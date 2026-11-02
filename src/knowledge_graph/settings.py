@@ -15,9 +15,9 @@ from .domain.model import EmbeddingProfile, StrictModel
 
 class LanguageProfile(StrictModel):
     provider: Literal["openai", "bailian"] = "openai"
-    base_url: str = "https://dashscope.aliyuncs.com/compatible-mode/v1"
-    model: str = "qwen-plus"
-    api_key_env: str = "DASHSCOPE_API_KEY"
+    base_url: str = "https://openrouter.ai/api/v1"
+    model: str = "z-ai/glm-5.3"
+    api_key_env: str = "OPENROUTER_API_KEY"
     timeout: float = Field(default=60, gt=0)
     max_input_chars: int = Field(default=60000, ge=1000)
     max_output_tokens: int = Field(default=12000, ge=1)
@@ -97,8 +97,7 @@ class Settings(StrictModel):
     @classmethod
     def load(cls, filename: str | None = None):
         """先补充未设置的环境变量，再加载配置文件并应用 KG_* 覆盖。"""
-        load_dotenv("/srv/knowledge-dev/.env", override=False)
-        load_dotenv("/srv/knowledge-graph/.env", override=False)
+        load_dotenv(os.getenv("KG_ENV_FILE", ".env"), override=False)
 
         filename = filename or os.getenv("KG_CONFIG")
         data = yaml.safe_load(Path(filename).read_text("utf-8")) if filename else {}

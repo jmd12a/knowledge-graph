@@ -300,11 +300,11 @@ class BusinessModel(StrictModel):
 class EmbeddingProfile(StrictModel):
     revision_id: str = Field(default_factory=new_id)
     provider: Literal["openai", "bailian"] = "openai"
-    base_url: str = "https://dashscope.aliyuncs.com/compatible-mode/v1"
-    model: str = "qwen3.7-text-embedding"
-    dimension: int = Field(default=1024, ge=1, le=65536)
+    base_url: str = "https://openrouter.ai/api/v1"
+    model: str = "google/gemini-embedding-2"
+    dimension: int = Field(default=3072, ge=1, le=65536)
     distance: Literal["Cosine", "Dot", "Euclid"] = "Cosine"
-    api_key_env: str = "DASHSCOPE_API_KEY"
+    api_key_env: str = "OPENROUTER_API_KEY"
     batch_size: int = Field(default=10, ge=1, le=128)
     timeout: float = Field(default=60, gt=0)
     extra_body: dict[str, Any] = Field(default_factory=dict)

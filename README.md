@@ -4,6 +4,8 @@
 
 Neo4j 保存当前图知识，Qdrant 辅助定位实体和原文证据，SQLite 保存资料、任务与来源贡献。最终回答、业务计算和操作执行由调用方或外部 Agent 完成。
 
+图解阅读：[项目概览 HTML](docs/project-overview.html)（下载后用浏览器打开，含架构、流程、验证结果与使用入口）。
+
 ## 核心能力
 
 - **按业务模型构建知识**：支持 TXT、Markdown、文本型 PDF，以及显式映射的 CSV/JSON。依据业务身份对齐实体，保留无法采用的候选及原因。
@@ -115,7 +117,7 @@ MCP 提供五个只读工具：`describe_model`、`search_knowledge`、`get_know
 | 原文切片检索 | 11/12 |
 | 自然语言组合检索 | 2/2 |
 
-本轮连接真实 Neo4j、Qdrant，并通过 OpenRouter 使用 GLM 5.3 与 Gemini Embedding 2。构建得到 68 个实体（63 个 Clause）、67 条关系、21 个切片，无候选拒绝；55 项机械检查通过。查询剩余 3 次未通过，付款清单拆分过细及许可段落 Top-K 召回不全仍待改进。
+本轮连接真实 Neo4j、Qdrant，并通过 OpenRouter 使用 GLM 5.3 与 Gemini Embedding 2。构建得到 68 个实体（63 个 Clause）、67 条关系、21 个切片，无候选拒绝；55 项机械检查通过。已知限制：付款清单拆分过细、许可段落 Top-K 召回不全，合计3次查询未达到完整覆盖。
 
 运行标识 `e316c7ca-7974-4b6d-9392-45868da2d2d7`。完整结果和剩余失败见[评测说明](docs/03-使用与验证/评测说明与结果.md)与[最新证据](evals/published/README.md)。推荐配置见[合同示例](examples/contracts/README.md)。验证结果绑定该次运行保存的源码、模型配置和输入资料。
 

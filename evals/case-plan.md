@@ -47,6 +47,6 @@ AlliedEsports Content License Agreement 的完整35,525字节原文、官方41�
 
 保留运行 `e316c7ca-7974-4b6d-9392-45868da2d2d7`，entity 10/12、chunk 11/12、retrieve 2/2，合计23/26。未通过为minimum_commitment/entity、license_grant/entity、license_grant/chunk；原题、预期与实际结果全部保留。
 
-55项机械检查通过，不计入查询通过数，也不替代语义验收。两类模型均走OpenRouter，配置见[合同示例](../examples/contracts/README.md)。本轮未执行上文完整机制与恢复矩阵；随后只整理代码可读性，没有重跑模型案例。
+55项机械检查通过，不计入查询通过数，也不替代语义验收。两类模型均走OpenRouter，配置见[合同示例](../examples/contracts/README.md)。本轮未执行上文完整机制与恢复矩阵；该结果仅对应保存的运行源码与配置。
 
 [逐题结果](published/latest/questions.json)、[原始摘要](published/latest/summary.json)和[证据导航](published/README.md)提供当前依据。[来源清单](published/provenance.json)标注原始文件与脱敏位置。详细边界见[评测说明](../docs/03-使用与验证/评测说明与结果.md)、[合同语义复核](../docs/03-使用与验证/合同语义复核.md)与[工程验证与限制](../docs/03-使用与验证/工程验证与限制.md)。

@@ -371,30 +371,21 @@ class Runtime:
         settings_path = self.e.directory / "settings.json"
         if not settings_path.exists():
             settings = Settings.load()
-            embedding = settings.embedding.model_copy(
-                update={
-                    "model": "qwen3.7-text-embedding",
-                    "dimension": 1024,
-                    "revision_id": str(uuid4()),
-                    "distance": "Cosine",
-                }
-            )
-            llm = settings.llm.model_copy(update={"model": "qwen3.7-plus"})
+            embedding = settings.embedding.model_copy(update={"revision_id": str(uuid4())})
             settings = settings.model_copy(
                 update={
                     "data_root": self.e.state["data_root"],
                     "host": "127.0.0.1",
                     "port": self.e.state["port"],
                     "embedding": embedding,
-                    "llm": llm,
                     "drain_timeout": 90,
                     "poll_interval": 0.2,
-                    "retrieval_timeout": 80,
+                    "retrieval_timeout": max(settings.retrieval_timeout, 80),
                     "checkpoint_retention_hours": 168,
                 }
             )
             write_json(settings_path, settings.model_dump(mode="json"))
-        # The loader reads the existing infrastructure/project .env without exposing its contents.
+        # Load credential variables without storing their values in the evaluation settings.
         Settings.load(str(settings_path))
         settings = Settings.model_validate(read_json(settings_path))
         self.e.state["configuration"] = settings.model_dump(mode="json")

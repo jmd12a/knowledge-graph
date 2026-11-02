@@ -13,6 +13,8 @@ from pathlib import Path
 from types import SimpleNamespace
 from uuid import uuid4
 
+import yaml
+
 from knowledge_graph.domain import KGError
 
 from .contract import audit_source_evidence, character_range, model
@@ -154,25 +156,20 @@ def estimate(case):
     )
     # Only pure serialization methods are used; Language.__init__ would construct an HTTP client.
     language = object.__new__(Language)
-    language.profile = LanguageProfile(
-        model="qwen3.7-plus",
-        timeout=180,
-        max_input_chars=60000,
-        max_output_tokens=8000,
-        extra_body={"enable_thinking": True, "thinking_budget": 1024},
-    )
+    profile = yaml.safe_load((ROOT / "examples/contracts/openrouter-quality.yaml").read_text())
+    language.profile = LanguageProfile.model_validate(profile["construction_llm"])
     chunks = {item["chunk_id"]: item for item in parsed["chunks"]}
     context = build_rule_context(parsed)
     business_model = BusinessModel.model_validate(model()).model_dump()
     schema = Extraction.model_json_schema()
     scopes = _plan_scopes(language, chunks, context, business_model, schema)
     return {
-        "basis": "Actual parser and first-pass scope planner with explicitly assumed existing budgets; no Settings.load",
+        "basis": "Parser and scope planner using the published OpenRouter profile; no Settings.load",
         "chunk_target": 1200,
         "chunk_max": 2000,
         "chunk_overlap": 150,
-        "max_input_chars": 60000,
-        "max_output_tokens": 8000,
+        "max_input_chars": language.profile.max_input_chars,
+        "max_output_tokens": language.profile.max_output_tokens,
         "chunks": len(chunks),
         "source_rule_units": len(context),
         "extraction_batches": len(scopes),

@@ -1,5 +1,5 @@
-# Copy only the relevant variables to /srv/knowledge-graph/.env and protect it with chmod 600.
-# Existing Neo4j/Qdrant credentials may be read from /srv/knowledge-dev/.env without modifying it.
+# Put the required variables in .env in the working directory and protect it with chmod 600.
+# Alternatively, set KG_ENV_FILE in the process environment to an explicit .env path.
 # Set actual values locally; never commit the credential file.
 # OPENROUTER_API_KEY=
 # NEO4J_PASSWORD=
