@@ -1,0 +1,519 @@
+{
+  "recorded_at": "2026-11-01T19:42:19.214724+00:00",
+  "stage": "long_contract",
+  "protocol": "HTTP",
+  "method": "GET",
+  "path": "/kbs/3da41804-fbda-491a-9465-8133e38b961b/knowledge/entity/d4caed52-0c7a-4c53-a7c2-5f6ab3c28ad1",
+  "input": null,
+  "params": {
+    "evidence_limit": 1000
+  },
+  "status_code": 200,
+  "elapsed_ms": 12,
+  "response": {
+    "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+    "request_id": "974deb4c-e225-4279-a401-4b01045aeceb",
+    "status": "ok",
+    "knowledge": [],
+    "relations": [],
+    "paths": [],
+    "evidence": [
+      {
+        "chunk_id": "78eeee72-3af7-4b2c-bc35-56c91866c643",
+        "chunk_range": [
+          1620,
+          2000
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "quote": "b. Royalty. The Royalties to be paid by Zynga to WPT is the percentage of Net Revenue as set forth in Section 5 of the Basic Provisions. \"Net Revenue(s)\" shall be defined as one hundred percent (100%) of gross revenues and all other receivables of any kind whatsoever received by Zynga or any of Zynga's affiliates attributable to the use of Paid Currency or in connection with th",
+        "quote_range": [
+          1620,
+          2000
+        ],
+        "quote_truncated": false,
+        "role": "fact",
+        "source_spans": [
+          {
+            "chunk_range": [
+              1620,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                15572,
+                15952
+              ],
+              "format": "txt",
+              "line_range": [
+                43,
+                43
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "b. Royalty. The Royalties to be paid by Zynga to WPT is the percentage of Net Revenue as set forth in Section 5 of the Basic Provisions. \"Net Revenue(s)\" shall be defined as one hundred percent (100%) of gross revenues and all other receivables of any kind whatsoever received by Zynga or any of Zynga's affiliates attributable to the use of Paid Currency or in connection with th",
+        "contribution_ids": [
+          "86a03eb7-2a52-4236-baf6-fff859f62cec"
+        ],
+        "fact_ids": [
+          "d4caed52-0c7a-4c53-a7c2-5f6ab3c28ad1"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "83e3cb05-bb0e-4d15-9870-8ead580681ca",
+        "chunk_range": [
+          150,
+          237
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "quote": "e sale of Virtual Digital Goods derived from use of the WPT-brand on the Zynga platform",
+        "quote_range": [
+          150,
+          237
+        ],
+        "quote_truncated": false,
+        "role": "fact",
+        "source_spans": [
+          {
+            "chunk_range": [
+              150,
+              237
+            ],
+            "origin": {
+              "char_range": [
+                15952,
+                16039
+              ],
+              "format": "txt",
+              "line_range": [
+                43,
+                53
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "e sale of Virtual Digital Goods derived from use of the WPT-brand on the Zynga platform",
+        "contribution_ids": [
+          "86a03eb7-2a52-4236-baf6-fff859f62cec"
+        ],
+        "fact_ids": [
+          "d4caed52-0c7a-4c53-a7c2-5f6ab3c28ad1"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "e7a38231-507b-429b-88fe-ad1f27180c75",
+        "chunk_range": [
+          1030,
+          1041
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "quote": "5. Royalty.",
+        "quote_range": [
+          1030,
+          1041
+        ],
+        "quote_truncated": false,
+        "role": "fact",
+        "source_spans": [
+          {
+            "chunk_range": [
+              1030,
+              1041
+            ],
+            "origin": {
+              "char_range": [
+                3978,
+                3989
+              ],
+              "format": "txt",
+              "line_range": [
+                1,
+                23
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "5. Royalty.",
+        "contribution_ids": [
+          "0f000b57-2e97-417f-9014-0fb745289518",
+          "0f1d77ad-9f89-40b7-ab5f-503888f1a49f",
+          "0fafcd17-3c4e-4610-94c5-438566b85f86"
+        ],
+        "fact_ids": [
+          "d4caed52-0c7a-4c53-a7c2-5f6ab3c28ad1"
+        ],
+        "field_paths": [
+          "$exists",
+          "/identity/heading",
+          "/properties/heading"
+        ]
+      },
+      {
+        "chunk_id": "e7a38231-507b-429b-88fe-ad1f27180c75",
+        "chunk_range": [
+          1030,
+          1704
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "quote": "5. Royalty. Zynga will pay to WPT ten percent (10%) of the cumulative Net Revenue (as defined in Section 3.b. of the Additional Provisions) (\"Royalty\") from the WPT-branded Zynga Poker Tournament Mode or other such use of the WPT brand on the Zynga platform. Zynga shall not be required to pay the Royalty to the extent offset by the Annual Minimum Guarantee payments previously paid to WPT during the Term. Conversely, Zynga shall not be required to make Annual Minimum Guarantee payments to the ext",
+        "quote_range": [
+          1030,
+          1530
+        ],
+        "quote_truncated": true,
+        "role": "fact",
+        "source_spans": [
+          {
+            "chunk_range": [
+              1030,
+              1704
+            ],
+            "origin": {
+              "char_range": [
+                3978,
+                4652
+              ],
+              "format": "txt",
+              "line_range": [
+                1,
+                23
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "5. Royalty. Zynga will pay to WPT ten percent (10%) of the cumulative Net Revenue (as defined in Section 3.b. of the Additional Provisions) (\"Royalty\") from the WPT-branded Zynga Poker Tournament Mode or other such use of the WPT brand on the Zynga platform. Zynga shall not be required to pay the Royalty to the extent offset by the Annual Minimum Guarantee payments previously paid to WPT during the Term. Conversely, Zynga shall not be required to make Annual Minimum Guarantee payments to the extent offset by the Royalty previously paid to WPT during the Term. The Additional Provisions and any attached Exhibits are incorporated by reference. Signature page to follow.",
+        "contribution_ids": [
+          "86a03eb7-2a52-4236-baf6-fff859f62cec"
+        ],
+        "fact_ids": [
+          "d4caed52-0c7a-4c53-a7c2-5f6ab3c28ad1"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "e7a38231-507b-429b-88fe-ad1f27180c75",
+        "chunk_range": [
+          1112,
+          1169
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "quote": "(as defined in Section 3.b. of the Additional Provisions)",
+        "quote_range": [
+          1112,
+          1169
+        ],
+        "quote_truncated": false,
+        "role": "fact",
+        "source_spans": [
+          {
+            "chunk_range": [
+              1112,
+              1169
+            ],
+            "origin": {
+              "char_range": [
+                4060,
+                4117
+              ],
+              "format": "txt",
+              "line_range": [
+                1,
+                23
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "(as defined in Section 3.b. of the Additional Provisions)",
+        "contribution_ids": [
+          "86a03eb7-2a52-4236-baf6-fff859f62cec"
+        ],
+        "fact_ids": [
+          "d4caed52-0c7a-4c53-a7c2-5f6ab3c28ad1"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "e7a38231-507b-429b-88fe-ad1f27180c75",
+        "chunk_range": [
+          150,
+          1706
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "role": "context",
+        "source_mapping_verified": true,
+        "source_spans": [
+          {
+            "chunk_range": [
+              150,
+              1706
+            ],
+            "origin": {
+              "char_range": [
+                3098,
+                4654
+              ],
+              "format": "txt",
+              "line_range": [
+                1,
+                23
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "3. Term. This Agreement will be in effect for three (3) years from the Effective Date (\"Initial Term\") unless terminated earlier in accordance with this Agreement. This Agreement shall automatically extend for an additional two (2) years on the same terms herein (\"Renewal Term\") provided WPT receives payments greater than twelve million U.S. dollars ($12,000,000) within the Initial Term. The Initial Term and any such Renewal Term are collectively referred to as the \"Term.\" 4. Annual Minimum Guarantee. Zynga will pay WPT three million U.S. dollars ($3,000,000) per year according to the following schedule (which the parties may alter upon mutual agreement) (the \"Annual Minimum Guarantee\"): a. Within thirty (30) days of executing this Agreement: $1.5M b. July 1, 2018: $1.5M c. January 1, 2019: $1.5M d. July 1, 2019: $1.5M e. January 1, 2020: $1.5M f. July 1, 2020: $1.5M 5. Royalty. Zynga will pay to WPT ten percent (10%) of the cumulative Net Revenue (as defined in Section 3.b. of the Additional Provisions) (\"Royalty\") from the WPT-branded Zynga Poker Tournament Mode or other such use of the WPT brand on the Zynga platform. Zynga shall not be required to pay the Royalty to the extent offset by the Annual Minimum Guarantee payments previously paid to WPT during the Term. Conversely, Zynga shall not be required to make Annual Minimum Guarantee payments to the extent offset by the Royalty previously paid to WPT during the Term. The Additional Provisions and any attached Exhibits are incorporated by reference. Signature page to follow.\n\n",
+        "contribution_ids": [
+          "86a03eb7-2a52-4236-baf6-fff859f62cec"
+        ],
+        "fact_ids": [
+          "d4caed52-0c7a-4c53-a7c2-5f6ab3c28ad1"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      }
+    ],
+    "candidates": [],
+    "conflicts": [],
+    "coverage": [
+      {
+        "component": "evidence",
+        "mode": "exact",
+        "scope": {
+          "document_ids": [],
+          "fact_ids": [
+            "d4caed52-0c7a-4c53-a7c2-5f6ab3c28ad1"
+          ]
+        },
+        "budget": {
+          "limit": 1000,
+          "available_references": 6,
+          "returned_references": 6,
+          "unavailable_resolved_references": 0
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      },
+      {
+        "component": "detail",
+        "mode": "exact",
+        "scope": {
+          "kind": "entity",
+          "id": "d4caed52-0c7a-4c53-a7c2-5f6ab3c28ad1"
+        },
+        "budget": {
+          "max_chars": 1000000
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      }
+    ],
+    "warnings": [],
+    "model": null,
+    "model_revision": null,
+    "item": {
+      "aliases": [],
+      "atomic_groups": {
+        "full_statement": {
+          "declarations": [
+            {
+              "contribution_ids": [
+                "86a03eb7-2a52-4236-baf6-fff859f62cec"
+              ],
+              "source_declarations": [
+                {
+                  "completeness_check": {
+                    "method": "basic_source_evidence",
+                    "rejected_optional_reference_count": 0,
+                    "required_reference_count": 0,
+                    "resolved_reference_count": 1,
+                    "rule_units": [
+                      "rule-unit/3"
+                    ],
+                    "section_key": "rule-unit/3",
+                    "semantic_completeness_verified": false
+                  },
+                  "contribution_id": "86a03eb7-2a52-4236-baf6-fff859f62cec",
+                  "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+                  "section_key": "rule-unit/3"
+                }
+              ],
+              "value": {
+                "complete": true,
+                "fields": {
+                  "definition": "Zynga will pay to WPT ten percent (10%) of the cumulative Net Revenue (as defined in Section 3.b. of the Additional Provisions) (\"Royalty\") from the WPT-branded Zynga Poker Tournament Mode or other such use of the WPT brand on the Zynga platform. Zynga shall not be required to pay the Royalty to the extent offset by the Annual Minimum Guarantee payments previously paid to WPT during the Term. Conversely, Zynga shall not be required to make Annual Minimum Guarantee payments to the extent offset by the Royalty previously paid to WPT during the Term. The Additional Provisions and any attached Exhibits are incorporated by reference. Signature page to follow."
+                },
+                "references_resolved": false
+              }
+            }
+          ],
+          "state": "confirmed"
+        }
+      },
+      "canonical_name": "5. Royalty.",
+      "completeness": "complete",
+      "conflicts": [],
+      "contribution_ids": [
+        "0f000b57-2e97-417f-9014-0fb745289518",
+        "0f1d77ad-9f89-40b7-ab5f-503888f1a49f",
+        "0fafcd17-3c4e-4610-94c5-438566b85f86",
+        "86a03eb7-2a52-4236-baf6-fff859f62cec"
+      ],
+      "description": "",
+      "description_fragments": [],
+      "document_ids": [
+        "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+      ],
+      "domain_ids": [],
+      "entity_id": "d4caed52-0c7a-4c53-a7c2-5f6ab3c28ad1",
+      "entity_type": "Clause",
+      "identity": {
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "fields": {
+          "heading": "5. Royalty."
+        },
+        "namespace": "contract-clause"
+      },
+      "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+      "kind": "entity",
+      "missing_fields": [],
+      "object_revision": "b5f29d49-fbba-47d6-af9e-60696d467247",
+      "origin": "graph",
+      "properties": {
+        "heading": {
+          "merge": "single",
+          "state": "confirmed",
+          "values": [
+            {
+              "contribution_ids": [
+                "0f1d77ad-9f89-40b7-ab5f-503888f1a49f"
+              ],
+              "value": "5. Royalty."
+            }
+          ]
+        }
+      }
+    },
+    "scope": null,
+    "selected_document_ids": [],
+    "declarations": [
+      {
+        "contribution_id": "0f000b57-2e97-417f-9014-0fb745289518",
+        "target_kind": "entity",
+        "target_id": "d4caed52-0c7a-4c53-a7c2-5f6ab3c28ad1",
+        "field_path": "/identity/heading",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          2
+        ],
+        "evidence_complete": true,
+        "resolved_references": [],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      },
+      {
+        "contribution_id": "0f1d77ad-9f89-40b7-ab5f-503888f1a49f",
+        "target_kind": "entity",
+        "target_id": "d4caed52-0c7a-4c53-a7c2-5f6ab3c28ad1",
+        "field_path": "/properties/heading",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          2
+        ],
+        "evidence_complete": true,
+        "resolved_references": [],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      },
+      {
+        "contribution_id": "0fafcd17-3c4e-4610-94c5-438566b85f86",
+        "target_kind": "entity",
+        "target_id": "d4caed52-0c7a-4c53-a7c2-5f6ab3c28ad1",
+        "field_path": "$exists",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          2
+        ],
+        "evidence_complete": true,
+        "resolved_references": [],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      },
+      {
+        "contribution_id": "86a03eb7-2a52-4236-baf6-fff859f62cec",
+        "target_kind": "entity",
+        "target_id": "d4caed52-0c7a-4c53-a7c2-5f6ab3c28ad1",
+        "field_path": "/atomic_groups/full_statement",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          0,
+          1,
+          3,
+          4,
+          5
+        ],
+        "evidence_complete": true,
+        "resolved_references": [
+          {
+            "reference_evidence_indices": [
+              4
+            ],
+            "missing_reference_count": 0,
+            "target_evidence_indices": [
+              0,
+              1
+            ],
+            "missing_target_count": 0,
+            "evidence_complete": true
+          }
+        ],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      }
+    ],
+    "plan_summary": null,
+    "unresolved_entities": [],
+    "excluded_endpoint_ids": []
+  }
+}

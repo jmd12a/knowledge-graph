@@ -1,0 +1,271 @@
+{
+  "recorded_at": "2026-11-01T19:41:29.795289+00:00",
+  "stage": "long_contract",
+  "protocol": "HTTP",
+  "method": "POST",
+  "path": "/kbs/3da41804-fbda-491a-9465-8133e38b961b/knowledge/search",
+  "input": {
+    "query": "Highlight the parts (if any) of this contract related to \"Revenue/Profit Sharing\" that should be reviewed by a lawyer. Details: Is one party required to share revenue or profit with the counterparty for any technology, goods, or services?",
+    "filters": {
+      "document_ids": [
+        "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+      ]
+    },
+    "limit": 5,
+    "kinds": [
+      "entity"
+    ],
+    "semantic": true
+  },
+  "params": null,
+  "status_code": 200,
+  "elapsed_ms": 4774,
+  "response": {
+    "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+    "request_id": "ab51b640-6ffc-4ba7-a52f-f31675902a26",
+    "status": "ok",
+    "knowledge": [
+      {
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "kind": "entity",
+        "origin": "graph",
+        "entity_id": "d4caed52-0c7a-4c53-a7c2-5f6ab3c28ad1",
+        "entity_type": "Clause",
+        "identity": {
+          "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+          "fields": {
+            "heading": "5. Royalty."
+          },
+          "namespace": "contract-clause"
+        },
+        "canonical_name": "5. Royalty.",
+        "aliases": [],
+        "domain_ids": [],
+        "document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "completeness": "complete",
+        "missing_fields": [],
+        "conflicts": [],
+        "scope": "selected_documents",
+        "selected_document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "id": "d4caed52-0c7a-4c53-a7c2-5f6ab3c28ad1",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "source_vector"
+        ],
+        "score": 1.0,
+        "summary": "5. Royalty.\nClause\n合同原文条款，涵盖每个编号条款、子条款和无编号的实质段落；保留条件、例外、范围与指代。可见原文不完整时仍保留并标记，绝不以摘要代替。\nheading [\"5. Royalty.\"]\nfull_statement [{\"definition\":\"Zynga will pay to WPT ten percent (10%) of the cumulative Net Revenue (as defined in Section 3.b. of the Additional Provisions) (\\\"Royalty\\\") from the WPT-branded Zynga Poker Tournament Mode or other such use of the WPT brand on the Zynga platform. Zynga shall not be required to pay the Royalty to the extent offset by the Annual Minimum Guarantee payments p",
+        "summary_truncated": true
+      },
+      {
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "kind": "entity",
+        "origin": "graph",
+        "entity_id": "908fd403-8ccd-4232-87af-98d41da9de3e",
+        "entity_type": "Clause",
+        "identity": {
+          "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+          "fields": {
+            "heading": "b. Royalty."
+          },
+          "namespace": "contract-clause"
+        },
+        "canonical_name": "b. Royalty.",
+        "aliases": [],
+        "domain_ids": [],
+        "document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "completeness": "complete",
+        "missing_fields": [],
+        "conflicts": [],
+        "scope": "selected_documents",
+        "selected_document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "id": "908fd403-8ccd-4232-87af-98d41da9de3e",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "source_vector"
+        ],
+        "score": 0.5,
+        "summary": "b. Royalty.\nClause\n合同原文条款，涵盖每个编号条款、子条款和无编号的实质段落；保留条件、例外、范围与指代。可见原文不完整时仍保留并标记，绝不以摘要代替。\nheading [\"b. Royalty.\"]\nfull_statement [{\"definition\":\"The Royalties to be paid by Zynga to WPT is the percentage of Net Revenue as set forth in Section 5 of the Basic Provisions. \\\"Net Revenue(s)\\\" shall be defined as one hundred percent (100%) of gross revenues and all other receivables of any kind whatsoever received by Zynga or any of Zynga's affiliates attributable to the use of Paid Currency or in connect",
+        "summary_truncated": true
+      },
+      {
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "kind": "entity",
+        "origin": "graph",
+        "entity_id": "7bb997d6-2106-4a2f-9719-dc78735267f6",
+        "entity_type": "Clause",
+        "identity": {
+          "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+          "fields": {
+            "heading": "3. PAYMENT a. Annual Minimum Guarantee."
+          },
+          "namespace": "contract-clause"
+        },
+        "canonical_name": "3. PAYMENT a. Annual Minimum Guarantee.",
+        "aliases": [],
+        "domain_ids": [],
+        "document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "completeness": "complete",
+        "missing_fields": [],
+        "conflicts": [],
+        "scope": "selected_documents",
+        "selected_document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "id": "7bb997d6-2106-4a2f-9719-dc78735267f6",
+        "match_channels": [
+          "rerank",
+          "source_vector"
+        ],
+        "score": 0.3333333333333333,
+        "summary": "3. PAYMENT a. Annual Minimum Guarantee.\nClause\n合同原文条款，涵盖每个编号条款、子条款和无编号的实质段落；保留条件、例外、范围与指代。可见原文不完整时仍保留并标记，绝不以摘要代替。\nheading [\"3. PAYMENT a. Annual Minimum Guarantee.\"]\nfull_statement [{\"definition\":\"Zynga will pay to WPT the Annual Minimum Guarantee as set forth in the Basic Provisions. The Annual Minimum Guarantee shall be recoupable from such Royalties as are, or have become, paid to WPT. For clarification, the Annual Minimum Guarantee will operate as an advance payment, such that when accrued R",
+        "summary_truncated": true
+      },
+      {
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "kind": "entity",
+        "origin": "graph",
+        "entity_id": "f647e81e-b4b7-4d1e-8f71-0798961fbd13",
+        "entity_type": "Clause",
+        "identity": {
+          "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+          "fields": {
+            "heading": "c. Payment."
+          },
+          "namespace": "contract-clause"
+        },
+        "canonical_name": "c. Payment.",
+        "aliases": [],
+        "domain_ids": [],
+        "document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "completeness": "complete",
+        "missing_fields": [],
+        "conflicts": [],
+        "scope": "selected_documents",
+        "selected_document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "id": "f647e81e-b4b7-4d1e-8f71-0798961fbd13",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "source_vector"
+        ],
+        "score": 0.25,
+        "summary": "c. Payment.\nClause\n合同原文条款，涵盖每个编号条款、子条款和无编号的实质段落；保留条件、例外、范围与指代。可见原文不完整时仍保留并标记，绝不以摘要代替。\nheading [\"c. Payment.\"]\nfull_statement [{\"definition\":\"All amounts payable and due will be made in U.S. dollars. If withholding taxes are required, Zynga may account for the required amount of such withholding taxes when calculating the Royalty or other payments payable prior to remittance to WPT. Zynga shall provide WPT with an official receipt or other equivalent documentation issued by the appropriate taxing",
+        "summary_truncated": true
+      },
+      {
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "kind": "entity",
+        "origin": "graph",
+        "entity_id": "c5abec50-d381-4cbf-a6ef-0e7567972073",
+        "entity_type": "Clause",
+        "identity": {
+          "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+          "fields": {
+            "heading": "d. Reporting."
+          },
+          "namespace": "contract-clause"
+        },
+        "canonical_name": "d. Reporting.",
+        "aliases": [],
+        "domain_ids": [],
+        "document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "completeness": "complete",
+        "missing_fields": [],
+        "conflicts": [],
+        "scope": "selected_documents",
+        "selected_document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "id": "c5abec50-d381-4cbf-a6ef-0e7567972073",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "source_vector"
+        ],
+        "score": 0.2,
+        "summary": "d. Reporting.\nClause\n合同原文条款，涵盖每个编号条款、子条款和无编号的实质段落；保留条件、例外、范围与指代。可见原文不完整时仍保留并标记，绝不以摘要代替。\nheading [\"d. Reporting.\"]\nfull_statement [{\"definition\":\"Zynga will, within thirty (30) days of the end of each calendar quarter, commencing with the first full calendar quarter following the Effective Date, furnish WPT with complete statements containing the following information with respect to all Net Revenue from the use of the WPT-brand on the Zynga platform, during the preceding period covered by such s",
+        "summary_truncated": true
+      }
+    ],
+    "relations": [],
+    "paths": [],
+    "evidence": [],
+    "candidates": [],
+    "conflicts": [],
+    "coverage": [
+      {
+        "component": "object_candidates",
+        "mode": "top_k",
+        "scope": {
+          "entity_types": [],
+          "domain_ids": [],
+          "document_ids": [
+            "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+          ],
+          "properties": {}
+        },
+        "budget": {
+          "rerank_candidates": 68,
+          "limit": 5
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      },
+      {
+        "component": "object_candidates",
+        "mode": "top_k",
+        "scope": {
+          "entity_types": [],
+          "domain_ids": [],
+          "document_ids": [
+            "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+          ],
+          "properties": {}
+        },
+        "budget": {
+          "limit": 5,
+          "scan_limit": 5000,
+          "channels": [
+            "keyword",
+            "rerank",
+            "source_vector"
+          ]
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      }
+    ],
+    "warnings": [],
+    "model": null,
+    "model_revision": null,
+    "item": null,
+    "scope": "selected_documents",
+    "selected_document_ids": [
+      "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+    ],
+    "declarations": [],
+    "plan_summary": null,
+    "unresolved_entities": [],
+    "excluded_endpoint_ids": []
+  }
+}

@@ -1,0 +1,326 @@
+{
+  "recorded_at": "2026-11-01T19:41:24.783123+00:00",
+  "stage": "long_contract",
+  "protocol": "HTTP",
+  "method": "POST",
+  "path": "/kbs/3da41804-fbda-491a-9465-8133e38b961b/knowledge/search",
+  "input": {
+    "query": "Highlight the parts (if any) of this contract related to \"Renewal Term\" that should be reviewed by a lawyer. Details: What is the renewal term after the initial term expires? This includes automatic extensions and unilateral extensions with prior notice.",
+    "filters": {
+      "document_ids": [
+        "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+      ]
+    },
+    "limit": 5,
+    "kinds": [
+      "chunk"
+    ],
+    "semantic": true
+  },
+  "params": null,
+  "status_code": 200,
+  "elapsed_ms": 3476,
+  "response": {
+    "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+    "request_id": "71d2b86c-47f1-4221-a25d-051d85cec99c",
+    "status": "ok",
+    "knowledge": [
+      {
+        "chunk_id": "e7a38231-507b-429b-88fe-ad1f27180c75",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              1904
+            ],
+            "origin": {
+              "char_range": [
+                2948,
+                4852
+              ],
+              "format": "txt",
+              "line_range": [
+                1,
+                23
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "other parts of the Territory are granted to, held and exercised by Zynga Ireland.\n\n1\n\nSource: ALLIED ESPORTS ENTERTAINMENT, INC., 8-K, 8/15/2019\n\n\n\n\n\n3. Term. This Agreement will be in effect for three (3) years from the Effective Date (\"Initial Term\") unless terminated earlier in accordance with this Agreement. This Agreement shall automatically extend for an additional two (2) years on the same terms herein (\"Renewal Term\") provided WPT receives payments greater than twelve million U.S. dollars ($12,000,000) within the Initial Term. The Initial Term and any such Renewal Term are collectively referred to as the \"Term.\" 4. Annual Minimum Guarantee. Zynga will pay WPT three million U.S. dollars ($3,000,000) per year according to the following schedule (which the parties may alter upon mutual agreement) (the \"Annual Minimum Guarantee\"): a. Within thirty (30) days of executing this Agreement: $1.5M b. July 1, 2018: $1.5M c. January 1, 2019: $1.5M d. July 1, 2019: $1.5M e. January 1, 2020: $1.5M f. July 1, 2020: $1.5M 5. Royalty. Zynga will pay to WPT ten percent (10%) of the cumulative Net Revenue (as defined in Section 3.b. of the Additional Provisions) (\"Royalty\") from the WPT-branded Zynga Poker Tournament Mode or other such use of the WPT brand on the Zynga platform. Zynga shall not be required to pay the Royalty to the extent offset by the Annual Minimum Guarantee payments previously paid to WPT during the Term. Conversely, Zynga shall not be required to make Annual Minimum Guarantee payments to the extent offset by the Royalty previously paid to WPT during the Term. The Additional Provisions and any attached Exhibits are incorporated by reference. Signature page to follow.\n\n2\n\nSource: ALLIED ESPORTS ENTERTAINMENT, INC., 8-K, 8/15/2019\n\n\n\n\n\nIN WITNESS WHEREOF ZYNGA INC. Signature: ______________________ Name: _________________________ Title: __________________________\n\n",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "e7a38231-507b-429b-88fe-ad1f27180c75",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 1.0
+      },
+      {
+        "chunk_id": "77c91247-8a19-4198-8227-3493e52981cc",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                26068,
+                28068
+              ],
+              "format": "txt",
+              "line_range": [
+                63,
+                63
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "inate this Agreement, such party shall give notice of termination in writing to the other party, which notice shall specify in reasonable detail the event(s) of default that give rise to such termination. The other party shall have thirty (30) days from the effective date of such notice in which to correct any such default(s) (except those which are not curable), and failing such correction by the end of such thirty (30) day cure period, this Agreement shall thereupon immediately terminate. 7. RIGHTS AND OBLIGATIONS UPON TERMINATION OR EXPIRATION. Upon expiration or termination of this Agreement: a. All rights granted to WPT by Zynga shall immediately revert to Zynga, and WPT shall promptly cease any and all marketing and promotional activities using Zynga's Licensed Property. b. All rights granted to Zynga by WPT shall immediately revert to WPT, and Zynga shall promptly cease any and all marketing and promotional activities using WPT's Licensed Property. c. Notwithstanding the foregoing, for each end user that previously downloaded a Zynga game that includes WPT's Licensed Property, and stored such Zynga game within such end user's device, WPT grants a license and right to continue to use, activate, operate, perform, store, use and display that game on the end user's device in perpetuity at no additional charge; provided, however, that Zynga shall use best efforts to offer end users updates to its games which no longer include WPT's Licensed Property after the Term. d. Notwithstanding any termination of this Agreement, nothing herein will obligate Zynga, any users of a Zynga game that includes WPT's Licensed Property or any third party platform or distribution partners to remove from the publicly available content regarding Zynga services or any user accounts with Zynga, any of the references to user interactions, experience points, achievements, item purchases or other engagements or metrics in the Zynga game(s) that were generated prior to the expiration or termi",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "77c91247-8a19-4198-8227-3493e52981cc",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.5
+      },
+      {
+        "chunk_id": "072f669c-fd8c-47e4-92a6-2b9859c5283f",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                18668,
+                20668
+              ],
+              "format": "txt",
+              "line_range": [
+                53,
+                53
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "ties rate; the distribution channels or portals, the platform, the territory(ies), and itemized Allowable Deductions (\"Royalty Statement(s)\"). The amount shown to be payable to WPT shall be paid simultaneously with the rendition of the respective Royalty Statement. The statements and payments remitted hereunder shall be delivered to WPT via email to the following email address: Deborah.Frazzetta@wpt.com (ATTN: Deborah Frazzetta, VP, Finance. e. Audit Rights. Zynga shall keep full, complete and accurate books of account and records (collectively \"records\") covering all transactions relating to the subject matter of this Agreement in sufficient detail to enable the Royalties payable hereunder to be determined and verified. Zynga shall permit such records to be examined by authorized representatives of WPT, including such independent auditors as WPT may designate, during usual business hours, with advance notice, to verify to the extent necessary the Royalties paid hereunder, and WPT and its representatives shall use reasonable efforts to minimize disruptions to Zynga's business. Prompt adjustment shall be made by Zynga to compensate for any errors or omissions disclosed by such examination. If the adjustment is more than $1,500 in favor, then out-of-pocket costs of such examination shall be borne by Zynga. f. No Other Charges or Expenses. Neither party will be liable to pay the other party any other types of charges or expenses not agreed to in this Agreement or any related amendment signed by the Parties. 4. REPRESENTATIONS AND WARRANTIES; LIMITATIONS OF LIABILITY a. Each party represents and warrants to the other as follows: (i) it is duly authorized under applicable law and has the authority to enter into and perform this Agreement; (ii) this Agreement constitutes a valid and binding obligation of such party enforceable in accordance with its terms; (iii) the making of this Agreement by such party does not violate any agreement, right or obligation existing between",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "072f669c-fd8c-47e4-92a6-2b9859c5283f",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.3333333333333333
+      },
+      {
+        "chunk_id": "d60cff60-49d3-423b-af99-0c93b4920f32",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                24218,
+                26218
+              ],
+              "format": "txt",
+              "line_range": [
+                63,
+                63
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "or with any applicable regulations in connection with its performance of this Agreement. c. In order to seek or receive indemnification hereunder in cases involving third-party claims the party seeking indemnification (the \"Indemnified Party\") must have promptly notified the other (the \"Indemnifying Party\") of any claim or litigation of which the Indemnified Party is aware and to which the indemnification relates; and the Indemnified Party must reasonably cooperate with Indemnifying Party in the defense or settlement of such claim or litigation. With regard to any claim or litigation to which the Indemnifying Party itself is not a party, the Indemnifying Party must have afforded the Indemnified Party the opportunity to participate in any compromise, settlement, litigation or other resolution or disposition of such claim or litigation. 6. TERMINATION a. Each party shall have the right at any time to terminate this Agreement without prejudice to any rights which it may have, whether pursuant to the provisions of this Agreement or otherwise in law or in equity or otherwise, upon the occurrence of any one or more of the following events: i. The other party breaches or fails to perform any of its material obligations provided for in this Agreement; ii. The other party is unable to pay its debts when due, or makes any assignment for the benefit of creditors, or files any petition under the bankruptcy or insolvency laws of any jurisdiction, county or place, or has or suffers a receiver or trustee to be appointed for its business or property, or is adjudicated a bankrupt or an insolvent; or iii. The other party asserts any rights in or to the terminating party's intellectual property in violation of this Agreement. a. In the event that any of these events of default should occur and a party elects to exercise its right to terminate this Agreement, such party shall give notice of termination in writing to the other party, which notice shall specify in reasonable detail the e",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "d60cff60-49d3-423b-af99-0c93b4920f32",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.25
+      },
+      {
+        "chunk_id": "9c81f57b-47d6-4fcd-a58f-2b86bc2d3c2b",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                6552,
+                8552
+              ],
+              "format": "txt",
+              "line_range": [
+                33,
+                33
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "ual property rights, and any other items set forth in this Agreement, which the parties may utilize in connection with the marketing and promotional activities in Exhibit A. A list of the Licensed Property for each party is described in Exhibit B. e. \"Annual Minimum Guarantee\" means the guaranteed minimum amount due to WPT by Zynga in consideration of the rights granted herein, which amount may be recoupable from Royalties as set forth below and in the Basic Provisions. f. \"Royalty\" means the amount(s) set forth in the Basic Provisions and calculated as described in the Additional Provisions. g. \"Term\" means the term of this Agreement as set forth in the Basic Provisions. h. \"Territory\" means the territory throughout which the parties are authorized to engage in the marketing and promotional activities as described in Exhibit A and in the Basic Provisions. 2. TRADEMARKS, APPROVALS, AND RESERVATION OF RIGHTS a. Materials. To the extent indicated on Exhibit A, each party will provide the other party with electronic files containing the Licensed Property of such party to be used under this Agreement, as specified in Exhibit B, if any. b. License by Zynga. Subject to the terms and conditions of this Agreement, Zynga grants to WPT a non-exclusive, non- assignable, non-sublicensable, royalty-free, paid up, limited worldwide license to use and display Zynga's Licensed Property solely as necessary to perform WPT's obligations under this Agreement and as specifically described on Exhibit A, in any and all media now known or hereafter devised, for the Term (subject to Section 7.e. of Additional Provisions). c. License by WPT. Subject to the terms and conditions of this Agreement, WPT grants to Zynga a non-exclusive, non-assignable, non-sublicensable, royalty-free, paid up, limited license in the Territory to use and display WPT's Licensed Property solely as necessary to perform Zynga's obligations under this Agreement and as specifically described on Exhibit A, for the Term. ",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "9c81f57b-47d6-4fcd-a58f-2b86bc2d3c2b",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.2
+      }
+    ],
+    "relations": [],
+    "paths": [],
+    "evidence": [],
+    "candidates": [],
+    "conflicts": [],
+    "coverage": [
+      {
+        "component": "documents",
+        "mode": "top_k",
+        "scope": {
+          "entity_types": [],
+          "domain_ids": [],
+          "document_ids": [
+            "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+          ],
+          "properties": {}
+        },
+        "budget": {
+          "rerank_candidates": 21,
+          "limit": 5
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      },
+      {
+        "component": "documents",
+        "mode": "top_k",
+        "scope": {
+          "document_ids": [
+            "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+          ],
+          "domain_ids": []
+        },
+        "budget": {
+          "limit": 5,
+          "scan_limit": 5000,
+          "channels": [
+            "keyword",
+            "vector",
+            "rerank"
+          ],
+          "entity_filters_apply_to": "object_candidates"
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      }
+    ],
+    "warnings": [],
+    "model": null,
+    "model_revision": null,
+    "item": null,
+    "scope": "selected_documents",
+    "selected_document_ids": [
+      "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+    ],
+    "declarations": [],
+    "plan_summary": null,
+    "unresolved_entities": [],
+    "excluded_endpoint_ids": []
+  }
+}

@@ -1,0 +1,272 @@
+{
+  "recorded_at": "2026-11-01T19:41:21.048203+00:00",
+  "stage": "long_contract",
+  "protocol": "HTTP",
+  "method": "POST",
+  "path": "/kbs/3da41804-fbda-491a-9465-8133e38b961b/knowledge/search",
+  "input": {
+    "query": "Highlight the parts (if any) of this contract related to \"Renewal Term\" that should be reviewed by a lawyer. Details: What is the renewal term after the initial term expires? This includes automatic extensions and unilateral extensions with prior notice.",
+    "filters": {
+      "document_ids": [
+        "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+      ]
+    },
+    "limit": 5,
+    "kinds": [
+      "entity"
+    ],
+    "semantic": true
+  },
+  "params": null,
+  "status_code": 200,
+  "elapsed_ms": 5706,
+  "response": {
+    "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+    "request_id": "f55c102a-feb6-4929-a1d3-992cd16d2bc5",
+    "status": "ok",
+    "knowledge": [
+      {
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "kind": "entity",
+        "origin": "graph",
+        "entity_id": "39816c4d-62fc-4687-ab06-54a9f55afbc6",
+        "entity_type": "Clause",
+        "identity": {
+          "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+          "fields": {
+            "heading": "3. Term."
+          },
+          "namespace": "contract-clause"
+        },
+        "canonical_name": "3. Term.",
+        "aliases": [],
+        "domain_ids": [],
+        "document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "completeness": "complete",
+        "missing_fields": [],
+        "conflicts": [],
+        "scope": "selected_documents",
+        "selected_document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "id": "39816c4d-62fc-4687-ab06-54a9f55afbc6",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "source_vector"
+        ],
+        "score": 1.0,
+        "summary": "3. Term.\nClause\n合同原文条款，涵盖每个编号条款、子条款和无编号的实质段落；保留条件、例外、范围与指代。可见原文不完整时仍保留并标记，绝不以摘要代替。\nheading [\"3. Term.\"]\nfull_statement [{\"definition\":\"This Agreement will be in effect for three (3) years from the Effective Date (\\\"Initial Term\\\") unless terminated earlier in accordance with this Agreement. This Agreement shall automatically extend for an additional two (2) years on the same terms herein (\\\"Renewal Term\\\") provided WPT receives payments greater than twelve million U.S. dollars ($12,000,000) with",
+        "summary_truncated": true
+      },
+      {
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "kind": "entity",
+        "origin": "graph",
+        "entity_id": "67c185a9-c3d3-433d-b0e1-3eb29b02b637",
+        "entity_type": "Clause",
+        "identity": {
+          "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+          "fields": {
+            "heading": "g. \"Term\""
+          },
+          "namespace": "contract-clause"
+        },
+        "canonical_name": "g. \"Term\"",
+        "aliases": [],
+        "domain_ids": [],
+        "document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "completeness": "complete",
+        "missing_fields": [],
+        "conflicts": [],
+        "scope": "selected_documents",
+        "selected_document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "id": "67c185a9-c3d3-433d-b0e1-3eb29b02b637",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "source_vector"
+        ],
+        "score": 0.5,
+        "summary": "g. \"Term\"\nClause\n合同原文条款，涵盖每个编号条款、子条款和无编号的实质段落；保留条件、例外、范围与指代。可见原文不完整时仍保留并标记，绝不以摘要代替。\nheading [\"g. \\\"Term\\\"\"]\nfull_statement [{\"definition\":\"\\\"Term\\\" means the term of this Agreement as set forth in the Basic Provisions.\"}]",
+        "summary_truncated": false
+      },
+      {
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "kind": "entity",
+        "origin": "graph",
+        "entity_id": "47e13ba8-7fb1-4e0b-a425-3ee869290d2b",
+        "entity_type": "Clause",
+        "identity": {
+          "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+          "fields": {
+            "heading": "e. Approvals."
+          },
+          "namespace": "contract-clause"
+        },
+        "canonical_name": "e. Approvals.",
+        "aliases": [],
+        "domain_ids": [],
+        "document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "completeness": "complete",
+        "missing_fields": [],
+        "conflicts": [],
+        "scope": "selected_documents",
+        "selected_document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "id": "47e13ba8-7fb1-4e0b-a425-3ee869290d2b",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "source_vector"
+        ],
+        "score": 0.3333333333333333,
+        "summary": "e. Approvals.\nClause\n合同原文条款，涵盖每个编号条款、子条款和无编号的实质段落；保留条件、例外、范围与指代。可见原文不完整时仍保留并标记，绝不以摘要代替。\nheading [\"e. Approvals.\"]\nfull_statement [{\"definition\":\"The Licensed Property shall be displayed or used only in such form and in such manner as has been approved in writing (which may be by email) by Licensor pursuant to this Section 2 and Licensee shall ensure its usage of the Licensed Property solely as approved. Throughout the Term, including any renewals or extensions (if applicable), Licensee shall com",
+        "summary_truncated": true
+      },
+      {
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "kind": "entity",
+        "origin": "graph",
+        "entity_id": "1635e6db-2155-4cb9-b9db-2dd1629162ec",
+        "entity_type": "Clause",
+        "identity": {
+          "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+          "fields": {
+            "heading": "c. Notwithstanding the foregoing, for each end user that previously downloaded a Zynga game"
+          },
+          "namespace": "contract-clause"
+        },
+        "canonical_name": "c. Notwithstanding the foregoing, for each end user that previously downloaded a Zynga game",
+        "aliases": [],
+        "domain_ids": [],
+        "document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "completeness": "complete",
+        "missing_fields": [],
+        "conflicts": [],
+        "scope": "selected_documents",
+        "selected_document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "id": "1635e6db-2155-4cb9-b9db-2dd1629162ec",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "source_vector"
+        ],
+        "score": 0.25,
+        "summary": "c. Notwithstanding the foregoing, for each end user that previously downloaded a Zynga game\nClause\n合同原文条款，涵盖每个编号条款、子条款和无编号的实质段落；保留条件、例外、范围与指代。可见原文不完整时仍保留并标记，绝不以摘要代替。\nheading [\"c. Notwithstanding the foregoing, for each end user that previously downloaded a Zynga game\"]\nfull_statement [{\"definition\":\"Notwithstanding the foregoing, for each end user that previously downloaded a Zynga game that includes WPT's Licensed Property, and stored such Zynga game within such end user's device, WPT grants a ",
+        "summary_truncated": true
+      },
+      {
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "kind": "entity",
+        "origin": "graph",
+        "entity_id": "d32e1aa2-4286-4d58-890d-eab5c550488e",
+        "entity_type": "Clause",
+        "identity": {
+          "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+          "fields": {
+            "heading": "d. Notwithstanding any termination of this Agreement, nothing herein will obligate Zynga"
+          },
+          "namespace": "contract-clause"
+        },
+        "canonical_name": "d. Notwithstanding any termination of this Agreement, nothing herein will obligate Zynga",
+        "aliases": [],
+        "domain_ids": [],
+        "document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "completeness": "complete",
+        "missing_fields": [],
+        "conflicts": [],
+        "scope": "selected_documents",
+        "selected_document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "id": "d32e1aa2-4286-4d58-890d-eab5c550488e",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "source_vector"
+        ],
+        "score": 0.2,
+        "summary": "d. Notwithstanding any termination of this Agreement, nothing herein will obligate Zynga\nClause\n合同原文条款，涵盖每个编号条款、子条款和无编号的实质段落；保留条件、例外、范围与指代。可见原文不完整时仍保留并标记，绝不以摘要代替。\nheading [\"d. Notwithstanding any termination of this Agreement, nothing herein will obligate Zynga\"]\nfull_statement [{\"definition\":\"Notwithstanding any termination of this Agreement, nothing herein will obligate Zynga, any users of a Zynga game that includes WPT's Licensed Property or any third party platform or distribution partners t",
+        "summary_truncated": true
+      }
+    ],
+    "relations": [],
+    "paths": [],
+    "evidence": [],
+    "candidates": [],
+    "conflicts": [],
+    "coverage": [
+      {
+        "component": "object_candidates",
+        "mode": "top_k",
+        "scope": {
+          "entity_types": [],
+          "domain_ids": [],
+          "document_ids": [
+            "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+          ],
+          "properties": {}
+        },
+        "budget": {
+          "rerank_candidates": 68,
+          "limit": 5
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      },
+      {
+        "component": "object_candidates",
+        "mode": "top_k",
+        "scope": {
+          "entity_types": [],
+          "domain_ids": [],
+          "document_ids": [
+            "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+          ],
+          "properties": {}
+        },
+        "budget": {
+          "limit": 5,
+          "scan_limit": 5000,
+          "channels": [
+            "keyword",
+            "rerank",
+            "source_vector"
+          ]
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      }
+    ],
+    "warnings": [],
+    "model": null,
+    "model_revision": null,
+    "item": null,
+    "scope": "selected_documents",
+    "selected_document_ids": [
+      "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+    ],
+    "declarations": [],
+    "plan_summary": null,
+    "unresolved_entities": [],
+    "excluded_endpoint_ids": []
+  }
+}

@@ -1,0 +1,270 @@
+{
+  "recorded_at": "2026-11-01T19:42:18.985540+00:00",
+  "stage": "long_contract",
+  "protocol": "HTTP",
+  "method": "POST",
+  "path": "/kbs/3da41804-fbda-491a-9465-8133e38b961b/knowledge/search",
+  "input": {
+    "query": "Highlight the parts (if any) of this contract related to \"Anti-Assignment\" that should be reviewed by a lawyer. Details: Is consent or notice required of a party if the contract is assigned to a third party?",
+    "filters": {
+      "document_ids": [
+        "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+      ]
+    },
+    "limit": 5,
+    "kinds": [
+      "entity"
+    ],
+    "semantic": true
+  },
+  "params": null,
+  "status_code": 200,
+  "elapsed_ms": 6181,
+  "response": {
+    "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+    "request_id": "d06d33ff-4f18-482f-9143-95eb23d92887",
+    "status": "ok",
+    "knowledge": [
+      {
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "kind": "entity",
+        "origin": "graph",
+        "entity_id": "5e1e7929-daaa-44a8-ad42-afda9954dee3",
+        "entity_type": "Clause",
+        "identity": {
+          "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+          "fields": {
+            "heading": "h. Assignment."
+          },
+          "namespace": "contract-clause"
+        },
+        "canonical_name": "h. Assignment.",
+        "aliases": [],
+        "domain_ids": [],
+        "document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "completeness": "complete",
+        "missing_fields": [],
+        "conflicts": [],
+        "scope": "selected_documents",
+        "selected_document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "id": "5e1e7929-daaa-44a8-ad42-afda9954dee3",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "source_vector"
+        ],
+        "score": 1.0,
+        "summary": "h. Assignment.\nClause\n合同原文条款，涵盖每个编号条款、子条款和无编号的实质段落；保留条件、例外、范围与指代。可见原文不完整时仍保留并标记，绝不以摘要代替。\nheading [\"h. Assignment.\"]\nfull_statement [{\"definition\":\"This Agreement shall bind and inure to the benefit of each party, its successors and assigns. Without the prior written consent of the other party, neither party shall assign or transfer any of its rights or obligations hereunder, in whole or in part, to any third party, and any purported assignment without such prior written consent shall be null and",
+        "summary_truncated": true
+      },
+      {
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "kind": "entity",
+        "origin": "graph",
+        "entity_id": "4d51e56b-4bee-405b-90b1-038bed681076",
+        "entity_type": "Clause",
+        "identity": {
+          "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+          "fields": {
+            "heading": "b. License by Zynga."
+          },
+          "namespace": "contract-clause"
+        },
+        "canonical_name": "b. License by Zynga.",
+        "aliases": [],
+        "domain_ids": [],
+        "document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "completeness": "complete",
+        "missing_fields": [],
+        "conflicts": [],
+        "scope": "selected_documents",
+        "selected_document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "id": "4d51e56b-4bee-405b-90b1-038bed681076",
+        "match_channels": [
+          "rerank",
+          "source_vector"
+        ],
+        "score": 0.5,
+        "summary": "b. License by Zynga.\nClause\n合同原文条款，涵盖每个编号条款、子条款和无编号的实质段落；保留条件、例外、范围与指代。可见原文不完整时仍保留并标记，绝不以摘要代替。\nheading [\"b. License by Zynga.\"]\nfull_statement [{\"definition\":\"Subject to the terms and conditions of this Agreement, Zynga grants to WPT a non-exclusive, non- assignable, non-sublicensable, royalty-free, paid up, limited worldwide license to use and display Zynga's Licensed Property solely as necessary to perform WPT's obligations under this Agreement and as specifically described on Exhibit A, in an",
+        "summary_truncated": true
+      },
+      {
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "kind": "entity",
+        "origin": "graph",
+        "entity_id": "e5cbc964-493c-4d51-b412-08a81e440ab7",
+        "entity_type": "Clause",
+        "identity": {
+          "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+          "fields": {
+            "heading": "c. License by WPT."
+          },
+          "namespace": "contract-clause"
+        },
+        "canonical_name": "c. License by WPT.",
+        "aliases": [],
+        "domain_ids": [],
+        "document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "completeness": "complete",
+        "missing_fields": [],
+        "conflicts": [],
+        "scope": "selected_documents",
+        "selected_document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "id": "e5cbc964-493c-4d51-b412-08a81e440ab7",
+        "match_channels": [
+          "rerank",
+          "source_vector"
+        ],
+        "score": 0.3333333333333333,
+        "summary": "c. License by WPT.\nClause\n合同原文条款，涵盖每个编号条款、子条款和无编号的实质段落；保留条件、例外、范围与指代。可见原文不完整时仍保留并标记，绝不以摘要代替。\nheading [\"c. License by WPT.\"]\nfull_statement [{\"definition\":\"Subject to the terms and conditions of this Agreement, WPT grants to Zynga a non-exclusive, non-assignable, non-sublicensable, royalty-free, paid up, limited license in the Territory to use and display WPT's Licensed Property solely as necessary to perform Zynga's obligations under this Agreement and as specifically described on Exhibit A, for",
+        "summary_truncated": true
+      },
+      {
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "kind": "entity",
+        "origin": "graph",
+        "entity_id": "f647e81e-b4b7-4d1e-8f71-0798961fbd13",
+        "entity_type": "Clause",
+        "identity": {
+          "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+          "fields": {
+            "heading": "c. Payment."
+          },
+          "namespace": "contract-clause"
+        },
+        "canonical_name": "c. Payment.",
+        "aliases": [],
+        "domain_ids": [],
+        "document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "completeness": "complete",
+        "missing_fields": [],
+        "conflicts": [],
+        "scope": "selected_documents",
+        "selected_document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "id": "f647e81e-b4b7-4d1e-8f71-0798961fbd13",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "source_vector"
+        ],
+        "score": 0.25,
+        "summary": "c. Payment.\nClause\n合同原文条款，涵盖每个编号条款、子条款和无编号的实质段落；保留条件、例外、范围与指代。可见原文不完整时仍保留并标记，绝不以摘要代替。\nheading [\"c. Payment.\"]\nfull_statement [{\"definition\":\"All amounts payable and due will be made in U.S. dollars. If withholding taxes are required, Zynga may account for the required amount of such withholding taxes when calculating the Royalty or other payments payable prior to remittance to WPT. Zynga shall provide WPT with an official receipt or other equivalent documentation issued by the appropriate taxing",
+        "summary_truncated": true
+      },
+      {
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "kind": "entity",
+        "origin": "graph",
+        "entity_id": "d4caed52-0c7a-4c53-a7c2-5f6ab3c28ad1",
+        "entity_type": "Clause",
+        "identity": {
+          "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+          "fields": {
+            "heading": "5. Royalty."
+          },
+          "namespace": "contract-clause"
+        },
+        "canonical_name": "5. Royalty.",
+        "aliases": [],
+        "domain_ids": [],
+        "document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "completeness": "complete",
+        "missing_fields": [],
+        "conflicts": [],
+        "scope": "selected_documents",
+        "selected_document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "id": "d4caed52-0c7a-4c53-a7c2-5f6ab3c28ad1",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "source_vector"
+        ],
+        "score": 0.2,
+        "summary": "5. Royalty.\nClause\n合同原文条款，涵盖每个编号条款、子条款和无编号的实质段落；保留条件、例外、范围与指代。可见原文不完整时仍保留并标记，绝不以摘要代替。\nheading [\"5. Royalty.\"]\nfull_statement [{\"definition\":\"Zynga will pay to WPT ten percent (10%) of the cumulative Net Revenue (as defined in Section 3.b. of the Additional Provisions) (\\\"Royalty\\\") from the WPT-branded Zynga Poker Tournament Mode or other such use of the WPT brand on the Zynga platform. Zynga shall not be required to pay the Royalty to the extent offset by the Annual Minimum Guarantee payments p",
+        "summary_truncated": true
+      }
+    ],
+    "relations": [],
+    "paths": [],
+    "evidence": [],
+    "candidates": [],
+    "conflicts": [],
+    "coverage": [
+      {
+        "component": "object_candidates",
+        "mode": "top_k",
+        "scope": {
+          "entity_types": [],
+          "domain_ids": [],
+          "document_ids": [
+            "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+          ],
+          "properties": {}
+        },
+        "budget": {
+          "rerank_candidates": 68,
+          "limit": 5
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      },
+      {
+        "component": "object_candidates",
+        "mode": "top_k",
+        "scope": {
+          "entity_types": [],
+          "domain_ids": [],
+          "document_ids": [
+            "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+          ],
+          "properties": {}
+        },
+        "budget": {
+          "limit": 5,
+          "scan_limit": 5000,
+          "channels": [
+            "keyword",
+            "rerank",
+            "source_vector"
+          ]
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      }
+    ],
+    "warnings": [],
+    "model": null,
+    "model_revision": null,
+    "item": null,
+    "scope": "selected_documents",
+    "selected_document_ids": [
+      "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+    ],
+    "declarations": [],
+    "plan_summary": null,
+    "unresolved_entities": [],
+    "excluded_endpoint_ids": []
+  }
+}

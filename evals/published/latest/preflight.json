@@ -1,0 +1,41 @@
+{
+  "status": "static_checks_passed",
+  "source_bytes": 35525,
+  "source_characters": 35504,
+  "official_categories": 41,
+  "positive_categories": 19,
+  "negative_categories": 22,
+  "official_positive_spans": 30,
+  "positive_queries": 12,
+  "retrieve_queries": 2,
+  "top_k": 5,
+  "frozen_at": "2026-11-01T17:12:55.371888+00:00",
+  "estimate": {
+    "basis": "Actual parser and first-pass scope planner with explicitly assumed existing budgets; no Settings.load",
+    "chunk_target": 1200,
+    "chunk_max": 2000,
+    "chunk_overlap": 150,
+    "max_input_chars": 60000,
+    "max_output_tokens": 8000,
+    "chunks": 21,
+    "source_rule_units": 31,
+    "extraction_batches": 3,
+    "batch_request_chars": [
+      57175,
+      55992,
+      55171
+    ],
+    "chunk_embedding_batches_at_size_10": 3,
+    "fixed_semantic_searches": 24,
+    "fixed_natural_language_retrievals": 2,
+    "unknown_until_real_output": [
+      "rule assembly calls",
+      "adopted entity embedding batches",
+      "retries/corrections",
+      "retrieval plan-dependent embedding calls"
+    ]
+  },
+  "network_calls": 0,
+  "processes_started": 0,
+  "business_cases_executed": 0
+}

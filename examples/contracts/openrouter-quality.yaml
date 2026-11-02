@@ -1,0 +1,58 @@
+llm:
+  provider: openai
+  base_url: https://openrouter.ai/api/v1
+  model: z-ai/glm-5.3
+  api_key_env: OPENROUTER_API_KEY
+  timeout: 180
+  max_input_chars: 240000
+  max_output_tokens: 12000
+  structured_output: json_object
+  extra_body:
+    reasoning:
+      effort: low
+    provider:
+      require_parameters: true
+      order:
+      - z-ai
+      - deepinfra
+      - fireworks
+      ignore:
+      - alibaba
+      allow_fallbacks: true
+  stream: true
+construction_llm:
+  provider: openai
+  base_url: https://openrouter.ai/api/v1
+  model: z-ai/glm-5.3
+  api_key_env: OPENROUTER_API_KEY
+  timeout: 600
+  max_input_chars: 240000
+  max_output_tokens: 64000
+  structured_output: json_object
+  extra_body:
+    reasoning:
+      effort: low
+    provider:
+      require_parameters: true
+      order:
+      - z-ai
+      - deepinfra
+      - fireworks
+      ignore:
+      - alibaba
+      allow_fallbacks: true
+  stream: true
+embedding:
+  provider: openai
+  base_url: https://openrouter.ai/api/v1
+  model: google/gemini-embedding-2
+  dimension: 3072
+  distance: Cosine
+  api_key_env: OPENROUTER_API_KEY
+  batch_size: 10
+  timeout: 90
+  extra_body: {}
+retrieval_timeout: 180
+rerank_enabled: true
+rerank_candidate_limit: 80
+rerank_timeout: 60

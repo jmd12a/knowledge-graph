@@ -1,0 +1,356 @@
+{
+  "recorded_at": "2026-11-01T19:41:38.616474+00:00",
+  "stage": "long_contract",
+  "protocol": "HTTP",
+  "method": "GET",
+  "path": "/kbs/3da41804-fbda-491a-9465-8133e38b961b/knowledge/entity/e33caa2e-dcc9-460b-be2b-f6ce4ea972ac",
+  "input": null,
+  "params": {
+    "evidence_limit": 1000
+  },
+  "status_code": 200,
+  "elapsed_ms": 14,
+  "response": {
+    "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+    "request_id": "099a78a5-0a99-4ad9-8b80-91fb3c4c1f69",
+    "status": "ok",
+    "knowledge": [],
+    "relations": [],
+    "paths": [],
+    "evidence": [
+      {
+        "chunk_id": "e7a38231-507b-429b-88fe-ad1f27180c75",
+        "chunk_range": [
+          150,
+          1706
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "role": "context",
+        "source_mapping_verified": true,
+        "source_spans": [
+          {
+            "chunk_range": [
+              150,
+              1706
+            ],
+            "origin": {
+              "char_range": [
+                3098,
+                4654
+              ],
+              "format": "txt",
+              "line_range": [
+                1,
+                23
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "3. Term. This Agreement will be in effect for three (3) years from the Effective Date (\"Initial Term\") unless terminated earlier in accordance with this Agreement. This Agreement shall automatically extend for an additional two (2) years on the same terms herein (\"Renewal Term\") provided WPT receives payments greater than twelve million U.S. dollars ($12,000,000) within the Initial Term. The Initial Term and any such Renewal Term are collectively referred to as the \"Term.\" 4. Annual Minimum Guarantee. Zynga will pay WPT three million U.S. dollars ($3,000,000) per year according to the following schedule (which the parties may alter upon mutual agreement) (the \"Annual Minimum Guarantee\"): a. Within thirty (30) days of executing this Agreement: $1.5M b. July 1, 2018: $1.5M c. January 1, 2019: $1.5M d. July 1, 2019: $1.5M e. January 1, 2020: $1.5M f. July 1, 2020: $1.5M 5. Royalty. Zynga will pay to WPT ten percent (10%) of the cumulative Net Revenue (as defined in Section 3.b. of the Additional Provisions) (\"Royalty\") from the WPT-branded Zynga Poker Tournament Mode or other such use of the WPT brand on the Zynga platform. Zynga shall not be required to pay the Royalty to the extent offset by the Annual Minimum Guarantee payments previously paid to WPT during the Term. Conversely, Zynga shall not be required to make Annual Minimum Guarantee payments to the extent offset by the Royalty previously paid to WPT during the Term. The Additional Provisions and any attached Exhibits are incorporated by reference. Signature page to follow.\n\n",
+        "contribution_ids": [
+          "faf219df-0b9f-470c-a118-2906cbcb3878"
+        ],
+        "fact_ids": [
+          "e33caa2e-dcc9-460b-be2b-f6ce4ea972ac"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "e7a38231-507b-429b-88fe-ad1f27180c75",
+        "chunk_range": [
+          628,
+          724
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "quote": "4. Annual Minimum Guarantee. Zynga will pay WPT three million U.S. dollars ($3,000,000) per year",
+        "quote_range": [
+          628,
+          724
+        ],
+        "quote_truncated": false,
+        "role": "fact",
+        "source_spans": [
+          {
+            "chunk_range": [
+              628,
+              724
+            ],
+            "origin": {
+              "char_range": [
+                3576,
+                3672
+              ],
+              "format": "txt",
+              "line_range": [
+                1,
+                23
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "4. Annual Minimum Guarantee. Zynga will pay WPT three million U.S. dollars ($3,000,000) per year",
+        "contribution_ids": [
+          "3b915f80-7c32-4372-880e-1bfd50af54ac",
+          "50ac9219-cdf7-48db-8898-0978b2da486d",
+          "5137cc44-4468-45e3-8ed1-b1f73914b269"
+        ],
+        "fact_ids": [
+          "e33caa2e-dcc9-460b-be2b-f6ce4ea972ac"
+        ],
+        "field_paths": [
+          "$exists",
+          "/identity/heading",
+          "/properties/heading"
+        ]
+      },
+      {
+        "chunk_id": "e7a38231-507b-429b-88fe-ad1f27180c75",
+        "chunk_range": [
+          657,
+          846
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "quote": "Zynga will pay WPT three million U.S. dollars ($3,000,000) per year according to the following schedule (which the parties may alter upon mutual agreement) (the \"Annual Minimum Guarantee\"):",
+        "quote_range": [
+          657,
+          846
+        ],
+        "quote_truncated": false,
+        "role": "fact",
+        "source_spans": [
+          {
+            "chunk_range": [
+              657,
+              846
+            ],
+            "origin": {
+              "char_range": [
+                3605,
+                3794
+              ],
+              "format": "txt",
+              "line_range": [
+                1,
+                23
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "Zynga will pay WPT three million U.S. dollars ($3,000,000) per year according to the following schedule (which the parties may alter upon mutual agreement) (the \"Annual Minimum Guarantee\"):",
+        "contribution_ids": [
+          "faf219df-0b9f-470c-a118-2906cbcb3878"
+        ],
+        "fact_ids": [
+          "e33caa2e-dcc9-460b-be2b-f6ce4ea972ac"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      }
+    ],
+    "candidates": [],
+    "conflicts": [],
+    "coverage": [
+      {
+        "component": "evidence",
+        "mode": "exact",
+        "scope": {
+          "document_ids": [],
+          "fact_ids": [
+            "e33caa2e-dcc9-460b-be2b-f6ce4ea972ac"
+          ]
+        },
+        "budget": {
+          "limit": 1000,
+          "available_references": 3,
+          "returned_references": 3,
+          "unavailable_resolved_references": 0
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      },
+      {
+        "component": "detail",
+        "mode": "exact",
+        "scope": {
+          "kind": "entity",
+          "id": "e33caa2e-dcc9-460b-be2b-f6ce4ea972ac"
+        },
+        "budget": {
+          "max_chars": 1000000
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      }
+    ],
+    "warnings": [],
+    "model": null,
+    "model_revision": null,
+    "item": {
+      "aliases": [],
+      "atomic_groups": {
+        "full_statement": {
+          "declarations": [
+            {
+              "contribution_ids": [
+                "faf219df-0b9f-470c-a118-2906cbcb3878"
+              ],
+              "source_declarations": [
+                {
+                  "completeness_check": {
+                    "method": "basic_source_evidence",
+                    "rejected_optional_reference_count": 0,
+                    "required_reference_count": 0,
+                    "resolved_reference_count": 0,
+                    "rule_units": [
+                      "rule-unit/3"
+                    ],
+                    "section_key": "rule-unit/3",
+                    "semantic_completeness_verified": false
+                  },
+                  "contribution_id": "faf219df-0b9f-470c-a118-2906cbcb3878",
+                  "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+                  "section_key": "rule-unit/3"
+                }
+              ],
+              "value": {
+                "complete": true,
+                "fields": {
+                  "definition": "Zynga will pay WPT three million U.S. dollars ($3,000,000) per year according to the following schedule (which the parties may alter upon mutual agreement) (the \"Annual Minimum Guarantee\"):"
+                },
+                "references_resolved": false
+              }
+            }
+          ],
+          "state": "confirmed"
+        }
+      },
+      "canonical_name": "4. Annual Minimum Guarantee. Zynga will pay WPT three million U.S. dollars ($3,000,000) per year",
+      "completeness": "complete",
+      "conflicts": [],
+      "contribution_ids": [
+        "3b915f80-7c32-4372-880e-1bfd50af54ac",
+        "50ac9219-cdf7-48db-8898-0978b2da486d",
+        "5137cc44-4468-45e3-8ed1-b1f73914b269",
+        "faf219df-0b9f-470c-a118-2906cbcb3878"
+      ],
+      "description": "",
+      "description_fragments": [],
+      "document_ids": [
+        "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+      ],
+      "domain_ids": [],
+      "entity_id": "e33caa2e-dcc9-460b-be2b-f6ce4ea972ac",
+      "entity_type": "Clause",
+      "identity": {
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "fields": {
+          "heading": "4. Annual Minimum Guarantee. Zynga will pay WPT three million U.S. dollars ($3,000,000) per year"
+        },
+        "namespace": "contract-clause"
+      },
+      "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+      "kind": "entity",
+      "missing_fields": [],
+      "object_revision": "8c6a0557-50ad-44ea-a8b5-5dd9a41232db",
+      "origin": "graph",
+      "properties": {
+        "heading": {
+          "merge": "single",
+          "state": "confirmed",
+          "values": [
+            {
+              "contribution_ids": [
+                "5137cc44-4468-45e3-8ed1-b1f73914b269"
+              ],
+              "value": "4. Annual Minimum Guarantee. Zynga will pay WPT three million U.S. dollars ($3,000,000) per year"
+            }
+          ]
+        }
+      }
+    },
+    "scope": null,
+    "selected_document_ids": [],
+    "declarations": [
+      {
+        "contribution_id": "3b915f80-7c32-4372-880e-1bfd50af54ac",
+        "target_kind": "entity",
+        "target_id": "e33caa2e-dcc9-460b-be2b-f6ce4ea972ac",
+        "field_path": "$exists",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          1
+        ],
+        "evidence_complete": true,
+        "resolved_references": [],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      },
+      {
+        "contribution_id": "50ac9219-cdf7-48db-8898-0978b2da486d",
+        "target_kind": "entity",
+        "target_id": "e33caa2e-dcc9-460b-be2b-f6ce4ea972ac",
+        "field_path": "/identity/heading",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          1
+        ],
+        "evidence_complete": true,
+        "resolved_references": [],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      },
+      {
+        "contribution_id": "5137cc44-4468-45e3-8ed1-b1f73914b269",
+        "target_kind": "entity",
+        "target_id": "e33caa2e-dcc9-460b-be2b-f6ce4ea972ac",
+        "field_path": "/properties/heading",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          1
+        ],
+        "evidence_complete": true,
+        "resolved_references": [],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      },
+      {
+        "contribution_id": "faf219df-0b9f-470c-a118-2906cbcb3878",
+        "target_kind": "entity",
+        "target_id": "e33caa2e-dcc9-460b-be2b-f6ce4ea972ac",
+        "field_path": "/atomic_groups/full_statement",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          0,
+          2
+        ],
+        "evidence_complete": true,
+        "resolved_references": [],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      }
+    ],
+    "plan_summary": null,
+    "unresolved_entities": [],
+    "excluded_endpoint_ids": []
+  }
+}

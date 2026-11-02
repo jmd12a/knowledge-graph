@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "dataset": "CUAD v1",
+  "dataset_home": "https://www.atticusprojectai.org/cuad/",
+  "official_json_url": "https://huggingface.co/datasets/theatticusproject/cuad/resolve/main/CUAD_v1/CUAD_v1.json",
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "license_source_url": "https://www.atticusprojectai.org/cuad/",
+  "attribution": "The Atticus Project; CUAD: An Expert-Annotated NLP Dataset for Legal Contract Review (Hendrycks, Burns, Chen, Ball; NeurIPS 2021).",
+  "selection_reason": "Full 35KB agreement with Basic/Additional Provisions, definitions, exhibits, cross-references, conditions and post-termination exceptions; selected for rule/evidence completeness rather than minimal cost or ease.",
+  "official_qa_file": "allied-esports-official-qa.json",
+  "fixed_case_file": "fixed-case.json",
+  "freeze_file": "fixed-case-freeze.json",
+  "official_qa_extraction": "One unchanged official document object in a version/data wrapper; original IDs, questions, answers and no-answer flags are preserved. JSON whitespace is locally formatted.",
+  "coordinate_system": "Zero-based Unicode code points, half-open [start,end), against raw UTF-8 decoded complete TXT. No newline or Unicode normalization.",
+  "model_file": "examples/contracts/model.yaml",
+  "files": [
+    {
+      "path": "allied-esports-content-license.txt",
+      "original_filename": "AlliedEsportsEntertainmentInc_20190815_8-K_EX-10.19_11788293_EX-10.19_Content License Agreement.txt",
+      "title": "AlliedEsportsEntertainmentInc_20190815_8-K_EX-10.19_11788293_EX-10.19_Content License Agreement",
+      "source_url": "https://huggingface.co/datasets/theatticusproject/cuad/resolve/main/CUAD_v1/full_contract_txt/Part_I/AlliedEsportsEntertainmentInc_20190815_8-K_EX-10.19_11788293_EX-10.19_Content%20License%20Agreement.txt",
+      "source_json_document_index": 43,
+      "download_completed_at_utc": "2026-11-01T17:08:02.958193+00:00",
+      "byte_length": 35525,
+      "character_length": 35504,
+      "official_categories": 41,
+      "positive_categories": 19,
+      "negative_categories": 22,
+      "official_positive_spans": 30,
+      "encoding": "utf-8"
+    }
+  ],
+  "source_limitations": [
+    "The official text references a separate August 24, 2017 Non-Disclosure Agreement that is not included; do not infer its full terms.",
+    "Additional Provisions 4.c refers to section 9 as No Agency Relationship, while the actual section heading is Independent Contractors; preserve source wording rather than silently normalizing it.",
+    "CUAD category answer spans are not a complete semantic gold standard for every clause condition or relation.",
+    "This step downloads/selects source material only; no paid model or application evaluation was run."
+  ]
+}

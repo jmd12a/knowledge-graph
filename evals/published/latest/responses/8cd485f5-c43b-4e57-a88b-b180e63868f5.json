@@ -1,0 +1,272 @@
+{
+  "recorded_at": "2026-11-01T19:42:37.585813+00:00",
+  "stage": "long_contract",
+  "protocol": "HTTP",
+  "method": "POST",
+  "path": "/kbs/3da41804-fbda-491a-9465-8133e38b961b/knowledge/search",
+  "input": {
+    "query": "Highlight the parts (if any) of this contract related to \"Cap On Liability\" that should be reviewed by a lawyer. Details: Does the contract include a cap on liability upon the breach of a party’s obligation? This includes time limitation for the counterparty to bring claims or maximum amount for recovery.",
+    "filters": {
+      "document_ids": [
+        "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+      ]
+    },
+    "limit": 5,
+    "kinds": [
+      "entity"
+    ],
+    "semantic": true
+  },
+  "params": null,
+  "status_code": 200,
+  "elapsed_ms": 6241,
+  "response": {
+    "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+    "request_id": "611ed293-f8f3-4119-9707-db1a06015b0a",
+    "status": "ok",
+    "knowledge": [
+      {
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "kind": "entity",
+        "origin": "graph",
+        "entity_id": "9bb7b0cb-d11e-4f9c-8176-69ebe4f82381",
+        "entity_type": "Clause",
+        "identity": {
+          "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+          "fields": {
+            "heading": "c. LIMITATIONS ON LIABILITY/NO INJUNCTIVE RELIEF."
+          },
+          "namespace": "contract-clause"
+        },
+        "canonical_name": "c. LIMITATIONS ON LIABILITY/NO INJUNCTIVE RELIEF.",
+        "aliases": [],
+        "domain_ids": [],
+        "document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "completeness": "complete",
+        "missing_fields": [],
+        "conflicts": [],
+        "scope": "selected_documents",
+        "selected_document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "id": "9bb7b0cb-d11e-4f9c-8176-69ebe4f82381",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "source_vector"
+        ],
+        "score": 1.0,
+        "summary": "c. LIMITATIONS ON LIABILITY/NO INJUNCTIVE RELIEF.\nClause\n合同原文条款，涵盖每个编号条款、子条款和无编号的实质段落；保留条件、例外、范围与指代。可见原文不完整时仍保留并标记，绝不以摘要代替。\nheading [\"c. LIMITATIONS ON LIABILITY/NO INJUNCTIVE RELIEF.\"]\nfull_statement [{\"definition\":\"EXCEPT IN CASES OF GROSS NEGLIGENCE, WILLFUL MISCONDUCT OR FRAUD, INDEMNIFICATION CLAIMS UNDER SECTION 5 OR BREACHES OF SECTION 2 (TRADEMARKS), 8 (CONFIDENTIALITY), OR 9 (NO AGENCY RELATIONSHIP), IN NO EVENT SHALL EITHER PARTY OR ITS OFFICERS, DIRECTORS, OR EMPLOYEES BE LIABLE TO TH",
+        "summary_truncated": true
+      },
+      {
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "kind": "entity",
+        "origin": "graph",
+        "entity_id": "66efb769-368c-4dd5-b377-49cfb030ec18",
+        "entity_type": "Clause",
+        "identity": {
+          "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+          "fields": {
+            "heading": "b. DISCLAIMER."
+          },
+          "namespace": "contract-clause"
+        },
+        "canonical_name": "b. DISCLAIMER.",
+        "aliases": [],
+        "domain_ids": [],
+        "document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "completeness": "complete",
+        "missing_fields": [],
+        "conflicts": [],
+        "scope": "selected_documents",
+        "selected_document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "id": "66efb769-368c-4dd5-b377-49cfb030ec18",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "source_vector"
+        ],
+        "score": 0.5,
+        "summary": "b. DISCLAIMER.\nClause\n合同原文条款，涵盖每个编号条款、子条款和无编号的实质段落；保留条件、例外、范围与指代。可见原文不完整时仍保留并标记，绝不以摘要代替。\nheading [\"b. DISCLAIMER.\"]\nfull_statement [{\"definition\":\"EXCEPT AS EXPRESSLY STATED IN THIS AGREEMENT, NEITHER PARTY MAKES ANY REPRESENTATIONS OR WARRANTIES OF ANY KIND WITH RESPECT TO THE SUBJECT MATTER HEREOF, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR ANY LEVEL OF BUSINESS OR SERVICE THAT MAY RESULT FROM THIS AGREEMENT, OR ANY WARRANTY OR C",
+        "summary_truncated": true
+      },
+      {
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "kind": "entity",
+        "origin": "graph",
+        "entity_id": "ad09f0cf-f15e-47a9-a1bf-ee9fc7d60baa",
+        "entity_type": "Clause",
+        "identity": {
+          "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+          "fields": {
+            "heading": "f. No Other Charges or Expenses."
+          },
+          "namespace": "contract-clause"
+        },
+        "canonical_name": "f. No Other Charges or Expenses.",
+        "aliases": [],
+        "domain_ids": [],
+        "document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "completeness": "complete",
+        "missing_fields": [],
+        "conflicts": [],
+        "scope": "selected_documents",
+        "selected_document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "id": "ad09f0cf-f15e-47a9-a1bf-ee9fc7d60baa",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "source_vector"
+        ],
+        "score": 0.3333333333333333,
+        "summary": "f. No Other Charges or Expenses.\nClause\n合同原文条款，涵盖每个编号条款、子条款和无编号的实质段落；保留条件、例外、范围与指代。可见原文不完整时仍保留并标记，绝不以摘要代替。\nheading [\"f. No Other Charges or Expenses.\"]\nfull_statement [{\"definition\":\"Neither party will be liable to pay the other party any other types of charges or expenses not agreed to in this Agreement or any related amendment signed by the Parties.\"}]",
+        "summary_truncated": false
+      },
+      {
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "kind": "entity",
+        "origin": "graph",
+        "entity_id": "24f7e08c-40e6-448d-8f4b-a5f0aaaae399",
+        "entity_type": "Clause",
+        "identity": {
+          "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+          "fields": {
+            "heading": "10. MISCELLANEOUS a. Insurance."
+          },
+          "namespace": "contract-clause"
+        },
+        "canonical_name": "10. MISCELLANEOUS a. Insurance.",
+        "aliases": [],
+        "domain_ids": [],
+        "document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "completeness": "complete",
+        "missing_fields": [],
+        "conflicts": [],
+        "scope": "selected_documents",
+        "selected_document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "id": "24f7e08c-40e6-448d-8f4b-a5f0aaaae399",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "source_vector"
+        ],
+        "score": 0.25,
+        "summary": "10. MISCELLANEOUS a. Insurance.\nClause\n合同原文条款，涵盖每个编号条款、子条款和无编号的实质段落；保留条件、例外、范围与指代。可见原文不完整时仍保留并标记，绝不以摘要代替。\nheading [\"10. MISCELLANEOUS a. Insurance.\"]\nfull_statement [{\"definition\":\"Each party agrees to carry liability insurance sufficient to cover the risks posed under this Agreement.\"}]",
+        "summary_truncated": false
+      },
+      {
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "kind": "entity",
+        "origin": "graph",
+        "entity_id": "0e014fd1-50de-40fe-9719-b44cec28b875",
+        "entity_type": "Clause",
+        "identity": {
+          "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+          "fields": {
+            "heading": "4. REPRESENTATIONS AND WARRANTIES; LIMITATIONS OF LIABILITY a. Each party represents and warrants"
+          },
+          "namespace": "contract-clause"
+        },
+        "canonical_name": "4. REPRESENTATIONS AND WARRANTIES; LIMITATIONS OF LIABILITY a. Each party represents and warrants",
+        "aliases": [],
+        "domain_ids": [],
+        "document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "completeness": "complete",
+        "missing_fields": [],
+        "conflicts": [],
+        "scope": "selected_documents",
+        "selected_document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "id": "0e014fd1-50de-40fe-9719-b44cec28b875",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "source_vector"
+        ],
+        "score": 0.2,
+        "summary": "4. REPRESENTATIONS AND WARRANTIES; LIMITATIONS OF LIABILITY a. Each party represents and warrants\nClause\n合同原文条款，涵盖每个编号条款、子条款和无编号的实质段落；保留条件、例外、范围与指代。可见原文不完整时仍保留并标记，绝不以摘要代替。\nheading [\"4. REPRESENTATIONS AND WARRANTIES; LIMITATIONS OF LIABILITY a. Each party represents and warrants\"]\nfull_statement [{\"definition\":\"Each party represents and warrants to the other as follows: (i) it is duly authorized under applicable law and has the authority to enter into and perform this Agreement; (ii) this Agreem",
+        "summary_truncated": true
+      }
+    ],
+    "relations": [],
+    "paths": [],
+    "evidence": [],
+    "candidates": [],
+    "conflicts": [],
+    "coverage": [
+      {
+        "component": "object_candidates",
+        "mode": "top_k",
+        "scope": {
+          "entity_types": [],
+          "domain_ids": [],
+          "document_ids": [
+            "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+          ],
+          "properties": {}
+        },
+        "budget": {
+          "rerank_candidates": 68,
+          "limit": 5
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      },
+      {
+        "component": "object_candidates",
+        "mode": "top_k",
+        "scope": {
+          "entity_types": [],
+          "domain_ids": [],
+          "document_ids": [
+            "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+          ],
+          "properties": {}
+        },
+        "budget": {
+          "limit": 5,
+          "scan_limit": 5000,
+          "channels": [
+            "keyword",
+            "rerank",
+            "source_vector"
+          ]
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      }
+    ],
+    "warnings": [],
+    "model": null,
+    "model_revision": null,
+    "item": null,
+    "scope": "selected_documents",
+    "selected_document_ids": [
+      "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+    ],
+    "declarations": [],
+    "plan_summary": null,
+    "unresolved_entities": [],
+    "excluded_endpoint_ids": []
+  }
+}

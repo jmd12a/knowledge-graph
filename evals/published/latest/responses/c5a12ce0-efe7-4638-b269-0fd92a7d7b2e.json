@@ -1,0 +1,326 @@
+{
+  "recorded_at": "2026-11-01T19:43:07.839947+00:00",
+  "stage": "long_contract",
+  "protocol": "HTTP",
+  "method": "POST",
+  "path": "/kbs/3da41804-fbda-491a-9465-8133e38b961b/knowledge/search",
+  "input": {
+    "query": "Highlight the parts (if any) of this contract related to \"Non-Compete\" that should be reviewed by a lawyer. Details: Is there a restriction on the ability of a party to compete with the counterparty or operate in a certain geography or business or technology sector? ",
+    "filters": {
+      "document_ids": [
+        "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+      ]
+    },
+    "limit": 5,
+    "kinds": [
+      "chunk"
+    ],
+    "semantic": true
+  },
+  "params": null,
+  "status_code": 200,
+  "elapsed_ms": 5117,
+  "response": {
+    "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+    "request_id": "e9f960aa-4e0c-46e4-a5db-d7eb9503763d",
+    "status": "ok",
+    "knowledge": [
+      {
+        "chunk_id": "78eeee72-3af7-4b2c-bc35-56c91866c643",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                13952,
+                15952
+              ],
+              "format": "txt",
+              "line_range": [
+                43,
+                43
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "l not authorize a Zynga Competitor to commercially exploit the Licensed Property in connection with social poker gaming via a license similar to the license granted herein for the Term. A \"Zynga Competitor\" means: 1) Aristocrat Technologies Australia Pty Ltd. Or Big Fish Games, Inc.; 2) HUUUGE Inc.; 3) Activision Blizzard, Inc., King.com Ltd. Or King.com (US) LLC; 4) Scientific Games Corporation; 5) Tencent Holdings Limited; and 6) Murka Ltd. The parties agree to work together in good faith to amend the definition of a Zynga Competitor if that meaning for Zynga reasonably changes during the Term. f. Reservation of Rights. The parties acknowledge and agree that, except for the rights and licenses expressly granted by each party to the other party under this Agreement, each party will retain all right, title and interest in and to its products, services, marks, copyrights or other intellectual property, and all content, information and other materials on its website(s), and nothing contained in this Agreement will be construed as conferring upon such party, by implication, operation of law or otherwise, any other license or other right. 3. PAYMENT a. Annual Minimum Guarantee. Zynga will pay to WPT the Annual Minimum Guarantee as set forth in the Basic Provisions. The Annual Minimum Guarantee shall be recoupable from such Royalties as are, or have become, paid to WPT. For clarification, the Annual Minimum Guarantee will operate as an advance payment, such that when accrued Royalties exceed the Annual Minimum Guarantee payments already paid, then the excess Royalties will be paid by Zynga to WPT. b. Royalty. The Royalties to be paid by Zynga to WPT is the percentage of Net Revenue as set forth in Section 5 of the Basic Provisions. \"Net Revenue(s)\" shall be defined as one hundred percent (100%) of gross revenues and all other receivables of any kind whatsoever received by Zynga or any of Zynga's affiliates attributable to the use of Paid Currency or in connection with th",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "78eeee72-3af7-4b2c-bc35-56c91866c643",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 1.0
+      },
+      {
+        "chunk_id": "82bd61a2-2474-42bd-b964-9afe56cdd874",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                12102,
+                14102
+              ],
+              "format": "txt",
+              "line_range": [
+                43,
+                43
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "er for every episode the brand is used in; and similarly, given exigencies in the social gaming business, it is reasonable that WPT would approve use of its brand conceptually in elements of the Zynga platform but not need to re-approve the use in a similar manner for every poker tournament the brand is used in). i. Licensee may use textual and/or pictorial matter pertaining to the Licensed Property on such promotional, display and advertising material as may, in Licensee's reasonable judgment, promote the awareness, consumption and sale of the Licensed Property. All final advertising and promotional material using the Licensed Property must be submitted to Licensor for its prior written approval. All press releases respecting this Agreement or the relationship of the parties herein shall require prior written approval by the other party. ii. Licensor will use commercially reasonable efforts to provide approval and/or feedback within five (5) business days after its receipt of a creative submission, or re-submission, with respect to the Licensed Property or marketing materials; provided that: (a) if Licensor declines to approve any submission or re-submission, then it shall provide reasonably detailed feedback in order to enable Licensee to modify the Licensed Property or marketing material accordingly in order to address Licensor's concerns and obtain Licensor's approval, and (b) if Licensor fails to (1) approve or (2) disapprove and provide feedback within such timeframe, then such submission or re-submission is deemed to have been approved. No approval may be unreasonably withdrawn by Licensor once delivered. iii. Zynga shall advise WPT to Zynga's knowledge as to which jurisdictions where it may be illegal to advertise Zynga's Licensed Property (if any) given local laws or regulations. iv. WPT or its affiliates shall not authorize a Zynga Competitor to commercially exploit the Licensed Property in connection with social poker gaming via a license similar to the l",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "82bd61a2-2474-42bd-b964-9afe56cdd874",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.5
+      },
+      {
+        "chunk_id": "ca9f9037-3290-4a88-8826-b9c1f0db359c",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              1248
+            ],
+            "origin": {
+              "char_range": [
+                1850,
+                3098
+              ],
+              "format": "txt",
+              "line_range": [
+                1,
+                11
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "ctivities described in Exhibit A, including, but not limited to Zynga promoting the WPT brand in a WPT-branded Zynga Poker Tournament Mode, and WPT promoting the Zynga brand in WPT Tournaments and WPT Invitational Tournaments. This Agreement describes the terms of a content license and cooperative marketing relationship under which each party will independently or cooperatively engage in mutually agreed activities to promote each other's products and services throughout the Territory (as defined below). 2. Territory. The Territory for this Agreement is worldwide, but not including Asian countries (including, but not limited to, Bangladesh, Bhutan, Brunei, Cambodia, East Timor, Hong Kong, India, Indonesia, Japan, Laos, Macau, Malaysia, Maldives, Mongolia, Myanmar, Nepal, North Korea, Pakistan, People's Republic of China, Philippines, Singapore, South Korea, Sri Lanka, Taiwan, Thailand, Vietnam). The parties acknowledge and agree that the rights granted hereunder by Zynga (a) with respect to the United States are granted to, held and exercised by Zynga US and (b) with respect to all other parts of the Territory are granted to, held and exercised by Zynga Ireland.\n\n1\n\nSource: ALLIED ESPORTS ENTERTAINMENT, INC., 8-K, 8/15/2019\n\n\n\n\n\n",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "ca9f9037-3290-4a88-8826-b9c1f0db359c",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.3333333333333333
+      },
+      {
+        "chunk_id": "9c81f57b-47d6-4fcd-a58f-2b86bc2d3c2b",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                6552,
+                8552
+              ],
+              "format": "txt",
+              "line_range": [
+                33,
+                33
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "ual property rights, and any other items set forth in this Agreement, which the parties may utilize in connection with the marketing and promotional activities in Exhibit A. A list of the Licensed Property for each party is described in Exhibit B. e. \"Annual Minimum Guarantee\" means the guaranteed minimum amount due to WPT by Zynga in consideration of the rights granted herein, which amount may be recoupable from Royalties as set forth below and in the Basic Provisions. f. \"Royalty\" means the amount(s) set forth in the Basic Provisions and calculated as described in the Additional Provisions. g. \"Term\" means the term of this Agreement as set forth in the Basic Provisions. h. \"Territory\" means the territory throughout which the parties are authorized to engage in the marketing and promotional activities as described in Exhibit A and in the Basic Provisions. 2. TRADEMARKS, APPROVALS, AND RESERVATION OF RIGHTS a. Materials. To the extent indicated on Exhibit A, each party will provide the other party with electronic files containing the Licensed Property of such party to be used under this Agreement, as specified in Exhibit B, if any. b. License by Zynga. Subject to the terms and conditions of this Agreement, Zynga grants to WPT a non-exclusive, non- assignable, non-sublicensable, royalty-free, paid up, limited worldwide license to use and display Zynga's Licensed Property solely as necessary to perform WPT's obligations under this Agreement and as specifically described on Exhibit A, in any and all media now known or hereafter devised, for the Term (subject to Section 7.e. of Additional Provisions). c. License by WPT. Subject to the terms and conditions of this Agreement, WPT grants to Zynga a non-exclusive, non-assignable, non-sublicensable, royalty-free, paid up, limited license in the Territory to use and display WPT's Licensed Property solely as necessary to perform Zynga's obligations under this Agreement and as specifically described on Exhibit A, for the Term. ",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "9c81f57b-47d6-4fcd-a58f-2b86bc2d3c2b",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.25
+      },
+      {
+        "chunk_id": "072f669c-fd8c-47e4-92a6-2b9859c5283f",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                18668,
+                20668
+              ],
+              "format": "txt",
+              "line_range": [
+                53,
+                53
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "ties rate; the distribution channels or portals, the platform, the territory(ies), and itemized Allowable Deductions (\"Royalty Statement(s)\"). The amount shown to be payable to WPT shall be paid simultaneously with the rendition of the respective Royalty Statement. The statements and payments remitted hereunder shall be delivered to WPT via email to the following email address: Deborah.Frazzetta@wpt.com (ATTN: Deborah Frazzetta, VP, Finance. e. Audit Rights. Zynga shall keep full, complete and accurate books of account and records (collectively \"records\") covering all transactions relating to the subject matter of this Agreement in sufficient detail to enable the Royalties payable hereunder to be determined and verified. Zynga shall permit such records to be examined by authorized representatives of WPT, including such independent auditors as WPT may designate, during usual business hours, with advance notice, to verify to the extent necessary the Royalties paid hereunder, and WPT and its representatives shall use reasonable efforts to minimize disruptions to Zynga's business. Prompt adjustment shall be made by Zynga to compensate for any errors or omissions disclosed by such examination. If the adjustment is more than $1,500 in favor, then out-of-pocket costs of such examination shall be borne by Zynga. f. No Other Charges or Expenses. Neither party will be liable to pay the other party any other types of charges or expenses not agreed to in this Agreement or any related amendment signed by the Parties. 4. REPRESENTATIONS AND WARRANTIES; LIMITATIONS OF LIABILITY a. Each party represents and warrants to the other as follows: (i) it is duly authorized under applicable law and has the authority to enter into and perform this Agreement; (ii) this Agreement constitutes a valid and binding obligation of such party enforceable in accordance with its terms; (iii) the making of this Agreement by such party does not violate any agreement, right or obligation existing between",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "072f669c-fd8c-47e4-92a6-2b9859c5283f",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.2
+      }
+    ],
+    "relations": [],
+    "paths": [],
+    "evidence": [],
+    "candidates": [],
+    "conflicts": [],
+    "coverage": [
+      {
+        "component": "documents",
+        "mode": "top_k",
+        "scope": {
+          "entity_types": [],
+          "domain_ids": [],
+          "document_ids": [
+            "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+          ],
+          "properties": {}
+        },
+        "budget": {
+          "rerank_candidates": 21,
+          "limit": 5
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      },
+      {
+        "component": "documents",
+        "mode": "top_k",
+        "scope": {
+          "document_ids": [
+            "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+          ],
+          "domain_ids": []
+        },
+        "budget": {
+          "limit": 5,
+          "scan_limit": 5000,
+          "channels": [
+            "keyword",
+            "vector",
+            "rerank"
+          ],
+          "entity_filters_apply_to": "object_candidates"
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      }
+    ],
+    "warnings": [],
+    "model": null,
+    "model_revision": null,
+    "item": null,
+    "scope": "selected_documents",
+    "selected_document_ids": [
+      "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+    ],
+    "declarations": [],
+    "plan_summary": null,
+    "unresolved_entities": [],
+    "excluded_endpoint_ids": []
+  }
+}

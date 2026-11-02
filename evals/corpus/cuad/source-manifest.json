@@ -1,0 +1,22 @@
+{
+  "dataset": "Contract Understanding Atticus Dataset (CUAD) v1",
+  "creator": "The Atticus Project",
+  "license": "CC BY 4.0",
+  "dataset_url": "https://huggingface.co/datasets/theatticusproject/cuad",
+  "documentation_url": "https://www.atticusprojectai.org/cuad",
+  "retrieved_at": "2026-11-01",
+  "selection": "Two complete public contract text files; selected for small-scale pipeline checks, not a representative contract benchmark.",
+  "modifications": "Original downloaded bytes preserved; local file names shortened. No content digest calculated.",
+  "files": [
+    {
+      "path": "rmr-joint-filing.txt",
+      "source_url": "https://huggingface.co/datasets/theatticusproject/cuad/resolve/main/CUAD_v1/full_contract_txt/Part_II/RMRGROUPINC_01_22_2020-EX-99.1-JOINT%20FILING%20AGREEMENT.txt",
+      "byte_length": 645
+    },
+    {
+      "path": "galacticomm-web-hosting.txt",
+      "source_url": "https://huggingface.co/datasets/theatticusproject/cuad/resolve/main/CUAD_v1/full_contract_txt/Part_I/GALACTICOMMTECHNOLOGIESINC_11_07_1997-EX-10.46-WEB%20HOSTING%20AGREEMENT.txt",
+      "byte_length": 1660
+    }
+  ]
+}

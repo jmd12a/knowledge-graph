@@ -1,0 +1,326 @@
+{
+  "recorded_at": "2026-11-01T19:43:17.402591+00:00",
+  "stage": "long_contract",
+  "protocol": "HTTP",
+  "method": "POST",
+  "path": "/kbs/3da41804-fbda-491a-9465-8133e38b961b/knowledge/search",
+  "input": {
+    "query": "Highlight the parts (if any) of this contract related to \"Covenant Not To Sue\" that should be reviewed by a lawyer. Details: Is a party restricted from contesting the validity of the counterparty’s ownership of intellectual property or otherwise bringing a claim against the counterparty for matters unrelated to the contract?",
+    "filters": {
+      "document_ids": [
+        "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+      ]
+    },
+    "limit": 5,
+    "kinds": [
+      "chunk"
+    ],
+    "semantic": true
+  },
+  "params": null,
+  "status_code": 200,
+  "elapsed_ms": 4327,
+  "response": {
+    "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+    "request_id": "5810f921-fdc3-4d77-bf05-05b2a735823d",
+    "status": "ok",
+    "knowledge": [
+      {
+        "chunk_id": "334002fc-5406-4ab9-b684-96b0b8abac66",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                8402,
+                10402
+              ],
+              "format": "txt",
+              "line_range": [
+                33,
+                33
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "s Licensed Property solely as necessary to perform Zynga's obligations under this Agreement and as specifically described on Exhibit A, for the Term. d. Trademark Guidelines. In its use of the Licensed Property of the other party (\"Licensee\"), each party (\"Licensor\") will comply with any trademark usage guidelines that Licensor may communicate to Licensee from time to time. Each use of Licensor's marks by Licensee will be accompanied by the appropriate trademark symbol (either \"™\" or \"®\") and a legend specifying that such marks are trademarks of Licensor as specified on Exhibit B, and will be in accordance with Licensor's then-current trademark usage policies as provided in writing to Licensee from time to time. Licensee will provide Licensor with copies of any materials bearing any of Licensor's marks as requested by Licensor from time to time. If Licensee's use of any of Licensor's marks, or if any material bearing such marks, does not comply with the then-current trademark usage policies provided in writing by Licensor, Licensee will promptly remedy such deficiencies upon receipt of written notice of such deficiencies from Licensor. Other than the express licenses granted herein with respect to each Licensor's marks, nothing herein will grant to Licensee any other right, title or interest in Licensor's marks. All goodwill resulting from Licensee's use of Licensor's marks will inure solely to Licensor. Each party recognizes the great value of the publicity and good will associated with the Licensed Property and acknowledges that: (a) such good will is exclusively that of Licensor or Licensee, as applicable; and (b) the Licensed Property have acquired a secondary meaning as trademarks and/or identifications of Licensor or Licensee, as applicable, in the mind of the purchasing public. Licensee will not, at any time during or after this Agreement, register, attempt to register, claim any interest in, contest the use of, or otherwise adversely affect the validity of a",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "334002fc-5406-4ab9-b684-96b0b8abac66",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 1.0
+      },
+      {
+        "chunk_id": "c61c7dcd-bfb9-4f94-8978-2c11b72f225c",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                10252,
+                12252
+              ],
+              "format": "txt",
+              "line_range": [
+                33,
+                43
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "ing or after this Agreement, register, attempt to register, claim any interest in, contest the use of, or otherwise adversely affect the validity of any of Licensor's marks (including, without limitation, any act or assistance to any act, which may infringe or lead to the infringement of any such marks).\n\n4\n\nSource: ALLIED ESPORTS ENTERTAINMENT, INC., 8-K, 8/15/2019\n\n\n\n\n\ne. Approvals. The Licensed Property shall be displayed or used only in such form and in such manner as has been approved in writing (which may be by email) by Licensor pursuant to this Section 2 and Licensee shall ensure its usage of the Licensed Property solely as approved. Throughout the Term, including any renewals or extensions (if applicable), Licensee shall comply with reasonable quality standards, style guides and clear specifications communicated to Licensee and rights of approval of Licensor set forth in this Section 2 with respect to any and all of its usage of the Licensed Property. Subject to Licensor's prior written approval of any applicable Licensed Property (hereinafter the \"Approved Content\"), all Conforming Content will be deemed approved by Licensor. \"Conforming Content\" means any and all elements of the Approved Content which (i) do not represent deviations in quality, style, look-and-feel or other aspects of use from the Approved Content and (ii) are consistent with the aesthetic style or tone of the Approved Content. The parties will come to agreement with respect to Exhibit A as to whether prior written approval is needed in every instance or whether it is not needed after the first instance has been approved in writing (e.g., given exigencies in television production business, it is reasonable that Zynga would approve the use of its brand conceptually in elements of an episode but not need to re-approve the use in a similar manner for every episode the brand is used in; and similarly, given exigencies in the social gaming business, it is reasonable that WPT would approve use ",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "c61c7dcd-bfb9-4f94-8978-2c11b72f225c",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.5
+      },
+      {
+        "chunk_id": "78eeee72-3af7-4b2c-bc35-56c91866c643",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                13952,
+                15952
+              ],
+              "format": "txt",
+              "line_range": [
+                43,
+                43
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "l not authorize a Zynga Competitor to commercially exploit the Licensed Property in connection with social poker gaming via a license similar to the license granted herein for the Term. A \"Zynga Competitor\" means: 1) Aristocrat Technologies Australia Pty Ltd. Or Big Fish Games, Inc.; 2) HUUUGE Inc.; 3) Activision Blizzard, Inc., King.com Ltd. Or King.com (US) LLC; 4) Scientific Games Corporation; 5) Tencent Holdings Limited; and 6) Murka Ltd. The parties agree to work together in good faith to amend the definition of a Zynga Competitor if that meaning for Zynga reasonably changes during the Term. f. Reservation of Rights. The parties acknowledge and agree that, except for the rights and licenses expressly granted by each party to the other party under this Agreement, each party will retain all right, title and interest in and to its products, services, marks, copyrights or other intellectual property, and all content, information and other materials on its website(s), and nothing contained in this Agreement will be construed as conferring upon such party, by implication, operation of law or otherwise, any other license or other right. 3. PAYMENT a. Annual Minimum Guarantee. Zynga will pay to WPT the Annual Minimum Guarantee as set forth in the Basic Provisions. The Annual Minimum Guarantee shall be recoupable from such Royalties as are, or have become, paid to WPT. For clarification, the Annual Minimum Guarantee will operate as an advance payment, such that when accrued Royalties exceed the Annual Minimum Guarantee payments already paid, then the excess Royalties will be paid by Zynga to WPT. b. Royalty. The Royalties to be paid by Zynga to WPT is the percentage of Net Revenue as set forth in Section 5 of the Basic Provisions. \"Net Revenue(s)\" shall be defined as one hundred percent (100%) of gross revenues and all other receivables of any kind whatsoever received by Zynga or any of Zynga's affiliates attributable to the use of Paid Currency or in connection with th",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "78eeee72-3af7-4b2c-bc35-56c91866c643",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.3333333333333333
+      },
+      {
+        "chunk_id": "696a9ce7-fda1-4d84-b019-ba98b7380734",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                22368,
+                24368
+              ],
+              "format": "txt",
+              "line_range": [
+                53,
+                63
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "REVENUE, WHETHER ARISING IN CONTRACT, TORT, NEGLIGENCE, STATUTE, OR OTHERWISE, EVEN IF ADVISED OF THE POSSIBILITY THEREOF. IN NO EVENT SHALL THE NON-BREACHING PARTY BE ENTITLED TO EQUITABLE OR INJUNCTIVE RELIEF OF ANY KIND.\n\n6\n\nSource: ALLIED ESPORTS ENTERTAINMENT, INC., 8-K, 8/15/2019\n\n\n\n\n\n5. INDEMNIFICATION a. WPT shall indemnify, defend, and hold harmless Zynga and its Affiliates, and the respective directors, officers and employees of the foregoing (the \"Zynga Indemnified Parties\") from and against any and all third party claims, actions, suits, costs, liabilities, judgments, obligations, losses, penalties, expenses or damages (including, without limitation, reasonable legal fees and expenses) of whatsoever kind and nature imposed on, incurred by or asserted against any of the Zynga Indemnified Parties arising out of: (i) any breach or alleged breach by WPT of any representation, warranty or covenant made, by WPT pursuant to this Agreement; or (ii) WPT's non-compliance with any applicable federal, state or local laws or with any applicable regulations in connection with its performance of this Agreement. b. Zynga shall indemnify, defend, and hold harmless WPT and its Affiliates, and the respective directors, officers and employees of the foregoing (the \"WPT Indemnified Parties\") from and against any and all third party claims, actions, suits, costs, liabilities, judgments, obligations, losses, penalties, expenses or damages (including, without limitation, reasonable legal fees and expenses) of whatsoever kind and nature imposed on, incurred by or asserted against any of the WPT Indemnified Parties arising out: (i) any breach or alleged breach by Zynga of any representation, warranty or covenant made by Zynga pursuant to this Agreement; or (ii) Zynga's non-compliance with any applicable federal, state or local laws or with any applicable regulations in connection with its performance of this Agreement. c. In order to seek or receive indemnification hereunder in c",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "696a9ce7-fda1-4d84-b019-ba98b7380734",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.25
+      },
+      {
+        "chunk_id": "dcb3351b-f6f6-4047-9f9f-0703e1dafeb3",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                20518,
+                22518
+              ],
+              "format": "txt",
+              "line_range": [
+                53,
+                53
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "le in accordance with its terms; (iii) the making of this Agreement by such party does not violate any agreement, right or obligation existing between such party and any third party; (iv) the marketing and promotional activities in Exhibit A shall not infringe or misappropriate third party rights, including, without limitation, any patent, trade name, trademark, copyright or other intellectual property or proprietary right and shall not invade or violate any right of privacy, publicity, personal or proprietary right, or other common law or statutory right, nor defame any person or entity in the United States and European Union (the \"Principal Territories\"), and to the knowledge of such party, outside the Principal Territories; provided that such party makes no representations regarding the Licensed Property or any other materials provided by Licensor as contemplated under this Agreement. b. DISCLAIMER. EXCEPT AS EXPRESSLY STATED IN THIS AGREEMENT, NEITHER PARTY MAKES ANY REPRESENTATIONS OR WARRANTIES OF ANY KIND WITH RESPECT TO THE SUBJECT MATTER HEREOF, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR ANY LEVEL OF BUSINESS OR SERVICE THAT MAY RESULT FROM THIS AGREEMENT, OR ANY WARRANTY OR CONDITION ARISING FROM ANY COURSE OF DEALING, COURSE OF PERFORMANCE OR USAGE IN THE INDUSTRY. c. LIMITATIONS ON LIABILITY/NO INJUNCTIVE RELIEF. EXCEPT IN CASES OF GROSS NEGLIGENCE, WILLFUL MISCONDUCT OR FRAUD, INDEMNIFICATION CLAIMS UNDER SECTION 5 OR BREACHES OF SECTION 2 (TRADEMARKS), 8 (CONFIDENTIALITY), OR 9 (NO AGENCY RELATIONSHIP), IN NO EVENT SHALL EITHER PARTY OR ITS OFFICERS, DIRECTORS, OR EMPLOYEES BE LIABLE TO THE OTHER PARTY IN CONNECTION WITH THE SUBJECT MATTER HEREOF, FOR ANY SPECIAL, INDIRECT, CONSEQUENTIAL OR PUNITIVE DAMAGES OF ANY KIND, LOST PROFITS OR LOST REVENUE, WHETHER ARISING IN CONTRACT, TORT, NEGLIGENCE, STATUTE, OR OTHERWISE, EVEN IF ADVISED OF THE POSSIBILITY THEREOF. IN NO EVENT SHALL THE NON-B",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "dcb3351b-f6f6-4047-9f9f-0703e1dafeb3",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.2
+      }
+    ],
+    "relations": [],
+    "paths": [],
+    "evidence": [],
+    "candidates": [],
+    "conflicts": [],
+    "coverage": [
+      {
+        "component": "documents",
+        "mode": "top_k",
+        "scope": {
+          "entity_types": [],
+          "domain_ids": [],
+          "document_ids": [
+            "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+          ],
+          "properties": {}
+        },
+        "budget": {
+          "rerank_candidates": 21,
+          "limit": 5
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      },
+      {
+        "component": "documents",
+        "mode": "top_k",
+        "scope": {
+          "document_ids": [
+            "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+          ],
+          "domain_ids": []
+        },
+        "budget": {
+          "limit": 5,
+          "scan_limit": 5000,
+          "channels": [
+            "keyword",
+            "vector",
+            "rerank"
+          ],
+          "entity_filters_apply_to": "object_candidates"
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      }
+    ],
+    "warnings": [],
+    "model": null,
+    "model_revision": null,
+    "item": null,
+    "scope": "selected_documents",
+    "selected_document_ids": [
+      "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+    ],
+    "declarations": [],
+    "plan_summary": null,
+    "unresolved_entities": [],
+    "excluded_endpoint_ids": []
+  }
+}

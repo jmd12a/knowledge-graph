@@ -1,0 +1,326 @@
+{
+  "recorded_at": "2026-11-01T19:42:31.123514+00:00",
+  "stage": "long_contract",
+  "protocol": "HTTP",
+  "method": "POST",
+  "path": "/kbs/3da41804-fbda-491a-9465-8133e38b961b/knowledge/search",
+  "input": {
+    "query": "Highlight the parts (if any) of this contract related to \"Audit Rights\" that should be reviewed by a lawyer. Details: Does a party have the right to  audit the books, records, or physical locations of the counterparty to ensure compliance with the contract?",
+    "filters": {
+      "document_ids": [
+        "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+      ]
+    },
+    "limit": 5,
+    "kinds": [
+      "chunk"
+    ],
+    "semantic": true
+  },
+  "params": null,
+  "status_code": 200,
+  "elapsed_ms": 3822,
+  "response": {
+    "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+    "request_id": "616c1cd4-04de-437b-b3e5-1820948ed6b4",
+    "status": "ok",
+    "knowledge": [
+      {
+        "chunk_id": "072f669c-fd8c-47e4-92a6-2b9859c5283f",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                18668,
+                20668
+              ],
+              "format": "txt",
+              "line_range": [
+                53,
+                53
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "ties rate; the distribution channels or portals, the platform, the territory(ies), and itemized Allowable Deductions (\"Royalty Statement(s)\"). The amount shown to be payable to WPT shall be paid simultaneously with the rendition of the respective Royalty Statement. The statements and payments remitted hereunder shall be delivered to WPT via email to the following email address: Deborah.Frazzetta@wpt.com (ATTN: Deborah Frazzetta, VP, Finance. e. Audit Rights. Zynga shall keep full, complete and accurate books of account and records (collectively \"records\") covering all transactions relating to the subject matter of this Agreement in sufficient detail to enable the Royalties payable hereunder to be determined and verified. Zynga shall permit such records to be examined by authorized representatives of WPT, including such independent auditors as WPT may designate, during usual business hours, with advance notice, to verify to the extent necessary the Royalties paid hereunder, and WPT and its representatives shall use reasonable efforts to minimize disruptions to Zynga's business. Prompt adjustment shall be made by Zynga to compensate for any errors or omissions disclosed by such examination. If the adjustment is more than $1,500 in favor, then out-of-pocket costs of such examination shall be borne by Zynga. f. No Other Charges or Expenses. Neither party will be liable to pay the other party any other types of charges or expenses not agreed to in this Agreement or any related amendment signed by the Parties. 4. REPRESENTATIONS AND WARRANTIES; LIMITATIONS OF LIABILITY a. Each party represents and warrants to the other as follows: (i) it is duly authorized under applicable law and has the authority to enter into and perform this Agreement; (ii) this Agreement constitutes a valid and binding obligation of such party enforceable in accordance with its terms; (iii) the making of this Agreement by such party does not violate any agreement, right or obligation existing between",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "072f669c-fd8c-47e4-92a6-2b9859c5283f",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 1.0
+      },
+      {
+        "chunk_id": "d60cff60-49d3-423b-af99-0c93b4920f32",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                24218,
+                26218
+              ],
+              "format": "txt",
+              "line_range": [
+                63,
+                63
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "or with any applicable regulations in connection with its performance of this Agreement. c. In order to seek or receive indemnification hereunder in cases involving third-party claims the party seeking indemnification (the \"Indemnified Party\") must have promptly notified the other (the \"Indemnifying Party\") of any claim or litigation of which the Indemnified Party is aware and to which the indemnification relates; and the Indemnified Party must reasonably cooperate with Indemnifying Party in the defense or settlement of such claim or litigation. With regard to any claim or litigation to which the Indemnifying Party itself is not a party, the Indemnifying Party must have afforded the Indemnified Party the opportunity to participate in any compromise, settlement, litigation or other resolution or disposition of such claim or litigation. 6. TERMINATION a. Each party shall have the right at any time to terminate this Agreement without prejudice to any rights which it may have, whether pursuant to the provisions of this Agreement or otherwise in law or in equity or otherwise, upon the occurrence of any one or more of the following events: i. The other party breaches or fails to perform any of its material obligations provided for in this Agreement; ii. The other party is unable to pay its debts when due, or makes any assignment for the benefit of creditors, or files any petition under the bankruptcy or insolvency laws of any jurisdiction, county or place, or has or suffers a receiver or trustee to be appointed for its business or property, or is adjudicated a bankrupt or an insolvent; or iii. The other party asserts any rights in or to the terminating party's intellectual property in violation of this Agreement. a. In the event that any of these events of default should occur and a party elects to exercise its right to terminate this Agreement, such party shall give notice of termination in writing to the other party, which notice shall specify in reasonable detail the e",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "d60cff60-49d3-423b-af99-0c93b4920f32",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.5
+      },
+      {
+        "chunk_id": "696a9ce7-fda1-4d84-b019-ba98b7380734",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                22368,
+                24368
+              ],
+              "format": "txt",
+              "line_range": [
+                53,
+                63
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "REVENUE, WHETHER ARISING IN CONTRACT, TORT, NEGLIGENCE, STATUTE, OR OTHERWISE, EVEN IF ADVISED OF THE POSSIBILITY THEREOF. IN NO EVENT SHALL THE NON-BREACHING PARTY BE ENTITLED TO EQUITABLE OR INJUNCTIVE RELIEF OF ANY KIND.\n\n6\n\nSource: ALLIED ESPORTS ENTERTAINMENT, INC., 8-K, 8/15/2019\n\n\n\n\n\n5. INDEMNIFICATION a. WPT shall indemnify, defend, and hold harmless Zynga and its Affiliates, and the respective directors, officers and employees of the foregoing (the \"Zynga Indemnified Parties\") from and against any and all third party claims, actions, suits, costs, liabilities, judgments, obligations, losses, penalties, expenses or damages (including, without limitation, reasonable legal fees and expenses) of whatsoever kind and nature imposed on, incurred by or asserted against any of the Zynga Indemnified Parties arising out of: (i) any breach or alleged breach by WPT of any representation, warranty or covenant made, by WPT pursuant to this Agreement; or (ii) WPT's non-compliance with any applicable federal, state or local laws or with any applicable regulations in connection with its performance of this Agreement. b. Zynga shall indemnify, defend, and hold harmless WPT and its Affiliates, and the respective directors, officers and employees of the foregoing (the \"WPT Indemnified Parties\") from and against any and all third party claims, actions, suits, costs, liabilities, judgments, obligations, losses, penalties, expenses or damages (including, without limitation, reasonable legal fees and expenses) of whatsoever kind and nature imposed on, incurred by or asserted against any of the WPT Indemnified Parties arising out: (i) any breach or alleged breach by Zynga of any representation, warranty or covenant made by Zynga pursuant to this Agreement; or (ii) Zynga's non-compliance with any applicable federal, state or local laws or with any applicable regulations in connection with its performance of this Agreement. c. In order to seek or receive indemnification hereunder in c",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "696a9ce7-fda1-4d84-b019-ba98b7380734",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.3333333333333333
+      },
+      {
+        "chunk_id": "78eeee72-3af7-4b2c-bc35-56c91866c643",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                13952,
+                15952
+              ],
+              "format": "txt",
+              "line_range": [
+                43,
+                43
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "l not authorize a Zynga Competitor to commercially exploit the Licensed Property in connection with social poker gaming via a license similar to the license granted herein for the Term. A \"Zynga Competitor\" means: 1) Aristocrat Technologies Australia Pty Ltd. Or Big Fish Games, Inc.; 2) HUUUGE Inc.; 3) Activision Blizzard, Inc., King.com Ltd. Or King.com (US) LLC; 4) Scientific Games Corporation; 5) Tencent Holdings Limited; and 6) Murka Ltd. The parties agree to work together in good faith to amend the definition of a Zynga Competitor if that meaning for Zynga reasonably changes during the Term. f. Reservation of Rights. The parties acknowledge and agree that, except for the rights and licenses expressly granted by each party to the other party under this Agreement, each party will retain all right, title and interest in and to its products, services, marks, copyrights or other intellectual property, and all content, information and other materials on its website(s), and nothing contained in this Agreement will be construed as conferring upon such party, by implication, operation of law or otherwise, any other license or other right. 3. PAYMENT a. Annual Minimum Guarantee. Zynga will pay to WPT the Annual Minimum Guarantee as set forth in the Basic Provisions. The Annual Minimum Guarantee shall be recoupable from such Royalties as are, or have become, paid to WPT. For clarification, the Annual Minimum Guarantee will operate as an advance payment, such that when accrued Royalties exceed the Annual Minimum Guarantee payments already paid, then the excess Royalties will be paid by Zynga to WPT. b. Royalty. The Royalties to be paid by Zynga to WPT is the percentage of Net Revenue as set forth in Section 5 of the Basic Provisions. \"Net Revenue(s)\" shall be defined as one hundred percent (100%) of gross revenues and all other receivables of any kind whatsoever received by Zynga or any of Zynga's affiliates attributable to the use of Paid Currency or in connection with th",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "78eeee72-3af7-4b2c-bc35-56c91866c643",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.25
+      },
+      {
+        "chunk_id": "b3efda74-39d8-4c5a-a6b4-912c3927d8be",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              208
+            ],
+            "origin": {
+              "char_range": [
+                35296,
+                35504
+              ],
+              "format": "txt",
+              "line_range": [
+                93,
+                97
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "parties mutually agree to provide additional details on allowable IP) WPT MARKS: ● WPT® ● WORLD POKER TOUR® ZYNGA MARKS: ● ZYNGA® ● ZYNGA POKER®\n\n10\n\nSource: ALLIED ESPORTS ENTERTAINMENT, INC., 8-K, 8/15/2019",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "b3efda74-39d8-4c5a-a6b4-912c3927d8be",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.2
+      }
+    ],
+    "relations": [],
+    "paths": [],
+    "evidence": [],
+    "candidates": [],
+    "conflicts": [],
+    "coverage": [
+      {
+        "component": "documents",
+        "mode": "top_k",
+        "scope": {
+          "entity_types": [],
+          "domain_ids": [],
+          "document_ids": [
+            "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+          ],
+          "properties": {}
+        },
+        "budget": {
+          "rerank_candidates": 21,
+          "limit": 5
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      },
+      {
+        "component": "documents",
+        "mode": "top_k",
+        "scope": {
+          "document_ids": [
+            "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+          ],
+          "domain_ids": []
+        },
+        "budget": {
+          "limit": 5,
+          "scan_limit": 5000,
+          "channels": [
+            "keyword",
+            "vector",
+            "rerank"
+          ],
+          "entity_filters_apply_to": "object_candidates"
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      }
+    ],
+    "warnings": [],
+    "model": null,
+    "model_revision": null,
+    "item": null,
+    "scope": "selected_documents",
+    "selected_document_ids": [
+      "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+    ],
+    "declarations": [],
+    "plan_summary": null,
+    "unresolved_entities": [],
+    "excluded_endpoint_ids": []
+  }
+}

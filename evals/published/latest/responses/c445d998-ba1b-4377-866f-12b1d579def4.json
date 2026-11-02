@@ -1,0 +1,491 @@
+{
+  "recorded_at": "2026-11-01T19:42:27.208177+00:00",
+  "stage": "long_contract",
+  "protocol": "HTTP",
+  "method": "GET",
+  "path": "/kbs/3da41804-fbda-491a-9465-8133e38b961b/knowledge/entity/65e93090-78d8-486a-9a64-2899777fb504",
+  "input": null,
+  "params": {
+    "evidence_limit": 1000
+  },
+  "status_code": 200,
+  "elapsed_ms": 11,
+  "response": {
+    "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+    "request_id": "99c4bf71-569a-4e7a-b921-9574102dd38b",
+    "status": "ok",
+    "knowledge": [],
+    "relations": [],
+    "paths": [],
+    "evidence": [
+      {
+        "chunk_id": "5f6211b3-9b0b-4b4c-a91b-1e857386acef",
+        "chunk_range": [
+          150,
+          177
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "role": "context",
+        "source_mapping_verified": true,
+        "source_spans": [
+          {
+            "chunk_range": [
+              150,
+              177
+            ],
+            "origin": {
+              "char_range": [
+                28068,
+                28095
+              ],
+              "format": "txt",
+              "line_range": [
+                63,
+                73
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "nation of this Agreement.\n\n",
+        "contribution_ids": [
+          "854d12b0-51b1-4bf6-a37e-62ca1ddbfa6d"
+        ],
+        "fact_ids": [
+          "65e93090-78d8-486a-9a64-2899777fb504"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "696a9ce7-fda1-4d84-b019-ba98b7380734",
+        "chunk_range": [
+          292,
+          2000
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "role": "context",
+        "source_mapping_verified": true,
+        "source_spans": [
+          {
+            "chunk_range": [
+              292,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                22660,
+                24368
+              ],
+              "format": "txt",
+              "line_range": [
+                53,
+                63
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "5. INDEMNIFICATION a. WPT shall indemnify, defend, and hold harmless Zynga and its Affiliates, and the respective directors, officers and employees of the foregoing (the \"Zynga Indemnified Parties\") from and against any and all third party claims, actions, suits, costs, liabilities, judgments, obligations, losses, penalties, expenses or damages (including, without limitation, reasonable legal fees and expenses) of whatsoever kind and nature imposed on, incurred by or asserted against any of the Zynga Indemnified Parties arising out of: (i) any breach or alleged breach by WPT of any representation, warranty or covenant made, by WPT pursuant to this Agreement; or (ii) WPT's non-compliance with any applicable federal, state or local laws or with any applicable regulations in connection with its performance of this Agreement. b. Zynga shall indemnify, defend, and hold harmless WPT and its Affiliates, and the respective directors, officers and employees of the foregoing (the \"WPT Indemnified Parties\") from and against any and all third party claims, actions, suits, costs, liabilities, judgments, obligations, losses, penalties, expenses or damages (including, without limitation, reasonable legal fees and expenses) of whatsoever kind and nature imposed on, incurred by or asserted against any of the WPT Indemnified Parties arising out: (i) any breach or alleged breach by Zynga of any representation, warranty or covenant made by Zynga pursuant to this Agreement; or (ii) Zynga's non-compliance with any applicable federal, state or local laws or with any applicable regulations in connection with its performance of this Agreement. c. In order to seek or receive indemnification hereunder in c",
+        "contribution_ids": [
+          "854d12b0-51b1-4bf6-a37e-62ca1ddbfa6d"
+        ],
+        "fact_ids": [
+          "65e93090-78d8-486a-9a64-2899777fb504"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "77c91247-8a19-4198-8227-3493e52981cc",
+        "chunk_range": [
+          150,
+          2000
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "role": "context",
+        "source_mapping_verified": true,
+        "source_spans": [
+          {
+            "chunk_range": [
+              150,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                26218,
+                28068
+              ],
+              "format": "txt",
+              "line_range": [
+                63,
+                63
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "vent(s) of default that give rise to such termination. The other party shall have thirty (30) days from the effective date of such notice in which to correct any such default(s) (except those which are not curable), and failing such correction by the end of such thirty (30) day cure period, this Agreement shall thereupon immediately terminate. 7. RIGHTS AND OBLIGATIONS UPON TERMINATION OR EXPIRATION. Upon expiration or termination of this Agreement: a. All rights granted to WPT by Zynga shall immediately revert to Zynga, and WPT shall promptly cease any and all marketing and promotional activities using Zynga's Licensed Property. b. All rights granted to Zynga by WPT shall immediately revert to WPT, and Zynga shall promptly cease any and all marketing and promotional activities using WPT's Licensed Property. c. Notwithstanding the foregoing, for each end user that previously downloaded a Zynga game that includes WPT's Licensed Property, and stored such Zynga game within such end user's device, WPT grants a license and right to continue to use, activate, operate, perform, store, use and display that game on the end user's device in perpetuity at no additional charge; provided, however, that Zynga shall use best efforts to offer end users updates to its games which no longer include WPT's Licensed Property after the Term. d. Notwithstanding any termination of this Agreement, nothing herein will obligate Zynga, any users of a Zynga game that includes WPT's Licensed Property or any third party platform or distribution partners to remove from the publicly available content regarding Zynga services or any user accounts with Zynga, any of the references to user interactions, experience points, achievements, item purchases or other engagements or metrics in the Zynga game(s) that were generated prior to the expiration or termi",
+        "contribution_ids": [
+          "854d12b0-51b1-4bf6-a37e-62ca1ddbfa6d"
+        ],
+        "fact_ids": [
+          "65e93090-78d8-486a-9a64-2899777fb504"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "d60cff60-49d3-423b-af99-0c93b4920f32",
+        "chunk_range": [
+          150,
+          2000
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "role": "context",
+        "source_mapping_verified": true,
+        "source_spans": [
+          {
+            "chunk_range": [
+              150,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                24368,
+                26218
+              ],
+              "format": "txt",
+              "line_range": [
+                63,
+                63
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "ases involving third-party claims the party seeking indemnification (the \"Indemnified Party\") must have promptly notified the other (the \"Indemnifying Party\") of any claim or litigation of which the Indemnified Party is aware and to which the indemnification relates; and the Indemnified Party must reasonably cooperate with Indemnifying Party in the defense or settlement of such claim or litigation. With regard to any claim or litigation to which the Indemnifying Party itself is not a party, the Indemnifying Party must have afforded the Indemnified Party the opportunity to participate in any compromise, settlement, litigation or other resolution or disposition of such claim or litigation. 6. TERMINATION a. Each party shall have the right at any time to terminate this Agreement without prejudice to any rights which it may have, whether pursuant to the provisions of this Agreement or otherwise in law or in equity or otherwise, upon the occurrence of any one or more of the following events: i. The other party breaches or fails to perform any of its material obligations provided for in this Agreement; ii. The other party is unable to pay its debts when due, or makes any assignment for the benefit of creditors, or files any petition under the bankruptcy or insolvency laws of any jurisdiction, county or place, or has or suffers a receiver or trustee to be appointed for its business or property, or is adjudicated a bankrupt or an insolvent; or iii. The other party asserts any rights in or to the terminating party's intellectual property in violation of this Agreement. a. In the event that any of these events of default should occur and a party elects to exercise its right to terminate this Agreement, such party shall give notice of termination in writing to the other party, which notice shall specify in reasonable detail the e",
+        "contribution_ids": [
+          "854d12b0-51b1-4bf6-a37e-62ca1ddbfa6d"
+        ],
+        "fact_ids": [
+          "65e93090-78d8-486a-9a64-2899777fb504"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "d60cff60-49d3-423b-af99-0c93b4920f32",
+        "chunk_range": [
+          847,
+          936
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "quote": "6. TERMINATION a. Each party shall have the right at any time to terminate this Agreement",
+        "quote_range": [
+          847,
+          936
+        ],
+        "quote_truncated": false,
+        "role": "fact",
+        "source_spans": [
+          {
+            "chunk_range": [
+              847,
+              936
+            ],
+            "origin": {
+              "char_range": [
+                25065,
+                25154
+              ],
+              "format": "txt",
+              "line_range": [
+                63,
+                63
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "6. TERMINATION a. Each party shall have the right at any time to terminate this Agreement",
+        "contribution_ids": [
+          "09761bf1-87f5-4a55-8c0d-3c29dd9aa56f",
+          "1e18edb0-4209-4658-9d3a-52555a06c4fc",
+          "bbc5b94a-62fb-4a62-87f3-79130f3809c5"
+        ],
+        "fact_ids": [
+          "65e93090-78d8-486a-9a64-2899777fb504"
+        ],
+        "field_paths": [
+          "$exists",
+          "/identity/heading",
+          "/properties/heading"
+        ]
+      },
+      {
+        "chunk_id": "d60cff60-49d3-423b-af99-0c93b4920f32",
+        "chunk_range": [
+          862,
+          1736
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "quote": "a. Each party shall have the right at any time to terminate this Agreement without prejudice to any rights which it may have, whether pursuant to the provisions of this Agreement or otherwise in law or in equity or otherwise, upon the occurrence of any one or more of the following events: i. The other party breaches or fails to perform any of its material obligations provided for in this Agreement; ii. The other party is unable to pay its debts when due, or makes any assignment for the benefit o",
+        "quote_range": [
+          862,
+          1362
+        ],
+        "quote_truncated": true,
+        "role": "fact",
+        "source_spans": [
+          {
+            "chunk_range": [
+              862,
+              1736
+            ],
+            "origin": {
+              "char_range": [
+                25080,
+                25954
+              ],
+              "format": "txt",
+              "line_range": [
+                63,
+                63
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "a. Each party shall have the right at any time to terminate this Agreement without prejudice to any rights which it may have, whether pursuant to the provisions of this Agreement or otherwise in law or in equity or otherwise, upon the occurrence of any one or more of the following events: i. The other party breaches or fails to perform any of its material obligations provided for in this Agreement; ii. The other party is unable to pay its debts when due, or makes any assignment for the benefit of creditors, or files any petition under the bankruptcy or insolvency laws of any jurisdiction, county or place, or has or suffers a receiver or trustee to be appointed for its business or property, or is adjudicated a bankrupt or an insolvent; or iii. The other party asserts any rights in or to the terminating party's intellectual property in violation of this Agreement.",
+        "contribution_ids": [
+          "854d12b0-51b1-4bf6-a37e-62ca1ddbfa6d"
+        ],
+        "fact_ids": [
+          "65e93090-78d8-486a-9a64-2899777fb504"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      }
+    ],
+    "candidates": [],
+    "conflicts": [],
+    "coverage": [
+      {
+        "component": "evidence",
+        "mode": "exact",
+        "scope": {
+          "document_ids": [],
+          "fact_ids": [
+            "65e93090-78d8-486a-9a64-2899777fb504"
+          ]
+        },
+        "budget": {
+          "limit": 1000,
+          "available_references": 6,
+          "returned_references": 6,
+          "unavailable_resolved_references": 0
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      },
+      {
+        "component": "detail",
+        "mode": "exact",
+        "scope": {
+          "kind": "entity",
+          "id": "65e93090-78d8-486a-9a64-2899777fb504"
+        },
+        "budget": {
+          "max_chars": 1000000
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      }
+    ],
+    "warnings": [],
+    "model": null,
+    "model_revision": null,
+    "item": {
+      "aliases": [],
+      "atomic_groups": {
+        "full_statement": {
+          "declarations": [
+            {
+              "contribution_ids": [
+                "854d12b0-51b1-4bf6-a37e-62ca1ddbfa6d"
+              ],
+              "source_declarations": [
+                {
+                  "completeness_check": {
+                    "method": "basic_source_evidence",
+                    "rejected_optional_reference_count": 0,
+                    "required_reference_count": 0,
+                    "resolved_reference_count": 0,
+                    "rule_units": [
+                      "rule-unit/19"
+                    ],
+                    "section_key": "rule-unit/19",
+                    "semantic_completeness_verified": false
+                  },
+                  "contribution_id": "854d12b0-51b1-4bf6-a37e-62ca1ddbfa6d",
+                  "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+                  "section_key": "rule-unit/19"
+                }
+              ],
+              "value": {
+                "complete": true,
+                "fields": {
+                  "definition": "Each party shall have the right at any time to terminate this Agreement without prejudice to any rights which it may have, whether pursuant to the provisions of this Agreement or otherwise in law or in equity or otherwise, upon the occurrence of any one or more of the following events: i. The other party breaches or fails to perform any of its material obligations provided for in this Agreement; ii. The other party is unable to pay its debts when due, or makes any assignment for the benefit of creditors, or files any petition under the bankruptcy or insolvency laws of any jurisdiction, county or place, or has or suffers a receiver or trustee to be appointed for its business or property, or is adjudicated a bankrupt or an insolvent; or iii. The other party asserts any rights in or to the terminating party's intellectual property in violation of this Agreement."
+                },
+                "references_resolved": true
+              }
+            }
+          ],
+          "state": "confirmed"
+        }
+      },
+      "canonical_name": "6. TERMINATION a. Each party shall have the right at any time to terminate",
+      "completeness": "complete",
+      "conflicts": [],
+      "contribution_ids": [
+        "09761bf1-87f5-4a55-8c0d-3c29dd9aa56f",
+        "1e18edb0-4209-4658-9d3a-52555a06c4fc",
+        "854d12b0-51b1-4bf6-a37e-62ca1ddbfa6d",
+        "bbc5b94a-62fb-4a62-87f3-79130f3809c5"
+      ],
+      "description": "",
+      "description_fragments": [],
+      "document_ids": [
+        "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+      ],
+      "domain_ids": [],
+      "entity_id": "65e93090-78d8-486a-9a64-2899777fb504",
+      "entity_type": "Clause",
+      "identity": {
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "fields": {
+          "heading": "6. TERMINATION a. Each party shall have the right at any time to terminate"
+        },
+        "namespace": "contract-clause"
+      },
+      "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+      "kind": "entity",
+      "missing_fields": [],
+      "object_revision": "8f4456a3-f879-4aaf-9274-48802a4429df",
+      "origin": "graph",
+      "properties": {
+        "heading": {
+          "merge": "single",
+          "state": "confirmed",
+          "values": [
+            {
+              "contribution_ids": [
+                "09761bf1-87f5-4a55-8c0d-3c29dd9aa56f"
+              ],
+              "value": "6. TERMINATION a. Each party shall have the right at any time to terminate"
+            }
+          ]
+        }
+      }
+    },
+    "scope": null,
+    "selected_document_ids": [],
+    "declarations": [
+      {
+        "contribution_id": "09761bf1-87f5-4a55-8c0d-3c29dd9aa56f",
+        "target_kind": "entity",
+        "target_id": "65e93090-78d8-486a-9a64-2899777fb504",
+        "field_path": "/properties/heading",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          4
+        ],
+        "evidence_complete": true,
+        "resolved_references": [],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      },
+      {
+        "contribution_id": "1e18edb0-4209-4658-9d3a-52555a06c4fc",
+        "target_kind": "entity",
+        "target_id": "65e93090-78d8-486a-9a64-2899777fb504",
+        "field_path": "$exists",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          4
+        ],
+        "evidence_complete": true,
+        "resolved_references": [],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      },
+      {
+        "contribution_id": "854d12b0-51b1-4bf6-a37e-62ca1ddbfa6d",
+        "target_kind": "entity",
+        "target_id": "65e93090-78d8-486a-9a64-2899777fb504",
+        "field_path": "/atomic_groups/full_statement",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "evidence_complete": true,
+        "resolved_references": [],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      },
+      {
+        "contribution_id": "bbc5b94a-62fb-4a62-87f3-79130f3809c5",
+        "target_kind": "entity",
+        "target_id": "65e93090-78d8-486a-9a64-2899777fb504",
+        "field_path": "/identity/heading",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          4
+        ],
+        "evidence_complete": true,
+        "resolved_references": [],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      }
+    ],
+    "plan_summary": null,
+    "unresolved_entities": [],
+    "excluded_endpoint_ids": []
+  }
+}

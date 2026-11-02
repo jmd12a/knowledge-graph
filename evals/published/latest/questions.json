@@ -1,0 +1,703 @@
+{
+  "run_id": "e316c7ca-7974-4b6d-9392-45868da2d2d7",
+  "passed": 23,
+  "total": 26,
+  "routes": {
+    "entity": {
+      "passed": 10,
+      "total": 12
+    },
+    "chunk": {
+      "passed": 11,
+      "total": 12
+    },
+    "retrieve": {
+      "passed": 2,
+      "total": 2
+    }
+  },
+  "scoring": "All expected original-source spans covered; not generated-answer accuracy.",
+  "questions": [
+    {
+      "name": "renewal_term",
+      "category": "Renewal Term",
+      "route": "entity",
+      "query": "Highlight the parts (if any) of this contract related to \"Renewal Term\" that should be reviewed by a lawyer. Details: What is the renewal term after the initial term expires? This includes automatic extensions and unilateral extensions with prior notice.",
+      "passed": true,
+      "metric": "candidate_clause_text_after_detail",
+      "full_spans": 1,
+      "expected_spans": 1,
+      "response_status": "ok",
+      "warnings": [],
+      "response_record": "responses/702d3301-6ac1-435f-85f4-5aa0e96b390e.json",
+      "detail_records": [
+        {
+          "rank": 1,
+          "target_id": "39816c4d-62fc-4687-ab06-54a9f55afbc6",
+          "record": "responses/f406d10a-f91c-46bc-a3ae-bc066e5c6514.json"
+        },
+        {
+          "rank": 2,
+          "target_id": "67c185a9-c3d3-433d-b0e1-3eb29b02b637",
+          "record": "responses/f3550cf9-2119-486d-a988-66a742288d03.json"
+        },
+        {
+          "rank": 3,
+          "target_id": "47e13ba8-7fb1-4e0b-a425-3ee869290d2b",
+          "record": "responses/045c156e-1c23-46cf-a581-f38cb43bb6c0.json"
+        },
+        {
+          "rank": 4,
+          "target_id": "1635e6db-2155-4cb9-b9db-2dd1629162ec",
+          "record": "responses/74af0d01-2b2c-4b26-af41-6c7d56482666.json"
+        },
+        {
+          "rank": 5,
+          "target_id": "d32e1aa2-4286-4d58-890d-eab5c550488e",
+          "record": "responses/631d1a39-0d65-4881-9783-2a69e0c44abb.json"
+        }
+      ]
+    },
+    {
+      "name": "renewal_term",
+      "category": "Renewal Term",
+      "route": "chunk",
+      "query": "Highlight the parts (if any) of this contract related to \"Renewal Term\" that should be reviewed by a lawyer. Details: What is the renewal term after the initial term expires? This includes automatic extensions and unilateral extensions with prior notice.",
+      "passed": true,
+      "metric": "initial_response_document_chunks",
+      "full_spans": 1,
+      "expected_spans": 1,
+      "response_status": "ok",
+      "warnings": [],
+      "response_record": "responses/c0804c0c-6157-4236-b731-49461a7f2c53.json",
+      "detail_records": []
+    },
+    {
+      "name": "revenue_profit_sharing",
+      "category": "Revenue/Profit Sharing",
+      "route": "entity",
+      "query": "Highlight the parts (if any) of this contract related to \"Revenue/Profit Sharing\" that should be reviewed by a lawyer. Details: Is one party required to share revenue or profit with the counterparty for any technology, goods, or services?",
+      "passed": true,
+      "metric": "candidate_clause_text_after_detail",
+      "full_spans": 2,
+      "expected_spans": 2,
+      "response_status": "ok",
+      "warnings": [],
+      "response_record": "responses/68139f40-6d27-4d70-b957-6ba736fdb34e.json",
+      "detail_records": [
+        {
+          "rank": 1,
+          "target_id": "d4caed52-0c7a-4c53-a7c2-5f6ab3c28ad1",
+          "record": "responses/7ba01598-715a-4fd0-9a3a-94bd3d91ab7b.json"
+        },
+        {
+          "rank": 2,
+          "target_id": "908fd403-8ccd-4232-87af-98d41da9de3e",
+          "record": "responses/241e3ee9-b609-417e-aeca-7daea611a78a.json"
+        },
+        {
+          "rank": 3,
+          "target_id": "7bb997d6-2106-4a2f-9719-dc78735267f6",
+          "record": "responses/b275d819-da18-4980-96b4-011a2df7c680.json"
+        },
+        {
+          "rank": 4,
+          "target_id": "f647e81e-b4b7-4d1e-8f71-0798961fbd13",
+          "record": "responses/7bf9bd1f-fdb0-4665-95f8-a2c629c3ec5d.json"
+        },
+        {
+          "rank": 5,
+          "target_id": "c5abec50-d381-4cbf-a6ef-0e7567972073",
+          "record": "responses/ff5d1346-165f-48b4-aebd-804d7685132f.json"
+        }
+      ]
+    },
+    {
+      "name": "revenue_profit_sharing",
+      "category": "Revenue/Profit Sharing",
+      "route": "chunk",
+      "query": "Highlight the parts (if any) of this contract related to \"Revenue/Profit Sharing\" that should be reviewed by a lawyer. Details: Is one party required to share revenue or profit with the counterparty for any technology, goods, or services?",
+      "passed": true,
+      "metric": "initial_response_document_chunks",
+      "full_spans": 2,
+      "expected_spans": 2,
+      "response_status": "ok",
+      "warnings": [],
+      "response_record": "responses/19146791-ba56-4650-8e2a-8b064aa2e419.json",
+      "detail_records": []
+    },
+    {
+      "name": "minimum_commitment",
+      "category": "Minimum Commitment",
+      "route": "entity",
+      "query": "Highlight the parts (if any) of this contract related to \"Minimum Commitment\" that should be reviewed by a lawyer. Details: Is there a minimum order size or minimum amount or units per-time period that one party must buy from the counterparty under the contract?",
+      "passed": false,
+      "metric": "candidate_clause_text_after_detail",
+      "full_spans": 0,
+      "expected_spans": 1,
+      "response_status": "ok",
+      "warnings": [],
+      "response_record": "responses/d0e99f23-5b0f-4bfd-a357-5966be1080a5.json",
+      "detail_records": [
+        {
+          "rank": 1,
+          "target_id": "e33caa2e-dcc9-460b-be2b-f6ce4ea972ac",
+          "record": "responses/c628a5a0-e84b-49da-885e-56e97cb77bd8.json"
+        },
+        {
+          "rank": 2,
+          "target_id": "7bb997d6-2106-4a2f-9719-dc78735267f6",
+          "record": "responses/323cc930-216e-4d52-b4f7-974a3e6a28d4.json"
+        },
+        {
+          "rank": 3,
+          "target_id": "d4caed52-0c7a-4c53-a7c2-5f6ab3c28ad1",
+          "record": "responses/2f9dc254-48ec-4a63-b91a-7371a583068d.json"
+        },
+        {
+          "rank": 4,
+          "target_id": "4b483d5a-47d1-41e7-bc50-5bf842d73a78",
+          "record": "responses/b21b3645-f446-4be2-be5b-bad7ad1151cd.json"
+        },
+        {
+          "rank": 5,
+          "target_id": "b20497ea-6695-40c0-a9ac-310a99fa6118",
+          "record": "responses/889cc03c-1ebb-4543-b61b-9d77c8382fee.json"
+        }
+      ]
+    },
+    {
+      "name": "minimum_commitment",
+      "category": "Minimum Commitment",
+      "route": "chunk",
+      "query": "Highlight the parts (if any) of this contract related to \"Minimum Commitment\" that should be reviewed by a lawyer. Details: Is there a minimum order size or minimum amount or units per-time period that one party must buy from the counterparty under the contract?",
+      "passed": true,
+      "metric": "initial_response_document_chunks",
+      "full_spans": 1,
+      "expected_spans": 1,
+      "response_status": "ok",
+      "warnings": [],
+      "response_record": "responses/bc803c10-55cf-4948-9b33-c91e596abde6.json",
+      "detail_records": []
+    },
+    {
+      "name": "license_grant",
+      "category": "License Grant",
+      "route": "entity",
+      "query": "Highlight the parts (if any) of this contract related to \"License Grant\" that should be reviewed by a lawyer. Details: Does the contract contain a license granted by one party to its counterparty?",
+      "passed": false,
+      "metric": "candidate_clause_text_after_detail",
+      "full_spans": 2,
+      "expected_spans": 4,
+      "response_status": "ok",
+      "warnings": [],
+      "response_record": "responses/aab45dfd-0db9-40ab-b74a-201af8f7a814.json",
+      "detail_records": [
+        {
+          "rank": 1,
+          "target_id": "e5cbc964-493c-4d51-b412-08a81e440ab7",
+          "record": "responses/1c246955-a4dc-46d7-b432-44667beb8bc9.json"
+        },
+        {
+          "rank": 2,
+          "target_id": "4d51e56b-4bee-405b-90b1-038bed681076",
+          "record": "responses/ae53f84c-a83a-481c-981b-650c0cd555a2.json"
+        },
+        {
+          "rank": 3,
+          "target_id": "e0dae0a7-3b05-4d04-8677-996653249324",
+          "record": "responses/5225b59e-4c3a-40db-bb7c-b55a8e5d2231.json"
+        },
+        {
+          "rank": 4,
+          "target_id": "18bcd387-7528-4611-a0ae-34bbc03f049c",
+          "record": "responses/8e76d610-2684-4406-aa4f-a129a75079ca.json"
+        },
+        {
+          "rank": 5,
+          "target_id": "5b329eeb-ed7a-4e7c-aabf-5cd552b86553",
+          "record": "responses/93fae9af-844b-4e49-8b3d-d8519934ef11.json"
+        }
+      ]
+    },
+    {
+      "name": "license_grant",
+      "category": "License Grant",
+      "route": "chunk",
+      "query": "Highlight the parts (if any) of this contract related to \"License Grant\" that should be reviewed by a lawyer. Details: Does the contract contain a license granted by one party to its counterparty?",
+      "passed": false,
+      "metric": "initial_response_document_chunks",
+      "full_spans": 3,
+      "expected_spans": 4,
+      "response_status": "ok",
+      "warnings": [],
+      "response_record": "responses/0ba5adbe-db81-42dc-ba32-c6fd15555339.json",
+      "detail_records": []
+    },
+    {
+      "name": "non_transferable_license",
+      "category": "Non-Transferable License",
+      "route": "entity",
+      "query": "Highlight the parts (if any) of this contract related to \"Non-Transferable License\" that should be reviewed by a lawyer. Details: Does the contract limit the ability of a party to transfer the license being granted to a third party?",
+      "passed": true,
+      "metric": "candidate_clause_text_after_detail",
+      "full_spans": 2,
+      "expected_spans": 2,
+      "response_status": "ok",
+      "warnings": [],
+      "response_record": "responses/1e7dda7d-ebfb-49c7-87b7-bea9e6f72fe7.json",
+      "detail_records": [
+        {
+          "rank": 1,
+          "target_id": "e5cbc964-493c-4d51-b412-08a81e440ab7",
+          "record": "responses/6d7dab15-ec96-4d48-8231-4917bd84823c.json"
+        },
+        {
+          "rank": 2,
+          "target_id": "4d51e56b-4bee-405b-90b1-038bed681076",
+          "record": "responses/db589735-57cc-4376-ad98-8f68f347787f.json"
+        },
+        {
+          "rank": 3,
+          "target_id": "5e1e7929-daaa-44a8-ad42-afda9954dee3",
+          "record": "responses/37338f2f-55a8-42a4-b7e5-31b679f62b5f.json"
+        },
+        {
+          "rank": 4,
+          "target_id": "e0dae0a7-3b05-4d04-8677-996653249324",
+          "record": "responses/e358d23f-9eeb-4e7f-b4a3-9ed6c2523a7e.json"
+        },
+        {
+          "rank": 5,
+          "target_id": "5b329eeb-ed7a-4e7c-aabf-5cd552b86553",
+          "record": "responses/af4c3129-6e46-4789-8bf4-c64a7b4c488f.json"
+        }
+      ]
+    },
+    {
+      "name": "non_transferable_license",
+      "category": "Non-Transferable License",
+      "route": "chunk",
+      "query": "Highlight the parts (if any) of this contract related to \"Non-Transferable License\" that should be reviewed by a lawyer. Details: Does the contract limit the ability of a party to transfer the license being granted to a third party?",
+      "passed": true,
+      "metric": "initial_response_document_chunks",
+      "full_spans": 2,
+      "expected_spans": 2,
+      "response_status": "ok",
+      "warnings": [],
+      "response_record": "responses/109ddf6f-9b69-4efe-83ce-d4109f4d85aa.json",
+      "detail_records": []
+    },
+    {
+      "name": "irrevocable_or_perpetual_license",
+      "category": "Irrevocable Or Perpetual License",
+      "route": "entity",
+      "query": "Highlight the parts (if any) of this contract related to \"Irrevocable Or Perpetual License\" that should be reviewed by a lawyer. Details: Does the contract contain a  license grant that is irrevocable or perpetual?",
+      "passed": true,
+      "metric": "candidate_clause_text_after_detail",
+      "full_spans": 2,
+      "expected_spans": 2,
+      "response_status": "ok",
+      "warnings": [],
+      "response_record": "responses/6be364f5-cc78-48b1-a02e-aa64c7dc5c7a.json",
+      "detail_records": [
+        {
+          "rank": 1,
+          "target_id": "1635e6db-2155-4cb9-b9db-2dd1629162ec",
+          "record": "responses/284a0c22-2c7c-4343-a34d-ae931c2d4c0a.json"
+        },
+        {
+          "rank": 2,
+          "target_id": "48ef2c94-90a0-4a5d-bf85-77cca9337c1b",
+          "record": "responses/8fb64ea1-852e-4aa7-b8c7-4c8c335ff085.json"
+        },
+        {
+          "rank": 3,
+          "target_id": "e5cbc964-493c-4d51-b412-08a81e440ab7",
+          "record": "responses/6f5e2e46-ac57-4827-a39a-028b8be7a2f3.json"
+        },
+        {
+          "rank": 4,
+          "target_id": "4d51e56b-4bee-405b-90b1-038bed681076",
+          "record": "responses/847e30a4-5f68-4242-97c6-267c3a68b07b.json"
+        },
+        {
+          "rank": 5,
+          "target_id": "e0dae0a7-3b05-4d04-8677-996653249324",
+          "record": "responses/681eae0e-887b-4f15-9176-79a43a9dbe89.json"
+        }
+      ]
+    },
+    {
+      "name": "irrevocable_or_perpetual_license",
+      "category": "Irrevocable Or Perpetual License",
+      "route": "chunk",
+      "query": "Highlight the parts (if any) of this contract related to \"Irrevocable Or Perpetual License\" that should be reviewed by a lawyer. Details: Does the contract contain a  license grant that is irrevocable or perpetual?",
+      "passed": true,
+      "metric": "initial_response_document_chunks",
+      "full_spans": 2,
+      "expected_spans": 2,
+      "response_status": "ok",
+      "warnings": [],
+      "response_record": "responses/dc6ababb-5cda-468c-b568-3b383d49638a.json",
+      "detail_records": []
+    },
+    {
+      "name": "anti_assignment",
+      "category": "Anti-Assignment",
+      "route": "entity",
+      "query": "Highlight the parts (if any) of this contract related to \"Anti-Assignment\" that should be reviewed by a lawyer. Details: Is consent or notice required of a party if the contract is assigned to a third party?",
+      "passed": true,
+      "metric": "candidate_clause_text_after_detail",
+      "full_spans": 1,
+      "expected_spans": 1,
+      "response_status": "ok",
+      "warnings": [],
+      "response_record": "responses/15889f7e-0bd6-4ca3-b15e-c2194965702b.json",
+      "detail_records": [
+        {
+          "rank": 1,
+          "target_id": "5e1e7929-daaa-44a8-ad42-afda9954dee3",
+          "record": "responses/6b79e9b4-181a-4a77-8f34-1063646a6208.json"
+        },
+        {
+          "rank": 2,
+          "target_id": "4d51e56b-4bee-405b-90b1-038bed681076",
+          "record": "responses/1cfa7ab7-3fef-41d8-b853-0351e67551cf.json"
+        },
+        {
+          "rank": 3,
+          "target_id": "e5cbc964-493c-4d51-b412-08a81e440ab7",
+          "record": "responses/7ca7bdbe-cdea-4043-a90c-cb0f40498fab.json"
+        },
+        {
+          "rank": 4,
+          "target_id": "f647e81e-b4b7-4d1e-8f71-0798961fbd13",
+          "record": "responses/551821ee-ef8e-4815-8d42-a8262e82b063.json"
+        },
+        {
+          "rank": 5,
+          "target_id": "d4caed52-0c7a-4c53-a7c2-5f6ab3c28ad1",
+          "record": "responses/de0d8583-4beb-4cdb-ad06-dce79b6538eb.json"
+        }
+      ]
+    },
+    {
+      "name": "anti_assignment",
+      "category": "Anti-Assignment",
+      "route": "chunk",
+      "query": "Highlight the parts (if any) of this contract related to \"Anti-Assignment\" that should be reviewed by a lawyer. Details: Is consent or notice required of a party if the contract is assigned to a third party?",
+      "passed": true,
+      "metric": "initial_response_document_chunks",
+      "full_spans": 1,
+      "expected_spans": 1,
+      "response_status": "ok",
+      "warnings": [
+        {
+          "code": "RERANK_IDS_IGNORED",
+          "count": 1
+        }
+      ],
+      "response_record": "responses/bc4ee950-b985-4910-b5a4-f66ccbaeae25.json",
+      "detail_records": []
+    },
+    {
+      "name": "audit_rights",
+      "category": "Audit Rights",
+      "route": "entity",
+      "query": "Highlight the parts (if any) of this contract related to \"Audit Rights\" that should be reviewed by a lawyer. Details: Does a party have the right to  audit the books, records, or physical locations of the counterparty to ensure compliance with the contract?",
+      "passed": true,
+      "metric": "candidate_clause_text_after_detail",
+      "full_spans": 1,
+      "expected_spans": 1,
+      "response_status": "ok",
+      "warnings": [],
+      "response_record": "responses/33e7f7ef-4690-4c56-8f7e-758a0bd1fefb.json",
+      "detail_records": [
+        {
+          "rank": 1,
+          "target_id": "f0a7d729-f1d2-4fec-9024-09e7c2f050a1",
+          "record": "responses/8dc8194f-892c-4c84-aad2-ed927d4f721d.json"
+        },
+        {
+          "rank": 2,
+          "target_id": "65e93090-78d8-486a-9a64-2899777fb504",
+          "record": "responses/c445d998-ba1b-4377-866f-12b1d579def4.json"
+        },
+        {
+          "rank": 3,
+          "target_id": "0e014fd1-50de-40fe-9719-b44cec28b875",
+          "record": "responses/7e971b8f-d267-4b4c-aeed-055921fbb684.json"
+        },
+        {
+          "rank": 4,
+          "target_id": "15c751f2-92a7-45da-8dd0-71883676dbce",
+          "record": "responses/c9b1da47-665a-4c57-8a89-ced724e80948.json"
+        },
+        {
+          "rank": 5,
+          "target_id": "40ec2690-ac47-4d61-a8cf-bd321060b6dc",
+          "record": "responses/0505df53-fb81-45b7-8171-8ce03959b433.json"
+        }
+      ]
+    },
+    {
+      "name": "audit_rights",
+      "category": "Audit Rights",
+      "route": "chunk",
+      "query": "Highlight the parts (if any) of this contract related to \"Audit Rights\" that should be reviewed by a lawyer. Details: Does a party have the right to  audit the books, records, or physical locations of the counterparty to ensure compliance with the contract?",
+      "passed": true,
+      "metric": "initial_response_document_chunks",
+      "full_spans": 1,
+      "expected_spans": 1,
+      "response_status": "ok",
+      "warnings": [],
+      "response_record": "responses/c570b026-5b68-433c-b285-3f61bc851f9a.json",
+      "detail_records": []
+    },
+    {
+      "name": "cap_on_liability",
+      "category": "Cap On Liability",
+      "route": "entity",
+      "query": "Highlight the parts (if any) of this contract related to \"Cap On Liability\" that should be reviewed by a lawyer. Details: Does the contract include a cap on liability upon the breach of a party’s obligation? This includes time limitation for the counterparty to bring claims or maximum amount for recovery.",
+      "passed": true,
+      "metric": "candidate_clause_text_after_detail",
+      "full_spans": 1,
+      "expected_spans": 1,
+      "response_status": "ok",
+      "warnings": [],
+      "response_record": "responses/8cd485f5-c43b-4e57-a88b-b180e63868f5.json",
+      "detail_records": [
+        {
+          "rank": 1,
+          "target_id": "9bb7b0cb-d11e-4f9c-8176-69ebe4f82381",
+          "record": "responses/f083bd24-dfc8-4924-96f5-45de39803bf1.json"
+        },
+        {
+          "rank": 2,
+          "target_id": "66efb769-368c-4dd5-b377-49cfb030ec18",
+          "record": "responses/083acc93-ea16-4e73-8a2e-244d29bde902.json"
+        },
+        {
+          "rank": 3,
+          "target_id": "ad09f0cf-f15e-47a9-a1bf-ee9fc7d60baa",
+          "record": "responses/83eb01f0-1245-45ce-ad0b-6797b260b4c3.json"
+        },
+        {
+          "rank": 4,
+          "target_id": "24f7e08c-40e6-448d-8f4b-a5f0aaaae399",
+          "record": "responses/5e6aebf6-2cef-4b7d-8164-ad51cbb443b1.json"
+        },
+        {
+          "rank": 5,
+          "target_id": "0e014fd1-50de-40fe-9719-b44cec28b875",
+          "record": "responses/a2b8f677-2756-46fe-83de-8e13022f48cd.json"
+        }
+      ]
+    },
+    {
+      "name": "cap_on_liability",
+      "category": "Cap On Liability",
+      "route": "chunk",
+      "query": "Highlight the parts (if any) of this contract related to \"Cap On Liability\" that should be reviewed by a lawyer. Details: Does the contract include a cap on liability upon the breach of a party’s obligation? This includes time limitation for the counterparty to bring claims or maximum amount for recovery.",
+      "passed": true,
+      "metric": "initial_response_document_chunks",
+      "full_spans": 1,
+      "expected_spans": 1,
+      "response_status": "ok",
+      "warnings": [],
+      "response_record": "responses/f8b806c7-abc7-448a-920c-52701a6de412.json",
+      "detail_records": []
+    },
+    {
+      "name": "uncapped_liability",
+      "category": "Uncapped Liability",
+      "route": "entity",
+      "query": "Highlight the parts (if any) of this contract related to \"Uncapped Liability\" that should be reviewed by a lawyer. Details: Is a party’s liability uncapped upon the breach of its obligation in the contract? This also includes uncap liability for a particular type of breach such as IP infringement or breach of confidentiality obligation.",
+      "passed": true,
+      "metric": "candidate_clause_text_after_detail",
+      "full_spans": 1,
+      "expected_spans": 1,
+      "response_status": "ok",
+      "warnings": [],
+      "response_record": "responses/4f907c61-c56b-4001-8820-0469ad1a83d5.json",
+      "detail_records": [
+        {
+          "rank": 1,
+          "target_id": "9bb7b0cb-d11e-4f9c-8176-69ebe4f82381",
+          "record": "responses/2b189533-ea35-457a-bdb9-df51a1f22388.json"
+        },
+        {
+          "rank": 2,
+          "target_id": "cdcc972a-f9b1-4792-8d94-36854e014898",
+          "record": "responses/7805bff2-7e12-4c42-b13e-cb6c5520ce2f.json"
+        },
+        {
+          "rank": 3,
+          "target_id": "88570f21-53ff-4abf-9a0f-12eb097ddf67",
+          "record": "responses/01497f99-8a03-4d2c-9934-aa6584c217bf.json"
+        },
+        {
+          "rank": 4,
+          "target_id": "0e014fd1-50de-40fe-9719-b44cec28b875",
+          "record": "responses/e43d543f-7e87-4c96-b2c9-5d23302d37cf.json"
+        },
+        {
+          "rank": 5,
+          "target_id": "d5c01dff-d165-4a07-a2eb-4005b2101157",
+          "record": "responses/e893467a-dab1-4e97-a104-e1f5f5b053a6.json"
+        }
+      ]
+    },
+    {
+      "name": "uncapped_liability",
+      "category": "Uncapped Liability",
+      "route": "chunk",
+      "query": "Highlight the parts (if any) of this contract related to \"Uncapped Liability\" that should be reviewed by a lawyer. Details: Is a party’s liability uncapped upon the breach of its obligation in the contract? This also includes uncap liability for a particular type of breach such as IP infringement or breach of confidentiality obligation.",
+      "passed": true,
+      "metric": "initial_response_document_chunks",
+      "full_spans": 1,
+      "expected_spans": 1,
+      "response_status": "ok",
+      "warnings": [],
+      "response_record": "responses/0b14343c-f214-42d5-aa3b-e0fa86e9ec59.json",
+      "detail_records": []
+    },
+    {
+      "name": "non_compete",
+      "category": "Non-Compete",
+      "route": "entity",
+      "query": "Highlight the parts (if any) of this contract related to \"Non-Compete\" that should be reviewed by a lawyer. Details: Is there a restriction on the ability of a party to compete with the counterparty or operate in a certain geography or business or technology sector? ",
+      "passed": true,
+      "metric": "candidate_clause_text_after_detail",
+      "full_spans": 1,
+      "expected_spans": 1,
+      "response_status": "ok",
+      "warnings": [],
+      "response_record": "responses/ee97b711-74cd-4728-924b-d06685786e77.json",
+      "detail_records": [
+        {
+          "rank": 1,
+          "target_id": "5b329eeb-ed7a-4e7c-aabf-5cd552b86553",
+          "record": "responses/772271c8-f197-4d9a-aceb-4414b53dcfcd.json"
+        },
+        {
+          "rank": 2,
+          "target_id": "17d84402-374a-4349-a78b-0ade98a5a520",
+          "record": "responses/7976dd16-71fe-4ddf-9e8f-70c3f6effd31.json"
+        },
+        {
+          "rank": 3,
+          "target_id": "e5cbc964-493c-4d51-b412-08a81e440ab7",
+          "record": "responses/0d5422d2-4e54-4614-ab49-41ffc5c86c9c.json"
+        },
+        {
+          "rank": 4,
+          "target_id": "c7f24f8f-8a90-42de-802a-e3071b2dc8b0",
+          "record": "responses/235a8b0b-9b2d-45d3-8183-c5c39b91bfce.json"
+        },
+        {
+          "rank": 5,
+          "target_id": "9bb7b0cb-d11e-4f9c-8176-69ebe4f82381",
+          "record": "responses/9bf61b61-f53d-4b63-bac8-c8bbc0da5f94.json"
+        }
+      ]
+    },
+    {
+      "name": "non_compete",
+      "category": "Non-Compete",
+      "route": "chunk",
+      "query": "Highlight the parts (if any) of this contract related to \"Non-Compete\" that should be reviewed by a lawyer. Details: Is there a restriction on the ability of a party to compete with the counterparty or operate in a certain geography or business or technology sector? ",
+      "passed": true,
+      "metric": "initial_response_document_chunks",
+      "full_spans": 1,
+      "expected_spans": 1,
+      "response_status": "ok",
+      "warnings": [],
+      "response_record": "responses/c5a12ce0-efe7-4638-b269-0fd92a7d7b2e.json",
+      "detail_records": []
+    },
+    {
+      "name": "covenant_not_to_sue",
+      "category": "Covenant Not To Sue",
+      "route": "entity",
+      "query": "Highlight the parts (if any) of this contract related to \"Covenant Not To Sue\" that should be reviewed by a lawyer. Details: Is a party restricted from contesting the validity of the counterparty’s ownership of intellectual property or otherwise bringing a claim against the counterparty for matters unrelated to the contract?",
+      "passed": true,
+      "metric": "candidate_clause_text_after_detail",
+      "full_spans": 1,
+      "expected_spans": 1,
+      "response_status": "ok",
+      "warnings": [],
+      "response_record": "responses/06333062-c186-414a-9f6b-f5a06165bbb2.json",
+      "detail_records": [
+        {
+          "rank": 1,
+          "target_id": "18bcd387-7528-4611-a0ae-34bbc03f049c",
+          "record": "responses/cc7883eb-febe-4afd-a311-462fe562a967.json"
+        },
+        {
+          "rank": 2,
+          "target_id": "e0dae0a7-3b05-4d04-8677-996653249324",
+          "record": "responses/ad4d06e2-087f-4bd9-ab59-6c39b7484cc5.json"
+        },
+        {
+          "rank": 3,
+          "target_id": "65e93090-78d8-486a-9a64-2899777fb504",
+          "record": "responses/1e0ed88f-6e53-4468-8964-71250ff52ec5.json"
+        },
+        {
+          "rank": 4,
+          "target_id": "3232c501-854c-42aa-b804-77fc008b3012",
+          "record": "responses/113eb266-6e92-446d-8b0c-7e40bd52aff8.json"
+        },
+        {
+          "rank": 5,
+          "target_id": "cdcc972a-f9b1-4792-8d94-36854e014898",
+          "record": "responses/f7151528-69cc-48dd-bb77-320c2bed038d.json"
+        }
+      ]
+    },
+    {
+      "name": "covenant_not_to_sue",
+      "category": "Covenant Not To Sue",
+      "route": "chunk",
+      "query": "Highlight the parts (if any) of this contract related to \"Covenant Not To Sue\" that should be reviewed by a lawyer. Details: Is a party restricted from contesting the validity of the counterparty’s ownership of intellectual property or otherwise bringing a claim against the counterparty for matters unrelated to the contract?",
+      "passed": true,
+      "metric": "initial_response_document_chunks",
+      "full_spans": 1,
+      "expected_spans": 1,
+      "response_status": "ok",
+      "warnings": [],
+      "response_record": "responses/312f982e-5b67-4f7a-9652-ba26e4db5088.json",
+      "detail_records": []
+    },
+    {
+      "name": "post_termination_licensed_property",
+      "category": null,
+      "route": "retrieve",
+      "query": "Under this agreement, which uses of Zynga’s and WPT’s licensed property may continue after expiry or termination, and what conditions or continuing obligations apply?",
+      "passed": true,
+      "metric": "initial_response_document_chunks",
+      "full_spans": 5,
+      "expected_spans": 5,
+      "response_status": "ok",
+      "warnings": [],
+      "response_record": "responses/e9f80be4-85f9-4681-b6c5-147d65bcb914.json",
+      "detail_records": []
+    },
+    {
+      "name": "minimum_guarantee_royalty_offsets",
+      "category": null,
+      "route": "retrieve",
+      "query": "How do the annual minimum guarantee and royalties offset one another, and which deductions are permitted when calculating Net Revenue?",
+      "passed": true,
+      "metric": "initial_response_document_chunks",
+      "full_spans": 4,
+      "expected_spans": 4,
+      "response_status": "ok",
+      "warnings": [],
+      "response_record": "responses/6d94564a-ddb0-4bf5-b9b3-72406be10bf9.json",
+      "detail_records": []
+    }
+  ]
+}

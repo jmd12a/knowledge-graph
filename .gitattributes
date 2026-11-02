@@ -1,0 +1,19 @@
+* text=auto
+*.md text eol=lf
+*.py text eol=lf
+*.toml text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.json text eol=lf
+*.mmd text eol=lf
+*.puml text eol=lf
+*.sh text eol=lf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+
+# Frozen evaluation inputs retain their original bytes and line endings.
+evals/corpus/** -text

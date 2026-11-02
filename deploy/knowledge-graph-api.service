@@ -1,0 +1,22 @@
+[Unit]
+Description=Knowledge graph HTTP and MCP service
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=kg
+Group=kg
+WorkingDirectory=/srv/knowledge-graph
+EnvironmentFile=-/srv/knowledge-graph/.env
+ExecStart=/srv/knowledge-graph/.venv/bin/kg serve
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=90
+KillSignal=SIGINT
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

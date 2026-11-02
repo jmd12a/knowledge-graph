@@ -1,0 +1,272 @@
+{
+  "recorded_at": "2026-11-01T19:41:48.125552+00:00",
+  "stage": "long_contract",
+  "protocol": "HTTP",
+  "method": "POST",
+  "path": "/kbs/3da41804-fbda-491a-9465-8133e38b961b/knowledge/search",
+  "input": {
+    "query": "Highlight the parts (if any) of this contract related to \"License Grant\" that should be reviewed by a lawyer. Details: Does the contract contain a license granted by one party to its counterparty?",
+    "filters": {
+      "document_ids": [
+        "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+      ]
+    },
+    "limit": 5,
+    "kinds": [
+      "entity"
+    ],
+    "semantic": true
+  },
+  "params": null,
+  "status_code": 200,
+  "elapsed_ms": 4470,
+  "response": {
+    "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+    "request_id": "d38743b6-9374-4f63-b041-37ebf6a705ee",
+    "status": "ok",
+    "knowledge": [
+      {
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "kind": "entity",
+        "origin": "graph",
+        "entity_id": "e5cbc964-493c-4d51-b412-08a81e440ab7",
+        "entity_type": "Clause",
+        "identity": {
+          "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+          "fields": {
+            "heading": "c. License by WPT."
+          },
+          "namespace": "contract-clause"
+        },
+        "canonical_name": "c. License by WPT.",
+        "aliases": [],
+        "domain_ids": [],
+        "document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "completeness": "complete",
+        "missing_fields": [],
+        "conflicts": [],
+        "scope": "selected_documents",
+        "selected_document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "id": "e5cbc964-493c-4d51-b412-08a81e440ab7",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "source_vector"
+        ],
+        "score": 1.0,
+        "summary": "c. License by WPT.\nClause\n合同原文条款，涵盖每个编号条款、子条款和无编号的实质段落；保留条件、例外、范围与指代。可见原文不完整时仍保留并标记，绝不以摘要代替。\nheading [\"c. License by WPT.\"]\nfull_statement [{\"definition\":\"Subject to the terms and conditions of this Agreement, WPT grants to Zynga a non-exclusive, non-assignable, non-sublicensable, royalty-free, paid up, limited license in the Territory to use and display WPT's Licensed Property solely as necessary to perform Zynga's obligations under this Agreement and as specifically described on Exhibit A, for",
+        "summary_truncated": true
+      },
+      {
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "kind": "entity",
+        "origin": "graph",
+        "entity_id": "4d51e56b-4bee-405b-90b1-038bed681076",
+        "entity_type": "Clause",
+        "identity": {
+          "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+          "fields": {
+            "heading": "b. License by Zynga."
+          },
+          "namespace": "contract-clause"
+        },
+        "canonical_name": "b. License by Zynga.",
+        "aliases": [],
+        "domain_ids": [],
+        "document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "completeness": "complete",
+        "missing_fields": [],
+        "conflicts": [],
+        "scope": "selected_documents",
+        "selected_document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "id": "4d51e56b-4bee-405b-90b1-038bed681076",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "source_vector"
+        ],
+        "score": 0.5,
+        "summary": "b. License by Zynga.\nClause\n合同原文条款，涵盖每个编号条款、子条款和无编号的实质段落；保留条件、例外、范围与指代。可见原文不完整时仍保留并标记，绝不以摘要代替。\nheading [\"b. License by Zynga.\"]\nfull_statement [{\"definition\":\"Subject to the terms and conditions of this Agreement, Zynga grants to WPT a non-exclusive, non- assignable, non-sublicensable, royalty-free, paid up, limited worldwide license to use and display Zynga's Licensed Property solely as necessary to perform WPT's obligations under this Agreement and as specifically described on Exhibit A, in an",
+        "summary_truncated": true
+      },
+      {
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "kind": "entity",
+        "origin": "graph",
+        "entity_id": "e0dae0a7-3b05-4d04-8677-996653249324",
+        "entity_type": "Clause",
+        "identity": {
+          "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+          "fields": {
+            "heading": "f. Reservation of Rights."
+          },
+          "namespace": "contract-clause"
+        },
+        "canonical_name": "f. Reservation of Rights.",
+        "aliases": [],
+        "domain_ids": [],
+        "document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "completeness": "complete",
+        "missing_fields": [],
+        "conflicts": [],
+        "scope": "selected_documents",
+        "selected_document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "id": "e0dae0a7-3b05-4d04-8677-996653249324",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "source_vector"
+        ],
+        "score": 0.3333333333333333,
+        "summary": "f. Reservation of Rights.\nClause\n合同原文条款，涵盖每个编号条款、子条款和无编号的实质段落；保留条件、例外、范围与指代。可见原文不完整时仍保留并标记，绝不以摘要代替。\nheading [\"f. Reservation of Rights.\"]\nfull_statement [{\"definition\":\"The parties acknowledge and agree that, except for the rights and licenses expressly granted by each party to the other party under this Agreement, each party will retain all right, title and interest in and to its products, services, marks, copyrights or other intellectual property, and all content, information and other materia",
+        "summary_truncated": true
+      },
+      {
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "kind": "entity",
+        "origin": "graph",
+        "entity_id": "18bcd387-7528-4611-a0ae-34bbc03f049c",
+        "entity_type": "Clause",
+        "identity": {
+          "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+          "fields": {
+            "heading": "d. Trademark Guidelines."
+          },
+          "namespace": "contract-clause"
+        },
+        "canonical_name": "d. Trademark Guidelines.",
+        "aliases": [],
+        "domain_ids": [],
+        "document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "completeness": "complete",
+        "missing_fields": [],
+        "conflicts": [],
+        "scope": "selected_documents",
+        "selected_document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "id": "18bcd387-7528-4611-a0ae-34bbc03f049c",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "source_vector"
+        ],
+        "score": 0.25,
+        "summary": "d. Trademark Guidelines.\nClause\n合同原文条款，涵盖每个编号条款、子条款和无编号的实质段落；保留条件、例外、范围与指代。可见原文不完整时仍保留并标记，绝不以摘要代替。\nheading [\"d. Trademark Guidelines.\"]\nfull_statement [{\"definition\":\"In its use of the Licensed Property of the other party (\\\"Licensee\\\"), each party (\\\"Licensor\\\") will comply with any trademark usage guidelines that Licensor may communicate to Licensee from time to time. Each use of Licensor's marks by Licensee will be accompanied by the appropriate trademark symbol (either \\\"™\\\" or \\\"®\\\") and a ",
+        "summary_truncated": true
+      },
+      {
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "kind": "entity",
+        "origin": "graph",
+        "entity_id": "5b329eeb-ed7a-4e7c-aabf-5cd552b86553",
+        "entity_type": "Clause",
+        "identity": {
+          "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+          "fields": {
+            "heading": "iv. WPT or its affiliates shall not authorize a Zynga Competitor"
+          },
+          "namespace": "contract-clause"
+        },
+        "canonical_name": "iv. WPT or its affiliates shall not authorize a Zynga Competitor",
+        "aliases": [],
+        "domain_ids": [],
+        "document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "completeness": "complete",
+        "missing_fields": [],
+        "conflicts": [],
+        "scope": "selected_documents",
+        "selected_document_ids": [
+          "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+        ],
+        "id": "5b329eeb-ed7a-4e7c-aabf-5cd552b86553",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "source_vector"
+        ],
+        "score": 0.2,
+        "summary": "iv. WPT or its affiliates shall not authorize a Zynga Competitor\nClause\n合同原文条款，涵盖每个编号条款、子条款和无编号的实质段落；保留条件、例外、范围与指代。可见原文不完整时仍保留并标记，绝不以摘要代替。\nheading [\"iv. WPT or its affiliates shall not authorize a Zynga Competitor\"]\nfull_statement [{\"definition\":\"WPT or its affiliates shall not authorize a Zynga Competitor to commercially exploit the Licensed Property in connection with social poker gaming via a license similar to the license granted herein for the Term. A \\\"Zynga Competitor\\\" means: 1) Aristocr",
+        "summary_truncated": true
+      }
+    ],
+    "relations": [],
+    "paths": [],
+    "evidence": [],
+    "candidates": [],
+    "conflicts": [],
+    "coverage": [
+      {
+        "component": "object_candidates",
+        "mode": "top_k",
+        "scope": {
+          "entity_types": [],
+          "domain_ids": [],
+          "document_ids": [
+            "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+          ],
+          "properties": {}
+        },
+        "budget": {
+          "rerank_candidates": 68,
+          "limit": 5
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      },
+      {
+        "component": "object_candidates",
+        "mode": "top_k",
+        "scope": {
+          "entity_types": [],
+          "domain_ids": [],
+          "document_ids": [
+            "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+          ],
+          "properties": {}
+        },
+        "budget": {
+          "limit": 5,
+          "scan_limit": 5000,
+          "channels": [
+            "keyword",
+            "rerank",
+            "source_vector"
+          ]
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      }
+    ],
+    "warnings": [],
+    "model": null,
+    "model_revision": null,
+    "item": null,
+    "scope": "selected_documents",
+    "selected_document_ids": [
+      "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+    ],
+    "declarations": [],
+    "plan_summary": null,
+    "unresolved_entities": [],
+    "excluded_endpoint_ids": []
+  }
+}

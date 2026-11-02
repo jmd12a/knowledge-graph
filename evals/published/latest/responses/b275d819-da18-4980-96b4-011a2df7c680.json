@@ -1,0 +1,603 @@
+{
+  "recorded_at": "2026-11-01T19:41:29.851750+00:00",
+  "stage": "long_contract",
+  "protocol": "HTTP",
+  "method": "GET",
+  "path": "/kbs/3da41804-fbda-491a-9465-8133e38b961b/knowledge/entity/7bb997d6-2106-4a2f-9719-dc78735267f6",
+  "input": null,
+  "params": {
+    "evidence_limit": 1000
+  },
+  "status_code": 200,
+  "elapsed_ms": 11,
+  "response": {
+    "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+    "request_id": "17153129-dd74-4c22-8c59-942be09a92e9",
+    "status": "ok",
+    "knowledge": [],
+    "relations": [],
+    "paths": [],
+    "evidence": [
+      {
+        "chunk_id": "78eeee72-3af7-4b2c-bc35-56c91866c643",
+        "chunk_range": [
+          1153,
+          1192
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "quote": "3. PAYMENT a. Annual Minimum Guarantee.",
+        "quote_range": [
+          1153,
+          1192
+        ],
+        "quote_truncated": false,
+        "role": "fact",
+        "source_spans": [
+          {
+            "chunk_range": [
+              1153,
+              1192
+            ],
+            "origin": {
+              "char_range": [
+                15105,
+                15144
+              ],
+              "format": "txt",
+              "line_range": [
+                43,
+                43
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "3. PAYMENT a. Annual Minimum Guarantee.",
+        "contribution_ids": [
+          "36cc7883-9a5b-461a-bbe3-4b2001922aba",
+          "50744631-e10e-43dc-8fd7-461074b110d2",
+          "8dd38540-7f67-4a38-909d-fa3d4e6c3a7e"
+        ],
+        "fact_ids": [
+          "7bb997d6-2106-4a2f-9719-dc78735267f6"
+        ],
+        "field_paths": [
+          "$exists",
+          "/identity/heading",
+          "/properties/heading"
+        ]
+      },
+      {
+        "chunk_id": "78eeee72-3af7-4b2c-bc35-56c91866c643",
+        "chunk_range": [
+          1164,
+          1619
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "quote": "a. Annual Minimum Guarantee. Zynga will pay to WPT the Annual Minimum Guarantee as set forth in the Basic Provisions. The Annual Minimum Guarantee shall be recoupable from such Royalties as are, or have become, paid to WPT. For clarification, the Annual Minimum Guarantee will operate as an advance payment, such that when accrued Royalties exceed the Annual Minimum Guarantee payments already paid, then the excess Royalties will be paid by Zynga to WPT.",
+        "quote_range": [
+          1164,
+          1619
+        ],
+        "quote_truncated": false,
+        "role": "fact",
+        "source_spans": [
+          {
+            "chunk_range": [
+              1164,
+              1619
+            ],
+            "origin": {
+              "char_range": [
+                15116,
+                15571
+              ],
+              "format": "txt",
+              "line_range": [
+                43,
+                43
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "a. Annual Minimum Guarantee. Zynga will pay to WPT the Annual Minimum Guarantee as set forth in the Basic Provisions. The Annual Minimum Guarantee shall be recoupable from such Royalties as are, or have become, paid to WPT. For clarification, the Annual Minimum Guarantee will operate as an advance payment, such that when accrued Royalties exceed the Annual Minimum Guarantee payments already paid, then the excess Royalties will be paid by Zynga to WPT.",
+        "contribution_ids": [
+          "f011b172-5ede-4303-afdb-4a5aab78132a"
+        ],
+        "fact_ids": [
+          "7bb997d6-2106-4a2f-9719-dc78735267f6"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "78eeee72-3af7-4b2c-bc35-56c91866c643",
+        "chunk_range": [
+          1193,
+          1281
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "quote": "Zynga will pay to WPT the Annual Minimum Guarantee as set forth in the Basic Provisions.",
+        "quote_range": [
+          1193,
+          1281
+        ],
+        "quote_truncated": false,
+        "role": "fact",
+        "source_spans": [
+          {
+            "chunk_range": [
+              1193,
+              1281
+            ],
+            "origin": {
+              "char_range": [
+                15145,
+                15233
+              ],
+              "format": "txt",
+              "line_range": [
+                43,
+                43
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "Zynga will pay to WPT the Annual Minimum Guarantee as set forth in the Basic Provisions.",
+        "contribution_ids": [
+          "f011b172-5ede-4303-afdb-4a5aab78132a"
+        ],
+        "fact_ids": [
+          "7bb997d6-2106-4a2f-9719-dc78735267f6"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "78eeee72-3af7-4b2c-bc35-56c91866c643",
+        "chunk_range": [
+          150,
+          2000
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "role": "context",
+        "source_mapping_verified": true,
+        "source_spans": [
+          {
+            "chunk_range": [
+              150,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                14102,
+                15952
+              ],
+              "format": "txt",
+              "line_range": [
+                43,
+                43
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "icense granted herein for the Term. A \"Zynga Competitor\" means: 1) Aristocrat Technologies Australia Pty Ltd. Or Big Fish Games, Inc.; 2) HUUUGE Inc.; 3) Activision Blizzard, Inc., King.com Ltd. Or King.com (US) LLC; 4) Scientific Games Corporation; 5) Tencent Holdings Limited; and 6) Murka Ltd. The parties agree to work together in good faith to amend the definition of a Zynga Competitor if that meaning for Zynga reasonably changes during the Term. f. Reservation of Rights. The parties acknowledge and agree that, except for the rights and licenses expressly granted by each party to the other party under this Agreement, each party will retain all right, title and interest in and to its products, services, marks, copyrights or other intellectual property, and all content, information and other materials on its website(s), and nothing contained in this Agreement will be construed as conferring upon such party, by implication, operation of law or otherwise, any other license or other right. 3. PAYMENT a. Annual Minimum Guarantee. Zynga will pay to WPT the Annual Minimum Guarantee as set forth in the Basic Provisions. The Annual Minimum Guarantee shall be recoupable from such Royalties as are, or have become, paid to WPT. For clarification, the Annual Minimum Guarantee will operate as an advance payment, such that when accrued Royalties exceed the Annual Minimum Guarantee payments already paid, then the excess Royalties will be paid by Zynga to WPT. b. Royalty. The Royalties to be paid by Zynga to WPT is the percentage of Net Revenue as set forth in Section 5 of the Basic Provisions. \"Net Revenue(s)\" shall be defined as one hundred percent (100%) of gross revenues and all other receivables of any kind whatsoever received by Zynga or any of Zynga's affiliates attributable to the use of Paid Currency or in connection with th",
+        "contribution_ids": [
+          "f011b172-5ede-4303-afdb-4a5aab78132a"
+        ],
+        "fact_ids": [
+          "7bb997d6-2106-4a2f-9719-dc78735267f6"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "82bd61a2-2474-42bd-b964-9afe56cdd874",
+        "chunk_range": [
+          150,
+          2000
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "role": "context",
+        "source_mapping_verified": true,
+        "source_spans": [
+          {
+            "chunk_range": [
+              150,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                12252,
+                14102
+              ],
+              "format": "txt",
+              "line_range": [
+                43,
+                43
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "of its brand conceptually in elements of the Zynga platform but not need to re-approve the use in a similar manner for every poker tournament the brand is used in). i. Licensee may use textual and/or pictorial matter pertaining to the Licensed Property on such promotional, display and advertising material as may, in Licensee's reasonable judgment, promote the awareness, consumption and sale of the Licensed Property. All final advertising and promotional material using the Licensed Property must be submitted to Licensor for its prior written approval. All press releases respecting this Agreement or the relationship of the parties herein shall require prior written approval by the other party. ii. Licensor will use commercially reasonable efforts to provide approval and/or feedback within five (5) business days after its receipt of a creative submission, or re-submission, with respect to the Licensed Property or marketing materials; provided that: (a) if Licensor declines to approve any submission or re-submission, then it shall provide reasonably detailed feedback in order to enable Licensee to modify the Licensed Property or marketing material accordingly in order to address Licensor's concerns and obtain Licensor's approval, and (b) if Licensor fails to (1) approve or (2) disapprove and provide feedback within such timeframe, then such submission or re-submission is deemed to have been approved. No approval may be unreasonably withdrawn by Licensor once delivered. iii. Zynga shall advise WPT to Zynga's knowledge as to which jurisdictions where it may be illegal to advertise Zynga's Licensed Property (if any) given local laws or regulations. iv. WPT or its affiliates shall not authorize a Zynga Competitor to commercially exploit the Licensed Property in connection with social poker gaming via a license similar to the l",
+        "contribution_ids": [
+          "f011b172-5ede-4303-afdb-4a5aab78132a"
+        ],
+        "fact_ids": [
+          "7bb997d6-2106-4a2f-9719-dc78735267f6"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "83e3cb05-bb0e-4d15-9870-8ead580681ca",
+        "chunk_range": [
+          150,
+          1099
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "role": "context",
+        "source_mapping_verified": true,
+        "source_spans": [
+          {
+            "chunk_range": [
+              150,
+              1099
+            ],
+            "origin": {
+              "char_range": [
+                15952,
+                16901
+              ],
+              "format": "txt",
+              "line_range": [
+                43,
+                53
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "e sale of Virtual Digital Goods derived from use of the WPT-brand on the Zynga platform, less the following actual and verifiable \"Allowable Deductions\": (i) out-of-pocket, third-party payment processing and currency system fees, commissions, and platform distribution fees (e.g., Apple, Google or Facebook platform fees); (ii) any governmental taxes (e.g., VAT, excise or sales or use tax, etc.) arising in connection with related receipts, but excluding any taxes on Licensee's net income; and (iii) charge- backs/refunds/cancellations/fraud. \"Paid Currency\" means virtual currency purchased using real money. \"Virtual Digital Goods\" means any virtual, digital representation of any actual or fictional thing or item within Zynga Poker, which is capable of being made available for distribution, placement, download or other display by electronic means. Any other deductions must be mutually agreed upon in advance and in writing by the parties.\n\n",
+        "contribution_ids": [
+          "f011b172-5ede-4303-afdb-4a5aab78132a"
+        ],
+        "fact_ids": [
+          "7bb997d6-2106-4a2f-9719-dc78735267f6"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "c61c7dcd-bfb9-4f94-8978-2c11b72f225c",
+        "chunk_range": [
+          374,
+          2000
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "role": "context",
+        "source_mapping_verified": true,
+        "source_spans": [
+          {
+            "chunk_range": [
+              374,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                10626,
+                12252
+              ],
+              "format": "txt",
+              "line_range": [
+                33,
+                43
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "e. Approvals. The Licensed Property shall be displayed or used only in such form and in such manner as has been approved in writing (which may be by email) by Licensor pursuant to this Section 2 and Licensee shall ensure its usage of the Licensed Property solely as approved. Throughout the Term, including any renewals or extensions (if applicable), Licensee shall comply with reasonable quality standards, style guides and clear specifications communicated to Licensee and rights of approval of Licensor set forth in this Section 2 with respect to any and all of its usage of the Licensed Property. Subject to Licensor's prior written approval of any applicable Licensed Property (hereinafter the \"Approved Content\"), all Conforming Content will be deemed approved by Licensor. \"Conforming Content\" means any and all elements of the Approved Content which (i) do not represent deviations in quality, style, look-and-feel or other aspects of use from the Approved Content and (ii) are consistent with the aesthetic style or tone of the Approved Content. The parties will come to agreement with respect to Exhibit A as to whether prior written approval is needed in every instance or whether it is not needed after the first instance has been approved in writing (e.g., given exigencies in television production business, it is reasonable that Zynga would approve the use of its brand conceptually in elements of an episode but not need to re-approve the use in a similar manner for every episode the brand is used in; and similarly, given exigencies in the social gaming business, it is reasonable that WPT would approve use ",
+        "contribution_ids": [
+          "f011b172-5ede-4303-afdb-4a5aab78132a"
+        ],
+        "fact_ids": [
+          "7bb997d6-2106-4a2f-9719-dc78735267f6"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "e7a38231-507b-429b-88fe-ad1f27180c75",
+        "chunk_range": [
+          628,
+          846
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "quote": "4. Annual Minimum Guarantee. Zynga will pay WPT three million U.S. dollars ($3,000,000) per year according to the following schedule (which the parties may alter upon mutual agreement) (the \"Annual Minimum Guarantee\"):",
+        "quote_range": [
+          628,
+          846
+        ],
+        "quote_truncated": false,
+        "role": "fact",
+        "source_spans": [
+          {
+            "chunk_range": [
+              628,
+              846
+            ],
+            "origin": {
+              "char_range": [
+                3576,
+                3794
+              ],
+              "format": "txt",
+              "line_range": [
+                1,
+                23
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "4. Annual Minimum Guarantee. Zynga will pay WPT three million U.S. dollars ($3,000,000) per year according to the following schedule (which the parties may alter upon mutual agreement) (the \"Annual Minimum Guarantee\"):",
+        "contribution_ids": [
+          "f011b172-5ede-4303-afdb-4a5aab78132a"
+        ],
+        "fact_ids": [
+          "7bb997d6-2106-4a2f-9719-dc78735267f6"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      }
+    ],
+    "candidates": [],
+    "conflicts": [],
+    "coverage": [
+      {
+        "component": "evidence",
+        "mode": "exact",
+        "scope": {
+          "document_ids": [],
+          "fact_ids": [
+            "7bb997d6-2106-4a2f-9719-dc78735267f6"
+          ]
+        },
+        "budget": {
+          "limit": 1000,
+          "available_references": 8,
+          "returned_references": 8,
+          "unavailable_resolved_references": 0
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      },
+      {
+        "component": "detail",
+        "mode": "exact",
+        "scope": {
+          "kind": "entity",
+          "id": "7bb997d6-2106-4a2f-9719-dc78735267f6"
+        },
+        "budget": {
+          "max_chars": 1000000
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      }
+    ],
+    "warnings": [],
+    "model": null,
+    "model_revision": null,
+    "item": {
+      "aliases": [],
+      "atomic_groups": {
+        "full_statement": {
+          "declarations": [
+            {
+              "contribution_ids": [
+                "f011b172-5ede-4303-afdb-4a5aab78132a"
+              ],
+              "source_declarations": [
+                {
+                  "completeness_check": {
+                    "method": "basic_source_evidence",
+                    "rejected_optional_reference_count": 0,
+                    "required_reference_count": 0,
+                    "resolved_reference_count": 1,
+                    "rule_units": [
+                      "rule-unit/13"
+                    ],
+                    "section_key": "rule-unit/13",
+                    "semantic_completeness_verified": false
+                  },
+                  "contribution_id": "f011b172-5ede-4303-afdb-4a5aab78132a",
+                  "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+                  "section_key": "rule-unit/13"
+                }
+              ],
+              "value": {
+                "complete": true,
+                "fields": {
+                  "definition": "Zynga will pay to WPT the Annual Minimum Guarantee as set forth in the Basic Provisions. The Annual Minimum Guarantee shall be recoupable from such Royalties as are, or have become, paid to WPT. For clarification, the Annual Minimum Guarantee will operate as an advance payment, such that when accrued Royalties exceed the Annual Minimum Guarantee payments already paid, then the excess Royalties will be paid by Zynga to WPT."
+                },
+                "references_resolved": true
+              }
+            }
+          ],
+          "state": "confirmed"
+        }
+      },
+      "canonical_name": "3. PAYMENT a. Annual Minimum Guarantee.",
+      "completeness": "complete",
+      "conflicts": [],
+      "contribution_ids": [
+        "36cc7883-9a5b-461a-bbe3-4b2001922aba",
+        "50744631-e10e-43dc-8fd7-461074b110d2",
+        "8dd38540-7f67-4a38-909d-fa3d4e6c3a7e",
+        "f011b172-5ede-4303-afdb-4a5aab78132a"
+      ],
+      "description": "",
+      "description_fragments": [],
+      "document_ids": [
+        "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+      ],
+      "domain_ids": [],
+      "entity_id": "7bb997d6-2106-4a2f-9719-dc78735267f6",
+      "entity_type": "Clause",
+      "identity": {
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "fields": {
+          "heading": "3. PAYMENT a. Annual Minimum Guarantee."
+        },
+        "namespace": "contract-clause"
+      },
+      "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+      "kind": "entity",
+      "missing_fields": [],
+      "object_revision": "eadab495-bbf6-4cde-ab64-ecb742d5a516",
+      "origin": "graph",
+      "properties": {
+        "heading": {
+          "merge": "single",
+          "state": "confirmed",
+          "values": [
+            {
+              "contribution_ids": [
+                "50744631-e10e-43dc-8fd7-461074b110d2"
+              ],
+              "value": "3. PAYMENT a. Annual Minimum Guarantee."
+            }
+          ]
+        }
+      }
+    },
+    "scope": null,
+    "selected_document_ids": [],
+    "declarations": [
+      {
+        "contribution_id": "36cc7883-9a5b-461a-bbe3-4b2001922aba",
+        "target_kind": "entity",
+        "target_id": "7bb997d6-2106-4a2f-9719-dc78735267f6",
+        "field_path": "$exists",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          0
+        ],
+        "evidence_complete": true,
+        "resolved_references": [],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      },
+      {
+        "contribution_id": "50744631-e10e-43dc-8fd7-461074b110d2",
+        "target_kind": "entity",
+        "target_id": "7bb997d6-2106-4a2f-9719-dc78735267f6",
+        "field_path": "/properties/heading",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          0
+        ],
+        "evidence_complete": true,
+        "resolved_references": [],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      },
+      {
+        "contribution_id": "8dd38540-7f67-4a38-909d-fa3d4e6c3a7e",
+        "target_kind": "entity",
+        "target_id": "7bb997d6-2106-4a2f-9719-dc78735267f6",
+        "field_path": "/identity/heading",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          0
+        ],
+        "evidence_complete": true,
+        "resolved_references": [],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      },
+      {
+        "contribution_id": "f011b172-5ede-4303-afdb-4a5aab78132a",
+        "target_kind": "entity",
+        "target_id": "7bb997d6-2106-4a2f-9719-dc78735267f6",
+        "field_path": "/atomic_groups/full_statement",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "evidence_complete": true,
+        "resolved_references": [
+          {
+            "reference_evidence_indices": [
+              2
+            ],
+            "missing_reference_count": 0,
+            "target_evidence_indices": [
+              7
+            ],
+            "missing_target_count": 0,
+            "evidence_complete": true
+          }
+        ],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      }
+    ],
+    "plan_summary": null,
+    "unresolved_entities": [],
+    "excluded_endpoint_ids": []
+  }
+}

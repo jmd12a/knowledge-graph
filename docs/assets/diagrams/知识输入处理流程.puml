@@ -1,0 +1,99 @@
+@startuml
+title 知识输入处理流程
+
+skinparam defaultFontName Microsoft YaHei
+skinparam defaultFontSize 14
+skinparam shadowing false
+skinparam backgroundColor #FFFFFF
+skinparam ArrowColor #506579
+skinparam activity {
+  BackgroundColor #F3F7FB
+  BorderColor #52728E
+  FontColor #172B3A
+  DiamondBackgroundColor #FFF5D6
+  DiamondBorderColor #9C7E36
+  StartColor #2563EB
+  EndColor #2563EB
+}
+skinparam partition {
+  BorderColor #A8BACB
+  FontColor #173B5C
+  FontStyle bold
+}
+
+start
+
+partition "A 业务模型输入：首次配置，后续复用" {
+  if (知识库已有可用业务模型？) then (是)
+    :读取知识库绑定的业务模型;
+  else (否)
+    :接入人员提供结构化配置\n节点类型、属性、边关系、建模规则\n以及领域等补充配置;
+    :校验类型引用、关系端点\n身份字段及领域结构;
+    if (配置校验通过？) then (是)
+      :将有效配置及知识库绑定\n保存到资料、来源与任务存储;
+    else (否)
+      :返回配置问题\n修正配置后重新提交;
+      stop
+    endif
+  endif
+}
+
+partition "B 资料接入：首先保存，再开始处理" {
+  :接收文档或结构化资料\n知识库 ID、来源信息;
+  :首先保存原始资料和来源元数据\n创建资料 ID 与导入任务\n资料保持未启用;
+  :返回资料 ID 和任务 ID\n进入该知识库的串行任务队列;
+}
+
+partition "C 构建准备：当前知识仍可查询" {
+  :Worker 读取已保存资料\n加载业务模型和运行配置;
+  :解析、切分或适配结构化记录\n生成片段 ID、正文及原文位置;
+  :识别适用领域\n按节点类型、边关系和规则\n进行抽取或字段映射;
+  :生成候选实体（含规则实体）\n属性和关系，附支持原文及片段标识;
+  :匹配已有图对象并校验候选\n采用可靠身份依据，不按同名强行合并;
+  if (存在不符合模型或身份不明的候选？) then (是)
+    :保留候选、原文引用和原因\n排除依赖未确定实体的关系\n继续处理可采用的知识;
+  else (否)
+  endif
+  :合并本次贡献与其他当前来源\n形成待写入的实体、关系和描述;
+  if (存在模型声明互斥的信息冲突？) then (是)
+    :保留各来源声明与证据\n标注冲突，不强行选择唯一值;
+  else (否)
+  endif
+  fork
+    :根据合并后的图对象描述生成向量\n实体和规则为主，关系按需;
+  fork again
+    :根据切片正文生成文档向量\n准备正文、文档 ID 和原文位置;
+  end fork
+  :准备来源贡献、关键词索引内容\n及各存储的待写入记录;
+  if (全部准备步骤执行成功？) then (是)
+    :保存待写入对象 ID 和任务恢复信息;
+  else (否)
+    :记录执行失败及错误阶段\n保留原始资料，允许任务重试\n已有知识继续可查询;
+    stop
+  endif
+}
+
+partition "D 写入与完成：暂停该知识库的知识查询" {
+  :持久化维护中标记\n暂停新知识查询，等待在途查询结束;
+  if (可以开始正式写入？) then (是)
+  else (否)
+    :确认尚未修改正式知识数据\n解除本任务维护标记，恢复查询\n任务等待或重试;
+    stop
+  endif
+  :写入文档切片索引\n切片正文、向量、文档 ID、原文位置;
+  :保存按资料整理的知识贡献\n写入资料、来源与任务存储;
+  :合并写入图知识库\n实体（含规则实体）、属性、关系\n及来源引用;
+  :写入或刷新图知识向量索引\n同步关键词索引;
+  :核验写入结果与对象、证据引用;
+  if (所有写入及核验成功？) then (是)
+    :启用本次导入的资料\n任务记为成功或带告警成功\n返回采用、未采用、冲突及索引处理结果;
+    :清除维护中标记\n恢复知识查询;
+  else (否)
+    :任务标记为需要修复\n保持知识查询暂停\n管理接口继续提供任务状态;
+    :按同一任务重试或重建受影响数据\n重启后仍先修复，核验成功才恢复查询;
+    stop
+  endif
+}
+
+stop
+@enduml

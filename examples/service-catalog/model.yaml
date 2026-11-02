@@ -1,0 +1,85 @@
+name: service-catalog
+node_types:
+  Service:
+    description: 可独立识别的业务服务，app_id 是可靠身份；显示名称不构成身份。
+    identity: {namespace: service, fields: [app_id], normalization: [trim]}
+    properties:
+      app_id: {type: string, required: true, merge: single, queryable: true}
+      name: {type: string, required: true, merge: alternatives}
+      status: {type: string, merge: single, queryable: true}
+      aliases: {type: string, merge: union}
+      description: {type: string, merge: supported_text}
+  Team:
+    description: 对服务负责的团队
+    identity: {namespace: team, fields: [team_code], normalization: [trim]}
+    properties:
+      team_code: {type: string, required: true, merge: single, queryable: true}
+      name: {type: string, required: true, merge: alternatives}
+relation_types:
+  CALLS:
+    description: 调用方指向被调用方
+    source_types: [Service]
+    target_types: [Service]
+    properties: {}
+  OWNED_BY:
+    description: 服务指向负责团队；矛盾归属必须保留双方来源
+    source_types: [Service]
+    target_types: [Team]
+    properties: {}
+    conflict_rule: {max_distinct_targets: 1}
+extraction:
+  instructions:
+    - 仅采用原文明确支持的事实；不得以名称相同证明身份相同。
+domains: []
+mappings:
+  calls_and_caller_owner:
+    format: csv
+    records: {header: true, encoding: utf-8}
+    entities:
+      caller:
+        type: Service
+        fields:
+          app_id: {column: caller_id, cast: string, empty: error}
+          name: {column: caller_name, cast: string, empty: error}
+          status: {column: caller_status, cast: string, empty: omit}
+          aliases: {column: caller_alias, cast: string, empty: omit}
+          description: {column: caller_description, cast: string, empty: omit}
+      callee:
+        type: Service
+        identity_only: true
+        fields:
+          app_id: {column: callee_id, cast: string, empty: error}
+          name: {column: callee_name, cast: string, empty: error}
+          status: {column: callee_status, cast: string, empty: omit}
+      owner:
+        type: Team
+        fields:
+          team_code: {column: team_code, cast: string, empty: error}
+          name: {column: team_name, cast: string, empty: error}
+    relations:
+      - {type: CALLS, source_ref: caller, target_ref: callee}
+      - {type: OWNED_BY, source_ref: caller, target_ref: owner}
+  calls_and_callee_owner:
+    format: json
+    records: {pointer: /calls, encoding: utf-8}
+    entities:
+      caller:
+        type: Service
+        fields:
+          app_id: {pointer: /caller_id, cast: string, empty: error}
+          name: {pointer: /caller_name, cast: string, empty: error}
+          status: {pointer: /caller_status, cast: string, empty: omit}
+      callee:
+        type: Service
+        identity_only: true
+        fields:
+          app_id: {pointer: /callee_id, cast: string, empty: error}
+          status: {pointer: /callee_status, cast: string, empty: omit}
+      owner:
+        type: Team
+        fields:
+          team_code: {pointer: /team_code, cast: string, empty: error}
+          name: {pointer: /team_name, cast: string, empty: error}
+    relations:
+      - {type: CALLS, source_ref: caller, target_ref: callee}
+      - {type: OWNED_BY, source_ref: callee, target_ref: owner}

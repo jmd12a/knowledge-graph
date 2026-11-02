@@ -1,0 +1,58 @@
+{
+  "frozen_at_utc": "2026-11-01T17:12:55.371888+00:00",
+  "stage": "before_paid_model_run",
+  "fixed_case_file": "fixed-case.json",
+  "source_text_file": "allied-esports-content-license.txt",
+  "official_qa_file": "allied-esports-official-qa.json",
+  "positive_query_count": 12,
+  "official_qa_question_exact_matches": 12,
+  "retrieve_query_count": 2,
+  "manual_reference_span_count": 9,
+  "manual_reference_span_mismatches": 0,
+  "reference_coordinate_system": "Zero-based Python Unicode character offsets; [start,end) against the complete official context, not UTF-8 byte offsets.",
+  "manual_reference_origin": "manual_source_review; supplemental review references, not official CUAD answer spans.",
+  "model_calls_during_freeze": 0,
+  "application_evaluation_during_freeze": false,
+  "references": {
+    "post_termination_licensed_property": [
+      [
+        7702,
+        8176
+      ],
+      [
+        26856,
+        27037
+      ],
+      [
+        27038,
+        27559
+      ],
+      [
+        27560,
+        28093
+      ],
+      [
+        28162,
+        28654
+      ]
+    ],
+    "minimum_guarantee_royalty_offsets": [
+      [
+        3576,
+        3977
+      ],
+      [
+        3978,
+        4543
+      ],
+      [
+        15116,
+        15571
+      ],
+      [
+        15572,
+        16899
+      ]
+    ]
+  }
+}

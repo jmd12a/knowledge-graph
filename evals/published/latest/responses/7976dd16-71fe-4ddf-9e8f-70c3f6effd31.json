@@ -1,0 +1,401 @@
+{
+  "recorded_at": "2026-11-01T19:43:02.407910+00:00",
+  "stage": "long_contract",
+  "protocol": "HTTP",
+  "method": "GET",
+  "path": "/kbs/3da41804-fbda-491a-9465-8133e38b961b/knowledge/entity/17d84402-374a-4349-a78b-0ade98a5a520",
+  "input": null,
+  "params": {
+    "evidence_limit": 1000
+  },
+  "status_code": 200,
+  "elapsed_ms": 11,
+  "response": {
+    "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+    "request_id": "67a07c37-7c91-4fe4-a1c7-821897161135",
+    "status": "ok",
+    "knowledge": [],
+    "relations": [],
+    "paths": [],
+    "evidence": [
+      {
+        "chunk_id": "49c4cc60-fe0a-49c7-843f-282c6c37d492",
+        "chunk_range": [
+          0,
+          2000
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "role": "context",
+        "source_mapping_verified": true,
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                0,
+                2000
+              ],
+              "format": "txt",
+              "line_range": [
+                1,
+                1
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "Exhibit 10.19 JOINT CONTENT LICENSE AGREEMENT This JOINT CONTENT LICENSE AGREEMENT (the \"Agreement\"), dated February 1, 2018 (the \"Effective Date\"), is made by and between WPT Enterprises, Inc., a Delaware corporation, with offices located at 1920 Main Street, Suite 1150, Irvine, CA 92614 (\"WPT\"), and ZYNGA INC., a Delaware corporation with offices located at 699 8th Street, San Francisco CA, 94103 (\"Zynga US\") and ZYNGA GAME IRELAND LIMITED, a limited company organized under the laws of Ireland, resident in Ireland and having its registered office located at The Oval, Building One, Third Floor 160 Shelbourne Road Ballsbridge 4 Co. Dublin Ireland (\"Zynga Ireland,\" and together with Zynga US and their respective Affiliates, \"Zynga\"). In addition to the Definitions set forth in Section 1 of the Additional Provisions (attached and incorporated by reference), all capitalized terms used herein shall have the meanings set forth below. In consideration of the mutual promises herein contained and for other good and valuable consideration, the receipt and sufficiency of which are hereby acknowledged, the parties hereby agree as follows: BASIC PROVISIONS 1. Joint Content License Relationship. Among other games, Zynga produces and distributes the ZYNGA POKER® game on a number of global platforms, including Apple iOS, Google Android, Facebook and the zynga.com website. The ZYNGA POKER® game features a Zynga Poker Tournaments Mode that Zynga can customize. Among other things, WPT is the creator of the World Poker Tour, WPT Tournaments and the WPT Invitational Tournaments. WPT Tournaments and WPT Invitational Tournaments are televised poker tournaments where a partner can promote its brand. The parties desire to work cooperatively, but independently, to use commercially reasonable efforts to engage in the marketing and promotional activities described in Exhibit A, including, but not limited to Zynga promoting the WPT brand in a WPT-branded Zynga Poker Tournament Mode, and WPT pr",
+        "contribution_ids": [
+          "3335ea75-9012-498a-80c7-9d463e98d072"
+        ],
+        "fact_ids": [
+          "17d84402-374a-4349-a78b-0ade98a5a520"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "ca9f9037-3290-4a88-8826-b9c1f0db359c",
+        "chunk_range": [
+          150,
+          1181
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "role": "context",
+        "source_mapping_verified": true,
+        "source_spans": [
+          {
+            "chunk_range": [
+              150,
+              1181
+            ],
+            "origin": {
+              "char_range": [
+                2000,
+                3031
+              ],
+              "format": "txt",
+              "line_range": [
+                1,
+                11
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "omoting the Zynga brand in WPT Tournaments and WPT Invitational Tournaments. This Agreement describes the terms of a content license and cooperative marketing relationship under which each party will independently or cooperatively engage in mutually agreed activities to promote each other's products and services throughout the Territory (as defined below). 2. Territory. The Territory for this Agreement is worldwide, but not including Asian countries (including, but not limited to, Bangladesh, Bhutan, Brunei, Cambodia, East Timor, Hong Kong, India, Indonesia, Japan, Laos, Macau, Malaysia, Maldives, Mongolia, Myanmar, Nepal, North Korea, Pakistan, People's Republic of China, Philippines, Singapore, South Korea, Sri Lanka, Taiwan, Thailand, Vietnam). The parties acknowledge and agree that the rights granted hereunder by Zynga (a) with respect to the United States are granted to, held and exercised by Zynga US and (b) with respect to all other parts of the Territory are granted to, held and exercised by Zynga Ireland.\n\n",
+        "contribution_ids": [
+          "3335ea75-9012-498a-80c7-9d463e98d072"
+        ],
+        "fact_ids": [
+          "17d84402-374a-4349-a78b-0ade98a5a520"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "ca9f9037-3290-4a88-8826-b9c1f0db359c",
+        "chunk_range": [
+          509,
+          1179
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "quote": "2. Territory. The Territory for this Agreement is worldwide, but not including Asian countries (including, but not limited to, Bangladesh, Bhutan, Brunei, Cambodia, East Timor, Hong Kong, India, Indonesia, Japan, Laos, Macau, Malaysia, Maldives, Mongolia, Myanmar, Nepal, North Korea, Pakistan, People's Republic of China, Philippines, Singapore, South Korea, Sri Lanka, Taiwan, Thailand, Vietnam). The parties acknowledge and agree that the rights granted hereunder by Zynga (a) with respect to the ",
+        "quote_range": [
+          509,
+          1009
+        ],
+        "quote_truncated": true,
+        "role": "fact",
+        "source_spans": [
+          {
+            "chunk_range": [
+              509,
+              1179
+            ],
+            "origin": {
+              "char_range": [
+                2359,
+                3029
+              ],
+              "format": "txt",
+              "line_range": [
+                1,
+                11
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "2. Territory. The Territory for this Agreement is worldwide, but not including Asian countries (including, but not limited to, Bangladesh, Bhutan, Brunei, Cambodia, East Timor, Hong Kong, India, Indonesia, Japan, Laos, Macau, Malaysia, Maldives, Mongolia, Myanmar, Nepal, North Korea, Pakistan, People's Republic of China, Philippines, Singapore, South Korea, Sri Lanka, Taiwan, Thailand, Vietnam). The parties acknowledge and agree that the rights granted hereunder by Zynga (a) with respect to the United States are granted to, held and exercised by Zynga US and (b) with respect to all other parts of the Territory are granted to, held and exercised by Zynga Ireland.",
+        "contribution_ids": [
+          "3335ea75-9012-498a-80c7-9d463e98d072"
+        ],
+        "fact_ids": [
+          "17d84402-374a-4349-a78b-0ade98a5a520"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "ca9f9037-3290-4a88-8826-b9c1f0db359c",
+        "chunk_range": [
+          509,
+          522
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "quote": "2. Territory.",
+        "quote_range": [
+          509,
+          522
+        ],
+        "quote_truncated": false,
+        "role": "fact",
+        "source_spans": [
+          {
+            "chunk_range": [
+              509,
+              522
+            ],
+            "origin": {
+              "char_range": [
+                2359,
+                2372
+              ],
+              "format": "txt",
+              "line_range": [
+                1,
+                11
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "2. Territory.",
+        "contribution_ids": [
+          "1fb48726-247d-4536-9ea2-3f574e778cbb",
+          "559a4c15-01e1-4ffa-b1c8-525f6a027eb0",
+          "aab2a7cd-79e9-4255-add3-34006236ed44"
+        ],
+        "fact_ids": [
+          "17d84402-374a-4349-a78b-0ade98a5a520"
+        ],
+        "field_paths": [
+          "$exists",
+          "/identity/heading",
+          "/properties/heading"
+        ]
+      }
+    ],
+    "candidates": [],
+    "conflicts": [],
+    "coverage": [
+      {
+        "component": "evidence",
+        "mode": "exact",
+        "scope": {
+          "document_ids": [],
+          "fact_ids": [
+            "17d84402-374a-4349-a78b-0ade98a5a520"
+          ]
+        },
+        "budget": {
+          "limit": 1000,
+          "available_references": 4,
+          "returned_references": 4,
+          "unavailable_resolved_references": 0
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      },
+      {
+        "component": "detail",
+        "mode": "exact",
+        "scope": {
+          "kind": "entity",
+          "id": "17d84402-374a-4349-a78b-0ade98a5a520"
+        },
+        "budget": {
+          "max_chars": 1000000
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      }
+    ],
+    "warnings": [],
+    "model": null,
+    "model_revision": null,
+    "item": {
+      "aliases": [],
+      "atomic_groups": {
+        "full_statement": {
+          "declarations": [
+            {
+              "contribution_ids": [
+                "3335ea75-9012-498a-80c7-9d463e98d072"
+              ],
+              "source_declarations": [
+                {
+                  "completeness_check": {
+                    "method": "basic_source_evidence",
+                    "rejected_optional_reference_count": 0,
+                    "required_reference_count": 0,
+                    "resolved_reference_count": 0,
+                    "rule_units": [
+                      "rule-unit/0"
+                    ],
+                    "section_key": "rule-unit/0",
+                    "semantic_completeness_verified": false
+                  },
+                  "contribution_id": "3335ea75-9012-498a-80c7-9d463e98d072",
+                  "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+                  "section_key": "rule-unit/0"
+                }
+              ],
+              "value": {
+                "complete": true,
+                "fields": {
+                  "definition": "The Territory for this Agreement is worldwide, but not including Asian countries (including, but not limited to, Bangladesh, Bhutan, Brunei, Cambodia, East Timor, Hong Kong, India, Indonesia, Japan, Laos, Macau, Malaysia, Maldives, Mongolia, Myanmar, Nepal, North Korea, Pakistan, People's Republic of China, Philippines, Singapore, South Korea, Sri Lanka, Taiwan, Thailand, Vietnam). The parties acknowledge and agree that the rights granted hereunder by Zynga (a) with respect to the United States are granted to, held and exercised by Zynga US and (b) with respect to all other parts of the Territory are granted to, held and exercised by Zynga Ireland."
+                },
+                "references_resolved": false
+              }
+            }
+          ],
+          "state": "confirmed"
+        }
+      },
+      "canonical_name": "2. Territory.",
+      "completeness": "complete",
+      "conflicts": [],
+      "contribution_ids": [
+        "1fb48726-247d-4536-9ea2-3f574e778cbb",
+        "3335ea75-9012-498a-80c7-9d463e98d072",
+        "559a4c15-01e1-4ffa-b1c8-525f6a027eb0",
+        "aab2a7cd-79e9-4255-add3-34006236ed44"
+      ],
+      "description": "",
+      "description_fragments": [],
+      "document_ids": [
+        "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+      ],
+      "domain_ids": [],
+      "entity_id": "17d84402-374a-4349-a78b-0ade98a5a520",
+      "entity_type": "Clause",
+      "identity": {
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "fields": {
+          "heading": "2. Territory."
+        },
+        "namespace": "contract-clause"
+      },
+      "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+      "kind": "entity",
+      "missing_fields": [],
+      "object_revision": "23479d74-a35e-4092-8f76-d63a1e171543",
+      "origin": "graph",
+      "properties": {
+        "heading": {
+          "merge": "single",
+          "state": "confirmed",
+          "values": [
+            {
+              "contribution_ids": [
+                "559a4c15-01e1-4ffa-b1c8-525f6a027eb0"
+              ],
+              "value": "2. Territory."
+            }
+          ]
+        }
+      }
+    },
+    "scope": null,
+    "selected_document_ids": [],
+    "declarations": [
+      {
+        "contribution_id": "1fb48726-247d-4536-9ea2-3f574e778cbb",
+        "target_kind": "entity",
+        "target_id": "17d84402-374a-4349-a78b-0ade98a5a520",
+        "field_path": "/identity/heading",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          3
+        ],
+        "evidence_complete": true,
+        "resolved_references": [],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      },
+      {
+        "contribution_id": "3335ea75-9012-498a-80c7-9d463e98d072",
+        "target_kind": "entity",
+        "target_id": "17d84402-374a-4349-a78b-0ade98a5a520",
+        "field_path": "/atomic_groups/full_statement",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          0,
+          1,
+          2
+        ],
+        "evidence_complete": true,
+        "resolved_references": [],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      },
+      {
+        "contribution_id": "559a4c15-01e1-4ffa-b1c8-525f6a027eb0",
+        "target_kind": "entity",
+        "target_id": "17d84402-374a-4349-a78b-0ade98a5a520",
+        "field_path": "/properties/heading",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          3
+        ],
+        "evidence_complete": true,
+        "resolved_references": [],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      },
+      {
+        "contribution_id": "aab2a7cd-79e9-4255-add3-34006236ed44",
+        "target_kind": "entity",
+        "target_id": "17d84402-374a-4349-a78b-0ade98a5a520",
+        "field_path": "$exists",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          3
+        ],
+        "evidence_complete": true,
+        "resolved_references": [],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      }
+    ],
+    "plan_summary": null,
+    "unresolved_entities": [],
+    "excluded_endpoint_ids": []
+  }
+}

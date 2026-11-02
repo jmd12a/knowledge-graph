@@ -1,0 +1,74 @@
+@startuml
+title 知识库写入、查询门禁与失败恢复
+skinparam defaultFontName Microsoft YaHei
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 240
+skinparam defaultFontSize 13
+skinparam ParticipantBackgroundColor #E7F0FA
+skinparam ParticipantBorderColor #416486
+skinparam NoteBackgroundColor #FFF5D8
+skinparam NoteBorderColor #B89B48
+actor "HTTP / MCP 调用方" as Client
+participant "在线服务\n共享检索逻辑" as API
+participant "单 Worker" as Worker
+database "SQLite\n任务 / 维护标记" as Meta
+participant "知识库文件锁\nSH / EX" as Lock
+database "图 / 贡献 / 两类索引\n原文件" as Stores
+
+group 准备阶段：旧知识仍可查询
+  Worker -> Stores : 读取原文、当前图和来源贡献
+  Worker -> Worker : 抽取、对齐、合并、计算向量
+  Worker -> Worker : 原子保存完整 prepared 清单和随机计划 ID
+  Worker -> Meta : PREPARED，保存清单地址、计划 ID 与长度
+  Client -> API : 知识检索请求
+  API -> Lock : 获取共享锁 SH
+  API -> Meta : 短读事务，检查 READY
+  API -> Stores : 读取图知识和原文证据
+end
+
+group 暂停新查询，等待在途查询退出
+  Worker -> Meta : 持久化 DRAINING + job_id
+  Worker -> Lock : 等待排他锁 EX
+  Client -> API : 新知识请求
+  API -> Lock : 新请求独立获取 SH；失败则直接返回维护中
+  API -> Meta : 共享锁内检查维护状态
+  API --> Client : 503 KB_MAINTENANCE
+  API -> Lock : 释放新请求共享锁
+  Stores --> API : 返回在途请求数据
+  API --> Client : 返回完整旧知识结果
+  API -> Lock : 释放在途共享锁
+  Lock --> Worker : 获得排他锁 EX
+end
+
+note over API,Meta
+任务查询、健康检查仍可用。
+若 DRAINING 阶段超时且确认尚未写入，
+清除此任务标记后重试，但保留同库队头。
+后续同库任务不能越过已准备清单。
+end note
+
+group 正式写入：仅执行已准备的计划
+  Worker -> Meta : 持久化 APPLYING，之后才允许正式写入
+  Worker -> Stores : 文档切片 -> 来源贡献 -> 图补丁
+  Worker -> Stores : 图对象向量 -> 引用核验 -> 原文件清理
+  note over Worker,Stores
+  删除旧记录先于写回最终记录。
+  REBUILD 先清理该库旧图，再完整重建；
+  REINDEX 只重建两个向量集合及配置。
+  end note
+  alt 全部步骤和引用核验通过
+    Worker -> Meta : 一个事务：启用/停用资料或更新模型\n任务成功 + 维护状态 READY
+    Worker -> Lock : 释放 EX
+    note over API,Stores : 后续知识请求取得 SH 并检查 READY 后读取新知识
+  else 部分写入失败或结果未知
+    Worker -> Meta : NEEDS_REPAIR / REPAIR_REQUIRED
+    Worker -> Lock : 释放 EX；持久化标记继续阻止查询
+    note over Worker,Stores
+    重启或重试：重新取得单 Worker 锁和该库 EX；
+    沿用同一 prepared 清单、ID 与向量重放并核验。
+    不重新调用 LLM 改写结果，不直接解除维护标记。
+    end note
+  end
+end
+@enduml

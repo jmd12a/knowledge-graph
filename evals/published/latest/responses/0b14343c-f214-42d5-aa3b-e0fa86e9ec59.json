@@ -1,0 +1,326 @@
+{
+  "recorded_at": "2026-11-01T19:42:56.919184+00:00",
+  "stage": "long_contract",
+  "protocol": "HTTP",
+  "method": "POST",
+  "path": "/kbs/3da41804-fbda-491a-9465-8133e38b961b/knowledge/search",
+  "input": {
+    "query": "Highlight the parts (if any) of this contract related to \"Uncapped Liability\" that should be reviewed by a lawyer. Details: Is a party’s liability uncapped upon the breach of its obligation in the contract? This also includes uncap liability for a particular type of breach such as IP infringement or breach of confidentiality obligation.",
+    "filters": {
+      "document_ids": [
+        "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+      ]
+    },
+    "limit": 5,
+    "kinds": [
+      "chunk"
+    ],
+    "semantic": true
+  },
+  "params": null,
+  "status_code": 200,
+  "elapsed_ms": 5129,
+  "response": {
+    "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+    "request_id": "20a68e8a-85bf-41fc-9586-b2d5cb3766d3",
+    "status": "ok",
+    "knowledge": [
+      {
+        "chunk_id": "dcb3351b-f6f6-4047-9f9f-0703e1dafeb3",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                20518,
+                22518
+              ],
+              "format": "txt",
+              "line_range": [
+                53,
+                53
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "le in accordance with its terms; (iii) the making of this Agreement by such party does not violate any agreement, right or obligation existing between such party and any third party; (iv) the marketing and promotional activities in Exhibit A shall not infringe or misappropriate third party rights, including, without limitation, any patent, trade name, trademark, copyright or other intellectual property or proprietary right and shall not invade or violate any right of privacy, publicity, personal or proprietary right, or other common law or statutory right, nor defame any person or entity in the United States and European Union (the \"Principal Territories\"), and to the knowledge of such party, outside the Principal Territories; provided that such party makes no representations regarding the Licensed Property or any other materials provided by Licensor as contemplated under this Agreement. b. DISCLAIMER. EXCEPT AS EXPRESSLY STATED IN THIS AGREEMENT, NEITHER PARTY MAKES ANY REPRESENTATIONS OR WARRANTIES OF ANY KIND WITH RESPECT TO THE SUBJECT MATTER HEREOF, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR ANY LEVEL OF BUSINESS OR SERVICE THAT MAY RESULT FROM THIS AGREEMENT, OR ANY WARRANTY OR CONDITION ARISING FROM ANY COURSE OF DEALING, COURSE OF PERFORMANCE OR USAGE IN THE INDUSTRY. c. LIMITATIONS ON LIABILITY/NO INJUNCTIVE RELIEF. EXCEPT IN CASES OF GROSS NEGLIGENCE, WILLFUL MISCONDUCT OR FRAUD, INDEMNIFICATION CLAIMS UNDER SECTION 5 OR BREACHES OF SECTION 2 (TRADEMARKS), 8 (CONFIDENTIALITY), OR 9 (NO AGENCY RELATIONSHIP), IN NO EVENT SHALL EITHER PARTY OR ITS OFFICERS, DIRECTORS, OR EMPLOYEES BE LIABLE TO THE OTHER PARTY IN CONNECTION WITH THE SUBJECT MATTER HEREOF, FOR ANY SPECIAL, INDIRECT, CONSEQUENTIAL OR PUNITIVE DAMAGES OF ANY KIND, LOST PROFITS OR LOST REVENUE, WHETHER ARISING IN CONTRACT, TORT, NEGLIGENCE, STATUTE, OR OTHERWISE, EVEN IF ADVISED OF THE POSSIBILITY THEREOF. IN NO EVENT SHALL THE NON-B",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "dcb3351b-f6f6-4047-9f9f-0703e1dafeb3",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 1.0
+      },
+      {
+        "chunk_id": "696a9ce7-fda1-4d84-b019-ba98b7380734",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                22368,
+                24368
+              ],
+              "format": "txt",
+              "line_range": [
+                53,
+                63
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "REVENUE, WHETHER ARISING IN CONTRACT, TORT, NEGLIGENCE, STATUTE, OR OTHERWISE, EVEN IF ADVISED OF THE POSSIBILITY THEREOF. IN NO EVENT SHALL THE NON-BREACHING PARTY BE ENTITLED TO EQUITABLE OR INJUNCTIVE RELIEF OF ANY KIND.\n\n6\n\nSource: ALLIED ESPORTS ENTERTAINMENT, INC., 8-K, 8/15/2019\n\n\n\n\n\n5. INDEMNIFICATION a. WPT shall indemnify, defend, and hold harmless Zynga and its Affiliates, and the respective directors, officers and employees of the foregoing (the \"Zynga Indemnified Parties\") from and against any and all third party claims, actions, suits, costs, liabilities, judgments, obligations, losses, penalties, expenses or damages (including, without limitation, reasonable legal fees and expenses) of whatsoever kind and nature imposed on, incurred by or asserted against any of the Zynga Indemnified Parties arising out of: (i) any breach or alleged breach by WPT of any representation, warranty or covenant made, by WPT pursuant to this Agreement; or (ii) WPT's non-compliance with any applicable federal, state or local laws or with any applicable regulations in connection with its performance of this Agreement. b. Zynga shall indemnify, defend, and hold harmless WPT and its Affiliates, and the respective directors, officers and employees of the foregoing (the \"WPT Indemnified Parties\") from and against any and all third party claims, actions, suits, costs, liabilities, judgments, obligations, losses, penalties, expenses or damages (including, without limitation, reasonable legal fees and expenses) of whatsoever kind and nature imposed on, incurred by or asserted against any of the WPT Indemnified Parties arising out: (i) any breach or alleged breach by Zynga of any representation, warranty or covenant made by Zynga pursuant to this Agreement; or (ii) Zynga's non-compliance with any applicable federal, state or local laws or with any applicable regulations in connection with its performance of this Agreement. c. In order to seek or receive indemnification hereunder in c",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "696a9ce7-fda1-4d84-b019-ba98b7380734",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.5
+      },
+      {
+        "chunk_id": "072f669c-fd8c-47e4-92a6-2b9859c5283f",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                18668,
+                20668
+              ],
+              "format": "txt",
+              "line_range": [
+                53,
+                53
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "ties rate; the distribution channels or portals, the platform, the territory(ies), and itemized Allowable Deductions (\"Royalty Statement(s)\"). The amount shown to be payable to WPT shall be paid simultaneously with the rendition of the respective Royalty Statement. The statements and payments remitted hereunder shall be delivered to WPT via email to the following email address: Deborah.Frazzetta@wpt.com (ATTN: Deborah Frazzetta, VP, Finance. e. Audit Rights. Zynga shall keep full, complete and accurate books of account and records (collectively \"records\") covering all transactions relating to the subject matter of this Agreement in sufficient detail to enable the Royalties payable hereunder to be determined and verified. Zynga shall permit such records to be examined by authorized representatives of WPT, including such independent auditors as WPT may designate, during usual business hours, with advance notice, to verify to the extent necessary the Royalties paid hereunder, and WPT and its representatives shall use reasonable efforts to minimize disruptions to Zynga's business. Prompt adjustment shall be made by Zynga to compensate for any errors or omissions disclosed by such examination. If the adjustment is more than $1,500 in favor, then out-of-pocket costs of such examination shall be borne by Zynga. f. No Other Charges or Expenses. Neither party will be liable to pay the other party any other types of charges or expenses not agreed to in this Agreement or any related amendment signed by the Parties. 4. REPRESENTATIONS AND WARRANTIES; LIMITATIONS OF LIABILITY a. Each party represents and warrants to the other as follows: (i) it is duly authorized under applicable law and has the authority to enter into and perform this Agreement; (ii) this Agreement constitutes a valid and binding obligation of such party enforceable in accordance with its terms; (iii) the making of this Agreement by such party does not violate any agreement, right or obligation existing between",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "072f669c-fd8c-47e4-92a6-2b9859c5283f",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.3333333333333333
+      },
+      {
+        "chunk_id": "d60cff60-49d3-423b-af99-0c93b4920f32",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                24218,
+                26218
+              ],
+              "format": "txt",
+              "line_range": [
+                63,
+                63
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "or with any applicable regulations in connection with its performance of this Agreement. c. In order to seek or receive indemnification hereunder in cases involving third-party claims the party seeking indemnification (the \"Indemnified Party\") must have promptly notified the other (the \"Indemnifying Party\") of any claim or litigation of which the Indemnified Party is aware and to which the indemnification relates; and the Indemnified Party must reasonably cooperate with Indemnifying Party in the defense or settlement of such claim or litigation. With regard to any claim or litigation to which the Indemnifying Party itself is not a party, the Indemnifying Party must have afforded the Indemnified Party the opportunity to participate in any compromise, settlement, litigation or other resolution or disposition of such claim or litigation. 6. TERMINATION a. Each party shall have the right at any time to terminate this Agreement without prejudice to any rights which it may have, whether pursuant to the provisions of this Agreement or otherwise in law or in equity or otherwise, upon the occurrence of any one or more of the following events: i. The other party breaches or fails to perform any of its material obligations provided for in this Agreement; ii. The other party is unable to pay its debts when due, or makes any assignment for the benefit of creditors, or files any petition under the bankruptcy or insolvency laws of any jurisdiction, county or place, or has or suffers a receiver or trustee to be appointed for its business or property, or is adjudicated a bankrupt or an insolvent; or iii. The other party asserts any rights in or to the terminating party's intellectual property in violation of this Agreement. a. In the event that any of these events of default should occur and a party elects to exercise its right to terminate this Agreement, such party shall give notice of termination in writing to the other party, which notice shall specify in reasonable detail the e",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "d60cff60-49d3-423b-af99-0c93b4920f32",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.25
+      },
+      {
+        "chunk_id": "b3efda74-39d8-4c5a-a6b4-912c3927d8be",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              208
+            ],
+            "origin": {
+              "char_range": [
+                35296,
+                35504
+              ],
+              "format": "txt",
+              "line_range": [
+                93,
+                97
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "parties mutually agree to provide additional details on allowable IP) WPT MARKS: ● WPT® ● WORLD POKER TOUR® ZYNGA MARKS: ● ZYNGA® ● ZYNGA POKER®\n\n10\n\nSource: ALLIED ESPORTS ENTERTAINMENT, INC., 8-K, 8/15/2019",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "b3efda74-39d8-4c5a-a6b4-912c3927d8be",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.2
+      }
+    ],
+    "relations": [],
+    "paths": [],
+    "evidence": [],
+    "candidates": [],
+    "conflicts": [],
+    "coverage": [
+      {
+        "component": "documents",
+        "mode": "top_k",
+        "scope": {
+          "entity_types": [],
+          "domain_ids": [],
+          "document_ids": [
+            "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+          ],
+          "properties": {}
+        },
+        "budget": {
+          "rerank_candidates": 21,
+          "limit": 5
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      },
+      {
+        "component": "documents",
+        "mode": "top_k",
+        "scope": {
+          "document_ids": [
+            "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+          ],
+          "domain_ids": []
+        },
+        "budget": {
+          "limit": 5,
+          "scan_limit": 5000,
+          "channels": [
+            "keyword",
+            "vector",
+            "rerank"
+          ],
+          "entity_filters_apply_to": "object_candidates"
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      }
+    ],
+    "warnings": [],
+    "model": null,
+    "model_revision": null,
+    "item": null,
+    "scope": "selected_documents",
+    "selected_document_ids": [
+      "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+    ],
+    "declarations": [],
+    "plan_summary": null,
+    "unresolved_entities": [],
+    "excluded_endpoint_ids": []
+  }
+}

@@ -1,0 +1,53 @@
+flowchart TB
+    MODEL_INPUT["外部业务模型输入<br/>节点类型、边关系、建模规则"]
+    DATA_INPUT["文档或结构化资料"]
+    CALLER["外部 Agent／外部系统"]
+
+    subgraph L1["接口层"]
+        HTTP["HTTP API<br/>资料管理、任务查询、知识检索"]
+        MCP["MCP<br/>知识检索工具"]
+    end
+
+    subgraph L2["服务层"]
+        MODEL["业务模型配置模块"]
+        MANAGER["资料与任务管理模块"]
+        BUILDER["知识构建与维护模块<br/>由后台 Worker 执行"]
+        RETRIEVER["知识检索模块"]
+    end
+
+    subgraph L3["数据层"]
+        SOURCE[("资料、来源与任务存储")]
+        GRAPH[("图知识库 · 核心<br/>实体、属性、关系、规则、来源引用")]
+        subgraph VECTORS["辅助向量知识库"]
+            GRAPH_VECTOR[("图知识向量索引")]
+            CHUNK_VECTOR[("文档切片向量索引<br/>正文、向量、原文位置")]
+        end
+    end
+
+    ADAPTER["能力适配<br/>解析器、LLM、Embedding、存储驱动"]
+
+    MODEL_INPUT -->|校验并绑定| MODEL
+    DATA_INPUT -->|上传或接入| HTTP
+    CALLER -->|调用接口| HTTP
+    CALLER -->|调用工具| MCP
+    HTTP -->|资料管理请求| MANAGER
+    MANAGER -->|先存原文和任务| SOURCE
+    MODEL -->|保存配置绑定| SOURCE
+    MANAGER -->|保存后调度| BUILDER
+    BUILDER <-->|原文与贡献读写| SOURCE
+    MODEL -.->|建模约束| BUILDER
+    MODEL -.->|模型说明| RETRIEVER
+    BUILDER <-->|读取与维护知识| GRAPH
+    BUILDER -->|图对象向量| GRAPH_VECTOR
+    BUILDER -->|切片正文与向量| CHUNK_VECTOR
+    HTTP -->|知识查询| RETRIEVER
+    MCP -->|知识查询| RETRIEVER
+    RETRIEVER -->|图查询| GRAPH
+    RETRIEVER -->|语义定位| GRAPH_VECTOR
+    RETRIEVER -->|原文检索| CHUNK_VECTOR
+    RETRIEVER -->|来源查询| SOURCE
+    ADAPTER -.->|解析与模型调用| BUILDER
+    ADAPTER -.->|向量与语义理解| RETRIEVER
+
+    classDef core fill:#e6f2ff,stroke:#2563eb,stroke-width:3px;
+    class GRAPH core;

@@ -1,0 +1,491 @@
+{
+  "recorded_at": "2026-11-01T19:42:08.001836+00:00",
+  "stage": "long_contract",
+  "protocol": "HTTP",
+  "method": "GET",
+  "path": "/kbs/3da41804-fbda-491a-9465-8133e38b961b/knowledge/entity/e5cbc964-493c-4d51-b412-08a81e440ab7",
+  "input": null,
+  "params": {
+    "evidence_limit": 1000
+  },
+  "status_code": 200,
+  "elapsed_ms": 11,
+  "response": {
+    "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+    "request_id": "8d7d76a1-4e8e-4ab5-95a2-2cf9e6775eaa",
+    "status": "ok",
+    "knowledge": [],
+    "relations": [],
+    "paths": [],
+    "evidence": [
+      {
+        "chunk_id": "334002fc-5406-4ab9-b684-96b0b8abac66",
+        "chunk_range": [
+          150,
+          2000
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "role": "context",
+        "source_mapping_verified": true,
+        "source_spans": [
+          {
+            "chunk_range": [
+              150,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                8552,
+                10402
+              ],
+              "format": "txt",
+              "line_range": [
+                33,
+                33
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "d. Trademark Guidelines. In its use of the Licensed Property of the other party (\"Licensee\"), each party (\"Licensor\") will comply with any trademark usage guidelines that Licensor may communicate to Licensee from time to time. Each use of Licensor's marks by Licensee will be accompanied by the appropriate trademark symbol (either \"™\" or \"®\") and a legend specifying that such marks are trademarks of Licensor as specified on Exhibit B, and will be in accordance with Licensor's then-current trademark usage policies as provided in writing to Licensee from time to time. Licensee will provide Licensor with copies of any materials bearing any of Licensor's marks as requested by Licensor from time to time. If Licensee's use of any of Licensor's marks, or if any material bearing such marks, does not comply with the then-current trademark usage policies provided in writing by Licensor, Licensee will promptly remedy such deficiencies upon receipt of written notice of such deficiencies from Licensor. Other than the express licenses granted herein with respect to each Licensor's marks, nothing herein will grant to Licensee any other right, title or interest in Licensor's marks. All goodwill resulting from Licensee's use of Licensor's marks will inure solely to Licensor. Each party recognizes the great value of the publicity and good will associated with the Licensed Property and acknowledges that: (a) such good will is exclusively that of Licensor or Licensee, as applicable; and (b) the Licensed Property have acquired a secondary meaning as trademarks and/or identifications of Licensor or Licensee, as applicable, in the mind of the purchasing public. Licensee will not, at any time during or after this Agreement, register, attempt to register, claim any interest in, contest the use of, or otherwise adversely affect the validity of a",
+        "contribution_ids": [
+          "5f7e0654-b47b-4999-8bad-0f853afc9ae2"
+        ],
+        "fact_ids": [
+          "e5cbc964-493c-4d51-b412-08a81e440ab7"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "9c81f57b-47d6-4fcd-a58f-2b86bc2d3c2b",
+        "chunk_range": [
+          150,
+          2000
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "role": "context",
+        "source_mapping_verified": true,
+        "source_spans": [
+          {
+            "chunk_range": [
+              150,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                6702,
+                8552
+              ],
+              "format": "txt",
+              "line_range": [
+                33,
+                33
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "ctivities in Exhibit A. A list of the Licensed Property for each party is described in Exhibit B. e. \"Annual Minimum Guarantee\" means the guaranteed minimum amount due to WPT by Zynga in consideration of the rights granted herein, which amount may be recoupable from Royalties as set forth below and in the Basic Provisions. f. \"Royalty\" means the amount(s) set forth in the Basic Provisions and calculated as described in the Additional Provisions. g. \"Term\" means the term of this Agreement as set forth in the Basic Provisions. h. \"Territory\" means the territory throughout which the parties are authorized to engage in the marketing and promotional activities as described in Exhibit A and in the Basic Provisions. 2. TRADEMARKS, APPROVALS, AND RESERVATION OF RIGHTS a. Materials. To the extent indicated on Exhibit A, each party will provide the other party with electronic files containing the Licensed Property of such party to be used under this Agreement, as specified in Exhibit B, if any. b. License by Zynga. Subject to the terms and conditions of this Agreement, Zynga grants to WPT a non-exclusive, non- assignable, non-sublicensable, royalty-free, paid up, limited worldwide license to use and display Zynga's Licensed Property solely as necessary to perform WPT's obligations under this Agreement and as specifically described on Exhibit A, in any and all media now known or hereafter devised, for the Term (subject to Section 7.e. of Additional Provisions). c. License by WPT. Subject to the terms and conditions of this Agreement, WPT grants to Zynga a non-exclusive, non-assignable, non-sublicensable, royalty-free, paid up, limited license in the Territory to use and display WPT's Licensed Property solely as necessary to perform Zynga's obligations under this Agreement and as specifically described on Exhibit A, for the Term. ",
+        "contribution_ids": [
+          "5f7e0654-b47b-4999-8bad-0f853afc9ae2"
+        ],
+        "fact_ids": [
+          "e5cbc964-493c-4d51-b412-08a81e440ab7"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "9c81f57b-47d6-4fcd-a58f-2b86bc2d3c2b",
+        "chunk_range": [
+          1625,
+          1643
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "quote": "c. License by WPT.",
+        "quote_range": [
+          1625,
+          1643
+        ],
+        "quote_truncated": false,
+        "role": "fact",
+        "source_spans": [
+          {
+            "chunk_range": [
+              1625,
+              1643
+            ],
+            "origin": {
+              "char_range": [
+                8177,
+                8195
+              ],
+              "format": "txt",
+              "line_range": [
+                33,
+                33
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "c. License by WPT.",
+        "contribution_ids": [
+          "60589d58-4f0e-48f2-b15e-5ab29b809ac8",
+          "7898cf1a-bef1-4ba7-b79c-38b6fec3d454",
+          "cb32490b-0d59-45e1-a0d5-7117271a85df"
+        ],
+        "fact_ids": [
+          "e5cbc964-493c-4d51-b412-08a81e440ab7"
+        ],
+        "field_paths": [
+          "$exists",
+          "/identity/heading",
+          "/properties/heading"
+        ]
+      },
+      {
+        "chunk_id": "9c81f57b-47d6-4fcd-a58f-2b86bc2d3c2b",
+        "chunk_range": [
+          1644,
+          1999
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "quote": "Subject to the terms and conditions of this Agreement, WPT grants to Zynga a non-exclusive, non-assignable, non-sublicensable, royalty-free, paid up, limited license in the Territory to use and display WPT's Licensed Property solely as necessary to perform Zynga's obligations under this Agreement and as specifically described on Exhibit A, for the Term.",
+        "quote_range": [
+          1644,
+          1999
+        ],
+        "quote_truncated": false,
+        "role": "fact",
+        "source_spans": [
+          {
+            "chunk_range": [
+              1644,
+              1999
+            ],
+            "origin": {
+              "char_range": [
+                8196,
+                8551
+              ],
+              "format": "txt",
+              "line_range": [
+                33,
+                33
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "Subject to the terms and conditions of this Agreement, WPT grants to Zynga a non-exclusive, non-assignable, non-sublicensable, royalty-free, paid up, limited license in the Territory to use and display WPT's Licensed Property solely as necessary to perform Zynga's obligations under this Agreement and as specifically described on Exhibit A, for the Term.",
+        "contribution_ids": [
+          "5f7e0654-b47b-4999-8bad-0f853afc9ae2"
+        ],
+        "fact_ids": [
+          "e5cbc964-493c-4d51-b412-08a81e440ab7"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "c2bc7fb7-a491-4eaf-b0f0-a763847d6680",
+        "chunk_range": [
+          476,
+          2000
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "role": "context",
+        "source_mapping_verified": true,
+        "source_spans": [
+          {
+            "chunk_range": [
+              476,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                5178,
+                6702
+              ],
+              "format": "txt",
+              "line_range": [
+                15,
+                33
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "ADDITIONAL PROVISIONS The following Additional Provisions form part of the Agreement dated February 1, 2018 entered into by and between ZYNGA INC. and ZYNGA GAME IRELAND LIMITED and their respective affiliates (\"Zynga\"), and WPT Enterprises, Inc. (\"WPT\"). 1. DEFINITIONS a. \"Affiliate\" means an entity, directly or indirectly, controlled by, controlling of, or under common control with a party, either now or in the future, and their respective successors and assigns. b. \"Artwork\" means, without limitation, all pictorial, graphic, visual, audio, audio-visual, digital, literary, animated, artistic, dramatic, sculptural, musical or any other type of creation or application, whether finished or not, including, without limitation, animation, drawings, designs, sketches, images, illustrations, film, video, electronic, digitized or computerized information, software, object code, source code, on-line elements, music, text, dialogue, stories, visuals, effects, scripts, voiceovers, logos, one-sheets, promotional pieces, packaging, display materials, printed materials, photographs, interstitials, notes, shot logs, character profiles and translations. c. \"Agreement\" means the Basic Provisions, these Additional Provisions, and any and all attached Exhibits. d. \"Licensed Property\" means those specific trademarks, service marks, publicity rights, copyrights, intellectual property rights, and any other items set forth in this Agreement, which the parties may utilize in connection with the marketing and promotional a",
+        "contribution_ids": [
+          "5f7e0654-b47b-4999-8bad-0f853afc9ae2"
+        ],
+        "fact_ids": [
+          "e5cbc964-493c-4d51-b412-08a81e440ab7"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "c61c7dcd-bfb9-4f94-8978-2c11b72f225c",
+        "chunk_range": [
+          150,
+          307
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "role": "context",
+        "source_mapping_verified": true,
+        "source_spans": [
+          {
+            "chunk_range": [
+              150,
+              307
+            ],
+            "origin": {
+              "char_range": [
+                10402,
+                10559
+              ],
+              "format": "txt",
+              "line_range": [
+                33,
+                43
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "ny of Licensor's marks (including, without limitation, any act or assistance to any act, which may infringe or lead to the infringement of any such marks).\n\n",
+        "contribution_ids": [
+          "5f7e0654-b47b-4999-8bad-0f853afc9ae2"
+        ],
+        "fact_ids": [
+          "e5cbc964-493c-4d51-b412-08a81e440ab7"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      }
+    ],
+    "candidates": [],
+    "conflicts": [],
+    "coverage": [
+      {
+        "component": "evidence",
+        "mode": "exact",
+        "scope": {
+          "document_ids": [],
+          "fact_ids": [
+            "e5cbc964-493c-4d51-b412-08a81e440ab7"
+          ]
+        },
+        "budget": {
+          "limit": 1000,
+          "available_references": 6,
+          "returned_references": 6,
+          "unavailable_resolved_references": 0
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      },
+      {
+        "component": "detail",
+        "mode": "exact",
+        "scope": {
+          "kind": "entity",
+          "id": "e5cbc964-493c-4d51-b412-08a81e440ab7"
+        },
+        "budget": {
+          "max_chars": 1000000
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      }
+    ],
+    "warnings": [],
+    "model": null,
+    "model_revision": null,
+    "item": {
+      "aliases": [],
+      "atomic_groups": {
+        "full_statement": {
+          "declarations": [
+            {
+              "contribution_ids": [
+                "5f7e0654-b47b-4999-8bad-0f853afc9ae2"
+              ],
+              "source_declarations": [
+                {
+                  "completeness_check": {
+                    "method": "basic_source_evidence",
+                    "rejected_optional_reference_count": 0,
+                    "required_reference_count": 0,
+                    "resolved_reference_count": 0,
+                    "rule_units": [
+                      "rule-unit/10"
+                    ],
+                    "section_key": "rule-unit/10",
+                    "semantic_completeness_verified": false
+                  },
+                  "contribution_id": "5f7e0654-b47b-4999-8bad-0f853afc9ae2",
+                  "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+                  "section_key": "rule-unit/10"
+                }
+              ],
+              "value": {
+                "complete": true,
+                "fields": {
+                  "definition": "Subject to the terms and conditions of this Agreement, WPT grants to Zynga a non-exclusive, non-assignable, non-sublicensable, royalty-free, paid up, limited license in the Territory to use and display WPT's Licensed Property solely as necessary to perform Zynga's obligations under this Agreement and as specifically described on Exhibit A, for the Term."
+                },
+                "references_resolved": false
+              }
+            }
+          ],
+          "state": "confirmed"
+        }
+      },
+      "canonical_name": "c. License by WPT.",
+      "completeness": "complete",
+      "conflicts": [],
+      "contribution_ids": [
+        "5f7e0654-b47b-4999-8bad-0f853afc9ae2",
+        "60589d58-4f0e-48f2-b15e-5ab29b809ac8",
+        "7898cf1a-bef1-4ba7-b79c-38b6fec3d454",
+        "cb32490b-0d59-45e1-a0d5-7117271a85df"
+      ],
+      "description": "",
+      "description_fragments": [],
+      "document_ids": [
+        "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+      ],
+      "domain_ids": [],
+      "entity_id": "e5cbc964-493c-4d51-b412-08a81e440ab7",
+      "entity_type": "Clause",
+      "identity": {
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "fields": {
+          "heading": "c. License by WPT."
+        },
+        "namespace": "contract-clause"
+      },
+      "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+      "kind": "entity",
+      "missing_fields": [],
+      "object_revision": "84520b3c-7d93-4245-8b4e-cb2f760b4aff",
+      "origin": "graph",
+      "properties": {
+        "heading": {
+          "merge": "single",
+          "state": "confirmed",
+          "values": [
+            {
+              "contribution_ids": [
+                "60589d58-4f0e-48f2-b15e-5ab29b809ac8"
+              ],
+              "value": "c. License by WPT."
+            }
+          ]
+        }
+      }
+    },
+    "scope": null,
+    "selected_document_ids": [],
+    "declarations": [
+      {
+        "contribution_id": "5f7e0654-b47b-4999-8bad-0f853afc9ae2",
+        "target_kind": "entity",
+        "target_id": "e5cbc964-493c-4d51-b412-08a81e440ab7",
+        "field_path": "/atomic_groups/full_statement",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          0,
+          1,
+          3,
+          4,
+          5
+        ],
+        "evidence_complete": true,
+        "resolved_references": [],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      },
+      {
+        "contribution_id": "60589d58-4f0e-48f2-b15e-5ab29b809ac8",
+        "target_kind": "entity",
+        "target_id": "e5cbc964-493c-4d51-b412-08a81e440ab7",
+        "field_path": "/properties/heading",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          2
+        ],
+        "evidence_complete": true,
+        "resolved_references": [],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      },
+      {
+        "contribution_id": "7898cf1a-bef1-4ba7-b79c-38b6fec3d454",
+        "target_kind": "entity",
+        "target_id": "e5cbc964-493c-4d51-b412-08a81e440ab7",
+        "field_path": "/identity/heading",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          2
+        ],
+        "evidence_complete": true,
+        "resolved_references": [],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      },
+      {
+        "contribution_id": "cb32490b-0d59-45e1-a0d5-7117271a85df",
+        "target_kind": "entity",
+        "target_id": "e5cbc964-493c-4d51-b412-08a81e440ab7",
+        "field_path": "$exists",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          2
+        ],
+        "evidence_complete": true,
+        "resolved_references": [],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      }
+    ],
+    "plan_summary": null,
+    "unresolved_entities": [],
+    "excluded_endpoint_ids": []
+  }
+}

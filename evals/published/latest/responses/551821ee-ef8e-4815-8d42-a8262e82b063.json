@@ -1,0 +1,603 @@
+{
+  "recorded_at": "2026-11-01T19:42:19.199026+00:00",
+  "stage": "long_contract",
+  "protocol": "HTTP",
+  "method": "GET",
+  "path": "/kbs/3da41804-fbda-491a-9465-8133e38b961b/knowledge/entity/f647e81e-b4b7-4d1e-8f71-0798961fbd13",
+  "input": null,
+  "params": {
+    "evidence_limit": 1000
+  },
+  "status_code": 200,
+  "elapsed_ms": 14,
+  "response": {
+    "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+    "request_id": "912ecf76-ed0e-4e38-867f-9ee3beac7a6c",
+    "status": "ok",
+    "knowledge": [],
+    "relations": [],
+    "paths": [],
+    "evidence": [
+      {
+        "chunk_id": "072f669c-fd8c-47e4-92a6-2b9859c5283f",
+        "chunk_range": [
+          150,
+          2000
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "role": "context",
+        "source_mapping_verified": true,
+        "source_spans": [
+          {
+            "chunk_range": [
+              150,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                18818,
+                20668
+              ],
+              "format": "txt",
+              "line_range": [
+                53,
+                53
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "unt shown to be payable to WPT shall be paid simultaneously with the rendition of the respective Royalty Statement. The statements and payments remitted hereunder shall be delivered to WPT via email to the following email address: Deborah.Frazzetta@wpt.com (ATTN: Deborah Frazzetta, VP, Finance. e. Audit Rights. Zynga shall keep full, complete and accurate books of account and records (collectively \"records\") covering all transactions relating to the subject matter of this Agreement in sufficient detail to enable the Royalties payable hereunder to be determined and verified. Zynga shall permit such records to be examined by authorized representatives of WPT, including such independent auditors as WPT may designate, during usual business hours, with advance notice, to verify to the extent necessary the Royalties paid hereunder, and WPT and its representatives shall use reasonable efforts to minimize disruptions to Zynga's business. Prompt adjustment shall be made by Zynga to compensate for any errors or omissions disclosed by such examination. If the adjustment is more than $1,500 in favor, then out-of-pocket costs of such examination shall be borne by Zynga. f. No Other Charges or Expenses. Neither party will be liable to pay the other party any other types of charges or expenses not agreed to in this Agreement or any related amendment signed by the Parties. 4. REPRESENTATIONS AND WARRANTIES; LIMITATIONS OF LIABILITY a. Each party represents and warrants to the other as follows: (i) it is duly authorized under applicable law and has the authority to enter into and perform this Agreement; (ii) this Agreement constitutes a valid and binding obligation of such party enforceable in accordance with its terms; (iii) the making of this Agreement by such party does not violate any agreement, right or obligation existing between",
+        "contribution_ids": [
+          "7f6fe859-d0fe-419d-8028-8322680fce30"
+        ],
+        "fact_ids": [
+          "f647e81e-b4b7-4d1e-8f71-0798961fbd13"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "30f6853d-b20e-4bcd-89ff-253426de1b81",
+        "chunk_range": [
+          1341,
+          1542
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "quote": "d. Reporting. Zynga will, within thirty (30) days of the end of each calendar quarter, commencing with the first full calendar quarter following the Effective Date, furnish WPT with complete statements",
+        "quote_range": [
+          1341,
+          1542
+        ],
+        "quote_truncated": false,
+        "role": "fact",
+        "source_spans": [
+          {
+            "chunk_range": [
+              1341,
+              1542
+            ],
+            "origin": {
+              "char_range": [
+                18159,
+                18360
+              ],
+              "format": "txt",
+              "line_range": [
+                43,
+                53
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "d. Reporting. Zynga will, within thirty (30) days of the end of each calendar quarter, commencing with the first full calendar quarter following the Effective Date, furnish WPT with complete statements",
+        "contribution_ids": [
+          "7f6fe859-d0fe-419d-8028-8322680fce30"
+        ],
+        "fact_ids": [
+          "f647e81e-b4b7-4d1e-8f71-0798961fbd13"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "30f6853d-b20e-4bcd-89ff-253426de1b81",
+        "chunk_range": [
+          150,
+          1340
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "quote": "c. Payment. All amounts payable and due will be made in U.S. dollars. If withholding taxes are required, Zynga may account for the required amount of such withholding taxes when calculating the Royalty or other payments payable prior to remittance to WPT. Zynga shall provide WPT with an official receipt or other equivalent documentation issued by the appropriate taxing authority or other evidence as is reasonably requested by WPT to establish that such taxes have been paid. Zynga shall pay all a",
+        "quote_range": [
+          150,
+          650
+        ],
+        "quote_truncated": true,
+        "role": "fact",
+        "source_spans": [
+          {
+            "chunk_range": [
+              150,
+              1340
+            ],
+            "origin": {
+              "char_range": [
+                16968,
+                18158
+              ],
+              "format": "txt",
+              "line_range": [
+                43,
+                53
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "c. Payment. All amounts payable and due will be made in U.S. dollars. If withholding taxes are required, Zynga may account for the required amount of such withholding taxes when calculating the Royalty or other payments payable prior to remittance to WPT. Zynga shall provide WPT with an official receipt or other equivalent documentation issued by the appropriate taxing authority or other evidence as is reasonably requested by WPT to establish that such taxes have been paid. Zynga shall pay all amounts accruing under this Agreement for any reporting period to WPT by check or wire transfer to the account specified by WPT in writing, concurrently with Zynga's delivery of the applicable report under Section 3(d), provided that payments will only be paid if the amount owed to WPT for any reporting period is greater than five hundred dollars ($500.00). An amount due of less than five hundred dollars ($500.00) will be accumulated to the next payment and will be included in the amount to be paid to WPT on the next payment date, again provided that the amount owed to WPT in the subsequent month exceeds five hundred dollars ($500.00). Accumulated amounts do not accrue any interest.",
+        "contribution_ids": [
+          "7f6fe859-d0fe-419d-8028-8322680fce30"
+        ],
+        "fact_ids": [
+          "f647e81e-b4b7-4d1e-8f71-0798961fbd13"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "30f6853d-b20e-4bcd-89ff-253426de1b81",
+        "chunk_range": [
+          150,
+          161
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "quote": "c. Payment.",
+        "quote_range": [
+          150,
+          161
+        ],
+        "quote_truncated": false,
+        "role": "fact",
+        "source_spans": [
+          {
+            "chunk_range": [
+              150,
+              161
+            ],
+            "origin": {
+              "char_range": [
+                16968,
+                16979
+              ],
+              "format": "txt",
+              "line_range": [
+                43,
+                53
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "c. Payment.",
+        "contribution_ids": [
+          "34dd14c7-24ad-4d73-ade7-41a6e28e5977",
+          "5d19a4e3-5bbd-4e80-9e3c-0c21397176dc",
+          "fcdffc1f-021c-443f-a46c-3a0a9cbe573a"
+        ],
+        "fact_ids": [
+          "f647e81e-b4b7-4d1e-8f71-0798961fbd13"
+        ],
+        "field_paths": [
+          "$exists",
+          "/identity/heading",
+          "/properties/heading"
+        ]
+      },
+      {
+        "chunk_id": "30f6853d-b20e-4bcd-89ff-253426de1b81",
+        "chunk_range": [
+          150,
+          2000
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "role": "context",
+        "source_mapping_verified": true,
+        "source_spans": [
+          {
+            "chunk_range": [
+              150,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                16968,
+                18818
+              ],
+              "format": "txt",
+              "line_range": [
+                43,
+                53
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "c. Payment. All amounts payable and due will be made in U.S. dollars. If withholding taxes are required, Zynga may account for the required amount of such withholding taxes when calculating the Royalty or other payments payable prior to remittance to WPT. Zynga shall provide WPT with an official receipt or other equivalent documentation issued by the appropriate taxing authority or other evidence as is reasonably requested by WPT to establish that such taxes have been paid. Zynga shall pay all amounts accruing under this Agreement for any reporting period to WPT by check or wire transfer to the account specified by WPT in writing, concurrently with Zynga's delivery of the applicable report under Section 3(d), provided that payments will only be paid if the amount owed to WPT for any reporting period is greater than five hundred dollars ($500.00). An amount due of less than five hundred dollars ($500.00) will be accumulated to the next payment and will be included in the amount to be paid to WPT on the next payment date, again provided that the amount owed to WPT in the subsequent month exceeds five hundred dollars ($500.00). Accumulated amounts do not accrue any interest. d. Reporting. Zynga will, within thirty (30) days of the end of each calendar quarter, commencing with the first full calendar quarter following the Effective Date, furnish WPT with complete statements containing the following information with respect to all Net Revenue from the use of the WPT-brand on the Zynga platform, during the preceding period covered by such statement: the Territory; the amount due WPT (or the remaining unrecouped Annual Minimum Guarantee balance as applicable); Net Revenue; Royalties rate; the distribution channels or portals, the platform, the territory(ies), and itemized Allowable Deductions (\"Royalty Statement(s)\"). The amo",
+        "contribution_ids": [
+          "7f6fe859-d0fe-419d-8028-8322680fce30"
+        ],
+        "fact_ids": [
+          "f647e81e-b4b7-4d1e-8f71-0798961fbd13"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "30f6853d-b20e-4bcd-89ff-253426de1b81",
+        "chunk_range": [
+          789,
+          867
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "quote": "concurrently with Zynga's delivery of the applicable report under Section 3(d)",
+        "quote_range": [
+          789,
+          867
+        ],
+        "quote_truncated": false,
+        "role": "fact",
+        "source_spans": [
+          {
+            "chunk_range": [
+              789,
+              867
+            ],
+            "origin": {
+              "char_range": [
+                17607,
+                17685
+              ],
+              "format": "txt",
+              "line_range": [
+                43,
+                53
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "concurrently with Zynga's delivery of the applicable report under Section 3(d)",
+        "contribution_ids": [
+          "7f6fe859-d0fe-419d-8028-8322680fce30"
+        ],
+        "fact_ids": [
+          "f647e81e-b4b7-4d1e-8f71-0798961fbd13"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "696a9ce7-fda1-4d84-b019-ba98b7380734",
+        "chunk_range": [
+          150,
+          225
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "role": "context",
+        "source_mapping_verified": true,
+        "source_spans": [
+          {
+            "chunk_range": [
+              150,
+              225
+            ],
+            "origin": {
+              "char_range": [
+                22518,
+                22593
+              ],
+              "format": "txt",
+              "line_range": [
+                53,
+                63
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "REACHING PARTY BE ENTITLED TO EQUITABLE OR INJUNCTIVE RELIEF OF ANY KIND.\n\n",
+        "contribution_ids": [
+          "7f6fe859-d0fe-419d-8028-8322680fce30"
+        ],
+        "fact_ids": [
+          "f647e81e-b4b7-4d1e-8f71-0798961fbd13"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      },
+      {
+        "chunk_id": "dcb3351b-f6f6-4047-9f9f-0703e1dafeb3",
+        "chunk_range": [
+          150,
+          2000
+        ],
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "locator": {
+          "format": "txt"
+        },
+        "role": "context",
+        "source_mapping_verified": true,
+        "source_spans": [
+          {
+            "chunk_range": [
+              150,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                20668,
+                22518
+              ],
+              "format": "txt",
+              "line_range": [
+                53,
+                53
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": " such party and any third party; (iv) the marketing and promotional activities in Exhibit A shall not infringe or misappropriate third party rights, including, without limitation, any patent, trade name, trademark, copyright or other intellectual property or proprietary right and shall not invade or violate any right of privacy, publicity, personal or proprietary right, or other common law or statutory right, nor defame any person or entity in the United States and European Union (the \"Principal Territories\"), and to the knowledge of such party, outside the Principal Territories; provided that such party makes no representations regarding the Licensed Property or any other materials provided by Licensor as contemplated under this Agreement. b. DISCLAIMER. EXCEPT AS EXPRESSLY STATED IN THIS AGREEMENT, NEITHER PARTY MAKES ANY REPRESENTATIONS OR WARRANTIES OF ANY KIND WITH RESPECT TO THE SUBJECT MATTER HEREOF, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR ANY LEVEL OF BUSINESS OR SERVICE THAT MAY RESULT FROM THIS AGREEMENT, OR ANY WARRANTY OR CONDITION ARISING FROM ANY COURSE OF DEALING, COURSE OF PERFORMANCE OR USAGE IN THE INDUSTRY. c. LIMITATIONS ON LIABILITY/NO INJUNCTIVE RELIEF. EXCEPT IN CASES OF GROSS NEGLIGENCE, WILLFUL MISCONDUCT OR FRAUD, INDEMNIFICATION CLAIMS UNDER SECTION 5 OR BREACHES OF SECTION 2 (TRADEMARKS), 8 (CONFIDENTIALITY), OR 9 (NO AGENCY RELATIONSHIP), IN NO EVENT SHALL EITHER PARTY OR ITS OFFICERS, DIRECTORS, OR EMPLOYEES BE LIABLE TO THE OTHER PARTY IN CONNECTION WITH THE SUBJECT MATTER HEREOF, FOR ANY SPECIAL, INDIRECT, CONSEQUENTIAL OR PUNITIVE DAMAGES OF ANY KIND, LOST PROFITS OR LOST REVENUE, WHETHER ARISING IN CONTRACT, TORT, NEGLIGENCE, STATUTE, OR OTHERWISE, EVEN IF ADVISED OF THE POSSIBILITY THEREOF. IN NO EVENT SHALL THE NON-B",
+        "contribution_ids": [
+          "7f6fe859-d0fe-419d-8028-8322680fce30"
+        ],
+        "fact_ids": [
+          "f647e81e-b4b7-4d1e-8f71-0798961fbd13"
+        ],
+        "field_paths": [
+          "/atomic_groups/full_statement"
+        ]
+      }
+    ],
+    "candidates": [],
+    "conflicts": [],
+    "coverage": [
+      {
+        "component": "evidence",
+        "mode": "exact",
+        "scope": {
+          "document_ids": [],
+          "fact_ids": [
+            "f647e81e-b4b7-4d1e-8f71-0798961fbd13"
+          ]
+        },
+        "budget": {
+          "limit": 1000,
+          "available_references": 8,
+          "returned_references": 8,
+          "unavailable_resolved_references": 0
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      },
+      {
+        "component": "detail",
+        "mode": "exact",
+        "scope": {
+          "kind": "entity",
+          "id": "f647e81e-b4b7-4d1e-8f71-0798961fbd13"
+        },
+        "budget": {
+          "max_chars": 1000000
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      }
+    ],
+    "warnings": [],
+    "model": null,
+    "model_revision": null,
+    "item": {
+      "aliases": [],
+      "atomic_groups": {
+        "full_statement": {
+          "declarations": [
+            {
+              "contribution_ids": [
+                "7f6fe859-d0fe-419d-8028-8322680fce30"
+              ],
+              "source_declarations": [
+                {
+                  "completeness_check": {
+                    "method": "basic_source_evidence",
+                    "rejected_optional_reference_count": 0,
+                    "required_reference_count": 0,
+                    "resolved_reference_count": 1,
+                    "rule_units": [
+                      "rule-unit/16"
+                    ],
+                    "section_key": "rule-unit/16",
+                    "semantic_completeness_verified": false
+                  },
+                  "contribution_id": "7f6fe859-d0fe-419d-8028-8322680fce30",
+                  "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+                  "section_key": "rule-unit/16"
+                }
+              ],
+              "value": {
+                "complete": true,
+                "fields": {
+                  "definition": "All amounts payable and due will be made in U.S. dollars. If withholding taxes are required, Zynga may account for the required amount of such withholding taxes when calculating the Royalty or other payments payable prior to remittance to WPT. Zynga shall provide WPT with an official receipt or other equivalent documentation issued by the appropriate taxing authority or other evidence as is reasonably requested by WPT to establish that such taxes have been paid. Zynga shall pay all amounts accruing under this Agreement for any reporting period to WPT by check or wire transfer to the account specified by WPT in writing, concurrently with Zynga's delivery of the applicable report under Section 3(d), provided that payments will only be paid if the amount owed to WPT for any reporting period is greater than five hundred dollars ($500.00). An amount due of less than five hundred dollars ($500.00) will be accumulated to the next payment and will be included in the amount to be paid to WPT on the next payment date, again provided that the amount owed to WPT in the subsequent month exceeds five hundred dollars ($500.00). Accumulated amounts do not accrue any interest."
+                },
+                "references_resolved": true
+              }
+            }
+          ],
+          "state": "confirmed"
+        }
+      },
+      "canonical_name": "c. Payment.",
+      "completeness": "complete",
+      "conflicts": [],
+      "contribution_ids": [
+        "34dd14c7-24ad-4d73-ade7-41a6e28e5977",
+        "5d19a4e3-5bbd-4e80-9e3c-0c21397176dc",
+        "7f6fe859-d0fe-419d-8028-8322680fce30",
+        "fcdffc1f-021c-443f-a46c-3a0a9cbe573a"
+      ],
+      "description": "",
+      "description_fragments": [],
+      "document_ids": [
+        "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+      ],
+      "domain_ids": [],
+      "entity_id": "f647e81e-b4b7-4d1e-8f71-0798961fbd13",
+      "entity_type": "Clause",
+      "identity": {
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "fields": {
+          "heading": "c. Payment."
+        },
+        "namespace": "contract-clause"
+      },
+      "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+      "kind": "entity",
+      "missing_fields": [],
+      "object_revision": "9ae06bda-5d98-45ef-a317-b1eda6e71b23",
+      "origin": "graph",
+      "properties": {
+        "heading": {
+          "merge": "single",
+          "state": "confirmed",
+          "values": [
+            {
+              "contribution_ids": [
+                "34dd14c7-24ad-4d73-ade7-41a6e28e5977"
+              ],
+              "value": "c. Payment."
+            }
+          ]
+        }
+      }
+    },
+    "scope": null,
+    "selected_document_ids": [],
+    "declarations": [
+      {
+        "contribution_id": "34dd14c7-24ad-4d73-ade7-41a6e28e5977",
+        "target_kind": "entity",
+        "target_id": "f647e81e-b4b7-4d1e-8f71-0798961fbd13",
+        "field_path": "/properties/heading",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          3
+        ],
+        "evidence_complete": true,
+        "resolved_references": [],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      },
+      {
+        "contribution_id": "5d19a4e3-5bbd-4e80-9e3c-0c21397176dc",
+        "target_kind": "entity",
+        "target_id": "f647e81e-b4b7-4d1e-8f71-0798961fbd13",
+        "field_path": "/identity/heading",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          3
+        ],
+        "evidence_complete": true,
+        "resolved_references": [],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      },
+      {
+        "contribution_id": "7f6fe859-d0fe-419d-8028-8322680fce30",
+        "target_kind": "entity",
+        "target_id": "f647e81e-b4b7-4d1e-8f71-0798961fbd13",
+        "field_path": "/atomic_groups/full_statement",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          0,
+          1,
+          2,
+          4,
+          5,
+          6,
+          7
+        ],
+        "evidence_complete": true,
+        "resolved_references": [
+          {
+            "reference_evidence_indices": [
+              5
+            ],
+            "missing_reference_count": 0,
+            "target_evidence_indices": [
+              1
+            ],
+            "missing_target_count": 0,
+            "evidence_complete": true
+          }
+        ],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      },
+      {
+        "contribution_id": "fcdffc1f-021c-443f-a46c-3a0a9cbe573a",
+        "target_kind": "entity",
+        "target_id": "f647e81e-b4b7-4d1e-8f71-0798961fbd13",
+        "field_path": "$exists",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "evidence_indices": [
+          3
+        ],
+        "evidence_complete": true,
+        "resolved_references": [],
+        "resolved_references_unavailable_count": 0,
+        "resolved_references_complete": true
+      }
+    ],
+    "plan_summary": null,
+    "unresolved_entities": [],
+    "excluded_endpoint_ids": []
+  }
+}

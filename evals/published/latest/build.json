@@ -1,0 +1,39 @@
+{
+  "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+  "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+  "job_id": "de150684-69bd-4cfe-898c-467c702d758a",
+  "state": "QUEUED",
+  "status_url": "/api/v1/jobs/de150684-69bd-4cfe-898c-467c702d758a",
+  "job": {
+    "queue_seq": 1,
+    "job_id": "de150684-69bd-4cfe-898c-467c702d758a",
+    "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+    "operation": "IMPORT",
+    "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+    "state": "SUCCEEDED",
+    "attempt": 1,
+    "plan_id": "d67e1f09-5e2b-47a5-981c-d635bdd1a03a",
+    "last_step": "committed",
+    "created_at": "2026-11-01T19:36:02.962701+00:00",
+    "updated_at": "2026-11-01T19:41:14.943324+00:00",
+    "next_attempt_at": 0.0,
+    "cleanup_pending": 0,
+    "input": {
+      "mapping_id": null
+    },
+    "error": null,
+    "counts": {
+      "adopted_contributions": 335,
+      "chunks": 21,
+      "current_chunks": 21,
+      "current_contributions": 335,
+      "current_entities": 68,
+      "current_relations": 67,
+      "entities": 68,
+      "rejected_candidates": 0,
+      "relations": 67,
+      "removed_contributions": 0,
+      "warnings": []
+    }
+  }
+}

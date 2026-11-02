@@ -1,0 +1,326 @@
+{
+  "recorded_at": "2026-11-01T19:42:02.698371+00:00",
+  "stage": "long_contract",
+  "protocol": "HTTP",
+  "method": "POST",
+  "path": "/kbs/3da41804-fbda-491a-9465-8133e38b961b/knowledge/search",
+  "input": {
+    "query": "Highlight the parts (if any) of this contract related to \"Non-Transferable License\" that should be reviewed by a lawyer. Details: Does the contract limit the ability of a party to transfer the license being granted to a third party?",
+    "filters": {
+      "document_ids": [
+        "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+      ]
+    },
+    "limit": 5,
+    "kinds": [
+      "chunk"
+    ],
+    "semantic": true
+  },
+  "params": null,
+  "status_code": 200,
+  "elapsed_ms": 4129,
+  "response": {
+    "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+    "request_id": "cd897ed1-dca6-46cc-b1b8-45fc501cd9ff",
+    "status": "ok",
+    "knowledge": [
+      {
+        "chunk_id": "9c81f57b-47d6-4fcd-a58f-2b86bc2d3c2b",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                6552,
+                8552
+              ],
+              "format": "txt",
+              "line_range": [
+                33,
+                33
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "ual property rights, and any other items set forth in this Agreement, which the parties may utilize in connection with the marketing and promotional activities in Exhibit A. A list of the Licensed Property for each party is described in Exhibit B. e. \"Annual Minimum Guarantee\" means the guaranteed minimum amount due to WPT by Zynga in consideration of the rights granted herein, which amount may be recoupable from Royalties as set forth below and in the Basic Provisions. f. \"Royalty\" means the amount(s) set forth in the Basic Provisions and calculated as described in the Additional Provisions. g. \"Term\" means the term of this Agreement as set forth in the Basic Provisions. h. \"Territory\" means the territory throughout which the parties are authorized to engage in the marketing and promotional activities as described in Exhibit A and in the Basic Provisions. 2. TRADEMARKS, APPROVALS, AND RESERVATION OF RIGHTS a. Materials. To the extent indicated on Exhibit A, each party will provide the other party with electronic files containing the Licensed Property of such party to be used under this Agreement, as specified in Exhibit B, if any. b. License by Zynga. Subject to the terms and conditions of this Agreement, Zynga grants to WPT a non-exclusive, non- assignable, non-sublicensable, royalty-free, paid up, limited worldwide license to use and display Zynga's Licensed Property solely as necessary to perform WPT's obligations under this Agreement and as specifically described on Exhibit A, in any and all media now known or hereafter devised, for the Term (subject to Section 7.e. of Additional Provisions). c. License by WPT. Subject to the terms and conditions of this Agreement, WPT grants to Zynga a non-exclusive, non-assignable, non-sublicensable, royalty-free, paid up, limited license in the Territory to use and display WPT's Licensed Property solely as necessary to perform Zynga's obligations under this Agreement and as specifically described on Exhibit A, for the Term. ",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "9c81f57b-47d6-4fcd-a58f-2b86bc2d3c2b",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 1.0
+      },
+      {
+        "chunk_id": "f6d1cfce-e94d-47a8-a041-f04c035164da",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                31618,
+                33618
+              ],
+              "format": "txt",
+              "line_range": [
+                73,
+                73
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "ither party is prevented from engaging in the marketing and promotional activities in Exhibit A manufacturing, distributing or selling the Licensed Property because of any act of God; unavoidable accident; fire, epidemic; strike, lockout, or other labor dispute; war, riot or civil commotion; act of public enemy; enactment of any rule, law, order or act of government or governmental instrumentality (whether federal, state, local or foreign); or other cause beyond such party's control, and such condition continues for a period of two (2) months or more, either party hereto shall have the right to terminate this Agreement effective at any time during the continuation of such condition by giving the other party at least thirty (30) days' notice to such effect. In such event, all payments made shall become immediately due and payable and this Agreement shall be automatically terminated. g. Governing Law and Forum. This Agreement will for all purposes be governed by and interpreted in accordance with the laws of the State of California without giving effect to any conflict of laws principles that require the application of the laws of a different state. Each of the parties hereto (i) irrevocably agrees that the federal and state courts in the Northern District of California shall have sole and exclusive jurisdiction over any suit or other proceeding arising out of or based upon this Agreement, (ii) submits to the venue and jurisdiction of such courts, and (iii) irrevocably consents to personal jurisdiction by such courts. h. Assignment. This Agreement shall bind and inure to the benefit of each party, its successors and assigns. Without the prior written consent of the other party, neither party shall assign or transfer any of its rights or obligations hereunder, in whole or in part, to any third party, and any purported assignment without such prior written consent shall be null and void and of no force and effect; except that notice, but no consent shall be required for",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "f6d1cfce-e94d-47a8-a041-f04c035164da",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.5
+      },
+      {
+        "chunk_id": "ebd3e5e8-eb9c-4d5a-9231-543ae7cea83c",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              1978
+            ],
+            "origin": {
+              "char_range": [
+                33468,
+                35446
+              ],
+              "format": "txt",
+              "line_range": [
+                73,
+                97
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "ignment without such prior written consent shall be null and void and of no force and effect; except that notice, but no consent shall be required for such assignment or transfer in connection with an internal reorganization or sale of the transferring party, including by merger or other business combination, or a sale of substantially all of the assets of the transferring party. None of either party's rights hereunder shall devolve by operation of law or otherwise upon any receiver, liquidator, trustee or other party. i. Severability. In case any one or more of the terms contained in this Agreement shall be invalid, illegal or unenforceable in any respect, the validity, legality and enforceability of the remaining terms shall not in any way be affected or impaired thereby. The parties shall endeavor in good faith negotiations to replace the invalid, illegal or unenforceable terms with valid terms the economic effect of which comes as close as possible to that of the invalid, illegal or unenforceable terms.\n\n8\n\nSource: ALLIED ESPORTS ENTERTAINMENT, INC., 8-K, 8/15/2019\n\n\n\n\n\nEXHIBIT A MARKETING AND PROMOTIONAL ACTIVITIES (the parties mutually agree to provide additional details and commitments) BY WPT: WPT shall promote the Zynga brand in the following activities: ● Prominent display of the Zynga or Zynga Poker brand in WPT Tournaments and WPT Invitational Tournaments, subject to venue approval, network approval and inventory space given existing sponsorship deals BY ZYNGA: Zynga shall promote the WPT brand in the following activities: ● Creation of a WPT-branded Zynga Poker Tournament Mode playable in the Zynga Poker game or other such use of the WPT brand on the Zynga platform as Zynga determines\n\n9\n\nSource: ALLIED ESPORTS ENTERTAINMENT, INC., 8-K, 8/15/2019\n\n\n\n\n\nEXHIBIT B LICENSED PROPERTY (the parties mutually agree to provide additional details on allowable IP) WPT MARKS: ● WPT® ● WORLD POKER TOUR® ZYNGA MARKS: ● ZYNGA® ● ZYNGA POKER®\n\n10\n\n",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "ebd3e5e8-eb9c-4d5a-9231-543ae7cea83c",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.3333333333333333
+      },
+      {
+        "chunk_id": "78eeee72-3af7-4b2c-bc35-56c91866c643",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                13952,
+                15952
+              ],
+              "format": "txt",
+              "line_range": [
+                43,
+                43
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "l not authorize a Zynga Competitor to commercially exploit the Licensed Property in connection with social poker gaming via a license similar to the license granted herein for the Term. A \"Zynga Competitor\" means: 1) Aristocrat Technologies Australia Pty Ltd. Or Big Fish Games, Inc.; 2) HUUUGE Inc.; 3) Activision Blizzard, Inc., King.com Ltd. Or King.com (US) LLC; 4) Scientific Games Corporation; 5) Tencent Holdings Limited; and 6) Murka Ltd. The parties agree to work together in good faith to amend the definition of a Zynga Competitor if that meaning for Zynga reasonably changes during the Term. f. Reservation of Rights. The parties acknowledge and agree that, except for the rights and licenses expressly granted by each party to the other party under this Agreement, each party will retain all right, title and interest in and to its products, services, marks, copyrights or other intellectual property, and all content, information and other materials on its website(s), and nothing contained in this Agreement will be construed as conferring upon such party, by implication, operation of law or otherwise, any other license or other right. 3. PAYMENT a. Annual Minimum Guarantee. Zynga will pay to WPT the Annual Minimum Guarantee as set forth in the Basic Provisions. The Annual Minimum Guarantee shall be recoupable from such Royalties as are, or have become, paid to WPT. For clarification, the Annual Minimum Guarantee will operate as an advance payment, such that when accrued Royalties exceed the Annual Minimum Guarantee payments already paid, then the excess Royalties will be paid by Zynga to WPT. b. Royalty. The Royalties to be paid by Zynga to WPT is the percentage of Net Revenue as set forth in Section 5 of the Basic Provisions. \"Net Revenue(s)\" shall be defined as one hundred percent (100%) of gross revenues and all other receivables of any kind whatsoever received by Zynga or any of Zynga's affiliates attributable to the use of Paid Currency or in connection with th",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "78eeee72-3af7-4b2c-bc35-56c91866c643",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.25
+      },
+      {
+        "chunk_id": "0d6fc13b-d96b-4989-9e33-1638c1a6469f",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                29768,
+                31768
+              ],
+              "format": "txt",
+              "line_range": [
+                73,
+                73
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "or is intended to give, any rights of any kind to any third persons. 10. MISCELLANEOUS a. Insurance. Each party agrees to carry liability insurance sufficient to cover the risks posed under this Agreement. b. Counterparts. This Agreement may be executed in any number of counterparts, each of which shall be an original and all of which shall constitute together but one and the same document. c. Notices. All notices and other communications given hereunder shall be in writing and shall be sent by courier service, express mail, personal delivery or mail to the respective addresses of the parties set forth above (or at such other address as such party may designate by notice to the other party). A copy of any notice to WPT shall also be sent to WPT Enterprises, Inc., ATTN: Legal, 1920 Main Street, Suite 1150, Irvine, CA 92614. A copy of any notice to Zynga shall also be sent to Office of the General Counsel, Zynga Inc., 699 8th Street, San Francisco, CA 94103 with a copy to legalnotices@zynga.com. Notice shall be deemed given as follows: upon delivery if sent by courier service, express mail or personal delivery; and five (5) days after the date of mailing, postage prepaid, certified or registered mail if sent by mail. d. Entire Agreement. This Agreement contains the full and complete understanding between the parties hereto with respect to the license granted hereunder and supersedes all prior agreements and understandings, whether written or oral, pertaining thereto. This Agreement cannot be modified except by a written instrument signed by each party hereto. e. Waiver. No waiver of any term or condition of this Agreement shall be construed as a waiver of any other term or condition and no waiver of any default under this Agreement shall be construed as a waiver of any other default. f. Force Majeure. In the event that either party is prevented from engaging in the marketing and promotional activities in Exhibit A manufacturing, distributing or selling the Licensed Pr",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "0d6fc13b-d96b-4989-9e33-1638c1a6469f",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.2
+      }
+    ],
+    "relations": [],
+    "paths": [],
+    "evidence": [],
+    "candidates": [],
+    "conflicts": [],
+    "coverage": [
+      {
+        "component": "documents",
+        "mode": "top_k",
+        "scope": {
+          "entity_types": [],
+          "domain_ids": [],
+          "document_ids": [
+            "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+          ],
+          "properties": {}
+        },
+        "budget": {
+          "rerank_candidates": 21,
+          "limit": 5
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      },
+      {
+        "component": "documents",
+        "mode": "top_k",
+        "scope": {
+          "document_ids": [
+            "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+          ],
+          "domain_ids": []
+        },
+        "budget": {
+          "limit": 5,
+          "scan_limit": 5000,
+          "channels": [
+            "keyword",
+            "vector",
+            "rerank"
+          ],
+          "entity_filters_apply_to": "object_candidates"
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      }
+    ],
+    "warnings": [],
+    "model": null,
+    "model_revision": null,
+    "item": null,
+    "scope": "selected_documents",
+    "selected_document_ids": [
+      "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+    ],
+    "declarations": [],
+    "plan_summary": null,
+    "unresolved_entities": [],
+    "excluded_endpoint_ids": []
+  }
+}

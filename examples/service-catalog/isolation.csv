@@ -1,0 +1,2 @@
+caller_id,caller_name,caller_status,caller_alias,caller_description,callee_id,callee_name,callee_status,team_code,team_name
+order,隔离订单服务,active,,,pay-core,隔离支付服务,active,isolated-team,隔离团队

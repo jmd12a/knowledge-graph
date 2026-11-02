@@ -1,0 +1,329 @@
+{
+  "recorded_at": "2026-11-01T19:43:24.625612+00:00",
+  "stage": "long_contract",
+  "protocol": "HTTP",
+  "method": "POST",
+  "path": "/kbs/3da41804-fbda-491a-9465-8133e38b961b/retrieve",
+  "input": {
+    "query": "Under this agreement, which uses of Zynga’s and WPT’s licensed property may continue after expiry or termination, and what conditions or continuing obligations apply?",
+    "filters": {
+      "document_ids": [
+        "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+      ]
+    },
+    "limit": 5,
+    "evidence_limit": 1000
+  },
+  "params": null,
+  "status_code": 200,
+  "elapsed_ms": 7052,
+  "response": {
+    "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+    "request_id": "98ded928-9afd-432e-af44-858781344ad9",
+    "status": "ok",
+    "knowledge": [
+      {
+        "chunk_id": "77c91247-8a19-4198-8227-3493e52981cc",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                26068,
+                28068
+              ],
+              "format": "txt",
+              "line_range": [
+                63,
+                63
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "inate this Agreement, such party shall give notice of termination in writing to the other party, which notice shall specify in reasonable detail the event(s) of default that give rise to such termination. The other party shall have thirty (30) days from the effective date of such notice in which to correct any such default(s) (except those which are not curable), and failing such correction by the end of such thirty (30) day cure period, this Agreement shall thereupon immediately terminate. 7. RIGHTS AND OBLIGATIONS UPON TERMINATION OR EXPIRATION. Upon expiration or termination of this Agreement: a. All rights granted to WPT by Zynga shall immediately revert to Zynga, and WPT shall promptly cease any and all marketing and promotional activities using Zynga's Licensed Property. b. All rights granted to Zynga by WPT shall immediately revert to WPT, and Zynga shall promptly cease any and all marketing and promotional activities using WPT's Licensed Property. c. Notwithstanding the foregoing, for each end user that previously downloaded a Zynga game that includes WPT's Licensed Property, and stored such Zynga game within such end user's device, WPT grants a license and right to continue to use, activate, operate, perform, store, use and display that game on the end user's device in perpetuity at no additional charge; provided, however, that Zynga shall use best efforts to offer end users updates to its games which no longer include WPT's Licensed Property after the Term. d. Notwithstanding any termination of this Agreement, nothing herein will obligate Zynga, any users of a Zynga game that includes WPT's Licensed Property or any third party platform or distribution partners to remove from the publicly available content regarding Zynga services or any user accounts with Zynga, any of the references to user interactions, experience points, achievements, item purchases or other engagements or metrics in the Zynga game(s) that were generated prior to the expiration or termi",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "77c91247-8a19-4198-8227-3493e52981cc",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 1.0
+      },
+      {
+        "chunk_id": "5f6211b3-9b0b-4b4c-a91b-1e857386acef",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                27918,
+                29918
+              ],
+              "format": "txt",
+              "line_range": [
+                63,
+                73
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "erience points, achievements, item purchases or other engagements or metrics in the Zynga game(s) that were generated prior to the expiration or termination of this Agreement.\n\n7\n\nSource: ALLIED ESPORTS ENTERTAINMENT, INC., 8-K, 8/15/2019\n\n\n\n\n\ne. Notwithstanding any termination of this Agreement, any Approved Content that includes Zynga's Licensed Property may remain in perpetuity in any media in which such Licensed Property was integrated into during the Term (e.g., televised WPT Tournaments or WPT Invitational Tournaments, social media posts, repurposed integrations for \"best of\" television programs) or for historical purposes (e.g., reference on WPT's website that Zynga-sponsored tour events took place as part of the tour). f. Sections 1, 3-7, and 8-10 of the Additional Provisions shall survive termination or expiration of this Agreement. 8. CONFIDENTIALITY. The parties acknowledge and agree that the subject matter of this Agreement constitutes \"Business Purpose\" and this Agreement and any Exhibits hereunder are \"Confidential Information\" of the parties as defined as \"Information\" in the Non- Disclosure Agreement between the parties dated August 24, 2017, and accordingly the restrictions relating to confidentiality and use thereof provided in the Non-Disclosure Agreement apply to any party's Confidential Information disclosed pursuant to this Agreement. In the event of a conflict between the Non-Disclosure Agreement and this Agreement, the terms of this Agreement will govern. 9. INDEPENDENT CONTRACTORS. The parties are independent contractors with respect to each other and nothing herein shall create any association, partnership, joint venture or agency relationship between them. Neither party shall have the right to obligate or bind the other party in any manner whatsoever, and nothing herein contained shall give, or is intended to give, any rights of any kind to any third persons. 10. MISCELLANEOUS a. Insurance. Each party agrees to carry liability insurance su",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "5f6211b3-9b0b-4b4c-a91b-1e857386acef",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.5
+      },
+      {
+        "chunk_id": "334002fc-5406-4ab9-b684-96b0b8abac66",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                8402,
+                10402
+              ],
+              "format": "txt",
+              "line_range": [
+                33,
+                33
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "s Licensed Property solely as necessary to perform Zynga's obligations under this Agreement and as specifically described on Exhibit A, for the Term. d. Trademark Guidelines. In its use of the Licensed Property of the other party (\"Licensee\"), each party (\"Licensor\") will comply with any trademark usage guidelines that Licensor may communicate to Licensee from time to time. Each use of Licensor's marks by Licensee will be accompanied by the appropriate trademark symbol (either \"™\" or \"®\") and a legend specifying that such marks are trademarks of Licensor as specified on Exhibit B, and will be in accordance with Licensor's then-current trademark usage policies as provided in writing to Licensee from time to time. Licensee will provide Licensor with copies of any materials bearing any of Licensor's marks as requested by Licensor from time to time. If Licensee's use of any of Licensor's marks, or if any material bearing such marks, does not comply with the then-current trademark usage policies provided in writing by Licensor, Licensee will promptly remedy such deficiencies upon receipt of written notice of such deficiencies from Licensor. Other than the express licenses granted herein with respect to each Licensor's marks, nothing herein will grant to Licensee any other right, title or interest in Licensor's marks. All goodwill resulting from Licensee's use of Licensor's marks will inure solely to Licensor. Each party recognizes the great value of the publicity and good will associated with the Licensed Property and acknowledges that: (a) such good will is exclusively that of Licensor or Licensee, as applicable; and (b) the Licensed Property have acquired a secondary meaning as trademarks and/or identifications of Licensor or Licensee, as applicable, in the mind of the purchasing public. Licensee will not, at any time during or after this Agreement, register, attempt to register, claim any interest in, contest the use of, or otherwise adversely affect the validity of a",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "334002fc-5406-4ab9-b684-96b0b8abac66",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.3333333333333333
+      },
+      {
+        "chunk_id": "9c81f57b-47d6-4fcd-a58f-2b86bc2d3c2b",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                6552,
+                8552
+              ],
+              "format": "txt",
+              "line_range": [
+                33,
+                33
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "ual property rights, and any other items set forth in this Agreement, which the parties may utilize in connection with the marketing and promotional activities in Exhibit A. A list of the Licensed Property for each party is described in Exhibit B. e. \"Annual Minimum Guarantee\" means the guaranteed minimum amount due to WPT by Zynga in consideration of the rights granted herein, which amount may be recoupable from Royalties as set forth below and in the Basic Provisions. f. \"Royalty\" means the amount(s) set forth in the Basic Provisions and calculated as described in the Additional Provisions. g. \"Term\" means the term of this Agreement as set forth in the Basic Provisions. h. \"Territory\" means the territory throughout which the parties are authorized to engage in the marketing and promotional activities as described in Exhibit A and in the Basic Provisions. 2. TRADEMARKS, APPROVALS, AND RESERVATION OF RIGHTS a. Materials. To the extent indicated on Exhibit A, each party will provide the other party with electronic files containing the Licensed Property of such party to be used under this Agreement, as specified in Exhibit B, if any. b. License by Zynga. Subject to the terms and conditions of this Agreement, Zynga grants to WPT a non-exclusive, non- assignable, non-sublicensable, royalty-free, paid up, limited worldwide license to use and display Zynga's Licensed Property solely as necessary to perform WPT's obligations under this Agreement and as specifically described on Exhibit A, in any and all media now known or hereafter devised, for the Term (subject to Section 7.e. of Additional Provisions). c. License by WPT. Subject to the terms and conditions of this Agreement, WPT grants to Zynga a non-exclusive, non-assignable, non-sublicensable, royalty-free, paid up, limited license in the Territory to use and display WPT's Licensed Property solely as necessary to perform Zynga's obligations under this Agreement and as specifically described on Exhibit A, for the Term. ",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "9c81f57b-47d6-4fcd-a58f-2b86bc2d3c2b",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.25
+      },
+      {
+        "chunk_id": "82bd61a2-2474-42bd-b964-9afe56cdd874",
+        "document_id": "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc",
+        "domain_ids": [],
+        "kb_id": "3da41804-fbda-491a-9465-8133e38b961b",
+        "locator": {
+          "format": "txt"
+        },
+        "parser_profile": {
+          "coordinates": "unicode_code_points_half_open",
+          "format": "txt",
+          "name": "source-spans",
+          "revision": 1
+        },
+        "section_path": [],
+        "source_spans": [
+          {
+            "chunk_range": [
+              0,
+              2000
+            ],
+            "origin": {
+              "char_range": [
+                12102,
+                14102
+              ],
+              "format": "txt",
+              "line_range": [
+                43,
+                43
+              ]
+            },
+            "role": "source",
+            "transform": "identity"
+          }
+        ],
+        "text": "er for every episode the brand is used in; and similarly, given exigencies in the social gaming business, it is reasonable that WPT would approve use of its brand conceptually in elements of the Zynga platform but not need to re-approve the use in a similar manner for every poker tournament the brand is used in). i. Licensee may use textual and/or pictorial matter pertaining to the Licensed Property on such promotional, display and advertising material as may, in Licensee's reasonable judgment, promote the awareness, consumption and sale of the Licensed Property. All final advertising and promotional material using the Licensed Property must be submitted to Licensor for its prior written approval. All press releases respecting this Agreement or the relationship of the parties herein shall require prior written approval by the other party. ii. Licensor will use commercially reasonable efforts to provide approval and/or feedback within five (5) business days after its receipt of a creative submission, or re-submission, with respect to the Licensed Property or marketing materials; provided that: (a) if Licensor declines to approve any submission or re-submission, then it shall provide reasonably detailed feedback in order to enable Licensee to modify the Licensed Property or marketing material accordingly in order to address Licensor's concerns and obtain Licensor's approval, and (b) if Licensor fails to (1) approve or (2) disapprove and provide feedback within such timeframe, then such submission or re-submission is deemed to have been approved. No approval may be unreasonably withdrawn by Licensor once delivered. iii. Zynga shall advise WPT to Zynga's knowledge as to which jurisdictions where it may be illegal to advertise Zynga's Licensed Property (if any) given local laws or regulations. iv. WPT or its affiliates shall not authorize a Zynga Competitor to commercially exploit the Licensed Property in connection with social poker gaming via a license similar to the l",
+        "kind": "chunk",
+        "origin": "document",
+        "id": "82bd61a2-2474-42bd-b964-9afe56cdd874",
+        "match_channels": [
+          "keyword",
+          "rerank",
+          "vector"
+        ],
+        "score": 0.2
+      }
+    ],
+    "relations": [],
+    "paths": [],
+    "evidence": [],
+    "candidates": [],
+    "conflicts": [],
+    "coverage": [
+      {
+        "component": "documents",
+        "mode": "top_k",
+        "scope": {
+          "entity_types": [],
+          "domain_ids": [],
+          "document_ids": [
+            "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+          ],
+          "properties": {}
+        },
+        "budget": {
+          "rerank_candidates": 21,
+          "limit": 5
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      },
+      {
+        "component": "documents",
+        "mode": "top_k",
+        "scope": {
+          "document_ids": [
+            "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+          ],
+          "domain_ids": []
+        },
+        "budget": {
+          "limit": 5,
+          "scan_limit": 5000,
+          "channels": [
+            "keyword",
+            "vector",
+            "rerank"
+          ],
+          "entity_filters_apply_to": "object_candidates"
+        },
+        "execution_complete": true,
+        "truncated": false,
+        "reason": null
+      }
+    ],
+    "warnings": [],
+    "model": null,
+    "model_revision": null,
+    "item": null,
+    "scope": "selected_documents",
+    "selected_document_ids": [
+      "6ed35e24-90d3-4dee-b0f1-c0ed6ceeaffc"
+    ],
+    "declarations": [],
+    "plan_summary": {
+      "intent": "documents",
+      "mentions": [],
+      "relation_types": [],
+      "direction": "outgoing",
+      "max_hops": 1
+    },
+    "unresolved_entities": [],
+    "excluded_endpoint_ids": []
+  }
+}

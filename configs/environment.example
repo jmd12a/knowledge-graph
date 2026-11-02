@@ -1,0 +1,7 @@
+# Copy only the relevant variables to /srv/knowledge-graph/.env and protect it with chmod 600.
+# Existing Neo4j/Qdrant credentials may be read from /srv/knowledge-dev/.env without modifying it.
+# Set actual values locally; never commit the credential file.
+# DASHSCOPE_API_KEY=
+# NEO4J_PASSWORD=
+# QDRANT_API_KEY=
+# KG_CONFIG=/srv/knowledge-graph/configs/app.local.yaml
