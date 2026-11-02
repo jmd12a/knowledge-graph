@@ -1,5 +1,6 @@
-# Copy to an application config file and set KG_CONFIG to its absolute Linux path.
-# Secrets are read from named environment variables, never from this file.
+# Copy to configs/app.local.yaml and set storage addresses for your environment.
+# Credentials are loaded from environment variables; do not put secrets in this file.
+# This example uses the OpenRouter long-contract profile (180-second retrieval budget).
 data_root: /srv/knowledge-graph/data
 host: 127.0.0.1
 port: 8000
@@ -16,39 +17,65 @@ chunk_overlap: 150
 drain_timeout: 30
 poll_interval: 1
 graph_timeout: 3
-retrieval_timeout: 15
+retrieval_timeout: 180
 candidate_scan_limit: 5000
 maintenance_scan_limit: 100000
 detail_max_chars: 1000000
 checkpoint_retention_hours: 24
 llm:
-  provider: bailian
-  # Use the endpoint assigned to your workspace and region.
-  base_url: https://YOUR-WORKSPACE.cn-beijing.maas.aliyuncs.com/compatible-mode/v1
-  model: qwen3.7-plus
-  api_key_env: DASHSCOPE_API_KEY
-  # Long structured extraction can need a larger provider timeout; retrieval has its own total budget.
-  timeout: 60
-  # Unicode character budget for the complete serialized request, including prompts and output schema.
-  max_input_chars: 60000
-  max_output_tokens: 8000
+  provider: openai
+  base_url: https://openrouter.ai/api/v1
+  model: z-ai/glm-5.3
+  api_key_env: OPENROUTER_API_KEY
+  timeout: 180
+  max_input_chars: 240000
+  max_output_tokens: 12000
   structured_output: json_object
-  # For Qwen models that support this vendor option, set extra_body: {enable_thinking: false}
-  # to disable thinking during structured extraction; check the selected model/provider first.
-  extra_body: {}
-# Optional complete LanguageProfile for background construction; null reuses llm and its client.
-# Configure provider-supported reasoning limits here while keeping API planning on llm.
-# For a compatible Qwen model, a separate profile can use:
-#   timeout: 180
-#   extra_body: {enable_thinking: true, thinking_budget: 1024}
-construction_llm: null
+  extra_body:
+    reasoning:
+      effort: low
+    provider:
+      require_parameters: true
+      order:
+      - z-ai
+      - deepinfra
+      - fireworks
+      ignore:
+      - alibaba
+      allow_fallbacks: true
+  stream: true
+construction_llm:
+  provider: openai
+  base_url: https://openrouter.ai/api/v1
+  model: z-ai/glm-5.3
+  api_key_env: OPENROUTER_API_KEY
+  timeout: 600
+  max_input_chars: 240000
+  max_output_tokens: 64000
+  structured_output: json_object
+  extra_body:
+    reasoning:
+      effort: low
+    provider:
+      require_parameters: true
+      order:
+      - z-ai
+      - deepinfra
+      - fireworks
+      ignore:
+      - alibaba
+      allow_fallbacks: true
+  stream: true
 embedding:
-  provider: bailian
-  base_url: https://YOUR-WORKSPACE.cn-beijing.maas.aliyuncs.com/compatible-mode/v1
-  model: qwen3.7-text-embedding
-  dimension: 1024
+  provider: openai
+  base_url: https://openrouter.ai/api/v1
+  model: google/gemini-embedding-2
+  dimension: 3072
   distance: Cosine
-  api_key_env: DASHSCOPE_API_KEY
+  api_key_env: OPENROUTER_API_KEY
   batch_size: 10
-  timeout: 60
+  timeout: 90
   extra_body: {}
+rerank_enabled: true
+rerank_candidate_limit: 80
+rerank_timeout: 60

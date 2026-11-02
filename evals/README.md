@@ -33,9 +33,9 @@
 
 ## 结果状态
 
-仅保留运行 `e316c7ca-7974-4b6d-9392-45868da2d2d7`：26 次长合同查询通过 23 次，entity 10/12、chunk 11/12、retrieve 2/2。55 项机械检查通过，与查询通过数分开统计。旧运行、旧审查档案与旧发布副本已清理，语料和评测程序保留。
+仅保留运行 `e316c7ca-7974-4b6d-9392-45868da2d2d7`：26 次长合同查询通过 23 次，entity 10/12、chunk 11/12、retrieve 2/2。55 项机械检查通过，与查询通过数分开统计。语料和评测入口随仓库提供。
 
-[逐题结果](published/latest/questions.json)、[原始摘要](published/latest/summary.json)与[证据导航](published/README.md)保存本轮通过和未通过项。完整原件留在本地 `records/e316c7ca-7974-4b6d-9392-45868da2d2d7/`。后续可读性整理没有调用模型，不能计为新业务运行。
+[逐题结果](published/latest/questions.json)、[原始摘要](published/latest/summary.json)与[证据导航](published/README.md)保存本轮通过和未通过项。完整原件留在本地 `records/e316c7ca-7974-4b6d-9392-45868da2d2d7/`。结果绑定该次运行保存的源码和配置。
 
 详细口径和限制见[评测说明](../docs/03-使用与验证/评测说明与结果.md)与[合同语义复核](../docs/03-使用与验证/合同语义复核.md)。
 
