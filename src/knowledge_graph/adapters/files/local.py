@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import shutil
@@ -120,10 +121,12 @@ class Files:
         if plan["job_id"] != job_id:
             raise KGError("PLAN_INVALID", "Prepared mutation belongs to another job", 503)
 
+        payload_bytes = canonical(plan).encode("utf-8")
         wrapper = {
-            "schema_version": 1,
+            "schema_version": 2,
             "plan_id": plan["plan_id"],
-            "payload_byte_length": len(canonical(plan).encode("utf-8")),
+            "payload_byte_length": len(payload_bytes),
+            "payload_sha256": hashlib.sha256(payload_bytes).hexdigest(),
             "object_ids": self._object_ids(plan),
             "expected_business_fields": sorted(PREPARED_FIELDS),
             "payload": plan,
@@ -139,20 +142,30 @@ class Files:
             if not job.get("plan_path") or Path(job["plan_path"]).resolve() != expected_path:
                 raise ValueError("Unexpected prepared plan path")
             wrapper = json.loads(expected_path.read_text("utf-8"))
-            if set(wrapper) != {
+            if not isinstance(wrapper, dict):
+                raise ValueError("Prepared wrapper must be an object")
+            version = wrapper.get("schema_version")
+            if type(version) is not int or version not in {1, 2}:
+                raise ValueError("Unsupported prepared wrapper version")
+            expected_fields = {
                 "schema_version",
                 "plan_id",
                 "payload_byte_length",
                 "object_ids",
                 "expected_business_fields",
                 "payload",
-            }:
+            }
+            # Version 1 plans remain readable so queued work can resume after an upgrade.
+            if version == 2:
+                expected_fields.add("payload_sha256")
+            if set(wrapper) != expected_fields:
                 raise ValueError("Unexpected prepared wrapper structure")
             plan = wrapper["payload"]
-            if wrapper["schema_version"] != 1 or wrapper["payload_byte_length"] != len(
-                canonical(plan).encode("utf-8")
-            ):
-                raise ValueError("Length or schema mismatch")
+            payload_bytes = canonical(plan).encode("utf-8")
+            if wrapper["payload_byte_length"] != len(payload_bytes):
+                raise ValueError("Payload length mismatch")
+            if version == 2 and wrapper["payload_sha256"] != hashlib.sha256(payload_bytes).hexdigest():
+                raise ValueError("Payload integrity check failed")
             if wrapper["plan_id"] != plan["plan_id"] or wrapper["plan_id"] != job.get("plan_id"):
                 raise ValueError("Plan ID differs from its persisted job binding")
             if wrapper["expected_business_fields"] != sorted(PREPARED_FIELDS) or wrapper[
@@ -175,7 +188,7 @@ class Files:
 
     @staticmethod
     def same_bytes(first: Path, second: Path):
-        """分块逐字节比较两个原文件，不为内容生成摘要或身份标识。"""
+        """分块逐字节比较两个原文件，提前返回首个差异。"""
         with first.open("rb") as a, second.open("rb") as b:
             while True:
                 left, right = a.read(1024 * 1024), b.read(1024 * 1024)

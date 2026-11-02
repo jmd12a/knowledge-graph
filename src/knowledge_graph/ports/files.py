@@ -13,7 +13,7 @@ class ContentReader(Protocol):
 
 
 class FilesPort(Protocol):
-    """保存原文与恢复文件；持久化操作不得依赖内容摘要作为身份。"""
+    """保存原文、上传暂存与可恢复写入计划。"""
 
     root: Path
 
