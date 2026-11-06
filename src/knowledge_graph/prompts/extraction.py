@@ -77,9 +77,15 @@ When the clause itself is visibly cut off, keep complete=false and return the su
 segment_complete=true. These flags record uncertainty; they are not instructions to discard evidence.
 Prefer whole clauses when visible. Do not omit a useful source-backed clause merely because its context
 is uncertain, a reference is unresolved, or a relative deadline cannot be converted into a calendar date.
-Review the source in order and extract every configured clause, including numbered subclauses and
-unnumbered operative paragraphs. Do not stop after a few prominent headings. Preserve each clause's
-full visible wording, even when a parent section or neighboring clause is also extracted.
+Review the source in order and cover all relevant numbered and unnumbered content; do not stop
+after prominent headings. Follow the business model's clause granularity: numbering, line breaks
+and rule-unit boundaries alone do not require separate entities. Retain a shared lead-in and its
+dependent list items together when they express one arrangement; keep independently meaningful
+clauses separate. Do not duplicate the same arrangement as both a whole and isolated list fragments.
+For clause entities with a configured title or heading, choose source text that actually labels the
+extracted body. Never combine titles from different locations or borrow a neighboring clause's title.
+Use the model's naming rule when no matching title exists. Preserve the full visible source wording;
+when only a fragment is supplied, retain it with uncertainty rather than inventing missing context.
 All completeness flags must be JSON booleans. All evidence must remain in this call's supplied source.
 Return {entities:[],relations:[]} when nothing can be supported.
 """
