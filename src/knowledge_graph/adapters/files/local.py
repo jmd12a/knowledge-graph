@@ -9,7 +9,7 @@ import shutil
 from pathlib import Path
 
 from ...domain import KGError, canonical, new_id, valid_id
-from ...domain.jobs import PREPARED_FIELDS, validate_prepared_mutation
+from ...domain.jobs import prepared_fields, validate_prepared_mutation
 from ...runtime import blocking
 
 
@@ -128,7 +128,7 @@ class Files:
             "payload_byte_length": len(payload_bytes),
             "payload_sha256": hashlib.sha256(payload_bytes).hexdigest(),
             "object_ids": self._object_ids(plan),
-            "expected_business_fields": sorted(PREPARED_FIELDS),
+            "expected_business_fields": sorted(prepared_fields(plan)),
             "payload": plan,
         }
         path = self.job_dir(job_id) / "prepared.json"
@@ -168,7 +168,7 @@ class Files:
                 raise ValueError("Payload integrity check failed")
             if wrapper["plan_id"] != plan["plan_id"] or wrapper["plan_id"] != job.get("plan_id"):
                 raise ValueError("Plan ID differs from its persisted job binding")
-            if wrapper["expected_business_fields"] != sorted(PREPARED_FIELDS) or wrapper[
+            if wrapper["expected_business_fields"] != sorted(prepared_fields(plan)) or wrapper[
                 "object_ids"
             ] != self._object_ids(plan):
                 raise ValueError("Manifest fields or object sets do not match the fixed schema")

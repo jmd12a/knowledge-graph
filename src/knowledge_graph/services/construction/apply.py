@@ -9,6 +9,7 @@ from ...domain.jobs import WRITE_STATES, validate_atomic_reference_mappings
 from ...ports.resources import Resources
 from ...runtime import blocking
 from ...domain.source import validate_stored_evidence
+from .changes import select_writes
 from .maintenance import check_vector_capacity
 
 
@@ -17,7 +18,7 @@ class MutationApplier:
         self.c = resources
 
     async def apply(self, job):
-        """排空读请求后重放完整计划，验证通过并提交完成状态后恢复可查询状态。"""
+        """排空读请求后重放固定写入范围，完整校验通过后恢复可查询状态。"""
         c, kb_id = self.c, job["kb_id"]
         job = await c.metadata.job(job["job_id"])
         kb = await c.metadata.kb(kb_id)
@@ -26,6 +27,7 @@ class MutationApplier:
         if job["state"] not in {"PREPARED", "DRAINING", "APPLYING", "VERIFYING", "NEEDS_REPAIR"}:
             raise KGError("INVALID_JOB_STATE", "This task has no prepared mutation to apply", 409)
         plan = await blocking(c.files.read_plan, job)
+        writes = select_writes(plan)
         check_vector_capacity(
             len(plan["chunk_points"]), len(plan["object_points"]), c.settings.maintenance_scan_limit
         )
@@ -50,20 +52,25 @@ class MutationApplier:
                     await c.vectors.delete(kb_id, "chunks", all_points=True)
                 else:
                     await c.vectors.delete(kb_id, "chunks", ids=plan["delete_chunks"])
-                await c.vectors.upsert(kb_id, "chunks", plan["chunk_points"])
+                await c.vectors.upsert(kb_id, "chunks", writes["chunk_points"])
                 await c.metadata.update_job(job["job_id"], last_step="chunks")
 
                 # 重建索引不改来源贡献和图事实，其余维护操作按同一计划更新两者。
                 if plan["operation"] != "REINDEX":
+                    contribution_scope = (
+                        plan["write_set"]["contribution_document_ids"]
+                        if plan.get("write_mode") == "delta" else None
+                    )
                     await c.metadata.replace_contributions(
-                        kb_id, plan["contributions"], plan["issues"], plan["issue_documents"]
+                        kb_id, writes["contributions"], plan["issues"], plan["issue_documents"],
+                        document_ids=contribution_scope,
                     )
                     await c.metadata.update_job(job["job_id"], last_step="contributions")
                     await c.graph.apply(
                         kb_id,
                         plan["model"],
-                        plan["entities"],
-                        plan["relations"],
+                        writes["entities"],
+                        writes["relations"],
                         plan["delete_entities"],
                         plan["delete_relations"],
                         rebuild=plan["operation"] == "REBUILD",
@@ -71,7 +78,7 @@ class MutationApplier:
                     await c.metadata.update_job(job["job_id"], last_step="graph")
 
                 await c.vectors.delete(kb_id, "objects", ids=plan["delete_objects"])
-                await c.vectors.upsert(kb_id, "objects", plan["object_points"])
+                await c.vectors.upsert(kb_id, "objects", writes["object_points"])
                 await c.metadata.update_job(job["job_id"], state="VERIFYING", last_step="objects")
 
                 # 跨库结果核对成功后才回收原文件和检查点，并最终提交资料状态。

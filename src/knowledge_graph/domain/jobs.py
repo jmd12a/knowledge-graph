@@ -36,8 +36,18 @@ class Job(TypedDict):
     input_json: NotRequired[str]
 
 
+class MutationWriteSet(StrictModel):
+    entity_ids: list[str]
+    relation_ids: list[str]
+    chunk_ids: list[str]
+    object_ids: list[str]
+    contribution_document_ids: list[str]
+
+
 class PreparedMutation(StrictModel):
-    schema_version: Literal[1]
+    schema_version: Literal[1, 2]
+    write_mode: Literal["full", "delta"] | None = None
+    write_set: MutationWriteSet | None = None
     plan_id: str
     job_id: str
     kb_id: str
@@ -67,6 +77,43 @@ class PreparedMutation(StrictModel):
 
 
 PREPARED_FIELDS = frozenset(PreparedMutation.model_fields)
+
+
+def prepared_fields(plan: dict) -> frozenset[str]:
+    if plan["schema_version"] == 1:
+        return PREPARED_FIELDS - {"write_mode", "write_set"}
+    return PREPARED_FIELDS
+
+
+def validate_write_set(plan: dict, groups: dict, job: dict | None) -> None:
+    if plan["schema_version"] == 1:
+        return
+    mode, scope = plan["write_mode"], plan["write_set"]
+    expected_mode = "delta" if plan["operation"] in {"IMPORT", "DELETE"} else "full"
+    if mode != expected_mode or not isinstance(scope, dict):
+        raise ValueError("Write mode does not match the maintenance operation")
+    for field, group in (
+        ("entity_ids", "entities"), ("relation_ids", "relations"),
+        ("chunk_ids", "chunks"), ("object_ids", "objects"),
+    ):
+        values = scope[field]
+        selected, final = set(values), set(groups[group])
+        if len(values) != len(selected) or selected - final or (mode == "full" and selected != final):
+            raise ValueError("Write set does not match the prepared final objects")
+    documents = scope["contribution_document_ids"]
+    selected = set(documents)
+    expected = set(plan["activate_documents"]) | set(plan["delete_documents"])
+    if mode == "full":
+        expected |= set(plan["document_ids"])
+    if len(documents) != len(selected) or selected != expected:
+        raise ValueError("Contribution write scope does not match the document transition")
+    if mode == "delta":
+        if len(selected) != 1 or (job is not None and selected != {job["document_id"]}):
+            raise ValueError("Incremental writes must belong to the task's source document")
+        if plan["operation"] == "IMPORT" and (plan["delete_documents"] or not plan["activate_documents"]):
+            raise ValueError("An import must activate its source document")
+        if plan["operation"] == "DELETE" and (plan["activate_documents"] or not plan["delete_documents"]):
+            raise ValueError("A deletion must withdraw its source document")
 
 
 def validate_atomic_reference_mappings(
@@ -178,8 +225,8 @@ def validate_prepared_mutation(plan: dict, job: dict | None = None) -> None:
 
     try:
         PreparedMutation.model_validate(plan)
-        if PREPARED_FIELDS - plan.keys():
-            raise ValueError("Incomplete prepared mutation")
+        if type(plan["schema_version"]) is not int or set(plan) != prepared_fields(plan):
+            raise ValueError("Prepared mutation fields do not match its schema version")
         model = BusinessModel.model_validate(plan["model"])
         profile = EmbeddingProfile.model_validate(plan["embedding_profile"])
         profile_data = profile.model_dump()
@@ -213,6 +260,7 @@ def validate_prepared_mutation(plan: dict, job: dict | None = None) -> None:
                 valid_id(value)
                 if UUID(value).version != 4:
                     raise ValueError("Prepared object identifiers must use UUIDv4")
+        validate_write_set(plan, groups, job)
         entity_ids, relation_ids = set(groups["entities"]), set(groups["relations"])
         if set(groups["objects"]) != entity_ids:
             raise ValueError("Object index does not match the final entity set")

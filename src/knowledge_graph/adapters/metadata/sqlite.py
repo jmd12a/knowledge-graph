@@ -413,11 +413,26 @@ class Metadata:
                 row[key] = json.loads(row.pop(key + "_json"))
         return rows
 
-    async def replace_contributions(self, kb_id, contributions, issues, issue_documents):
-        """在单个事务内替换当前来源贡献及指定资料的候选问题记录。"""
+    async def replace_contributions(
+        self, kb_id, contributions, issues, issue_documents, *, document_ids=None
+    ):
+        """在短事务内替换全库或指定来源的贡献，并更新候选问题记录。"""
+        scope = set(document_ids) if document_ids is not None else None
+        if any(
+            row["kb_id"] != kb_id or (scope is not None and row["document_id"] not in scope)
+            for row in contributions
+        ):
+            raise KGError("INVALID_ARGUMENT", "Contributions exceed the requested replacement scope")
 
         def replace(c):
-            c.execute("DELETE FROM source_contributions WHERE kb_id=?", (kb_id,))
+            if document_ids is None:
+                c.execute("DELETE FROM source_contributions WHERE kb_id=?", (kb_id,))
+            elif document_ids:
+                c.execute(
+                    "DELETE FROM source_contributions WHERE kb_id=? "
+                    "AND document_id IN (SELECT value FROM json_each(?))",
+                    (kb_id, canonical(document_ids)),
+                )
             for row in contributions:
                 c.execute(
                     "INSERT INTO source_contributions VALUES(?,?,?,?,?,?,?,?,?,?,?)",

@@ -7,6 +7,7 @@ from ...ports.resources import Resources
 from ...runtime import blocking
 from .alignment import align
 from .apply import MutationApplier
+from .changes import build_write_set, select_writes
 from .extraction import extract_text, mapped_extraction
 from .maintenance import check_vector_capacity, conflict_warnings, deletion_cleanup, task_counts
 from .merge import aggregate
@@ -308,7 +309,8 @@ class Construction:
 
         # 完整计划先原子落盘，再发布 PREPARED，供写入与恢复共用。
         plan = {
-            "schema_version": 1,
+            "schema_version": 2,
+            "write_mode": "delta" if operation in {"IMPORT", "DELETE"} else "full",
             "plan_id": draft["plan_id"],
             "job_id": job["job_id"],
             "kb_id": kb_id,
@@ -336,6 +338,18 @@ class Construction:
             "warnings": warnings,
             "counts": counts,
         }
+        plan["write_set"] = build_write_set(plan, {
+            "entities": old_entities, "relations": old_relations,
+            "chunk_points": old_chunks, "object_points": old_objects,
+        })
+        writes = select_writes(plan)
+        counts.update({
+            "upserted_chunks": len(writes["chunk_points"]),
+            "upserted_objects": len(writes["object_points"]),
+            "upserted_entities": len(writes["entities"]) if operation != "REINDEX" else 0,
+            "upserted_relations": len(writes["relations"]) if operation != "REINDEX" else 0,
+            "written_contributions": len(writes["contributions"]) if operation != "REINDEX" else 0,
+        })
         plan_path = await blocking(c.files.save_plan, job["job_id"], plan)
         await c.metadata.update_job(
             job["job_id"], state="PREPARED", plan_path=plan_path, plan_id=plan["plan_id"], error_json=None

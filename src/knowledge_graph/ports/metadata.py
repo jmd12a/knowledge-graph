@@ -55,8 +55,11 @@ class MetadataPort(Protocol):
         ...
 
     async def replace_contributions(
-        self, kb_id: str, contributions: list[Contribution], issues: list[dict], issue_documents: list[str]
-    ) -> None: ...
+        self, kb_id: str, contributions: list[Contribution], issues: list[dict], issue_documents: list[str],
+        *, document_ids: list[str] | None = None,
+    ) -> None:
+        """None 替换全库贡献；列表仅替换指定来源，其他来源保持不变。"""
+        ...
     async def finish(self, job_id: str, plan: dict) -> None:
         """按持久化计划提交最终元数据状态，并恢复知识库可查询状态。"""
         ...
