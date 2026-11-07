@@ -55,8 +55,35 @@ class LanguageProfile(StrictModel):
         return self
 
 
+class WorkerDistribution(StrictModel):
+    redis_url_env: str = "REDIS_URL"
+    stream: str = "kg:{prepare}:stream"
+    group: str = "prepare"
+    heartbeat_seconds: float = Field(default=10, gt=0)
+    claim_idle_seconds: float = Field(default=60, gt=0)
+    minio_endpoint: str
+    minio_bucket: str
+    minio_access_key_env: str = "MINIO_ACCESS_KEY"
+    minio_secret_key_env: str = "MINIO_SECRET_KEY"
+
+    @model_validator(mode="after")
+    def validate_endpoints(self):
+        from urllib.parse import urlsplit
+
+        url = urlsplit(self.minio_endpoint)
+        if url.scheme not in {"http", "https"} or not url.hostname or url.username or url.query or url.fragment:
+            raise ValueError("MinIO endpoint must be an HTTP URL without credentials")
+        if not self.stream or not self.group or self.claim_idle_seconds <= 2 * self.heartbeat_seconds:
+            raise ValueError("Redis requires a stream, group and an idle timeout over twice the heartbeat")
+        return self
+
+
 class Settings(StrictModel):
     data_root: str = "/srv/knowledge-graph/data"
+    postgres_dsn_env: str = "POSTGRES_DSN"
+    worker_distribution: WorkerDistribution | None = None
+    chunk_similarity_threshold: float = Field(default=0.97, ge=0, le=1)
+    chunk_decision_model: str = "typesafe/jev-1.13"
     neo4j_uri: str = "bolt://127.0.0.1:7687"
     neo4j_user: str = "neo4j"
     neo4j_password_env: str = "NEO4J_PASSWORD"

@@ -46,6 +46,9 @@ async def deletion_cleanup(resources, job, document):
         # 重建等任务可能间接保存该来源，不能只检查任务的 document_id。
         if exists and not matches:
             for content in await blocking(resources.files.job_checkpoints, previous["job_id"]):
+                if content.get("unsealed_attempt"):
+                    matches = True
+                    break
                 payload = content.get("payload", content)
                 referenced = set(payload.get("document_ids", [])) | set(payload.get("documents", {}))
                 referenced.update(payload.get("baseline_document_ids", []))

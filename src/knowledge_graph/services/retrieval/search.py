@@ -113,16 +113,19 @@ class SearchMixin:
         for document_id in filters.document_ids:
             valid_id(document_id)
 
+    async def _validate_documents(self, kb_id, document_ids):
+        for document_id in document_ids:
+            document = await self.r.metadata.document(kb_id, document_id)
+            if document.get("deleted_at"):
+                raise KGError("NOT_FOUND", "Selected document has been deleted", 404, document_id=document_id)
+
     async def _scope(self, kb, filters):
         """仅用所选资料的贡献重聚合知识；未指定资料时返回 None。"""
         model = BusinessModel.model_validate(kb["model"])
         self.validate_filters(model, filters)
         if not filters.document_ids:
             return None
-        for document_id in filters.document_ids:
-            document = await self.r.metadata.document(kb["kb_id"], document_id)
-            if document.get("deleted_at"):
-                raise KGError("NOT_FOUND", "Selected document has been deleted", 404, document_id=document_id)
+        await self._validate_documents(kb["kb_id"], filters.document_ids)
         from ..construction.merge import aggregate
 
         # 整库聚合可能包含其他来源的值，不能仅按 document_ids 过滤后复用。
@@ -341,10 +344,12 @@ class SearchMixin:
             "additionalProperties": False,
         }
         data = {"query": request.query, "limit": min(request.limit, len(ordered)), "candidates": []}
-        for key in ordered[: self.r.settings.rerank_candidate_limit]:
+        candidate_keys = {}
+        for index, key in enumerate(ordered[: self.r.settings.rerank_candidate_limit], 1):
             item = records[key]
             text = item.get("text", item.get("search_text", ""))
-            candidate = {"id": key, "name": item.get("canonical_name", ""), "text": text[:12000]}
+            number = str(index)
+            candidate = {"id": number, "name": item.get("canonical_name", ""), "text": text[:12000]}
             proposed = data | {"candidates": data["candidates"] + [candidate]}
             if (
                 self.r.language.json_request_chars(RERANK_SYSTEM, proposed, schema)
@@ -352,24 +357,23 @@ class SearchMixin:
             ):
                 break
             data = proposed
-        supplied = {item["id"] for item in data["candidates"]}
-        if len(supplied) <= 1:
+            candidate_keys[number] = key
+        if len(candidate_keys) <= 1:
             return ordered, set()
-        data["limit"] = min(request.limit, len(supplied))
+        data["limit"] = min(request.limit, len(candidate_keys))
         try:
             async with asyncio.timeout(
                 min(self.r.settings.rerank_timeout, self.r.settings.retrieval_timeout / 3)
             ):
                 response = await self.r.language.json(RERANK_SYSTEM, data, schema)
-            selected = response["ids"]
-            if not isinstance(selected, list) or any(not isinstance(key, str) for key in selected):
+            numbers = response["ids"]
+            if not isinstance(numbers, list) or any(not isinstance(number, str) for number in numbers):
                 raise ValueError("Reranker IDs must be strings")
-            invalid_count = sum(key not in supplied for key in selected)
+            selected = [candidate_keys[number] for number in numbers if number in candidate_keys]
+            invalid_count = len(numbers) - len(selected)
             if invalid_count:
                 result["warnings"].append({"code": "RERANK_IDS_IGNORED", "count": invalid_count})
-                selected = [key for key in selected if key in supplied]
-            # A relevance shortlist may contain fewer than Top K. Retain it and
-            # fill remaining slots from the original fused ranking.
+            # 保留有效的重排结果，从原候选顺序补齐。
             selected = list(dict.fromkeys(selected))[: data["limit"]]
         except (KGError, ValueError, KeyError, TypeError, TimeoutError) as exc:
             add_warning(
@@ -384,18 +388,62 @@ class SearchMixin:
                 component,
                 "top_k",
                 request.filters.model_dump(),
-                {"rerank_candidates": len(supplied), "limit": request.limit},
+                {"rerank_candidates": len(candidate_keys), "limit": request.limit},
             )
         )
-        return selected + [key for key in ordered if key not in selected], supplied
+        selected_keys = set(selected)
+        return selected + [key for key in ordered if key not in selected_keys], set(candidate_keys.values())
+
+    async def _search_chunk_vectors(self, kb_id, vector, limit, filters):
+        r = self.r
+        scoped = bool(filters.document_ids or filters.domain_ids)
+        members = None
+        ids = None
+        if scoped:
+            members = await r.metadata.vector_members(
+                kb_id, document_ids=filters.document_ids or None, domain_ids=filters.domain_ids or None,
+                active_only=True,
+            )
+            ids = sorted({row["vector_id"] for row in members})
+            if not ids:
+                return []
+        hits = await r.vectors.search(kb_id, "chunk_vectors", vector, limit, filters, point_ids=ids)
+        if not hits:
+            return []
+        hit_ids = {hit["id"] for hit in hits}
+        if members is None:
+            members = await r.metadata.vector_members(kb_id, vector_ids=sorted(hit_ids), active_only=True)
+        by_vector = defaultdict(list)
+        for row in members:
+            if row["vector_id"] in hit_ids:
+                by_vector[row["vector_id"]].append(row["chunk_id"])
+        selected = []
+        for hit in hits:
+            group = by_vector[hit["id"]]
+            if not group:
+                continue
+            representative = hit["payload"]["representative_chunk_id"]
+            chunk_id = representative if representative in group else group[0]
+            selected.append((hit, chunk_id, group))
+        chunks = {
+            point["id"]: point["payload"]
+            for point in await r.vectors.read(kb_id, "chunks", [key for _, key, _ in selected])
+        }
+        return [
+            {"id": key, "payload": chunks[key], "score": hit["score"], "member_chunk_ids": group}
+            for hit, key, group in selected if key in chunks
+        ]
 
     async def _search(self, kb, request, scope=None):
         """合并精确、关键词与语义候选，分别报告对象和文档的覆盖范围。"""
         r, kb_id = self.r, kb["kb_id"]
         model = BusinessModel.model_validate(kb["model"])
         self.validate_filters(model, request.filters)
-        if scope is None:
-            scope = await self._scope(kb, request.filters)
+        if scope is None and request.filters.document_ids:
+            if "entity" in request.kinds:
+                scope = await self._scope(kb, request.filters)
+            else:
+                await self._validate_documents(kb_id, request.filters.document_ids)
         result, scan = envelope(kb_id), r.settings.candidate_scan_limit
         actual_scope = request.filters.model_dump()
         records, channels, ranks = {}, defaultdict(set), defaultdict(float)
@@ -455,8 +503,8 @@ class SearchMixin:
                     admit(item, channel, rank, ranked=channel != "keyword" or scope is not None)
 
         vector = None
-        collection = "chunks" if scope is not None or "entity" not in request.kinds else "objects"
-        collections = {collection} | ({"chunks"} if "chunk" in request.kinds else set())
+        collection = "chunk_vectors" if scope is not None or "entity" not in request.kinds else "objects"
+        collections = {collection} | ({"chunk_vectors"} if "chunk" in request.kinds else set())
         if request.semantic and any([await r.vectors.exists(kb_id, kind) for kind in sorted(collections)]):
             try:
                 vector = (await r.language.embed([request.query], kb["embedding_profile"]))[0]
@@ -482,7 +530,10 @@ class SearchMixin:
         )
         source_hits = None
         if vector is not None and "entity" in request.kinds:
-            hits = await r.vectors.search(kb_id, collection, vector, fetch_limit, request.filters)
+            if scope is not None:
+                hits = await self._search_chunk_vectors(kb_id, vector, fetch_limit, request.filters)
+            else:
+                hits = await r.vectors.search(kb_id, collection, vector, fetch_limit, request.filters)
             if scope is not None:
                 source_hits = hits
                 # 所选来源视图通过切片证据找对象，避免使用整库对象向量引入其他来源。
@@ -492,14 +543,17 @@ class SearchMixin:
                         for reference in claim["evidence"]:
                             by_chunk[reference["chunk_id"]].add(claim["target_id"])
                 for rank, hit in enumerate(hits, 1):
-                    for object_id in sorted(by_chunk[hit["id"]]):
+                    for object_id in sorted(set().union(*(by_chunk[key] for key in hit["member_chunk_ids"]))):
                         item = scope["entity"].get(object_id)
                         if item:
                             admit(item, "source_vector", rank)
             else:
+                items = {
+                    item["entity_id"]: item
+                    for item in await r.graph.by_id(kb_id, "entity", [hit["id"] for hit in hits])
+                }
                 for rank, hit in enumerate(hits, 1):
-                    item = await r.graph.get(kb_id, "entity", hit["id"])
-                    if item:
+                    if item := items.get(hit["id"]):
                         admit(item, "vector", rank)
             if (
                 len(hits) >= fetch_limit
@@ -565,7 +619,7 @@ class SearchMixin:
                 hits = (
                     source_hits
                     if source_hits is not None
-                    else await r.vectors.search(kb_id, "chunks", vector, fetch_limit, request.filters)
+                    else await self._search_chunk_vectors(kb_id, vector, fetch_limit, request.filters)
                 )
                 for rank, hit in enumerate(hits, 1):
                     chunks[hit["id"]] = hit["payload"]

@@ -83,6 +83,7 @@ async def content_response(context, kb_id, document_id):
             "csv": "text/csv; charset=utf-8",
             "json": "application/json",
             "pdf": "application/pdf",
+            "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         }.get(content["media_type"], "application/octet-stream")
         return LockedContentResponse(
             stream,
@@ -204,9 +205,9 @@ def create_router(context):
 
     @router.post("/jobs/{job_id}/retry", status_code=202)
     async def retry(
-        job_id: str, idempotency_key: str = Header(alias="Idempotency-Key", min_length=1, max_length=200)
+        job_id: str, generation: int = Query(ge=0)
     ):
-        return metadata_result(await management.retry(job_id, idempotency_key))
+        return metadata_result(await management.retry(job_id, generation))
 
     @router.get("/kbs/{kb_id}/model", **result_options)
     async def describe_model(

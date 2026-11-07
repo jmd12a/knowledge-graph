@@ -22,8 +22,14 @@ class Context:
 
     def __init__(self, settings: Settings | None = None):
         self.settings = settings or Settings.load()
-        self.files = Files(self.settings.data_root)
-        self.metadata = Metadata(self.settings.data_root)
+        distribution = self.settings.worker_distribution
+        if distribution is None:
+            self.files = Files(self.settings.data_root)
+        else:
+            from .adapters.files.minio import MinioFiles
+
+            self.files = MinioFiles(self.settings.data_root, distribution)
+        self.metadata = Metadata(self.settings.postgres_dsn_env)
         self.graph, self.vectors, self.language = (
             Graph(self.settings),
             Vectors(self.settings),
@@ -70,7 +76,14 @@ class Context:
         async with self.gate.server():
             async with self.gate.worker():
                 await blocking(self.metadata.initialize)
+                await self.check_storage_mode()
                 await self.graph.initialize()
+
+    async def check_storage_mode(self):
+        if not await self.metadata.storage_mode_matches(self.settings.worker_distribution is not None):
+            raise KGError(
+                "INCONSISTENT_STORAGE", "Registered files use a different storage mode; migrate references first", 503
+            )
 
     async def ready(self):
         """检查元数据初始化状态，再汇总图与向量存储的可用性。"""
@@ -80,6 +93,11 @@ class Context:
             )
         checks = await asyncio.gather(self.graph.ready(), self.vectors.ready(), return_exceptions=True)
         dependencies = {"metadata": True, "graph": checks[0] is True, "vectors": checks[1] is True}
+        if self.settings.worker_distribution is not None:
+            try:
+                dependencies["objects"] = await blocking(self.files.ready)
+            except KGError:
+                dependencies["objects"] = False
         if not all(dependencies.values()):
             raise KGError(
                 "UPSTREAM_UNAVAILABLE",
@@ -96,6 +114,7 @@ class Context:
         if self.construction_language is not self.language:
             languages.append(self.construction_language)
 
-        await asyncio.gather(
-            *(language.close() for language in languages), self.vectors.close(), self.graph.close()
-        )
+        closers = [self.vectors.close(), self.graph.close()]
+        if self.settings.worker_distribution is not None:
+            closers.append(blocking(self.files.close))
+        await asyncio.gather(*(language.close() for language in languages), *closers)

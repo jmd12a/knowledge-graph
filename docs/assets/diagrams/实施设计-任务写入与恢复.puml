@@ -12,7 +12,7 @@ skinparam NoteBorderColor #B89B48
 actor "HTTP / MCP 调用方" as Client
 participant "在线服务\n共享检索逻辑" as API
 participant "单 Worker" as Worker
-database "SQLite\n任务 / 维护标记" as Meta
+database "PostgreSQL\n任务 / 维护标记" as Meta
 participant "知识库文件锁\nSH / EX" as Lock
 database "图 / 贡献 / 两类索引\n原文件" as Stores
 
@@ -50,17 +50,21 @@ end note
 
 group 正式写入：仅执行已准备的计划
   Worker -> Meta : 持久化 APPLYING，之后才允许正式写入
-  Worker -> Stores : 文档切片 -> 来源贡献 -> 图补丁
-  Worker -> Stores : 图对象向量 -> 引用核验 -> 原文件清理
+  Worker -> Stores : 导入与删除按存储并行应用差量
+  Worker -> Stores : 全部分支结束后核验对象与引用
   note over Worker,Stores
   删除旧记录先于写回最终记录。
   REBUILD 先清理该库旧图，再完整重建；
   REINDEX 只重建两个向量集合及配置。
   end note
   alt 全部步骤和引用核验通过
-    Worker -> Meta : 一个事务：启用/停用资料或更新模型\n任务成功 + 维护状态 READY
+    Worker -> Meta : 一个事务：启用/停用资料或更新模型\n更新任务阶段 + 维护状态 READY
     Worker -> Lock : 释放 EX
-    note over API,Stores : 后续知识请求取得 SH 并检查 READY 后读取新知识
+    note over API,Stores : 后续知识请求读取已发布的知识
+    opt 删除待清理
+      Worker -> Stores : 锁外清理原文与旧检查点
+      Worker -> Meta : 清理完成后标记任务成功
+    end
   else 部分写入失败或结果未知
     Worker -> Meta : NEEDS_REPAIR / REPAIR_REQUIRED
     Worker -> Lock : 释放 EX；持久化标记继续阻止查询

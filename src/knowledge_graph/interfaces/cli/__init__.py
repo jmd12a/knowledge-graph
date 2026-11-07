@@ -123,12 +123,18 @@ def serve(config: Annotated[Path | None, typer.Option(exists=True, dir_okay=Fals
 
 @app.command()
 def worker(
-    config: Annotated[Path | None, typer.Option(exists=True, dir_okay=False)] = None, once: bool = False
+    config: Annotated[Path | None, typer.Option(exists=True, dir_okay=False)] = None,
+    once: bool = False,
+    role: Annotated[str | None, typer.Option(help="Distributed Worker role: prepare or publish.")] = None,
 ):
-    """Run the single background Worker, prioritizing incomplete writes."""
+    """Run the local Worker or a distributed preparation or publication role."""
     from ...worker import run_worker
 
-    asyncio.run(run_worker(Settings.load(str(config) if config else None), once=once))
+    try:
+        asyncio.run(run_worker(Settings.load(str(config) if config else None), once=once, role=role))
+    except KGError as exc:
+        output(exc.as_dict())
+        raise typer.Exit(1) from exc
 
 
 @model_app.command("validate")
@@ -261,8 +267,8 @@ def job_issues(ctx: typer.Context, job_id: str, limit: int = 100, offset: int = 
 
 
 @job_app.command("retry")
-def retry_job(ctx: typer.Context, job_id: str, key: Annotated[str, typer.Option("--key")]):
-    request(ctx, "POST", "/jobs/" + segment(job_id) + "/retry", key=key)
+def retry_job(ctx: typer.Context, job_id: str, generation: Annotated[int, typer.Option("--generation", min=0)]):
+    request(ctx, "POST", "/jobs/" + segment(job_id) + "/retry", params={"generation": generation})
 
 
 @app.command()

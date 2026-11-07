@@ -61,8 +61,7 @@ class Management:
         kb_id, document_id = valid_id(kb_id), valid_id(document_id)
         await self.c.metadata.document(kb_id, document_id)
         limit, offset = self._page(limit, offset)
-        rows = await self.c.metadata.document_jobs(kb_id, document_id)
-        return rows[offset : offset + limit]
+        return await self.c.metadata.document_jobs(kb_id, document_id, limit, offset)
 
     async def content(self, kb_id, document_id):
         """读取下载元信息；调用方须持有读门禁直到响应流结束。"""
@@ -98,11 +97,12 @@ class Management:
             ".md": "md",
             ".markdown": "md",
             ".pdf": "pdf",
+            ".docx": "docx",
             ".csv": "csv",
             ".json": "json",
         }
         if extension not in formats:
-            raise KGError("UNSUPPORTED_FORMAT", "Supported formats are TXT, Markdown, CSV, JSON and text PDF")
+            raise KGError("UNSUPPORTED_FORMAT", "Supported formats are TXT, Markdown, DOCX, CSV, JSON and text PDF")
         # 重放沿用原请求的映射选择，不能由当前模型重新解释旧请求。
         requested_mapping_id = mapping_id
         old = await self.c.metadata.request(kb_id, "IMPORT", key)
@@ -219,15 +219,15 @@ class Management:
         )
         return await self.c.metadata.job(job_id)
 
-    async def retry(self, job_id, key):
-        job_id, key = valid_id(job_id), self.key(key)
+    async def retry(self, job_id, generation):
+        job_id = valid_id(job_id)
         job = await self.c.metadata.job(job_id)
         if job["operation"] == "IMPORT":
             document = await self.c.metadata.document(job["kb_id"], job["document_id"])
             if document["deleted_at"]:
                 raise KGError("INVALID_JOB_STATE", "Deleted document imports cannot be retried", 409)
         # 准备文件由 Worker 独占修改；准备失败后的重试通过 queue_seq 切换准备代次。
-        await self.c.metadata.retry(job_id, key)
+        await self.c.metadata.retry(job_id, generation)
         return await self.c.metadata.job(job_id)
 
     async def issues(self, job_id, limit=100, offset=0):

@@ -12,6 +12,8 @@ from pypdf import PdfReader, __version__ as pypdf_version
 from pypdf.errors import PyPdfError
 
 from ...domain import KGError, canonical, new_id, select_mapping
+from .sections import count_line_breaks, markdown_sections
+from .word import word_blocks
 
 PARSER_PROFILE = {"name": "source-spans", "revision": 1, "coordinates": "unicode_code_points_half_open"}
 
@@ -42,11 +44,13 @@ class Parser:
         self.settings = settings
 
     def _chunk_text(
-        self, text, origin, document_id, domain_ids, *, overlap=True, spans=None, section_path=None
+        self, text, origin, document_id, domain_ids, *, overlap=True, spans=None, section_path=None,
+        char_offset=0, line_offset=0,
     ):
         """按长度与边界切片，将原文或字段坐标映射到切片内的半开区间。"""
         chunks, start = [], 0
-        previous_start, prefix_newlines = 0, 0
+        previous_start, prefix_newlines = 0, line_offset
+        span_index = 0
         max_length = self.settings.chunk_max
         while start < len(text):
             end = min(start + max_length, len(text))
@@ -62,13 +66,13 @@ class Parser:
             # 普通原文直接映射坐标；结构化记录按字段来源片段裁剪。
             if spans is None:
                 segment_origin = dict(origin)
-                segment_origin["char_range"] = [start, end]
+                segment_origin["char_range"] = [char_offset + start, char_offset + end]
                 if origin["format"] in {"txt", "md"}:
-                    prefix_newlines += text.count("\n", previous_start, start)
+                    prefix_newlines += count_line_breaks(text, previous_start, start)
                     previous_start = start
                     segment_origin["line_range"] = [
                         prefix_newlines + 1,
-                        prefix_newlines + text.count("\n", start, end) + 1,
+                        prefix_newlines + count_line_breaks(text, start, end) + 1,
                     ]
                 mapped = [
                     {
@@ -79,8 +83,13 @@ class Parser:
                     }
                 ]
             else:
-                for span in spans:
+                while span_index < len(spans) and spans[span_index]["chunk_range"][1] <= start:
+                    span_index += 1
+                for index in range(span_index, len(spans)):
+                    span = spans[index]
                     left, right = span["chunk_range"]
+                    if left >= end:
+                        break
                     a, b = max(start, left), min(end, right)
                     if a >= b:
                         continue
@@ -92,11 +101,6 @@ class Parser:
                         item["origin"]["value_range"] = [value_range[0] + a - left, value_range[0] + b - left]
                     mapped.append(item)
 
-            headings = section_path or []
-            if origin["format"] == "md":
-                headings = [m.group(2).strip() for m in re.finditer(r"(?m)^(#{1,6})\s+(.+)$", text[:end])][
-                    -6:
-                ]
             chunks.append(
                 {
                     "chunk_id": new_id(),
@@ -104,7 +108,7 @@ class Parser:
                     "text": body,
                     "locator": origin,
                     "source_spans": mapped,
-                    "section_path": headings,
+                    "section_path": section_path or [],
                     "parser_profile": PARSER_PROFILE
                     | {
                         "format": origin["format"],
@@ -144,11 +148,32 @@ class Parser:
             text = filename.read_bytes().decode(doc["source"].get("encoding", "utf-8"))
             if not text.strip():
                 raise KGError("EMPTY_DOCUMENT", "Document contains no text")
-            return {
-                "chunks": self._chunk_text(text, {"format": media_type}, doc["document_id"], domains),
-                "records": [],
-                "mapping_id": None,
-            }
+            origin = {"format": media_type}
+            if media_type == "md":
+                chunks = []
+                for start, end, line, path in markdown_sections(text):
+                    chunks.extend(
+                        self._chunk_text(
+                            text[start:end], origin, doc["document_id"], domains,
+                            section_path=path, char_offset=start, line_offset=line,
+                        )
+                    )
+            else:
+                chunks = self._chunk_text(text, origin, doc["document_id"], domains)
+            return {"chunks": chunks, "records": [], "mapping_id": None}
+
+        if media_type == "docx":
+            chunks = []
+            for block in word_blocks(filename):
+                chunks.extend(
+                    self._chunk_text(
+                        block.text, block.locator, doc["document_id"], domains,
+                        overlap=block.overlap, spans=block.spans, section_path=block.section_path,
+                    )
+                )
+            if not chunks:
+                raise KGError("EMPTY_DOCUMENT", "Word document contains no text")
+            return {"chunks": chunks, "records": [], "mapping_id": None}
 
         if media_type == "pdf":
             chunks = []

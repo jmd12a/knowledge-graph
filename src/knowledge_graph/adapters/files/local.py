@@ -78,12 +78,33 @@ class Files:
     def raw_path(self, kb_id, document_id, extension):
         valid_id(kb_id)
         valid_id(document_id)
-        if extension not in {".txt", ".md", ".markdown", ".csv", ".json", ".pdf"}:
+        if extension not in {".txt", ".md", ".markdown", ".csv", ".json", ".pdf", ".docx"}:
             raise KGError("UNSUPPORTED_FORMAT", "Invalid original file extension")
         return self.path("raw", kb_id, document_id, "original" + extension)
 
     def job_dir(self, job_id):
         return self.path("jobs", valid_id(job_id))
+
+    def attempt_dir(self, job):
+        return self.job_dir(job["job_id"])
+
+    def begin_preparation(self, job):
+        pass
+
+    def read_preparation(self, job):
+        return self.read_json(self.attempt_dir(job) / "preparation.json")
+
+    def extraction_path(self, job):
+        return self.job_dir(job["job_id"]) / "extraction-results.json"
+
+    def parse_document(self, parser, document, model):
+        return parser.parse(document, model)
+
+    def raw_directory(self, kb_id, document_id):
+        return self.path("raw", valid_id(kb_id), valid_id(document_id))
+
+    def _cleanup_target(self, path):
+        return Path(path).resolve()
 
     def atomic(self, path: Path, value: dict):
         """先同步临时文件，再原子替换目标并同步目录，持久保存 JSON。"""
@@ -115,7 +136,7 @@ class Files:
             "contributions": [x["contribution_id"] for x in plan["contributions"]],
         }
 
-    def save_plan(self, job_id, plan):
+    def save_plan(self, job_id, plan, *, path=None):
         """校验写入计划并保存恢复清单，返回与任务绑定的固定路径。"""
         validate_prepared_mutation(plan)
         if plan["job_id"] != job_id:
@@ -131,17 +152,20 @@ class Files:
             "expected_business_fields": sorted(prepared_fields(plan)),
             "payload": plan,
         }
-        path = self.job_dir(job_id) / "prepared.json"
+        path = path or self.job_dir(job_id) / "prepared.json"
         self.atomic(path, wrapper)
         return str(path)
 
+    def _read_plan_wrapper(self, job):
+        expected = self.job_dir(job["job_id"]) / "prepared.json"
+        if not job.get("plan_path") or Path(job["plan_path"]).resolve() != expected:
+            raise ValueError("Unexpected prepared plan path")
+        return self.read_json(expected)
+
     def read_plan(self, job):
         """核对任务绑定、清单结构和清理范围后，返回可重放的写入计划。"""
-        expected_path = self.job_dir(job["job_id"]) / "prepared.json"
         try:
-            if not job.get("plan_path") or Path(job["plan_path"]).resolve() != expected_path:
-                raise ValueError("Unexpected prepared plan path")
-            wrapper = json.loads(expected_path.read_text("utf-8"))
+            wrapper = self._read_plan_wrapper(job)
             if not isinstance(wrapper, dict):
                 raise ValueError("Prepared wrapper must be an object")
             version = wrapper.get("schema_version")
@@ -175,13 +199,15 @@ class Files:
 
             validate_prepared_mutation(plan, job)
             allowed_cleanup = {
-                self.path("raw", plan["kb_id"], document_id) for document_id in plan["delete_documents"]
+                self.raw_directory(plan["kb_id"], document_id) for document_id in plan["delete_documents"]
             }
             allowed_cleanup |= {self.job_dir(job_id) for job_id in plan["cleanup_job_ids"]}
-            if any(Path(path).resolve() not in allowed_cleanup for path in plan["cleanup_paths"]):
+            if any(self._cleanup_target(path) not in allowed_cleanup for path in plan["cleanup_paths"]):
                 raise ValueError("Cleanup path does not belong to the explicit deletion plan")
             return plan
         except (OSError, ValueError, KeyError, TypeError, KGError) as exc:
+            if isinstance(exc, KGError) and exc.code == "OBJECT_STORE_UNAVAILABLE":
+                raise
             raise KGError(
                 "PLAN_INVALID", "Prepared plan is missing or structurally invalid", 503, retryable=False
             ) from exc

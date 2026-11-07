@@ -180,18 +180,51 @@ def _atomic_statement(
     return statement, supports
 
 
-def align(
-    doc, extracted, chunks, model, state, job_id, existing_entities, existing_relations, rule_context=None
+def _relation_identity(candidate, definition, source, target):
+    values = candidate.get("properties", {})
+    if any(field not in values for field in definition.identity_properties):
+        raise KGError("MISSING_IDENTITY", "Relation is missing an identity property")
+    return {
+        "source_id": source["id"],
+        "target_id": target["id"],
+        "relation_type": candidate["type"],
+        "fields": {field: values[field] for field in definition.identity_properties},
+    }
+
+
+async def align(
+    doc,
+    extracted,
+    chunks,
+    model,
+    state,
+    job_id,
+    existing_entities,
+    existing_relations,
+    rule_context=None,
+    *,
+    graph=None,
 ):
     """按业务身份对齐候选并生成来源贡献，将无法采用的候选单独记录。
 
     实体贡献先暂存；仅供关系端点使用的不完整实体须有成功采用的关系才保留。
     """
+    if graph is not None:
+        keys = set()
+        for candidate in extracted["entities"]:
+            definition = model.node_types.get(candidate["type"])
+            if definition is not None:
+                try:
+                    identity = identity_value(definition, candidate["properties"], doc["document_id"])
+                    keys.add((candidate["type"], canonical(identity)))
+                except KGError:
+                    # 正常对齐阶段会记录无法构造可靠身份的候选。
+                    continue
+        existing_entities = await graph.by_identity(doc["kb_id"], "entity", sorted(keys))
+
     entity_identities, relation_identities = defaultdict(set), defaultdict(set)
     for entity in existing_entities:
         entity_identities[(entity["entity_type"], canonical(entity["identity"]))].add(entity["entity_id"])
-    for relation in existing_relations:
-        relation_identities[canonical(relation["identity"])].add(relation["relation_id"])
     identities = state.setdefault("entity_ids", {})
     relation_ids = state.setdefault("relation_ids", {})
     contribution_ids = state.setdefault("contribution_ids", {})
@@ -376,6 +409,21 @@ def align(
         except KGError as exc:
             issue(candidate, exc)
 
+    # 关系身份依赖已校验的端点 ID，实体对齐结束后再批量匹配。
+    if graph is not None:
+        keys = set()
+        for candidate in extracted["relations"]:
+            definition = model.relation_types.get(candidate["type"])
+            source, target = refs.get(candidate["source_ref"]), refs.get(candidate["target_ref"])
+            if definition and source and target:
+                try:
+                    keys.add(validate_identity_key(_relation_identity(candidate, definition, source, target)))
+                except KGError:
+                    continue
+        existing_relations = await graph.by_identity(doc["kb_id"], "relation", sorted(keys))
+    for relation in existing_relations:
+        relation_identities[canonical(relation["identity"])].add(relation["relation_id"])
+
     # 关系只使用已通过身份与证据检查的本地实体引用。
     used_refs = set()
     for candidate in extracted["relations"]:
@@ -401,14 +449,7 @@ def align(
                     )
                 if field in values:
                     check_value(values[field], prop)
-            if any(field not in values for field in definition.identity_properties):
-                raise KGError("MISSING_IDENTITY", "Relation is missing an identity property")
-            identity = {
-                "source_id": source["id"],
-                "target_id": target["id"],
-                "relation_type": candidate["type"],
-                "fields": {field: values[field] for field in definition.identity_properties},
-            }
+            identity = _relation_identity(candidate, definition, source, target)
             key = validate_identity_key(identity)
             existing = relation_identities[key]
             if len(existing) > 1:

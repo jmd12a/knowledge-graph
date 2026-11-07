@@ -106,7 +106,7 @@ async def evaluate(evidence):
             required=True,
         )
 
-        await api.mutation("boundary.retry.prepare", "POST", f"/jobs/{job_id}/retry")
+        await api.retry_job("boundary.retry.prepare", job_id)
         hold = str(uuid4())
         runtime.start_worker("--job-id", job_id, "--hold-prepared", hold)
         await runtime.wait_file(e.directory / "controls" / (hold + ".entered.json"))

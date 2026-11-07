@@ -1,3 +1,3 @@
-from .sqlite import Metadata
+from .postgres import Metadata
 
 __all__ = ["Metadata"]

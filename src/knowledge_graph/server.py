@@ -34,6 +34,8 @@ def create_app(context=None):
         try:
             # 进程锁与 MCP 会话管理器覆盖整个应用运行期。
             async with context.gate.server():
+                if await context.metadata.ready():
+                    await context.check_storage_mode()
                 async with mcp.session_manager.run():
                     yield
         finally:

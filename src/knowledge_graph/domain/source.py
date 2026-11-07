@@ -60,7 +60,7 @@ class ParsedDocument(TypedDict):
 class VectorPoint(TypedDict):
     id: str
     payload: dict[str, Any]
-    vector: list[float]
+    vector: list[float] | None
 
 
 class ScanPage(TypedDict):

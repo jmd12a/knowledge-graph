@@ -12,6 +12,7 @@ from pydantic import Field, StrictBool, StrictInt, ValidationError
 from ...domain import KGError, StrictModel, canonical
 from ...domain.model import identity_value
 from ...prompts.extraction import EXTRACTION_SYSTEM, RULE_ASSEMBLY_SYSTEM
+from .extraction_batches import ExtractionBatch, chapter_groups
 from .source_references import evidence_positions as evidence_positions
 from .source_references import origin_key, unit_visible_parts, units_by_chunk
 from .source_references import verify_evidence as verify_evidence
@@ -459,63 +460,55 @@ def _plan_scopes(language, chunks, context, model_data, schema):
         selected = set().union(*(index[chunk_id] for chunk_id in group))
         return [context[position] for position in sorted(selected)]
 
-    groups, batch = [], {}
-    for chunk_id, chunk in chunks.items():
-        proposed = batch | {chunk_id: chunk}
-        scope = _scope(proposed, local_context(proposed))
-        request = {
-            "business_model": model_data,
-            "chunks": list(proposed.values()),
-            "rule_units": scope["unit_views"],
-        }
-        if language.json_request_chars(EXTRACTION_SYSTEM, request, schema) > language.profile.max_input_chars:
-            if not batch:
-                raise KGError(
-                    "MODEL_INPUT_TOO_LARGE", "One source chunk and model exceed the extraction budget"
-                )
+    def fits(group, scope):
+        request = ExtractionBatch(scope, group, model_data).request
+        return language.json_request_chars(EXTRACTION_SYSTEM, request, schema) <= language.profile.max_input_chars
+
+    # 单批能容纳全文时保留跨章节上下文；长文档再按章节独立装箱。
+    if sum(len(chunk["text"]) for chunk in chunks.values()) <= language.profile.max_input_chars:
+        whole = _scope(chunks, context, key="batch/0")
+        if fits(chunks, whole):
+            return [whole]
+
+    groups = []
+    for chapter in chapter_groups(chunks):
+        batch = {}
+        for chunk_id, chunk in chapter.items():
+            proposed = batch | {chunk_id: chunk}
+            if fits(proposed, _scope(proposed, local_context(proposed))):
+                batch = proposed
+            else:
+                if not batch:
+                    raise KGError(
+                        "MODEL_INPUT_TOO_LARGE", "One source chunk and model exceed the extraction budget"
+                    )
+                groups.append(batch)
+                batch = {chunk_id: chunk}
+        if batch:
             groups.append(batch)
-            batch = {chunk_id: chunk}
-        else:
-            batch = proposed
-    if batch:
-        groups.append(batch)
-    # Include complete boundary units when they fit. Shared chunks may appear in
-    # adjacent batches; persisted per-call scopes still define evidence authority.
+
+    # 边界处的规则单元需要更多原文时，仍尽量带齐它的切片。
+    scopes = []
     for position, group in enumerate(groups):
         for unit in local_context(group):
             required = {ref["chunk_id"]: chunks[ref["chunk_id"]] for ref in unit["evidence"]}
             if required.keys() <= group.keys():
                 continue
             proposed = group | required
-            scope = _scope(proposed, local_context(proposed))
-            request = {
-                "business_model": model_data,
-                "chunks": list(proposed.values()),
-                "rule_units": scope["unit_views"],
-            }
-            if (
-                language.json_request_chars(EXTRACTION_SYSTEM, request, schema)
-                <= language.profile.max_input_chars
-            ):
+            if fits(proposed, _scope(proposed, local_context(proposed))):
                 group = proposed
-        groups[position] = group
-    scopes = [
-        _scope(group, local_context(group), key="batch/" + str(index)) for index, group in enumerate(groups)
-    ]
-    for scope in scopes:
-        request = {
-            "business_model": model_data,
-            "chunks": [chunks[key] for key in scope["input_chunk_ids"]],
-            "rule_units": scope["unit_views"],
-        }
-        if language.json_request_chars(EXTRACTION_SYSTEM, request, schema) > language.profile.max_input_chars:
+        scope = _scope(group, local_context(group), key=f"batch/{position}")
+        if not fits(group, scope):
             raise KGError("MODEL_INPUT_TOO_LARGE", "Source context exceeds the extraction budget")
+        scopes.append(scope)
     return scopes
 
 
-async def extract_text(language, parsed, model, checkpoint, persist):
+async def extract_text(language, parsed, model, checkpoint, persist, *, reuse=None):
     """按持久化输入范围分批抽取，复用已校验的批次结果并组装完整规则。"""
-    context = parsed.setdefault("rule_units", build_rule_context(parsed))
+    if "rule_units" not in parsed:
+        parsed["rule_units"] = build_rule_context(parsed)
+    context = parsed["rule_units"]
     chunks = {chunk["chunk_id"]: chunk for chunk in parsed["chunks"]}
     schema, model_data = Extraction.model_json_schema(), model.model_dump()
 
@@ -532,12 +525,12 @@ async def extract_text(language, parsed, model, checkpoint, persist):
             scopes = [_scope(chunks, context, key="batch/0")]
         else:
             scopes = _plan_scopes(language, chunks, context, model_data, schema)
-        checkpoint["_input_scopes"] = {"version": 1, "batches": scopes}
+        checkpoint["_input_scopes"] = {"version": 1 if cached else 2, "batches": scopes}
         await persist()
     else:
         if (
             not isinstance(saved, dict)
-            or saved.get("version") != 1
+            or saved.get("version") not in (1, 2)
             or not isinstance(saved.get("batches"), list)
         ):
             raise KGError(
@@ -560,14 +553,16 @@ async def extract_text(language, parsed, model, checkpoint, persist):
     if {key for key in checkpoint if key.startswith("batch/")} - expected_batches:
         raise KGError("PREPARATION_SCOPE_UNAVAILABLE", "A cached model response lacks its saved input scope")
 
+    local_refs = checkpoint["_input_scopes"]["version"] == 2
+    reuse = {} if reuse is None else reuse
     combined = {"entities": [], "relations": []}
     for index, scope in enumerate(scopes):
-        _check_scope(scope, chunks, context)
         key = scope.get("key")
         if key != "batch/" + str(index):
             raise KGError("PREPARATION_SCOPE_UNAVAILABLE", "Saved extraction batch ownership is inconsistent")
+        batch = ExtractionBatch(scope, chunks, model_data) if local_refs else None
         if key not in checkpoint:
-            request = {
+            request = batch.request if batch else {
                 "business_model": model_data,
                 "chunks": [chunks[item] for item in scope["input_chunk_ids"]],
                 "rule_units": scope["unit_views"],
@@ -579,14 +574,27 @@ async def extract_text(language, parsed, model, checkpoint, persist):
                 raise KGError(
                     "MODEL_INPUT_TOO_LARGE", "The saved model input exceeds the current request budget"
                 )
-            checkpoint[key] = _validate_output(
-                await language.json(EXTRACTION_SYSTEM, request, schema), "Extraction"
+            request_key = batch.request_key(language, EXTRACTION_SYSTEM, schema) if batch else None
+            result = reuse.get(request_key)
+            reused = result is not None
+            if not reused:
+                result = await language.json(EXTRACTION_SYSTEM, request, schema)
+            result = _validate_output(result, "Extraction")
+            checkpoint[key] = (
+                {"request_key": request_key, "result": result, "reused": reused} if batch else result
             )
             await persist()
-        data = _validate_output(checkpoint[key], "Checkpoint extraction")
-        data = await _repair_evidence(
+        saved_batch = checkpoint[key]
+        data = _validate_output(saved_batch["result"] if batch else saved_batch, "Checkpoint extraction")
+        if batch:
+            data, all_known = batch.bind(data)
+        repaired = await _repair_evidence(
             language, data, scope, chunks, context, model_data, schema, checkpoint, persist
         )
+        if batch and all_known and repaired is data:
+            saved_batch["reusable"] = True
+            reuse[saved_batch["request_key"]] = saved_batch["result"]
+        data = repaired
         authorization = {field: list(scope[field]) for field in ("input_chunk_ids", "input_unit_keys")}
         # 局部引用加批次前缀，避免不同调用中同名 ref 相互连接。
         namespace = key + "/"

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+from hashlib import sha256
 import math
 import re
 from collections import Counter
@@ -13,7 +14,18 @@ from qdrant_client.http.exceptions import ResponseHandlingException, UnexpectedR
 
 from qdrant_client import AsyncQdrantClient, models
 
-from ...domain import EmbeddingProfile, KGError, valid_id
+from ...domain import EmbeddingProfile, KGError, canonical, valid_id
+
+
+_REUSE_FIELD = "_embedding_key"
+
+
+def _embedding_key(text, profile):
+    return sha256(canonical([text, profile]).encode("utf-8")).hexdigest()
+
+
+def _business_payload(payload):
+    return {key: value for key, value in payload.items() if key != _REUSE_FIELD}
 
 
 def storage_request(function):
@@ -51,7 +63,7 @@ class Vectors:
 
     @staticmethod
     def collection(kb_id, kind):
-        if kind not in {"objects", "chunks"}:
+        if kind not in {"objects", "chunks", "chunk_vectors"}:
             raise KGError("INVALID_ARGUMENT", "Unknown vector collection kind")
         return "kg_" + valid_id(kb_id).replace("-", "_") + "_" + kind
 
@@ -61,42 +73,40 @@ class Vectors:
 
     @storage_request
     async def ensure(self, kb_id, profile_data, recreate=False):
-        """按有效向量配置创建或重建两类集合，并核对已有集合的向量空间。"""
+        """正文点与代表向量分开建集合，证据切片仍按原 ID 读取。"""
         profile = EmbeddingProfile.model_validate(profile_data)
-        for kind in ("objects", "chunks"):
+        for kind in ("objects", "chunks", "chunk_vectors"):
             name = self.collection(kb_id, kind)
             exists = await self.client.collection_exists(name)
             if exists and recreate:
                 await self.client.delete_collection(name)
                 exists = False
+            vectors = {} if kind == "chunks" else models.VectorParams(
+                size=profile.dimension, distance=models.Distance(profile.distance)
+            )
             if not exists:
-                await self.client.create_collection(
-                    name,
-                    vectors_config=models.VectorParams(
-                        size=profile.dimension, distance=models.Distance(profile.distance)
-                    ),
+                await self.client.create_collection(name, vectors_config=vectors)
+                fields = ("kb_id", "document_id", "domain_ids", _REUSE_FIELD) if kind == "chunks" else (
+                    ("kb_id", "entity_type", "domain_ids", "object_id", _REUSE_FIELD)
+                    if kind == "objects" else ("kb_id", _REUSE_FIELD)
                 )
-                for field in ("kb_id", "document_id", "entity_type", "domain_ids", "object_id"):
+                for field in fields:
+                    await self.client.create_payload_index(name, field, models.PayloadSchemaType.KEYWORD, wait=True)
+                if kind == "chunks":
                     await self.client.create_payload_index(
-                        name, field, models.PayloadSchemaType.KEYWORD, wait=True
+                        name, "text", models.TextIndexParams(type="text", tokenizer=models.TokenizerType.MULTILINGUAL),
+                        wait=True,
                     )
-                await self.client.create_payload_index(
-                    name,
-                    "text" if kind == "chunks" else "search_text",
-                    models.TextIndexParams(type="text", tokenizer=models.TokenizerType.MULTILINGUAL),
-                    wait=True,
-                )
 
             info = await self.client.get_collection(name)
             config = info.config.params.vectors
-            if (
-                not isinstance(config, models.VectorParams)
-                or config.size != profile.dimension
-                or config.distance != models.Distance(profile.distance)
-            ):
-                raise KGError(
-                    "INDEX_PROFILE_MISMATCH", "Collection does not match the effective embedding profile", 503
-                )
+            matches = config == {} if kind == "chunks" else (
+                isinstance(config, models.VectorParams)
+                and config.size == profile.dimension
+                and config.distance == models.Distance(profile.distance)
+            )
+            if not matches:
+                raise KGError("INDEX_PROFILE_MISMATCH", "Collection does not match the effective embedding profile", 503)
 
     @staticmethod
     def filter(kb_id, *, document_ids=None, entity_types=None, domain_ids=None):
@@ -114,17 +124,25 @@ class Vectors:
     async def scan(self, kb_id, kind, *, limit, offset=None, with_vectors=False, document_ids=None):
         if isinstance(limit, bool) or not isinstance(limit, int) or not 1 <= limit <= 10000:
             raise KGError("INVALID_ARGUMENT", "Vector scan limit must be between 1 and 10000")
-        if not await self.exists(kb_id, kind):
+        name = self.collection(kb_id, kind)
+        if not await self.client.collection_exists(name):
             return {"items": [], "next_offset": None, "complete": True, "scanned": 0}
+        selection = self.filter(kb_id, document_ids=document_ids)
+        return await self._scan_page(name, kind, selection, limit, offset, with_vectors)
+
+    async def _scan_page(self, name, kind, selection, limit, offset, with_vectors):
         points, next_offset = await self.client.scroll(
-            self.collection(kb_id, kind),
-            scroll_filter=self.filter(kb_id, document_ids=document_ids),
+            name,
+            scroll_filter=selection,
             limit=limit,
             offset=offset,
             with_payload=True,
             with_vectors=with_vectors,
         )
-        items = [{"id": str(point.id), "payload": point.payload, "vector": point.vector} for point in points]
+        items = [
+            {"id": str(point.id), "payload": _business_payload(point.payload), "vector": None if kind == "chunks" else point.vector}
+            for point in points
+        ]
         return {
             "items": items,
             "next_offset": str(next_offset) if next_offset is not None else None,
@@ -137,15 +155,14 @@ class Vectors:
         """在维护预算内读取完整集合，达到边界时额外探测以避免误报完整。"""
         if isinstance(max_points, bool) or not isinstance(max_points, int) or max_points < 1:
             raise KGError("INVALID_ARGUMENT", "A positive complete-scan point budget is required")
+        name = self.collection(kb_id, kind)
+        if not await self.client.collection_exists(name):
+            return []
+        selection = self.filter(kb_id, document_ids=document_ids)
         result, offset = [], None
         while len(result) < max_points:
-            page = await self.scan(
-                kb_id,
-                kind,
-                limit=min(256, max_points - len(result)),
-                offset=offset,
-                with_vectors=with_vectors,
-                document_ids=document_ids,
+            page = await self._scan_page(
+                name, kind, selection, min(256, max_points - len(result)), offset, with_vectors
             )
             result.extend(page["items"])
             if page["complete"]:
@@ -153,9 +170,7 @@ class Vectors:
             offset = page["next_offset"]
 
         # 正好达到上限不代表集合已读完，探测下一条后才能宣告完整。
-        probe = await self.scan(
-            kb_id, kind, limit=1, offset=offset, with_vectors=False, document_ids=document_ids
-        )
+        probe = await self._scan_page(name, kind, selection, 1, offset, False)
         if not probe["items"] and probe["complete"]:
             return result
         raise KGError(
@@ -169,7 +184,7 @@ class Vectors:
         )
 
     @storage_request
-    async def read(self, kb_id, kind, ids):
+    async def read(self, kb_id, kind, ids, *, with_vectors=False):
         if not ids or not await self.exists(kb_id, kind):
             return []
         points = []
@@ -181,47 +196,140 @@ class Vectors:
                     self.collection(kb_id, kind),
                     ids=ids[start : start + 256],
                     with_payload=True,
-                    with_vectors=False,
+                    with_vectors=with_vectors,
                 )
             )
-        return [{"id": str(p.id), "payload": p.payload} for p in points if p.payload.get("kb_id") == kb_id]
+        return [
+            {
+                "id": str(p.id),
+                "payload": _business_payload(p.payload),
+                **({"vector": None if kind == "chunks" else p.vector} if with_vectors else {}),
+            }
+            for p in points
+            if p.payload.get("kb_id") == kb_id
+        ]
+
+    @storage_request
+    async def count(self, kb_id, kind, *, document_ids=None):
+        if not await self.exists(kb_id, kind):
+            return 0
+        return (
+            await self.client.count(
+                self.collection(kb_id, kind),
+                count_filter=self.filter(kb_id, document_ids=document_ids),
+                exact=True,
+            )
+        ).count
+
+    async def _exact_vectors(self, kb_id, kind, texts, profile):
+        if not texts or not await self.exists(kb_id, kind):
+            return {}
+        found = {}
+        text_field = "search_text" if kind == "objects" else "text"
+        dense = kind != "chunks"
+        for start in range(0, len(texts), 64):
+            batch = texts[start:start + 64]
+            requests = [
+                models.QueryRequest(
+                    filter=models.Filter(must=[
+                        models.FieldCondition(key="kb_id", match=models.MatchValue(value=kb_id)),
+                        models.FieldCondition(
+                            key=_REUSE_FIELD, match=models.MatchValue(value=_embedding_key(text, profile))
+                        ),
+                    ]),
+                    limit=1, with_vector=dense, with_payload=True,
+                )
+                for text in batch
+            ]
+            responses = await self.client.query_batch_points(self.collection(kb_id, kind), requests=requests)
+            for text, response in zip(batch, responses, strict=True):
+                for point in response.points:
+                    if (
+                        point.payload.get(text_field) == text
+                        and point.payload.get("embedding_profile") == profile
+                        and (not dense or point.vector is not None)
+                    ):
+                        found[text] = {
+                            "id": str(point.id), "payload": _business_payload(point.payload), "vector": point.vector,
+                        }
+        return found
+
+    @storage_request
+    async def exact_chunk_vectors(self, kb_id, texts, profile):
+        return await self._exact_vectors(kb_id, "chunk_vectors", texts, profile)
+
+    @storage_request
+    async def exact_source_chunks(self, kb_id, texts, profile):
+        return await self._exact_vectors(kb_id, "chunks", texts, profile)
+
+    @storage_request
+    async def reusable_vectors(self, kb_id, texts, profile):
+        chunks = await self._exact_vectors(kb_id, "chunk_vectors", texts, profile)
+        objects = await self._exact_vectors(kb_id, "objects", [text for text in texts if text not in chunks], profile)
+        return {text: point["vector"] for text, point in (chunks | objects).items()}
+
+    @storage_request
+    async def near_chunk_vectors(self, kb_id, points, threshold):
+        if not points or not await self.exists(kb_id, "chunk_vectors"):
+            return {}
+        found = {}
+        for start in range(0, len(points), 64):
+            batch = points[start:start + 64]
+            requests = [
+                models.QueryRequest(
+                    query=point["vector"], filter=self.filter(kb_id), score_threshold=threshold,
+                    limit=3, with_payload=True, with_vector=True,
+                )
+                for point in batch
+            ]
+            responses = await self.client.query_batch_points(self.collection(kb_id, "chunk_vectors"), requests=requests)
+            for point, response in zip(batch, responses, strict=True):
+                found[point["id"]] = [
+                    {"id": str(hit.id), "payload": _business_payload(hit.payload), "vector": hit.vector}
+                    for hit in response.points
+                ]
+        return found
 
     @storage_request
     async def upsert(self, kb_id, kind, points):
-        """先校验全部点的知识库与维度，再分批写入并确认每批完成。"""
+        """正文点写载荷，向量点写已校验的向量与复用键。"""
         if not points:
             return
-        info = await self.client.get_collection(self.collection(kb_id, kind))
-        dimension = info.config.params.vectors.size
+        name = self.collection(kb_id, kind)
+        dense = kind != "chunks"
+        dimension = None
+        if dense:
+            info = await self.client.get_collection(name)
+            dimension = info.config.params.vectors.size
+        text_field = "search_text" if kind == "objects" else "text"
+        batch = []
         for point in points:
             valid_id(point["id"])
-            if point["payload"].get("kb_id") != kb_id:
+            payload = point["payload"]
+            if payload.get("kb_id") != kb_id:
                 raise KGError("INVALID_ARGUMENT", "Index point belongs to another knowledge base")
-            profile = EmbeddingProfile.model_validate(point["payload"].get("embedding_profile"))
-            if (
-                profile.dimension != dimension
-                or len(point["vector"]) != dimension
-                or any(
-                    isinstance(value, bool) or not isinstance(value, (float, int)) or not math.isfinite(value)
-                    for value in point["vector"]
-                )
-            ):
-                raise KGError("INVALID_ARGUMENT", "Index vector does not match the collection dimension")
+            vector = point["vector"]
+            if dense:
+                profile = EmbeddingProfile.model_validate(payload["embedding_profile"])
+                if (
+                    not isinstance(vector, list) or profile.dimension != dimension or len(vector) != dimension
+                    or any(isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v) for v in vector)
+                ):
+                    raise KGError("INVALID_ARGUMENT", "Index vector does not match the collection dimension")
+            elif vector is not None:
+                raise KGError("INVALID_ARGUMENT", "Source chunks store payload only")
+            payload = payload | {_REUSE_FIELD: _embedding_key(payload[text_field], payload["embedding_profile"])}
+            batch.append(models.PointStruct(id=point["id"], vector=vector if dense else {}, payload=payload))
 
-        # 全量校验通过后才开始副作用；每批都要求服务端确认完成。
-        for start in range(0, len(points), 100):
-            batch = points[start : start + 100]
-            ack = await self.client.upsert(
-                self.collection(kb_id, kind), [models.PointStruct(**p) for p in batch], wait=True
-            )
+        for start in range(0, len(batch), 100):
+            ack = await self.client.upsert(name, batch[start:start + 100], wait=True)
             if ack.status != models.UpdateStatus.COMPLETED:
                 raise KGError("UPSTREAM_UNAVAILABLE", "Qdrant did not confirm the write", 503, retryable=True)
 
     @storage_request
     async def delete(self, kb_id, kind, ids=None, document_ids=None, all_points=False):
         """按显式 ID 或范围删除，并要求存储确认删除完成。"""
-        if not await self.exists(kb_id, kind):
-            return
+        name = self.collection(kb_id, kind)
         if ids is not None:
             if not ids:
                 return
@@ -231,12 +339,14 @@ class Vectors:
                 return
             selector = models.FilterSelector(filter=self.filter(kb_id, document_ids=document_ids))
 
-        ack = await self.client.delete(self.collection(kb_id, kind), selector, wait=True)
+        if not await self.client.collection_exists(name):
+            return
+        ack = await self.client.delete(name, selector, wait=True)
         if ack.status != models.UpdateStatus.COMPLETED:
             raise KGError("UPSTREAM_UNAVAILABLE", "Qdrant did not confirm deletion", 503, retryable=True)
 
     @storage_request
-    async def search(self, kb_id, kind, vector, limit, filters):
+    async def search(self, kb_id, kind, vector, limit, filters, *, point_ids=None):
         if isinstance(limit, bool) or not isinstance(limit, int) or not 1 <= limit <= 10000:
             raise KGError("INVALID_ARGUMENT", "Invalid vector candidate budget")
         if any(
@@ -249,20 +359,21 @@ class Vectors:
         info = await self.client.get_collection(self.collection(kb_id, kind))
         if len(vector) != info.config.params.vectors.size:
             raise KGError("INDEX_PROFILE_MISMATCH", "Query vector dimension differs from the collection", 503)
+        scope = self.filter(
+            kb_id,
+            entity_types=filters.entity_types if kind == "objects" else None,
+            domain_ids=filters.domain_ids if kind == "objects" else None,
+        )
+        if point_ids is not None:
+            if not point_ids:
+                return []
+            scope.must.append(models.HasIdCondition(has_id=point_ids))
         result = await self.client.query_points(
-            self.collection(kb_id, kind),
-            query=vector,
-            query_filter=self.filter(
-                kb_id,
-                document_ids=filters.document_ids if kind == "chunks" else None,
-                entity_types=filters.entity_types if kind == "objects" else None,
-                domain_ids=filters.domain_ids,
-            ),
-            limit=limit,
-            with_payload=True,
+            self.collection(kb_id, kind), query=vector, query_filter=scope, limit=limit, with_payload=True,
         )
         return [
-            {"id": str(point.id), "payload": point.payload, "score": point.score} for point in result.points
+            {"id": str(point.id), "payload": _business_payload(point.payload), "score": point.score}
+            for point in result.points
         ]
 
     @storage_request
@@ -303,6 +414,6 @@ class Vectors:
                 if tf:
                     idf = inverse_document_frequency[term]
                     score += idf * tf * 2.2 / (tf + 1.2 * (0.25 + 0.75 * length / max(average, 1)))
-            ranked.append({"id": str(point.id), "payload": point.payload, "score": score})
+            ranked.append({"id": str(point.id), "payload": _business_payload(point.payload), "score": score})
         ranked.sort(key=lambda hit: (-hit["score"], hit["id"]))
         return ranked, truncated

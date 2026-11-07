@@ -116,6 +116,50 @@ class Graph:
     def _filters(entity_types, domain_ids, document_ids):
         return {"types": entity_types or [], "domains": domain_ids or [], "documents": document_ids or []}
 
+    async def by_id(self, kb_id, kind, ids):
+        if not ids:
+            return []
+        query = (
+            "UNWIND $keys AS id MATCH (n:KGEntity {kb_id:$kb,entity_id:id}) RETURN n.data_json AS data"
+            if kind == "entity"
+            else "UNWIND $keys AS id MATCH ()-[r:KG_REL {kb_id:$kb,relation_id:id}]->() RETURN r.data_json AS data"
+        )
+        rows = await self._run(query, kb=kb_id, keys=sorted(set(ids)))
+        return [json.loads(row["data"]) for row in rows]
+
+    async def by_identity(self, kb_id, kind, keys):
+        if not keys:
+            return []
+        query = (
+            "UNWIND $keys AS key MATCH (n:KGEntity {kb_id:$kb,entity_type:key[0],identity_key:key[1]})"
+            " RETURN n.data_json AS data"
+            if kind == "entity"
+            else "UNWIND $keys AS key MATCH ()-[r:KG_REL {kb_id:$kb,relation_key:key}]->() RETURN r.data_json AS data"
+        )
+        rows = await self._run(query, kb=kb_id, keys=list(keys))
+        return [json.loads(row["data"]) for row in rows]
+
+    async def relation_groups(self, kb_id, groups):
+        if not groups:
+            return []
+        rows = await self._run(
+            "UNWIND $groups AS item MATCH (a:KGEntity {kb_id:$kb,entity_id:item[0]})"
+            "-[r:KG_REL {kb_id:$kb,relation_type:item[1]}]->(:KGEntity {kb_id:$kb})"
+            " RETURN r.data_json AS data",
+            kb=kb_id,
+            groups=groups,
+        )
+        return [json.loads(row["data"]) for row in rows]
+
+    async def counts(self, kb_id):
+        rows = await self._run(
+            "MATCH (n:KGEntity {kb_id:$kb}) WITH count(n) AS total RETURN 'entities' AS kind,total "
+            "UNION ALL MATCH ()-[r:KG_REL {kb_id:$kb}]->() "
+            "WITH count(r) AS total RETURN 'relations' AS kind,total",
+            kb=kb_id,
+        )
+        return {row["kind"]: row["total"] for row in rows}
+
     async def candidates(
         self, kb_id, text, scan_limit, entity_types=None, domain_ids=None, document_ids=None
     ):

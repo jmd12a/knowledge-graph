@@ -2,6 +2,11 @@
 # Alternatively, set KG_ENV_FILE in the process environment to an explicit .env path.
 # Set actual values locally; never commit the credential file.
 # OPENROUTER_API_KEY=
+# POSTGRES_DSN=postgresql://kg:password@127.0.0.1:5432/knowledge_graph
+# Required only when worker_distribution is enabled.
+# REDIS_URL=redis://127.0.0.1:6379/0
+# MINIO_ACCESS_KEY=
+# MINIO_SECRET_KEY=
 # NEO4J_PASSWORD=
 # QDRANT_API_KEY=
 # KG_CONFIG=/srv/knowledge-graph/configs/app.local.yaml

@@ -78,3 +78,13 @@
 第二条会调用真实模型。使用[OpenRouter 配置示例](../examples/contracts/openrouter-quality.yaml)中的语言、向量和检索配置，并提供 `OPENROUTER_API_KEY` 环境变量；密钥不写入版本控制。完整配置和运行准备见[合同示例说明](../examples/contracts/README.md)。
 
 新代码或配置运行使用新 UUID，不覆盖当前保留档案。最新一轮采用完整冻结原文，模型与向量化都走 OpenRouter；结果和三次未通过查询见[最新验证证据](published/README.md)。
+
+## 分布式 Worker 故障验收
+
+为评测准备独立的 PostgreSQL 数据库、Redis、无版本历史的 MinIO 私有桶及 Neo4j、Qdrant 环境。配置方式见[运行指南](../docs/03-使用与验证/运行指南.md)。使用隔离配置运行机制用例：
+
+```bash
+.venv/bin/python -m evals.distributed_worker --config /path/to/test-app.yaml
+```
+
+用例创建两个临时知识库和独立的 Stream。它启动一个独立准备进程，在保存草稿后终止该进程，验证另一 Worker 复用草稿，并检查同库队头、写入计划重放、原文下载和迟到的条件 PUT。抽取与向量使用固定测试响应，存储与队列连接真实服务。

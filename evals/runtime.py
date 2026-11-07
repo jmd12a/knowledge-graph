@@ -274,6 +274,14 @@ class API:
         result = await self.request(method, path, expected=202, **kwargs)
         return self._remember(action, request, result)
 
+    async def retry_job(self, action, job_id):
+        prefix = f"/jobs/{job_id}/retry?generation="
+        saved_path = self.e.state["actions"].get(action, {}).get("request", {}).get("path", "")
+        if saved_path.startswith(prefix):
+            return await self.mutation(action, "POST", saved_path)
+        job = await self.request("GET", f"/jobs/{job_id}")
+        return await self.mutation(action, "POST", prefix + str(job["retry_generation"]))
+
     async def paid_request(self, action, path, body):
         request = {"method": "POST", "path": path, "body": body}
         reused = self._reuse(action, request)
@@ -346,7 +354,7 @@ class API:
                     },
                 )
                 return value
-            if value["state"] in {"PREPARE_FAILED", "INVALIDATED"} or (
+            if value["state"] in {"PREPARE_FAILED", "CLEANUP_FAILED", "INVALIDATED"} or (
                 value["attempt"] >= 3 and value["state"] in {"NEEDS_REPAIR", "PREPARED"}
             ):
                 if allow_failure:

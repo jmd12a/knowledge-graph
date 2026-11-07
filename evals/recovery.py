@@ -101,9 +101,7 @@ async def run(runtime):
                 evidence=api.last_record,
                 required=True,
             )
-            retried = await api.mutation(
-                "recovery.manual_retry." + str(index), "POST", f"/jobs/{job_id}/retry"
-            )
+            retried = await api.retry_job("recovery.manual_retry." + str(index), job_id)
             e.check(
                 "HTTP manual retry retains prepared IDs " + str(index),
                 retried["attempt"] == 0

@@ -1,4 +1,4 @@
-"""Real HTTP, files, SQLite and model-backed mapping migration regressions from final review."""
+"""Real HTTP, files, PostgreSQL and model-backed mapping migration regressions from final review."""
 
 from __future__ import annotations
 

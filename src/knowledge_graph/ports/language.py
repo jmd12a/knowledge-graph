@@ -10,6 +10,7 @@ class LanguagePort(Protocol):
 
     profile: LanguageProfile
 
+    async def chunk_coverage(self, old: dict, new: dict, model: str) -> tuple[bool, bool]: ...
     async def close(self) -> None: ...
     def json_request_chars(self, system: str, data: dict, schema: dict | None = None) -> int:
         """Pure first-request character count, identical to the adapter's send-time budget measure."""

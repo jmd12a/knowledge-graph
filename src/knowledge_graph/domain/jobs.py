@@ -11,7 +11,9 @@ from .source import Contribution, VectorPoint, validate_stored_evidence
 
 SUCCESS_STATES = {"SUCCEEDED", "SUCCEEDED_WITH_WARNINGS"}
 # 队首未完成任务占据知识库维护顺序；正式写入后的状态必须优先修复。
-HEAD_STATES = {"PREPARING", "PREPARED", "DRAINING", "APPLYING", "VERIFYING", "NEEDS_REPAIR"}
+HEAD_STATES = {
+    "PREPARING", "PREPARED", "DRAINING", "APPLYING", "VERIFYING", "NEEDS_REPAIR", "CLEANING", "CLEANUP_FAILED",
+}
 WRITE_STATES = {"APPLYING", "VERIFYING", "NEEDS_REPAIR"}
 
 
@@ -33,6 +35,7 @@ class Job(TypedDict):
     updated_at: str
     next_attempt_at: float
     cleanup_pending: int
+    retry_generation: int
     input_json: NotRequired[str]
 
 
@@ -44,8 +47,31 @@ class MutationWriteSet(StrictModel):
     contribution_document_ids: list[str]
 
 
+class VerificationScope(StrictModel):
+    endpoint_ids: list[str]
+    evidence_chunk_ids: list[str]
+    relation_groups: list[list[str]]
+
+
+class ChunkVectorMember(StrictModel):
+    kb_id: str
+    chunk_id: str
+    document_id: str
+    vector_id: str
+
+
+class ChunkIndexPlan(StrictModel):
+    points: list[VectorPoint]
+    members: list[ChunkVectorMember]
+    write_ids: list[str]
+    delete_ids: list[str]
+    current_count: int = Field(ge=0)
+
+
 class PreparedMutation(StrictModel):
-    schema_version: Literal[1, 2]
+    schema_version: Literal[4]
+    chunk_index: ChunkIndexPlan
+    verification: VerificationScope | None = None
     write_mode: Literal["full", "delta"] | None = None
     write_set: MutationWriteSet | None = None
     plan_id: str
@@ -80,14 +106,10 @@ PREPARED_FIELDS = frozenset(PreparedMutation.model_fields)
 
 
 def prepared_fields(plan: dict) -> frozenset[str]:
-    if plan["schema_version"] == 1:
-        return PREPARED_FIELDS - {"write_mode", "write_set"}
     return PREPARED_FIELDS
 
 
 def validate_write_set(plan: dict, groups: dict, job: dict | None) -> None:
-    if plan["schema_version"] == 1:
-        return
     mode, scope = plan["write_mode"], plan["write_set"]
     expected_mode = "delta" if plan["operation"] in {"IMPORT", "DELETE"} else "full"
     if mode != expected_mode or not isinstance(scope, dict):
@@ -215,6 +237,43 @@ def validate_atomic_reference_mappings(
         ) from exc
 
 
+def _validate_chunk_index(plan, chunks, document_ids):
+    from .common import valid_id
+
+    index = plan["chunk_index"]
+    points = {point["id"]: point for point in index["points"]}
+    members = {row["chunk_id"]: row for row in index["members"]}
+    writes, deleted = set(index["write_ids"]), set(index["delete_ids"])
+    if (
+        len(points) != len(index["points"]) or len(members) != len(index["members"])
+        or len(writes) != len(index["write_ids"]) or len(deleted) != len(index["delete_ids"])
+        or writes - points.keys() or deleted & points.keys()
+        or {row["vector_id"] for row in members.values()} != points.keys()
+        or chunks.keys() - members.keys() or members.keys() & set(plan["delete_chunks"])
+    ):
+        raise ValueError("Chunk vector groups do not match the write and verification scope")
+    if plan["write_mode"] == "full" and (
+        members.keys() != chunks.keys() or writes != points.keys() or deleted or index["current_count"] != len(points)
+    ):
+        raise ValueError("Full rebuild must cover all chunk vector groups")
+    for key in points.keys() | deleted | members.keys():
+        valid_id(key)
+    for chunk_id, member in members.items():
+        if member["kb_id"] != plan["kb_id"] or member["document_id"] not in document_ids:
+            raise ValueError("Chunk vector membership crosses document scope")
+        if chunk_id in chunks and chunks[chunk_id]["document_id"] != member["document_id"]:
+            raise ValueError("Chunk vector membership belongs to a different source")
+    for vector_id, point in points.items():
+        payload = point["payload"]
+        representative = payload["representative_chunk_id"]
+        member = members.get(representative)
+        if not member or member["vector_id"] != vector_id or not isinstance(payload["text"], str):
+            raise ValueError("Representative must belong to its own vector group")
+        if representative in chunks and chunks[representative]["text"] != payload["text"]:
+            raise ValueError("Representative text differs from its source chunk")
+
+
+
 def validate_prepared_mutation(plan: dict, job: dict | None = None) -> None:
     """校验持久化计划的结构、任务绑定和跨存储引用，拒绝不可安全重放的计划。"""
     import math
@@ -264,6 +323,26 @@ def validate_prepared_mutation(plan: dict, job: dict | None = None) -> None:
         entity_ids, relation_ids = set(groups["entities"]), set(groups["relations"])
         if set(groups["objects"]) != entity_ids:
             raise ValueError("Object index does not match the final entity set")
+        verification = plan.get("verification")
+        external_chunks, external_endpoints = set(), set()
+        if (plan["write_mode"] == "delta") != (verification is not None):
+            raise ValueError("Verification scope does not match the write mode")
+        if verification is not None:
+            external_chunks = set(verification["evidence_chunk_ids"])
+            external_endpoints = set(verification["endpoint_ids"])
+            if external_chunks & (
+                set(groups["chunks"]) | set(plan["delete_chunks"])
+            ) or external_endpoints & (entity_ids | set(plan["delete_entities"])):
+                raise ValueError("External verification references overlap written or deleted records")
+            for key in external_chunks | external_endpoints:
+                valid_id(key)
+            for group in verification["relation_groups"]:
+                if len(group) != 2 or not model.relation_types[group[1]].conflict_rule.get(
+                    "max_distinct_targets"
+                ):
+                    raise ValueError("Invalid relation conflict group")
+                valid_id(group[0])
+
         document_ids = set(plan["document_ids"])
         if document_ids & set(plan["delete_documents"]) or set(plan["activate_documents"]) - document_ids:
             raise ValueError("Inconsistent document transition")
@@ -272,19 +351,23 @@ def validate_prepared_mutation(plan: dict, job: dict | None = None) -> None:
 
         chunks = {point["id"]: point["payload"] for point in plan["chunk_points"]}
         objects = {point["id"]: point["payload"] for point in plan["object_points"]}
-        for point in plan["chunk_points"] + plan["object_points"]:
+        for point in plan["chunk_points"] + plan["object_points"] + plan["chunk_index"]["points"]:
             if (
                 point["payload"].get("kb_id") != plan["kb_id"]
                 or point["payload"].get("embedding_profile") != profile_data
             ):
                 raise ValueError("Index point has the wrong knowledge base or vector profile")
+        if any(point["vector"] is not None for point in plan["chunk_points"]):
+            raise ValueError("Source chunks must be stored as payload-only points")
+        for point in plan["object_points"] + plan["chunk_index"]["points"]:
             vector = point["vector"]
-            if len(vector) != profile.dimension or any(
+            if not isinstance(vector, list) or len(vector) != profile.dimension or any(
                 isinstance(x, bool) or not isinstance(x, (int, float)) or not math.isfinite(x) for x in vector
             ):
                 raise ValueError("Invalid prepared vector")
             if profile.distance == "Cosine" and not any(vector):
                 raise ValueError("Zero cosine vector")
+        _validate_chunk_index(plan, chunks, document_ids)
         for chunk_id, chunk in chunks.items():
             if (
                 chunk.get("chunk_id") != chunk_id
@@ -311,12 +394,13 @@ def validate_prepared_mutation(plan: dict, job: dict | None = None) -> None:
             }
             if payload != expected:
                 raise ValueError("Object payload differs from the full final business fields")
+        allowed_endpoints = entity_ids | external_endpoints
         for relation in plan["relations"]:
             validate_identity_key(relation["identity"])
             if (
                 relation["kb_id"] != plan["kb_id"]
-                or relation["source_id"] not in entity_ids
-                or relation["target_id"] not in entity_ids
+                or relation["source_id"] not in allowed_endpoints
+                or relation["target_id"] not in allowed_endpoints
             ):
                 raise ValueError("Invalid relation endpoint scope")
             if (
@@ -334,22 +418,27 @@ def validate_prepared_mutation(plan: dict, job: dict | None = None) -> None:
                 contribution["kb_id"] != plan["kb_id"]
                 or contribution["target_id"] not in target_ids
                 or contribution["document_id"] not in document_ids
-                or contribution["chunk_id"] not in chunks
+                or (
+                    contribution["chunk_id"] not in chunks and contribution["chunk_id"] not in external_chunks
+                )
             ):
                 raise ValueError("Invalid contribution references")
             if not contribution["evidence"]:
                 raise ValueError("Contribution has no evidence")
             by_target.setdefault(contribution["target_id"], set()).add(contribution["contribution_id"])
             for evidence in contribution["evidence"]:
-                chunk = chunks.get(evidence["chunk_id"])
-                if (
-                    not chunk
-                    or chunk["document_id"] != contribution["document_id"]
-                    or evidence["document_id"] != contribution["document_id"]
-                ):
+                if evidence["document_id"] != contribution["document_id"]:
                     raise ValueError("Evidence crosses document scope")
-                validate_stored_evidence(evidence, chunk)
-        validate_atomic_reference_mappings(plan["contributions"], chunks, plan["entities"])
+                chunk = chunks.get(evidence["chunk_id"])
+                if chunk is not None:
+                    if chunk["document_id"] != contribution["document_id"]:
+                        raise ValueError("Evidence crosses document scope")
+                    validate_stored_evidence(evidence, chunk)
+                elif evidence["chunk_id"] not in external_chunks:
+                    raise ValueError("Evidence is outside the verification scope")
+        # 旧来源切片由写后校验按 ID 读取，避免在计划中复制它们的正文。
+        if not external_chunks:
+            validate_atomic_reference_mappings(plan["contributions"], chunks, plan["entities"])
         for item in plan["entities"] + plan["relations"]:
             definition = (
                 model.node_types[item["entity_type"]]

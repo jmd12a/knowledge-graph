@@ -8,12 +8,26 @@ neo4j_uri: bolt://127.0.0.1:7687
 neo4j_user: neo4j
 neo4j_password_env: NEO4J_PASSWORD
 neo4j_database: neo4j
+postgres_dsn_env: POSTGRES_DSN
+# Enable this section together with --role prepare and --role publish.
+# worker_distribution:
+#   redis_url_env: REDIS_URL
+#   stream: "kg:{prepare}:stream"
+#   group: prepare
+#   heartbeat_seconds: 10
+#   claim_idle_seconds: 60
+#   minio_endpoint: http://127.0.0.1:9000
+#   minio_bucket: knowledge-graph
+#   minio_access_key_env: MINIO_ACCESS_KEY
+#   minio_secret_key_env: MINIO_SECRET_KEY
 qdrant_url: http://127.0.0.1:6333
 qdrant_api_key_env: QDRANT_API_KEY
 upload_limit: 20971520
 chunk_target: 1200
 chunk_max: 2000
 chunk_overlap: 150
+chunk_similarity_threshold: 0.97
+chunk_decision_model: typesafe/jev-1.13
 drain_timeout: 30
 poll_interval: 1
 graph_timeout: 3

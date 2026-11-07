@@ -66,16 +66,29 @@ def _atomic_values(contributions):
     return result
 
 
-def aggregate(kb_id, contributions, model, previous_entities=None, previous_relations=None):
-    """从当前来源贡献重建对象与冲突；旧对象仅用于保留未变化内容的修订标识。"""
+def relation_conflict_groups(changes, model):
+    groups = set()
+    for claim in changes:
+        if claim["target_kind"] == "relation" and claim["field_path"] == "$relation":
+            relation = claim["value"]
+            relation_type = relation["relation_type"]
+            if model.relation_types[relation_type].conflict_rule.get("max_distinct_targets"):
+                groups.add((relation["source_id"], relation_type))
+    return [list(group) for group in sorted(groups)]
+
+
+def aggregate(
+    kb_id, contributions, model, previous_entities=None, previous_relations=None, *, endpoint_ids=()
+):
+    """合并传入的目标贡献；局部维护可引用已经存在的外部端点。"""
+    old_entities = {item["entity_id"]: item for item in previous_entities or []}
+    old_relations = {item["relation_id"]: item for item in previous_relations or []}
     by_target = defaultdict(list)
     for contribution in contributions:
         if contribution["kb_id"] != kb_id:
             raise KGError("INVALID_CONTRIBUTION", "A source contribution belongs to another knowledge base")
         by_target[(contribution["target_kind"], contribution["target_id"])].append(contribution)
     entities, relations = [], []
-    old_entities = {item["entity_id"]: item for item in previous_entities or []}
-    old_relations = {item["relation_id"]: item for item in previous_relations or []}
     for (kind, object_id), claims in sorted(by_target.items()):
         if kind not in {"entity", "relation"}:
             raise KGError("INVALID_CONTRIBUTION", "A source contribution has an invalid object kind")
@@ -234,8 +247,8 @@ def aggregate(kb_id, contributions, model, previous_entities=None, previous_rela
             relations.append(item)
         item["search_text"] = _search_text(item, definition.description)
 
-    # 全部对象形成后再核对端点，并按源对象与关系类型计算唯一归属等冲突。
-    entity_ids = {entity["entity_id"] for entity in entities}
+    # 局部聚合前已收齐同组关系，保留关系仍需验证两个端点。
+    entity_ids = {entity["entity_id"] for entity in entities} | set(endpoint_ids)
     for relation in relations:
         if relation["source_id"] not in entity_ids or relation["target_id"] not in entity_ids:
             raise KGError("INVALID_CONTRIBUTION", "A retained relation lacks a source-supported endpoint")

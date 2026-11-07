@@ -439,11 +439,13 @@ async def run(runtime):
         evidence=rec_empty,
     )
     await api.request("GET", f"/kbs/{kb}/documents/{b['document_id']}/content", expected=404)
+    stale_job_id = a["job_id"]
+    stale_job = await api.request("GET", f"/jobs/{stale_job_id}")
     stale = await api.request(
         "POST",
-        f"/jobs/{a['job_id']}/retry",
+        f"/jobs/{stale_job_id}/retry",
         expected=409,
-        headers={"Idempotency-Key": e.key("mechanisms.stale_import")},
+        params={"generation": stale_job["retry_generation"]},
     )
     e.check(
         "old IMPORT cannot revive deleted source",
