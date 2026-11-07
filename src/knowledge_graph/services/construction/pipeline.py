@@ -357,9 +357,9 @@ class Construction:
         return plan
 
     async def _prepare_vectors(self, points, existing, draft, profile, persist):
-        """依次复用同配置同文本的旧向量、草稿缓存，再分批补齐并保存。"""
+        """复用同配置、同输入文本的向量，再分批补齐剩余输入。"""
         previous = {point["id"]: point for point in existing}
-        missing, texts = [], []
+        missing = []
         for point in points:
             text_key = "text" if "text" in point["payload"] else "search_text"
             old = previous.get(point["id"])
@@ -375,17 +375,35 @@ class Construction:
             if point["vector"] is None and saved is not None:
                 point["vector"] = saved
             if point["vector"] is None:
-                missing.append(point)
-                texts.append(point["payload"][text_key])
+                missing.append((point, point["payload"][text_key]))
+        if not missing:
+            return
 
-        for start in range(0, len(missing), profile["batch_size"]):
-            batch = missing[start : start + profile["batch_size"]]
-            vectors = await self.c.language.embed(texts[start : start + profile["batch_size"]], profile)
+        # 新切片可能有新 ID。只复用向量数值，切片的来源和位置仍以本轮解析为准。
+        wanted_texts = {text for _, text in missing}
+        vectors_by_text = {}
+        for old in existing:
+            payload = old["payload"]
+            if old["vector"] is None or payload.get("embedding_profile") != profile:
+                continue
+            text = payload.get("text", payload.get("search_text"))
+            if isinstance(text, str) and text in wanted_texts:
+                vectors_by_text.setdefault(text, old["vector"])
+
+        pending = []
+        for point, text in missing:
+            point["vector"] = vectors_by_text.get(text)
+            if point["vector"] is None:
+                pending.append((point, text))
+
+        for start in range(0, len(pending), profile["batch_size"]):
+            batch = pending[start : start + profile["batch_size"]]
+            vectors = await self.c.language.embed([text for _, text in batch], profile)
             if len(vectors) != len(batch):
                 raise KGError(
                     "INVALID_EMBEDDING_RESPONSE", "Embedding item count does not match its input", 503
                 )
-            for point, vector in zip(batch, vectors, strict=True):
+            for (point, _), vector in zip(batch, vectors, strict=True):
                 if (
                     not isinstance(vector, list)
                     or len(vector) != profile["dimension"]
