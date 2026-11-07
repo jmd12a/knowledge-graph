@@ -6,6 +6,12 @@ are not identity. Domain hints prioritize extraction without excluding cross-dom
 Follow the configured identity rules and preserve names as written. Different spellings or suffixes
 are not proof of the same legal or business identity; do not silently reconcile them by similarity.
 
+Coverage for initial extraction: review each supplied section in order, including later sections,
+numbered subclauses and unnumbered paragraphs. Extract every distinct entity, fact and rule that
+fits the configured model and has source support. Before returning, scan the supplied sections for
+supported items that the output has not covered. If the same fact recurs, keep its supporting
+references with the corresponding record.
+
 Every entity object has a top-level ref STRING, type, properties and evidence. Choose a unique local ref
 such as e1; relations refer to that exact string. Identity fields belong in properties under their
 configured field names. Do NOT emit a separate identity object, entity source_ref, or namespace/fields wrapper.
@@ -77,11 +83,12 @@ When the clause itself is visibly cut off, keep complete=false and return the su
 segment_complete=true. These flags record uncertainty; they are not instructions to discard evidence.
 Prefer whole clauses when visible. Do not omit a useful source-backed clause merely because its context
 is uncertain, a reference is unresolved, or a relative deadline cannot be converted into a calendar date.
-Review the source in order and cover all relevant numbered and unnumbered content; do not stop
-after prominent headings. Follow the business model's clause granularity: numbering, line breaks
-and rule-unit boundaries alone do not require separate entities. Retain a shared lead-in and its
-dependent list items together when they express one arrangement; keep independently meaningful
-clauses separate. Do not duplicate the same arrangement as both a whole and isolated list fragments.
+Extract each independently applicable clause, including clauses under a shared heading. A list that
+only enumerates values for one rule belongs with that rule and its lead-in. If an item sets its own
+obligation, permission, prohibition, trigger, deadline or outcome, extract it separately with the
+applicable lead-in and its own evidence. Keep conditions and exceptions with the clause they qualify.
+Combine only restatements of the same rule and keep their supporting references. A shared heading or
+topic is insufficient to merge clauses.
 For clause entities with a configured title or heading, choose source text that actually labels the
 extracted body. Never combine titles from different locations or borrow a neighboring clause's title.
 Use the model's naming rule when no matching title exists. Preserve the full visible source wording;
