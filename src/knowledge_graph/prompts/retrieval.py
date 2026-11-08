@@ -54,11 +54,24 @@ on redundant passages when another candidate supplies a missing aspect. Semantic
 an exact keyword alone does not establish relevance. Never answer the question or invent passages.
 """
 
-COMPACT_RERANK_SYSTEM = (
-    _RERANK_GUIDANCE
-    + """Candidate context and names help interpret the evidence.
+_RERANK_SNIPPETS = """Candidate context and names help interpret the evidence.
 Each candidate references its snippets in a shared table. A table value is [source text] or
 [source text, source ID]. If present, the sources table maps source IDs to document titles.
-Return {"ids":[...]} in relevance order, up to final_limit, without duplicates or explanations.
 """
+
+COMPACT_RERANK_SYSTEM = (
+    _RERANK_GUIDANCE
+    + _RERANK_SNIPPETS
+    + 'Return {"ids":[...]} in relevance order, up to final_limit, without duplicates or explanations.\n'
+)
+
+DOCUMENT_RERANK_SYSTEM = (
+    _RERANK_GUIDANCE
+    + _RERANK_SNIPPETS
+    + "A location is [source number, start, end] in that source. Use it to recognize repetitions and "
+    "locate continuations. For the first final_limit IDs, select a set that covers the question together. "
+    "Identify the exact proposition to verify, including evidence that supports a negative answer. Prefer "
+    "independent direct evidence for missing parts over repeating the same fact. Include complementary "
+    "chunks when a statement, table, or procedure continues. Then add the strongest distinct alternatives "
+    'in relevance order. Return {"ids":[...]} up to ranking_limit, without explanations.\n'
 )

@@ -8,10 +8,11 @@ from itertools import islice
 
 from ...domain.errors import KGError
 from ...domain.source import source_evidence, validate_stored_evidence
-from ...prompts.retrieval import COMPACT_RERANK_SYSTEM
+from ...prompts.retrieval import COMPACT_RERANK_SYSTEM, DOCUMENT_RERANK_SYSTEM
 from ..construction.extraction_batches import request_fits
 from ..construction.source_references import origin_key
 from ..contracts import SearchRequest
+from .document_rerank import document_rerank_payload, select_document_candidates
 
 _WORD = re.compile(r"\w+")
 _COMPARE = re.compile(
@@ -316,10 +317,21 @@ async def compact_rerank(
         )
         if len(candidate_keys) <= 1:
             return ordered, set(), metrics
-        response = await r.language.json(COMPACT_RERANK_SYSTEM, data, _SCHEMA)
+        system = COMPACT_RERANK_SYSTEM
+        locations = {}
+        if component == "documents" and len(candidate_keys) > data["final_limit"]:
+            enriched, source_locations = document_rerank_payload(data, candidate_keys, records)
+            if request_fits(r.language, DOCUMENT_RERANK_SYSTEM, enriched, _SCHEMA):
+                system, data, locations = DOCUMENT_RERANK_SYSTEM, enriched, source_locations
+        response = await r.language.json(system, data, _SCHEMA)
     ids = response["ids"]
     ranked = list(dict.fromkeys(candidate_keys[number] for number in ids if number in candidate_keys))
-    selected = ranked[: data["final_limit"]]
+    limit = data["final_limit"]
+    selected = (
+        select_document_candidates(ranked[: data["ranking_limit"]], locations, limit)
+        if "ranking_limit" in data
+        else ranked[:limit]
+    )
     metrics["invalid_rerank_ids"] = len(ids) - len(ranked)
     metrics["rerank_selected"] = len(selected)
     selected_keys = set(selected)

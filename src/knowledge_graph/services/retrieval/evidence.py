@@ -9,6 +9,7 @@ from ...domain.errors import KGError
 from ...domain.source import validate_stored_evidence
 from ..contracts import coverage, envelope
 from .search import public_item
+from .source_context import source_context
 
 
 def _evidence_key(reference):
@@ -113,7 +114,7 @@ class EvidenceMixin:
             raise KGError("INVALID_ARGUMENT", "Evidence limit must be between 0 and 1000")
         wanted = {claim_id for item in items for claim_id in item.get("contribution_ids", [])}
         if not wanted:
-            return [], [], False, 0
+            return [], [], False, 0, []
         claims = await self.r.metadata.contributions(kb_id, document_ids, contribution_ids=sorted(wanted))
         if {claim["contribution_id"] for claim in claims} != wanted:
             raise KGError(
@@ -187,12 +188,16 @@ class EvidenceMixin:
             _declaration_evidence(claim, returned_indices)
             for claim in sorted(claims, key=lambda value: value["contribution_id"])
         ]
-        return selected, declarations, len(references) > limit, len(references)
+        entity_ids = {item["entity_id"] for item in items if "entity_id" in item}
+        context = source_context(selected, chunks, entity_ids, limit - len(selected))
+        return selected, declarations, len(references) > limit, len(references), context
 
     async def _attach_evidence(self, result, kb_id, items, limit, document_ids=None):
         """将统一证据下标关联到声明、关系与路径，并报告证据覆盖。"""
-        evidence, declarations, truncated, total = await self._evidence(kb_id, items, limit, document_ids)
-        result.update(evidence=evidence, declarations=declarations)
+        evidence, declarations, truncated, total, context = await self._evidence(
+            kb_id, items, limit, document_ids
+        )
+        result.update(evidence=evidence + context, declarations=declarations)
         unavailable = [
             declaration
             for declaration in declarations
@@ -211,6 +216,7 @@ class EvidenceMixin:
                     "limit": limit,
                     "available_references": total,
                     "returned_references": len(evidence),
+                    **({"returned_source_context": len(context)} if context else {}),
                     "unavailable_resolved_references": sum(
                         declaration["resolved_references_unavailable_count"] for declaration in unavailable
                     ),

@@ -116,6 +116,13 @@ KG_EXTRACTION_SCOPE_POLICY=structure .venv/bin/python -B -m evals.long_contract 
 
 另有一个全量标注的小语料，包含 TXT 与 Markdown、3 个 Service、3 个 Clause 实例和 1 条 CALLS 关系，并同时覆盖同名不同实体、别名同实体与同标题不同条款。早期无原子组装配置的 run `c0f51673-0f03-463c-a5f2-cd984e8eac45`：全文 Clause TP/FP/FN 为 2/0/1，小批为 0/2/3；两者 Service 均为 3/0/0、CALLS 均为 1/0/0。中间版本加 `full_statement` 的 run `761d1470-a869-4c02-8338-2bd91363b744` 小批 Clause 为 1/1/2，全文因模型结构错误失败。这些是诊断样本，不是最终代码的跨场景效果估计；标注集很小，不代表总体 precision。普通逐字模式只保证来源保真，不保证句子完整；模型在完全可见单元内仍可能选择词边界正确但语义未完的片段。不同完整身份但同义标题的安全归并留待下一轮独立设计和评测。
 
+### 保留的两条检索评测基线
+
+- **最早的全文旧基线**在 `evals/records/b1afbd7c-620a-43ee-b814-24840f42a6eb/`。GLM‑5.3 搭配 Gemini Embedding 2，原始长合同通过 **23/26**。该目录的 `program-sources/` 保存当时实际执行的程序，`manifest.json` 保存配置，`long-contract-retrieval.json` 保存逐题结果。复现旧版时以冻结程序为准。
+- **当前推荐版**的代码快照为 `4531b68`。采用结构化构建快照、原召回和紧凑重排，图实体详情补完整段落，原文保留来源坐标与备选。GPT‑6 Sol 在原始合同上通过 **25/26**，图实体 12/12、原文 12/12、自然语言 1/2。复测复用了已发布的结构化快照，GPT‑6 Sol 用于重排及两次自然语言规划。逐题结果在评测工作区的 `contract-26-model-ab-gpt-6-sol-structure-verified/compact.json`。
+
+两版沿用同一套证据覆盖口径，模型与构建快照不同，适合做历史参照。共享证据组装保存在 `experiment/evidence-assembly` 分支的 `e7d25fa`。它在同模型的 59 组配对中总体持平，混合查询耗时下降，同时出现公开长文覆盖回归。
+
 ## 分布式 Worker 故障验收
 
 为评测准备独立的 PostgreSQL 数据库、Redis、无版本历史的 MinIO 私有桶及 Neo4j、Qdrant 环境。配置方式见[运行指南](../docs/03-使用与验证/运行指南.md)。使用隔离配置运行机制用例：

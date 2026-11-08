@@ -10,14 +10,18 @@ from uuid import uuid4
 
 from knowledge_graph.adapters.parsers.documents import Parser
 from knowledge_graph.domain.source import source_evidence
+from knowledge_graph.prompts.retrieval import COMPACT_RERANK_SYSTEM, DOCUMENT_RERANK_SYSTEM
 from knowledge_graph.services.contracts import SearchRequest, envelope
+from knowledge_graph.services.retrieval.evidence import EvidenceMixin
 from knowledge_graph.services.retrieval.rerank import (
+    _SCHEMA,
     Excerpt,
     _compact_payload,
     _pick_excerpts,
     compact_rerank,
 )
 from knowledge_graph.services.retrieval.search import SearchMixin
+from knowledge_graph.services.retrieval.source_context import source_context
 from knowledge_graph.settings import Settings
 
 
@@ -211,6 +215,50 @@ async def _check_channel_budgets():
     assert order == ["exact", "similar"] and not sent
 
 
+async def _check_document_selection():
+    parser = Parser(SimpleNamespace(chunk_target=1200, chunk_max=2000, chunk_overlap=0))
+    doc, other = str(uuid4()), str(uuid4())
+    text = "Routine inspection starts on Monday. Only a supervisor may approve it."
+    prefix, tail = text[:10], text[10:]
+    chunks = [
+        parser._chunk_text(body, {"format": "pdf", "page": page}, document, [], char_offset=start)[0]
+        for body, page, document, start in (
+            (text, 1, doc, 0),
+            (tail, 1, doc, len(prefix)),
+            (tail + " Stop.", 1, doc, len(prefix)),
+            (tail, 1, other, len(prefix)),
+            (tail, 2, doc, len(prefix)),
+        )
+    ]
+    records = {item["chunk_id"]: item for item in chunks}
+    ordered = list(records)
+    language = FakeLanguage()
+
+    async def rank(system, data, schema):
+        assert language.json_request_chars(system, data, schema) <= language.profile.max_input_chars
+        language.requests.append((system, data))
+        limit = data.get("ranking_limit", data["final_limit"])
+        return {"ids": [item["id"] for item in data["candidates"][:limit]]}
+
+    language.json = rank
+    runtime = SimpleNamespace(settings=Settings(), language=language)
+    request = SearchRequest(query="Who approves routine and emergency inspections?", limit=4, kinds=["chunk"])
+    args = (runtime, "kb", request, ordered, records, "documents", None, {})
+    ranked, sent, _ = await compact_rerank(*args)
+    assert ranked == [ordered[i] for i in (0, 2, 3, 4, 1)] and sent == set(ordered)
+    system, data = language.requests[-1]
+    assert system == DOCUMENT_RERANK_SYSTEM and data["ranking_limit"] == 5
+    assert [item["location"][0] for item in data["candidates"]] == [1, 1, 1, 2, 3]
+
+    base, _, _ = await _compact_payload(*args)
+    language.profile = SimpleNamespace(
+        max_input_chars=language.json_request_chars(COMPACT_RERANK_SYSTEM, base, _SCHEMA)
+    )
+    ranked, sent, _ = await compact_rerank(*args)
+    assert ranked == ordered and sent == set(ordered)
+    assert language.requests[-1] == (COMPACT_RERANK_SYSTEM, base)
+
+
 async def _check_rerank_fallback():
     doc = str(uuid4())
     parser = Parser(SimpleNamespace(chunk_target=1600, chunk_max=2000, chunk_overlap=0))
@@ -327,11 +375,129 @@ async def _check_primary_evidence_budget():
     assert _pick_excerpts(excerpts, {"inspection"}, set()) == excerpts[:3]
 
 
+async def _check_source_context():
+    parser = Parser(SimpleNamespace(chunk_target=1200, chunk_max=2000, chunk_overlap=0))
+    kb_id, doc_id, other_doc, entity_id = (str(uuid4()) for _ in range(4))
+    procedure = (
+        "1. Open the settings page.\n\n2. Back up the configuration.\n\n"
+        "Example:\n\ncopy settings settings.old\n\n3. Apply the change.\n\n"
+        "   Wait until the backup finishes.\n\n   KEEP THE BACKUP AVAILABLE"
+    )
+    text = f"## Upgrade\n\n{procedure}\n\n## Reset\n\n1. Remove the database.\n\n2. Start over."
+    chunk = parser._chunk_text(text, {"format": "md"}, doc_id, [])[0] | {"kb_id": kb_id}
+    claim_ids = [str(uuid4()), str(uuid4())]
+    claims = []
+    for phrase, claim_id in zip(("Open the settings page.", "Apply the change."), claim_ids, strict=True):
+        start = text.index(phrase)
+        claims.append(
+            {
+                "contribution_id": claim_id,
+                "target_kind": "entity",
+                "target_id": entity_id,
+                "document_id": doc_id,
+                "field_path": "/properties/statement",
+                "evidence": [source_evidence(chunk, start, start + len(phrase))],
+            }
+        )
+
+    async def contributions(kb, documents, *, contribution_ids):
+        assert kb == kb_id and documents == [doc_id] and other_doc not in documents
+        assert set(contribution_ids) == set(claim_ids)
+        return claims
+
+    async def read(kb, collection, ids):
+        assert kb == kb_id and collection == "chunks" and ids == [chunk["chunk_id"]]
+        return [{"id": chunk["chunk_id"], "payload": chunk}]
+
+    detail = EvidenceMixin()
+    detail.r = SimpleNamespace(
+        metadata=SimpleNamespace(contributions=contributions), vectors=SimpleNamespace(read=read)
+    )
+    items = [{"entity_id": entity_id, "contribution_ids": claim_ids}]
+    limited, expanded = envelope(kb_id), envelope(kb_id)
+    await detail._attach_evidence(limited, kb_id, items, 2, [doc_id])
+    await detail._attach_evidence(expanded, kb_id, items, 3, [doc_id])
+    assert expanded["evidence"][:2] == limited["evidence"]
+    assert expanded["declarations"] == limited["declarations"]
+    assert len(expanded["evidence"]) == 3
+    added = expanded["evidence"][-1]
+    assert added["text"] == procedure and added["role"] == "context"
+    assert added["document_id"] == doc_id and added["fact_ids"] == [entity_id]
+    assert added["contribution_ids"] == [] and added["field_paths"] == []
+    assert expanded["status"] == limited["status"] == "ok"
+    for field in ("available_references", "returned_references"):
+        assert expanded["coverage"][0]["budget"][field] == limited["coverage"][0]["budget"][field] == 2
+    assert expanded["coverage"][0]["budget"]["returned_source_context"] == 1
+
+
+def _check_source_context_boundaries():
+    doc, entity = str(uuid4()), str(uuid4())
+    parser = Parser(SimpleNamespace(chunk_target=1200, chunk_max=2000, chunk_overlap=0))
+    text = "Enable debug mode temporarily.\n\n示例：\n\nexport DEBUG=1"
+    chunk = parser._chunk_text(text, {"format": "txt"}, doc, [])[0]
+
+    def expand(chunk, anchor):
+        start = chunk["text"].index(anchor)
+        reference = source_evidence(chunk, start, start + len(anchor)) | {"fact_ids": [entity]}
+        return source_context([reference], {chunk["chunk_id"]: chunk}, {entity}, 1)
+
+    assert [r["text"] for r in expand(chunk, "export DEBUG=1")] == [text]
+    legacy = deepcopy(chunk)
+    del legacy["block_range"]
+    assert not expand(legacy, "export DEBUG=1")
+
+    steps = "1. Shut down the motor.\n\n2. Close the supply valve.\n\n"
+    truncated = parser._chunk_text(steps, {"format": "txt"}, doc, [])[0]
+    truncated["parser_profile"]["block_length"] += 30
+    assert not expand(truncated, "Close the supply valve.")
+
+    oversized = parser._chunk_text(
+        "1. Prepare the station.\n\n2. " + "Repeat the inspection. " * 65,
+        {"format": "txt"},
+        doc,
+        [],
+    )[0]
+    assert not expand(oversized, "Prepare the station.")
+
+    paragraph = "Each permit expires at midnight. A supervisor may extend it during an emergency."
+    body = f"## Permits\n\n{paragraph}\n\n## Exceptions\n\nOther rules apply."
+    complete = parser._chunk_text(body, {"format": "md"}, doc, [])[0]
+    (added,) = expand(complete, "expires at midnight")
+    start = body.index(paragraph)
+    assert added == source_evidence(complete, start, start + len(paragraph), role="context") | {
+        "text": paragraph,
+        "fact_ids": [entity],
+        "contribution_ids": [],
+        "field_paths": [],
+    }
+    assert not expand(complete, paragraph)
+
+    offset = body.index("\n")
+    overlap = parser._chunk_text(body[offset:], {"format": "md"}, doc, [], char_offset=offset)[0]
+    chunks = {item["chunk_id"]: item for item in (complete, overlap)}
+    refs = []
+    for item in chunks.values():
+        pos = item["text"].index("expires at midnight")
+        refs.append(source_evidence(item, pos, pos + len("expires at midnight")) | {"fact_ids": [entity]})
+    assert [item["text"] for item in source_context(refs, chunks, {entity}, 2)] == [paragraph]
+
+    left = parser._chunk_text(paragraph, {"format": "md"}, doc, [], char_offset=20)[0]
+    left["block_range"] = [20, 20 + len(paragraph)]
+    left["parser_profile"]["block_length"] = 20 + len(paragraph)
+    right = parser._chunk_text(paragraph, {"format": "md"}, doc, [])[0]
+    right["parser_profile"]["block_length"] += 20
+    assert not expand(left, "expires at midnight")
+    assert not expand(right, "expires at midnight")
+
+
 async def check():
     await _check_candidate_payload()
     await _check_channel_budgets()
     await _check_rerank_fallback()
+    await _check_document_selection()
     await _check_primary_evidence_budget()
+    await _check_source_context()
+    _check_source_context_boundaries()
 
 
 if __name__ == "__main__":
