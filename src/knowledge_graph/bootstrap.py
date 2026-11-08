@@ -82,7 +82,9 @@ class Context:
     async def check_storage_mode(self):
         if not await self.metadata.storage_mode_matches(self.settings.worker_distribution is not None):
             raise KGError(
-                "INCONSISTENT_STORAGE", "Registered files use a different storage mode; migrate references first", 503
+                "INCONSISTENT_STORAGE",
+                "Registered files use a different storage mode; migrate references first",
+                503,
             )
 
     async def ready(self):

@@ -2,7 +2,10 @@ from __future__ import annotations
 
 from copy import deepcopy
 from typing import Any, Literal
+
 from typing_extensions import NotRequired, TypedDict
+
+DEFAULT_STRUCTURE_WINDOW_CHARS = 10_000
 
 
 class SourceSpan(TypedDict):
@@ -20,6 +23,7 @@ class Chunk(TypedDict):
     source_spans: list[SourceSpan]
     section_path: list[str]
     parser_profile: dict[str, Any]
+    block_range: NotRequired[list[int]]
     domain_ids: list[str]
 
 
@@ -71,6 +75,45 @@ class ScanPage(TypedDict):
 
 
 QUOTE_LIMIT = 500
+
+
+def effective_contributions(contributions):
+    """Exclude explicit identity-dependent audit rows without a live source anchor."""
+    from .common import canonical
+    from .errors import KGError
+
+    anchors = {
+        (row["target_id"], canonical(row["value"]["identity"]))
+        for row in contributions
+        if row["target_kind"] == "entity" and row["field_path"] == "$exists"
+    }
+    active, suppressed = [], []
+    for row in contributions:
+        claim = row.get("claim", {})
+        if not isinstance(claim, dict):
+            raise KGError("INVALID_CONTRIBUTION", "Contribution claim is malformed")
+        dependencies = claim.get("identity_dependencies", [])
+        if "identity_dependencies" in claim and (
+            not isinstance(dependencies, list)
+            or not dependencies
+            or any(
+                not isinstance(item, dict)
+                or set(item) != {"target_id", "identity_key"}
+                or not isinstance(item["target_id"], str)
+                or not isinstance(item["identity_key"], str)
+                for item in dependencies
+            )
+        ):
+            raise KGError("INVALID_CONTRIBUTION", "Identity dependency marker is malformed")
+        if dependencies and (row["field_path"] == "$exists" or row["field_path"].startswith("/identity/")):
+            raise KGError("INVALID_CONTRIBUTION", "Identity anchors cannot depend on another identity")
+        if dependencies and any(
+            (item["target_id"], item["identity_key"]) not in anchors for item in dependencies
+        ):
+            suppressed.append(row)
+        else:
+            active.append(row)
+    return active, suppressed
 
 
 def _character_range(value, maximum):

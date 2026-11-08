@@ -9,7 +9,7 @@ from ...domain import valid_id
 from ...domain.errors import KGError
 from ...domain.model import BusinessModel
 from ..contracts import GraphRequest, coverage, envelope
-from .search import public_item
+from .search import add_warning, public_item
 
 
 class GraphMixin:
@@ -263,4 +263,11 @@ class GraphMixin:
             result["excluded_endpoint_ids"] = excluded
         if scope is not None:
             result.update(scope="selected_documents", selected_document_ids=request.filters.document_ids)
+            if scope.get("suppressed_dependencies"):
+                add_warning(
+                    result,
+                    "IDENTITY_DEPENDENCY_OUT_OF_SCOPE",
+                    component="graph",
+                    scope=request.filters.model_dump(),
+                )
         return result

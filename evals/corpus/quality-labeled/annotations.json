@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "scope": "All Service and Clause instances and CALLS relations stated by these two complete source files; Clause instance matching uses the unique source phrases below, not the configured heading identity.",
+  "service_app_ids": ["pay-core", "pay-demo", "order"],
+  "calls": [["pay-core", "order"]],
+  "clauses": [
+    {"id": "confidentiality-source-code", "source": "operations.md", "phrase": "Source Code must remain secret for two years."},
+    {"id": "confidentiality-customer-data", "source": "operations.md", "phrase": "Customer Data must remain secret for five years."},
+    {"id": "termination", "source": "operations.md", "phrase": "Either party may terminate upon thirty days' written notice."}
+  ],
+  "identity_cases": [
+    {"kind": "distinct_same_name", "left": "pay-core", "right": "pay-demo"},
+    {"kind": "alias_same_entity", "alias": "收银平台", "target": "pay-core"},
+    {"kind": "distinct_same_heading", "left": "confidentiality-source-code", "right": "confidentiality-customer-data"},
+    {"kind": "same_clause_different_heading", "heading": "Early Exit", "target": "termination"}
+  ]
+}

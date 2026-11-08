@@ -4,13 +4,14 @@ import asyncio
 import math
 from collections import defaultdict
 
-from ...domain import KGError, SUCCESS_STATES
+from ...domain import SUCCESS_STATES, KGError
 from ...domain.jobs import WRITE_STATES, validate_atomic_reference_mappings
+from ...domain.source import validate_stored_evidence
 from ...ports.resources import Resources
 from ...runtime import blocking
-from ...domain.source import validate_stored_evidence
 from .changes import select_writes
 from .maintenance import check_vector_capacity
+from .merge import effective_contributions
 
 
 class MutationApplier:
@@ -104,7 +105,10 @@ class MutationApplier:
             await self._write_contributions(plan, writes)
 
         pending = asyncio.gather(
-            write_vectors(), write_metadata(), self._write_graph(plan, writes), return_exceptions=True,
+            write_vectors(),
+            write_metadata(),
+            self._write_graph(plan, writes),
+            return_exceptions=True,
         )
         try:
             results = await asyncio.shield(pending)
@@ -127,29 +131,46 @@ class MutationApplier:
         vectors, kb_id = self.c.vectors, plan["kb_id"]
         rebuild = plan["operation"] == "REBUILD"
         index = plan["chunk_index"]
-        await vectors.delete(kb_id, "chunks", ids=None if rebuild else plan["delete_chunks"], all_points=rebuild)
+        await vectors.delete(
+            kb_id, "chunks", ids=None if rebuild else plan["delete_chunks"], all_points=rebuild
+        )
         await vectors.upsert(kb_id, "chunks", writes["chunk_points"])
-        await vectors.delete(kb_id, "chunk_vectors", ids=None if rebuild else index["delete_ids"], all_points=rebuild)
+        await vectors.delete(
+            kb_id, "chunk_vectors", ids=None if rebuild else index["delete_ids"], all_points=rebuild
+        )
         write_ids = set(index["write_ids"])
-        await vectors.upsert(kb_id, "chunk_vectors", [point for point in index["points"] if point["id"] in write_ids])
+        await vectors.upsert(
+            kb_id, "chunk_vectors", [point for point in index["points"] if point["id"] in write_ids]
+        )
 
     async def _write_members(self, plan):
         index = plan["chunk_index"]
-        scope = None if plan["write_mode"] == "full" else sorted(
-            {point["id"] for point in index["points"]} | set(index["delete_ids"])
+        scope = (
+            None
+            if plan["write_mode"] == "full"
+            else sorted({point["id"] for point in index["points"]} | set(index["delete_ids"]))
         )
         await self.c.metadata.replace_vector_members(plan["kb_id"], scope, index["members"])
 
     async def _write_contributions(self, plan, writes):
         scope = plan["write_set"]["contribution_document_ids"] if plan["write_mode"] == "delta" else None
         await self.c.metadata.replace_contributions(
-            plan["kb_id"], writes["contributions"], plan["issues"], plan["issue_documents"], document_ids=scope,
+            plan["kb_id"],
+            writes["contributions"],
+            plan["issues"],
+            plan["issue_documents"],
+            document_ids=scope,
         )
 
     async def _write_graph(self, plan, writes):
         await self.c.graph.apply(
-            plan["kb_id"], plan["model"], writes["entities"], writes["relations"],
-            plan["delete_entities"], plan["delete_relations"], rebuild=plan["operation"] == "REBUILD",
+            plan["kb_id"],
+            plan["model"],
+            writes["entities"],
+            writes["relations"],
+            plan["delete_entities"],
+            plan["delete_relations"],
+            rebuild=plan["operation"] == "REBUILD",
         )
 
     async def _write_object_vectors(self, plan, writes):
@@ -209,13 +230,23 @@ class MutationApplier:
         # 单库内容一致还不够，继续检查跨库存储引用及原文坐标映射。
         entity_by_id = {entity["entity_id"]: entity for entity in entities}
         relation_by_id = {relation["relation_id"]: relation for relation in relations}
+        active_contributions, suppressed_dependencies = effective_contributions(contributions)
+        projection = plan.get("identity_dependency_projection")
+        if projection and (
+            sorted(row["contribution_id"] for row in active_contributions) != projection["active"]
+            or sorted(row["contribution_id"] for row in suppressed_dependencies) != projection["suppressed"]
+        ):
+            raise KGError("VERIFY_FAILED", "Identity dependency projection changed after preparation", 503)
+        active_ids = {row["contribution_id"] for row in active_contributions}
         by_target = defaultdict(set)
         by_document = defaultdict(set)
         for contribution in contributions:
             targets = entity_by_id if contribution["target_kind"] == "entity" else relation_by_id
             if (
                 contribution["kb_id"] != kb_id
-                or contribution["target_id"] not in targets
+                or (
+                    contribution["contribution_id"] in active_ids and contribution["target_id"] not in targets
+                )
                 or contribution["chunk_id"] not in chunks
                 or chunks[contribution["chunk_id"]]["document_id"] != contribution["document_id"]
             ):
@@ -243,12 +274,13 @@ class MutationApplier:
                         "Evidence cannot be verified against its complete indexed source mapping",
                         503,
                     ) from exc
-            key = (contribution["target_kind"], contribution["target_id"])
-            by_target[key].add(contribution["contribution_id"])
-            by_document[key].add(contribution["document_id"])
+            if contribution["contribution_id"] in active_ids:
+                key = (contribution["target_kind"], contribution["target_id"])
+                by_target[key].add(contribution["contribution_id"])
+                by_document[key].add(contribution["document_id"])
 
         try:
-            validate_atomic_reference_mappings(contributions, chunks, entities)
+            validate_atomic_reference_mappings(active_contributions, chunks, entities)
         except KGError as exc:
             raise KGError(
                 "VERIFY_FAILED", "Atomic reference mappings do not match the indexed source evidence", 503
@@ -289,7 +321,10 @@ class MutationApplier:
                 stored = await c.vectors.read(kb_id, kind, ids, with_vectors=dense)
             else:
                 stored = await c.vectors.all(
-                    kb_id, kind, with_vectors=dense, max_points=c.settings.maintenance_scan_limit,
+                    kb_id,
+                    kind,
+                    with_vectors=dense,
+                    max_points=c.settings.maintenance_scan_limit,
                 )
             actual = {point["id"]: point for point in stored}
             if len(actual) != len(stored) or set(actual) != {point["id"] for point in expected}:
@@ -299,7 +334,10 @@ class MutationApplier:
             for point in expected:
                 observed = actual[point["id"]]
                 if observed["payload"] != point["payload"] or (
-                    dense and not vector_equal(point["vector"], observed["vector"], plan["embedding_profile"]["distance"])
+                    dense
+                    and not vector_equal(
+                        point["vector"], observed["vector"], plan["embedding_profile"]["distance"]
+                    )
                 ):
                     raise KGError(
                         "VERIFY_FAILED",
@@ -378,7 +416,11 @@ class MutationApplier:
 
 def vector_equal(expected, actual, distance):
     """按存储浮点容差比较向量；Cosine 的预期值先对齐存储端归一化结果。"""
-    if not isinstance(actual, list) or len(expected) != len(actual) or any(not math.isfinite(value) for value in actual):
+    if (
+        not isinstance(actual, list)
+        or len(expected) != len(actual)
+        or any(not math.isfinite(value) for value in actual)
+    ):
         return False
     if distance == "Cosine":
         norm = math.sqrt(sum(value * value for value in expected))

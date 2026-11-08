@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import re
 from collections import Counter, defaultdict
 
 from ...domain import KGError, canonical, check_value, identity_value, new_id, validate_identity_key
+from .literal import normalize_candidate_literals
 from .source_references import (
     evidence_positions,
     origin_key,
@@ -52,7 +54,7 @@ def _input_scope(owner, chunks):
 
 
 def _atomic_statement(
-    candidate, group, definition, document, chunks, rule_context, model, *, input_unit_keys=None
+    candidate, group, definition, document, chunks, catalog, model, *, input_unit_keys=None
 ):
     """只校验字段、引用原文及输入授权；保留模型完整性判断，不据此否决文本。"""
     declaration = candidate.get("atomic_groups", {}).get(group.name)
@@ -69,7 +71,6 @@ def _atomic_statement(
             "Atomic declaration lacks its complete configured field group",
             group=group.name,
         )
-    catalog = {unit["unit_key"]: unit for unit in rule_context}
     supports, per_field, verified_references = [], {}, []
     for field in group.fields:
         check_value(fields[field], definition.properties[field])
@@ -90,7 +91,6 @@ def _atomic_statement(
         per_field[field] = field_evidence
         supports.extend(field_evidence)
 
-    # 结构化映射核对记录；文本字段只要求其自身证据真实且可见。
     mapping_id = candidate.get("mapping_id")
     if mapping_id:
         mapping = model.mappings.get(mapping_id)
@@ -115,7 +115,7 @@ def _atomic_statement(
         if input_unit_keys is not None and set(selected) - set(input_unit_keys):
             raise KGError("RULE_INCOMPLETE", "The rule selected a source unit not supplied in its model call")
         ordered = sorted((catalog[key] for key in selected), key=lambda unit: unit["order"])
-        # Context availability is deterministic; the model's field evidence and completeness flags remain independent.
+        # 上下文证据由程序确定；字段证据和完整性标记仍分别校验。
         section_support = [
             item for unit in ordered for item in unit_context_evidence(unit, chunks, visible_only=True)
         ]
@@ -132,7 +132,7 @@ def _atomic_statement(
                     "RULE_INCOMPLETE", "A rule field is supported outside its declared source clause"
                 )
 
-        # Optional reference enrichment must not discard an independently supported clause.
+        # 补充引用无效时只拒绝该引用，不丢弃已有独立证据的条款。
         rejected_references = 0
         for reference in declaration.get("resolved_references", []):
             try:
@@ -176,6 +176,11 @@ def _atomic_statement(
         "field_evidence": per_field,
         "resolved_references": verified_references,
         "completeness_check": validation,
+        **(
+            {"literal_provenance": declaration["literal_provenance"]}
+            if declaration.get("literal_provenance")
+            else {}
+        ),
     }
     return statement, supports
 
@@ -190,6 +195,87 @@ def _relation_identity(candidate, definition, source, target):
         "relation_type": candidate["type"],
         "fields": {field: values[field] for field in definition.identity_properties},
     }
+
+
+_ALIAS_EQUIVALENCE = re.compile(
+    r"\b(?:also known as|formerly known as|a\.?k\.?a\.?)\b|即|又称|简称|亦称", re.I
+)
+
+
+async def _resolve_mention(doc, candidate, definition, graph, chunks, catalog, input_unit_keys):
+    """Use only configured, source-verified independent facts to reuse an existing ID."""
+    if graph is None or not definition.identity_match.model_dump(exclude_defaults=True):
+        raise KGError("MISSING_IDENTITY", "Incomplete identity has no configured alignment path")
+    mention = candidate.get("mention")
+    if not isinstance(mention, str) or not mention.strip():
+        raise KGError("MISSING_IDENTITY", "Incomplete identity requires a source mention")
+    mention_support = verify_evidence(
+        candidate.get("mention_evidence", []),
+        chunks,
+        units=catalog,
+        input_unit_keys=input_unit_keys,
+    )
+    if {item["document_id"] for item in mention_support} != {doc["document_id"]}:
+        raise KGError("EVIDENCE_INVALID", "Entity mention must come from this document")
+    if not any(mention in item.get("quote", "") for item in mention_support):
+        raise KGError("IDENTITY_EVIDENCE_MISSING", "Mention evidence does not contain the stated name")
+    matches = {}
+    document_ids = [doc["document_id"]] if definition.identity.scope == "document" else None
+    for field in definition.identity_match.stable_fields:
+        if field not in candidate["properties"]:
+            continue
+        support = verify_evidence(
+            candidate.get("evidence", {}).get(field, []),
+            chunks,
+            units=catalog,
+            input_unit_keys=input_unit_keys,
+        )
+        if {item["document_id"] for item in support} != {doc["document_id"]}:
+            raise KGError("EVIDENCE_INVALID", "Identity discriminator belongs to another document")
+        value = candidate["properties"][field]
+        if not any(str(value) in item.get("quote", "") for item in support):
+            raise KGError("IDENTITY_EVIDENCE_MISSING", "Stable-field evidence omits its value")
+        found = await graph.by_property_value(doc["kb_id"], candidate["type"], field, value, document_ids)
+        if len(found) > 1:
+            raise KGError("IDENTITY_AMBIGUITY", "A stable field matches multiple entities")
+        matches.update((item["entity_id"], item) for item in found)
+    equivalence = candidate.get("identity_equivalence")
+    if equivalence:
+        if not definition.identity_match.explicit_alias:
+            raise KGError("IDENTITY_EVIDENCE_MISSING", "Explicit alias matching is not configured")
+        values = equivalence["identity_fields"]
+        if set(values) != set(definition.identity.fields):
+            raise KGError("IDENTITY_EVIDENCE_MISSING", "Alias statement lacks complete identity values")
+        support = verify_evidence(
+            equivalence["evidence"], chunks, units=catalog, input_unit_keys=input_unit_keys
+        )
+        if {item["document_id"] for item in support} != {doc["document_id"]}:
+            raise KGError("EVIDENCE_INVALID", "Alias statement belongs to another document")
+        if not any(
+            mention in item.get("quote", "")
+            and all(str(value) in item.get("quote", "") for value in values.values())
+            and _ALIAS_EQUIVALENCE.search(item.get("quote", ""))
+            for item in support
+        ):
+            raise KGError(
+                "IDENTITY_EVIDENCE_MISSING", "Source does not explicitly equate the mention and identity"
+            )
+        identity = identity_value(definition, values, doc["document_id"])
+        found = await graph.by_identity(doc["kb_id"], "entity", [(candidate["type"], canonical(identity))])
+        if len(found) > 1:
+            raise KGError("IDENTITY_AMBIGUITY", "Alias identity matches multiple entities")
+        matches.update((item["entity_id"], item) for item in found)
+    if len(matches) != 1:
+        raise KGError(
+            "IDENTITY_AMBIGUITY" if matches else "IDENTITY_EVIDENCE_MISSING",
+            "Independent source facts do not identify one existing entity",
+        )
+    target = next(iter(matches.values()))
+    if target["entity_type"] != candidate["type"] or (
+        definition.identity.scope == "document" and doc["document_id"] not in target.get("document_ids", [])
+    ):
+        raise KGError("IDENTITY_AMBIGUITY", "Candidate exceeds its identity type or document scope")
+    return target, mention_support
 
 
 async def align(
@@ -252,7 +338,7 @@ async def align(
             }
         )
 
-    def contribution(kind, object_id, field, value, evidence, claim=None):
+    def contribution(kind, object_id, field, value, evidence, claim=None, dependencies=()):
         comparable_value = {"fields": value["fields"]} if field.startswith("/atomic_groups/") else value
         key = canonical(
             {
@@ -262,6 +348,7 @@ async def align(
                 "field": field,
                 "value": comparable_value,
                 "source_positions": evidence_positions(evidence),
+                "identity_dependencies": list(dependencies),
             }
         )
         if key not in contribution_ids:
@@ -274,7 +361,8 @@ async def align(
             "target_kind": kind,
             "target_id": object_id,
             "field_path": field,
-            "claim": claim if claim is not None else {"value": value},
+            "claim": (claim if claim is not None else {"value": value})
+            | ({"identity_dependencies": list(dependencies)} if dependencies else {}),
             "value": value,
             "evidence": evidence,
             "job_id": job_id,
@@ -287,20 +375,46 @@ async def align(
             definition = model.node_types.get(candidate["type"])
             if not definition:
                 raise KGError("UNKNOWN_TYPE", "Unknown entity type")
+            local_chunks, local_units = _input_scope(candidate, chunks)
+            group_scopes = {
+                name: _input_scope(scope, chunks)
+                for name, scope in candidate.get("atomic_group_scopes", {}).items()
+            }
+            normalize_candidate_literals(
+                candidate,
+                definition,
+                catalog,
+                local_chunks,
+                local_units if local_units is not None else list(catalog),
+                group_scopes=group_scopes,
+            )
             values = candidate["properties"]
             if set(values) - definition.properties.keys():
                 raise KGError("UNKNOWN_FIELD", "Unknown entity property")
             for field, value in values.items():
                 check_value(value, definition.properties[field])
-            identity = identity_value(definition, values, doc["document_id"])
+            try:
+                identity = identity_value(definition, values, doc["document_id"])
+                alias_target, mention_evidence = None, []
+            except KGError as exc:
+                if exc.code != "MISSING_IDENTITY":
+                    raise
+                alias_target, mention_evidence = await _resolve_mention(
+                    doc, candidate, definition, graph, local_chunks, catalog, local_units
+                )
+                identity = alias_target["identity"]
             atomic_fields = {field for group in definition.atomic_groups for field in group.fields}
             missing = [
                 field
                 for field, prop in definition.properties.items()
                 if prop.required and field not in atomic_fields and field not in values
             ]
-            endpoint_only = bool(missing)
-            if missing and not (candidate.get("identity_only") and candidate["ref"] in relation_refs):
+            endpoint_only = bool(missing) and alias_target is None
+            if (
+                missing
+                and alias_target is None
+                and not (candidate.get("identity_only") and candidate["ref"] in relation_refs)
+            ):
                 raise KGError(
                     "MISSING_REQUIRED_FIELD", "Entity is missing required properties", fields=missing
                 )
@@ -313,7 +427,6 @@ async def align(
             )
             if set(domains) - known_domains:
                 raise KGError("UNKNOWN_DOMAIN", "Candidate contains unconfigured domains")
-            local_chunks, local_units = _input_scope(candidate, chunks)
             evidence_by_field = {}
             for field in values:
                 if field not in atomic_fields:
@@ -324,45 +437,74 @@ async def align(
                         input_unit_keys=local_units,
                     )
             identity_evidence = []
-            for field in definition.identity.fields:
-                if field not in evidence_by_field:
-                    evidence_by_field[field] = verify_evidence(
-                        candidate.get("evidence", {}).get(field, []),
-                        local_chunks,
-                        units=catalog,
-                        input_unit_keys=local_units,
-                    )
-                identity_evidence.extend(evidence_by_field[field])
+            if alias_target is None:
+                for field in definition.identity.fields:
+                    if field not in evidence_by_field:
+                        evidence_by_field[field] = verify_evidence(
+                            candidate.get("evidence", {}).get(field, []),
+                            local_chunks,
+                            units=catalog,
+                            input_unit_keys=local_units,
+                        )
+                    identity_evidence.extend(evidence_by_field[field])
+            else:
+                identity_evidence = mention_evidence
             if {item["document_id"] for item in identity_evidence} != {doc["document_id"]}:
                 raise KGError("EVIDENCE_INVALID", "Entity support belongs to another source document")
             key = canonical([candidate["type"], identity])
             existing = entity_identities[(candidate["type"], canonical(identity))]
             if len(existing) > 1:
                 raise KGError("IDENTITY_AMBIGUITY", "Multiple existing objects share this business identity")
-            object_id = identities.get(key) or next(iter(existing), None) or new_id()
+            object_id = (
+                alias_target["entity_id"]
+                if alias_target is not None
+                else identities.get(key) or next(iter(existing), None) or new_id()
+            )
+            if identities.get(key) not in (None, object_id):
+                raise KGError("IDENTITY_AMBIGUITY", "Local identity maps to conflicting graph objects")
             identities[key] = object_id
-            rows = [
-                contribution(
-                    "entity",
-                    object_id,
-                    "$exists",
-                    {"entity_type": candidate["type"], "identity": identity, "domain_ids": domains},
-                    identity_evidence,
-                )
-            ]
-            for field in definition.identity.fields:
+            dependencies = (
+                [{"target_id": object_id, "identity_key": canonical(identity)}]
+                if alias_target is not None
+                else []
+            )
+            rows = []
+            if alias_target is None:
                 rows.append(
                     contribution(
                         "entity",
                         object_id,
-                        "/identity/" + field,
-                        identity["fields"][field],
-                        evidence_by_field[field],
-                        {"raw_value": values[field]},
+                        "$exists",
+                        {"entity_type": candidate["type"], "identity": identity, "domain_ids": domains},
+                        identity_evidence,
+                    )
+                )
+                for field in definition.identity.fields:
+                    rows.append(
+                        contribution(
+                            "entity",
+                            object_id,
+                            "/identity/" + field,
+                            identity["fields"][field],
+                            evidence_by_field[field],
+                            {"raw_value": values[field]},
+                        )
+                    )
+            else:
+                rows.append(
+                    contribution(
+                        "entity",
+                        object_id,
+                        "$mention",
+                        {"mention": candidate["mention"]},
+                        mention_evidence,
+                        dependencies=dependencies,
                     )
                 )
             for field, value in values.items():
-                if field not in atomic_fields:
+                if field not in atomic_fields and (
+                    alias_target is None or field not in definition.identity.fields
+                ):
                     rows.append(
                         contribution(
                             "entity",
@@ -370,11 +512,17 @@ async def align(
                             "/properties/" + field,
                             identity["fields"].get(field, value),
                             evidence_by_field[field],
-                            {"raw_value": value},
+                            {"raw_value": value}
+                            | (
+                                {"literal_provenance": candidate["literal_provenance"][field]}
+                                if field in candidate.get("literal_provenance", {})
+                                else {}
+                            ),
+                            dependencies,
                         )
                     )
             for group in definition.atomic_groups:
-                # Rule fields are indivisible; endpoint permission does not turn an incomplete rule into a fact.
+                # 规则字段必须成组成立；端点豁免不能让不完整规则成为事实。
                 scope = candidate.get("atomic_group_scopes", {}).get(group.name)
                 group_chunks, group_units = (
                     _input_scope(scope, chunks) if scope is not None else (local_chunks, local_units)
@@ -385,7 +533,7 @@ async def align(
                     definition,
                     doc,
                     group_chunks,
-                    rule_context or [],
+                    catalog,
                     model,
                     input_unit_keys=group_units,
                 )
@@ -397,6 +545,7 @@ async def align(
                         statement,
                         supports,
                         {"fields": statement["fields"]},
+                        dependencies,
                     )
                 )
             refs[candidate["ref"]] = {
@@ -404,6 +553,7 @@ async def align(
                 "type": candidate["type"],
                 "identity": identity,
                 "evidence": identity_evidence,
+                "identity_dependencies": dependencies,
             }
             entity_rows[candidate["ref"]] = (rows, endpoint_only)
         except KGError as exc:
@@ -486,6 +636,13 @@ async def align(
                         "endpoint_identities": endpoint_identities,
                         "endpoint_evidence": {"source": source["evidence"], "target": target["evidence"]},
                     },
+                    list(
+                        {
+                            item["target_id"]: item
+                            for endpoint in (source, target)
+                            for item in endpoint["identity_dependencies"]
+                        }.values()
+                    ),
                 )
             ]
             for field, value_ in values.items():
@@ -495,7 +652,22 @@ async def align(
                     units=catalog,
                     input_unit_keys=local_units,
                 )
-                rows.append(contribution("relation", object_id, "/properties/" + field, value_, support))
+                rows.append(
+                    contribution(
+                        "relation",
+                        object_id,
+                        "/properties/" + field,
+                        value_,
+                        support,
+                        dependencies=list(
+                            {
+                                item["target_id"]: item
+                                for endpoint in (source, target)
+                                for item in endpoint["identity_dependencies"]
+                            }.values()
+                        ),
+                    )
+                )
             output.extend(rows)
             used_refs.update((candidate["source_ref"], candidate["target_ref"]))
         except KGError as exc:

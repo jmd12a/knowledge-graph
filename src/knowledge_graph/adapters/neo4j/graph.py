@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 
 from neo4j import AsyncGraphDatabase, Query
 from neo4j.exceptions import DriverError, Neo4jError
@@ -159,6 +160,23 @@ class Graph:
             kb=kb_id,
         )
         return {row["kind"]: row["total"] for row in rows}
+
+    async def by_property_value(self, kb_id, entity_type, field, value, document_ids=None):
+        """Read exact confirmed scalar matches with a second row for ambiguity detection."""
+        valid_id(kb_id)
+        if not re.fullmatch(r"[A-Za-z][A-Za-z0-9_]{0,63}", field):
+            raise KGError("INVALID_ARGUMENT", "Invalid identity discriminator field")
+        rows = await self._run(
+            "MATCH (n:KGEntity {kb_id:$kb,entity_type:$type})"
+            + f" WHERE n.p_{field}=$value"
+            + " AND (size($documents)=0 OR any(d IN n.document_ids WHERE d IN $documents))"
+            + " RETURN n.data_json AS data ORDER BY n.entity_id LIMIT 2",
+            kb=kb_id,
+            type=entity_type,
+            value=value,
+            documents=document_ids or [],
+        )
+        return [json.loads(row["data"]) for row in rows]
 
     async def candidates(
         self, kb_id, text, scan_limit, entity_types=None, domain_ids=None, document_ids=None

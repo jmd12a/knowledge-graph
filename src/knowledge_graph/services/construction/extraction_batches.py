@@ -10,9 +10,18 @@ from itertools import groupby
 from ...domain import canonical
 
 
+def request_fits(language, system, request, schema) -> bool:
+    if getattr(language.profile, "max_context_tokens", None) is not None:
+        return language.json_request_fits(system, request, schema)
+    return language.json_request_chars(system, request, schema) <= language.profile.max_input_chars
+
+
 class ExtractionBatch:
-    def __init__(self, scope, chunks, model):
-        self.chunk_ids = {f"chunk/{index}": key for index, key in enumerate(scope["input_chunk_ids"])}
+    def __init__(self, scope, chunks, model, *, scope_policy="whole", units_only=False):
+        units_only = units_only or scope_policy == "structure"
+        self.chunk_ids = (
+            {} if units_only else {f"chunk/{i}": key for i, key in enumerate(scope["input_chunk_ids"])}
+        )
         self.unit_keys = {f"unit/{index}": key for index, key in enumerate(scope["input_unit_keys"])}
         tables = {}
 
@@ -37,22 +46,28 @@ class ExtractionBatch:
                     ],
                     "section_path": chunk.get("section_path", []),
                     "parser_profile": chunk["parser_profile"],
+                    **({"block_range": chunk["block_range"]} if "block_range" in chunk else {}),
                     "domain_ids": chunk["domain_ids"],
                 }
             )
         self.request = {
             "business_model": model,
-            "chunks": local_chunks,
+            "scope_policy": scope_policy,
+            **({"chunks": local_chunks} if not units_only else {}),
             "rule_units": [
                 view | {"unit_key": alias, "order": index}
                 for index, (alias, view) in enumerate(zip(self.unit_keys, scope["unit_views"], strict=True))
             ],
         }
 
-    def request_key(self, language, system, schema):
-        profile = language.profile.model_dump(exclude={"api_key_env", "timeout", "max_input_chars"})
+    def request_key(self, language, system, schema, *, request=None):
+        profile = language.profile.model_dump(
+            exclude={"api_key_env", "timeout", "max_input_chars", "max_context_tokens"}
+        )
         # 请求中的字段顺序也会进入模型看到的 JSON 文本。
-        prompt = json.dumps([self.request, schema], ensure_ascii=False, allow_nan=False)
+        prompt = json.dumps(
+            [self.request if request is None else request, schema], ensure_ascii=False, allow_nan=False
+        )
         return sha256(canonical([profile, system, prompt]).encode("utf-8")).hexdigest()
 
     def bind(self, output):
@@ -76,9 +91,15 @@ class ExtractionBatch:
                     ref["unit_key"] = source_key(ref["unit_key"], self.unit_keys)
 
         for entity in output["entities"]:
+            bind_refs(entity.get("mention_evidence", []))
+            if entity.get("identity_equivalence"):
+                bind_refs(entity["identity_equivalence"]["evidence"])
             for refs in entity["evidence"].values():
                 bind_refs(refs)
             for declaration in entity["atomic_groups"].values():
+                for parts in declaration.get("literal_parts", {}).values():
+                    for part in parts:
+                        part["unit_key"] = source_key(part["unit_key"], self.unit_keys)
                 for refs in declaration["evidence"].values():
                     bind_refs(refs)
                 declaration["rule_units"] = [
@@ -90,6 +111,9 @@ class ExtractionBatch:
                 for reference in declaration["resolved_references"]:
                     bind_refs(reference["reference"])
                     bind_refs(reference["target"])
+            for parts in entity.get("literal_parts", {}).values():
+                for part in parts:
+                    part["unit_key"] = source_key(part["unit_key"], self.unit_keys)
         for relation in output["relations"]:
             bind_refs(relation["evidence"])
             for refs in relation["property_evidence"].values():

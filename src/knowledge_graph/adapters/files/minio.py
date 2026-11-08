@@ -18,7 +18,6 @@ from ...domain import KGError, canonical, valid_id
 from ...runtime import blocking
 from .local import Files, _ContentReader
 
-
 log = logging.getLogger(__name__)
 
 
@@ -42,9 +41,12 @@ class MinioFiles(Files):
             aws_secret_access_key=secret_key,
             region_name="us-east-1",
             config=Config(
-                connect_timeout=5, read_timeout=30, retries={"total_max_attempts": 1},
+                connect_timeout=5,
+                read_timeout=30,
+                retries={"total_max_attempts": 1},
                 s3={"addressing_style": "path"},
-                request_checksum_calculation="when_required", response_checksum_validation="when_required",
+                request_checksum_calculation="when_required",
+                response_checksum_validation="when_required",
             ),
         )
 
@@ -59,20 +61,28 @@ class MinioFiles(Files):
             if missing_ok and code in _MISSING:
                 return None
             if code in {"409", "412", "PreconditionFailed", "ConditionalRequestConflict"}:
-                raise KGError("OBJECT_WRITE_CONFLICT", "The object changed before its conditional write", 503,
-                              retryable=True) from exc
-            raise KGError("OBJECT_STORE_UNAVAILABLE", "MinIO did not complete the operation", 503,
-                          retryable=True) from exc
+                raise KGError(
+                    "OBJECT_WRITE_CONFLICT",
+                    "The object changed before its conditional write",
+                    503,
+                    retryable=True,
+                ) from exc
+            raise KGError(
+                "OBJECT_STORE_UNAVAILABLE", "MinIO did not complete the operation", 503, retryable=True
+            ) from exc
         except (BotoCoreError, OSError) as exc:
-            raise KGError("OBJECT_STORE_UNAVAILABLE", "MinIO did not complete the operation", 503,
-                          retryable=True) from exc
+            raise KGError(
+                "OBJECT_STORE_UNAVAILABLE", "MinIO did not complete the operation", 503, retryable=True
+            ) from exc
 
     def initialize(self):
         super().initialize()
         self.ready()
         versioning = self._request("get_bucket_versioning").get("Status")
         if versioning:
-            raise KGError("STORAGE_NOT_CONFIGURED", "MinIO requires a bucket without object version history", 503)
+            raise KGError(
+                "STORAGE_NOT_CONFIGURED", "MinIO requires a bucket without object version history", 503
+            )
 
     def ready(self):
         self._request("head_bucket")
@@ -100,7 +110,9 @@ class MinioFiles(Files):
             for page in paginator.paginate(Bucket=self.bucket, Prefix=prefix):
                 yield from page.get("Contents", [])
         except (BotoCoreError, ClientError, OSError) as exc:
-            raise KGError("OBJECT_STORE_UNAVAILABLE", "MinIO could not list objects", 503, retryable=True) from exc
+            raise KGError(
+                "OBJECT_STORE_UNAVAILABLE", "MinIO could not list objects", 503, retryable=True
+            ) from exc
 
     def raw_directory(self, kb_id, document_id):
         return Path("raw", valid_id(kb_id), valid_id(document_id))
@@ -136,7 +148,12 @@ class MinioFiles(Files):
         path = Path(self._key(job.get("plan_path", "")))
         expected = self.job_dir(job["job_id"]) / str(job["queue_seq"])
         attempt = path.parent.name
-        if path.parent.parent != expected or not attempt.isdecimal() or int(attempt) < 1 or path.name != "prepared.json":
+        if (
+            path.parent.parent != expected
+            or not attempt.isdecimal()
+            or int(attempt) < 1
+            or path.name != "prepared.json"
+        ):
             raise ValueError("Unexpected prepared plan key")
         return self.read_json(path)
 
@@ -153,7 +170,11 @@ class MinioFiles(Files):
             raise KGError("PREPARATION_REPLACED", "This preparation is closed", 409)
         condition = {"IfMatch": previous["ETag"]} if previous else {"IfNoneMatch": "*"}
         self._request(
-            "put_object", Key=key, Body=canonical(value).encode("utf-8"), ContentType="application/json", **condition,
+            "put_object",
+            Key=key,
+            Body=canonical(value).encode("utf-8"),
+            ContentType="application/json",
+            **condition,
         )
 
     def read_json(self, path):
@@ -171,8 +192,9 @@ class MinioFiles(Files):
         except (ValueError, UnicodeError) as exc:
             raise KGError("PLAN_INVALID", "Checkpoint JSON is invalid", 503) from exc
         except (BotoCoreError, OSError) as exc:
-            raise KGError("OBJECT_STORE_UNAVAILABLE", "MinIO could not read the checkpoint", 503,
-                          retryable=True) from exc
+            raise KGError(
+                "OBJECT_STORE_UNAVAILABLE", "MinIO could not read the checkpoint", 503, retryable=True
+            ) from exc
 
     def exists(self, path):
         target = Path(self._key(path))
@@ -185,8 +207,10 @@ class MinioFiles(Files):
         paths = [Path(item["Key"]) for item in self._objects(self.job_dir(job_id))]
         planned = {path.parent for path in paths if path.name == "prepared.json"}
         result = [
-            value for path in paths
-            if path.name in {"preparation.json", "prepared.json"} and (value := self.read_json(path)) is not None
+            value
+            for path in paths
+            if path.name in {"preparation.json", "prepared.json"}
+            and (value := self.read_json(path)) is not None
         ]
         if any(path.name == "scope.json" and path.parent not in planned for path in paths):
             # 旧尝试可能刚登记范围，还没来得及写入可核对来源的草稿。
@@ -208,7 +232,9 @@ class MinioFiles(Files):
             raise KGError("INCONSISTENT_STORAGE", "Registered document object is invalid", 503)
         result = self._request("get_object", Key=key, missing_ok=True)
         if result is None:
-            raise KGError("SOURCE_UNAVAILABLE", "Registered document content is unavailable", 503, retryable=True)
+            raise KGError(
+                "SOURCE_UNAVAILABLE", "Registered document content is unavailable", 503, retryable=True
+            )
         return result
 
     async def open_content(self, path, expected_bytes):
@@ -218,7 +244,9 @@ class MinioFiles(Files):
             result = self._open_raw(path)
             opened.append(result["Body"])
             if result["ContentLength"] != expected_bytes:
-                raise KGError("INCONSISTENT_STORAGE", "Registered document length does not match its content", 503)
+                raise KGError(
+                    "INCONSISTENT_STORAGE", "Registered document length does not match its content", 503
+                )
 
         try:
             await blocking(open_checked)
@@ -247,8 +275,9 @@ class MinioFiles(Files):
                     if not left:
                         return True
         except BotoCoreError as exc:
-            raise KGError("SOURCE_UNAVAILABLE", "MinIO could not compare document content", 503,
-                          retryable=True) from exc
+            raise KGError(
+                "SOURCE_UNAVAILABLE", "MinIO could not compare document content", 503, retryable=True
+            ) from exc
 
     def parse_document(self, parser, document, model):
         # 匿名文件在进程退出时释放，远端 Worker 中断也不会留下原文副本。
@@ -258,10 +287,13 @@ class MinioFiles(Files):
                 with closing(result["Body"]) as source:
                     shutil.copyfileobj(source, temporary, length=1024 * 1024)
             except (BotoCoreError, OSError) as exc:
-                raise KGError("SOURCE_UNAVAILABLE", "MinIO could not read document content", 503,
-                              retryable=True) from exc
+                raise KGError(
+                    "SOURCE_UNAVAILABLE", "MinIO could not read document content", 503, retryable=True
+                ) from exc
             if temporary.tell() != document["byte_length"]:
-                raise KGError("INCONSISTENT_STORAGE", "Registered document length does not match its content", 503)
+                raise KGError(
+                    "INCONSISTENT_STORAGE", "Registered document length does not match its content", 503
+                )
             temporary.flush()
             return parser.parse(document | {"raw_path": f"/proc/self/fd/{temporary.fileno()}"}, model)
 
@@ -269,7 +301,8 @@ class MinioFiles(Files):
     def _attempt(path):
         parts = Path(path).parts
         if (
-            len(parts) != 4 or parts[0] != "jobs"
+            len(parts) != 4
+            or parts[0] != "jobs"
             or not all(value.isdecimal() and int(value) > 0 for value in parts[2:])
         ):
             raise KGError("INVALID_ARGUMENT", "Invalid preparation prefix")
@@ -325,6 +358,7 @@ class MinioFiles(Files):
 
     def orphan_files(self, referenced_paths, cutoff):
         return [
-            item["Key"] for item in self._objects("raw")
+            item["Key"]
+            for item in self._objects("raw")
             if item["Key"] not in referenced_paths and item["LastModified"].timestamp() < cutoff
         ]

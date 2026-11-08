@@ -3,6 +3,8 @@ from __future__ import annotations
 import asyncio
 import logging
 import math
+from collections import Counter
+from copy import deepcopy
 
 from ...domain import BusinessModel, EmbeddingProfile, KGError, new_id
 from ...ports.resources import Resources
@@ -14,10 +16,60 @@ from .chunk_vectors import ChunkVectorPreparation
 from .extraction import extract_text, mapped_extraction
 from .extraction_batches import reusable_batches
 from .maintenance import check_vector_capacity, conflict_warnings, deletion_cleanup, task_counts
-from .merge import aggregate, relation_conflict_groups
+from .merge import aggregate, effective_contributions, relation_conflict_groups
+
+
+async def dependency_target_closure(metadata, kb_id, targets, changes, excluded_document_id, limit):
+    """Include the live anchors needed to judge every selected dependent contribution."""
+    selected = set(targets)
+    while True:
+        rows = await metadata.target_contributions(kb_id, sorted(selected), active_only=True)
+        if len(rows) > limit or len(selected) > limit:
+            raise KGError("SCAN_BUDGET_EXCEEDED", "Identity dependency scope exceeds the maintenance budget")
+        remaining = [row for row in rows if row["document_id"] != excluded_document_id]
+        if excluded_document_id is None:
+            remaining.extend(changes)
+        effective_contributions(remaining)  # Validate dependency markers before following them.
+        anchors = {
+            ("entity", item["target_id"])
+            for row in remaining
+            for item in row.get("claim", {}).get("identity_dependencies", [])
+        }
+        missing = anchors - selected
+        if not missing:
+            return selected, rows
+        selected.update(missing)
 
 
 log = logging.getLogger(__name__)
+
+
+def retry_extraction_checkpoints(draft, baseline, document_id, settings):
+    """Carry raw local responses; new parser IDs and scopes are built afresh."""
+    if (
+        not isinstance(draft, dict)
+        or baseline["operation"] != "IMPORT"
+        or any(draft.get(key) != value for key, value in baseline.items())
+        or draft.get("scoped") is not True
+    ):
+        return {}
+    entry = draft.get("documents", {}).get(document_id, {})
+    saved = entry.get("extraction_batches", {})
+    scopes = saved.get("_input_scopes", {})
+    if scopes.get("version") != 2 or scopes.get("scope_policy", "whole") != settings.extraction_scope_policy:
+        return {}
+    batches = {
+        value["request_key"]: deepcopy(value["result"])
+        for key, value in saved.items()
+        if (
+            key.startswith("batch/")
+            or (settings.extraction_scope_policy == "structure" and key.startswith(("grounding/", "link/")))
+        )
+        and isinstance(value, dict)
+        and isinstance(value.get("request_key"), str)
+        and isinstance(value.get("result"), dict)
+    }
+    return {**entry.get("retry_reuse", {}), **batches}
 
 
 class Construction:
@@ -78,6 +130,7 @@ class Construction:
             or draft.get("queue_seq") != job["queue_seq"]
             or draft.get("scoped", False) != scoped
         ):
+            recovery = retry_extraction_checkpoints(draft, baseline, job.get("document_id"), c.settings)
             draft = {
                 **baseline,
                 "queue_seq": job["queue_seq"],
@@ -90,6 +143,8 @@ class Construction:
                 "contribution_ids": {},
                 "vectors": {},
             }
+            if recovery:
+                draft["documents"][job["document_id"]] = {"retry_reuse": recovery}
         elif any(draft.get(key) != value for key, value in baseline.items()):
             raise KGError(
                 "PREPARATION_BASELINE_CHANGED", "Preparation no longer matches its persisted baseline", 503
@@ -171,9 +226,7 @@ class Construction:
         entities, relations = draft["final_entities"], draft["final_relations"]
         check_vector_capacity(len(chunk_points), len(entities), c.settings.maintenance_scan_limit)
         object_points = self._object_points(entities, kb_id, profile)
-        await self._prepare_vectors(
-            object_points, old_objects, draft, profile, persist
-        )
+        await self._prepare_vectors(object_points, old_objects, draft, profile, persist)
 
         if issues:
             warnings.append({"code": "CANDIDATE_ISSUES", "count": len(issues)})
@@ -215,7 +268,7 @@ class Construction:
 
         # 完整计划先原子落盘，再发布 PREPARED，供写入与恢复共用。
         plan = {
-            "schema_version": 4,
+            "schema_version": 5,
             "verification": None,
             "write_mode": "full",
             "plan_id": draft["plan_id"],
@@ -230,6 +283,13 @@ class Construction:
             "entities": entities,
             "relations": relations,
             "contributions": contributions,
+            "identity_dependency_targets": [],
+            "identity_dependency_projection": {
+                "active": sorted(row["contribution_id"] for row in effective_contributions(contributions)[0]),
+                "suppressed": sorted(
+                    row["contribution_id"] for row in effective_contributions(contributions)[1]
+                ),
+            },
             "chunk_points": chunk_points,
             "object_points": object_points,
             "issues": issues,
@@ -288,24 +348,49 @@ class Construction:
             )
 
         targets = {(row["target_kind"], row["target_id"]) for row in changes}
-        groups = relation_conflict_groups(changes, model)
+        identity_dependency_targets = []
+        dependent_rows = []
+        if operation == "DELETE":
+            anchor_ids = sorted({row["target_id"] for row in changes if row["field_path"] == "$exists"})
+            dependent_rows = await c.metadata.dependent_contributions(
+                kb_id, anchor_ids, c.settings.maintenance_scan_limit
+            )
+            identity_dependency_targets = sorted(
+                {
+                    (row["target_kind"], row["target_id"])
+                    for row in dependent_rows
+                    if row["document_id"] != document_id
+                }
+            )
+            targets.update(identity_dependency_targets)
+        groups = relation_conflict_groups(changes + dependent_rows, model)
+        group_relations = await c.graph.relation_groups(kb_id, groups)
+        targets.update(("relation", row["relation_id"]) for row in group_relations)
+        direct_targets = set(targets)
+        targets, remaining = await dependency_target_closure(
+            c.metadata,
+            kb_id,
+            targets,
+            changes,
+            document_id if operation == "DELETE" else None,
+            c.settings.maintenance_scan_limit,
+        )
+        identity_dependency_targets = sorted(set(identity_dependency_targets) | (targets - direct_targets))
         entity_ids = {key for kind, key in targets if kind == "entity"}
-        old_entities, direct_relations, group_relations = await asyncio.gather(
+        old_entities, direct_relations = await asyncio.gather(
             c.graph.by_id(kb_id, "entity", sorted(entity_ids)),
             c.graph.by_id(kb_id, "relation", sorted(key for kind, key in targets if kind == "relation")),
-            c.graph.relation_groups(kb_id, groups),
         )
         old_relations = list({row["relation_id"]: row for row in direct_relations + group_relations}.values())
-        targets.update(("relation", row["relation_id"]) for row in old_relations)
-        remaining = await c.metadata.target_contributions(kb_id, sorted(targets), active_only=True)
         contributions = [row for row in remaining if row["document_id"] != document_id]
         if operation == "IMPORT":
             contributions.extend(changes)
 
+        active_contributions, suppressed_dependencies = effective_contributions(contributions)
         external_endpoints = sorted(
             {
                 row["value"][field]
-                for row in contributions
+                for row in active_contributions
                 if row["field_path"] == "$relation"
                 for field in ("source_id", "target_id")
             }
@@ -323,6 +408,26 @@ class Construction:
             )
             await persist()
         entities, relations = draft["final_entities"], draft["final_relations"]
+        if suppressed_dependencies:
+            warnings.append({"code": "IDENTITY_DEPENDENCY_INACTIVE", "count": len(suppressed_dependencies)})
+            if operation == "DELETE":
+                issues.extend(
+                    {
+                        "issue_id": new_id(),
+                        "kb_id": kb_id,
+                        "job_id": job["job_id"],
+                        "document_id": row["document_id"],
+                        "chunk_id": row["chunk_id"],
+                        "candidate": {
+                            "target_kind": row["target_kind"],
+                            "target_id": row["target_id"],
+                            "field_path": row["field_path"],
+                        },
+                        "reason_code": "IDENTITY_DEPENDENCY_INACTIVE",
+                        "details": {"identity_dependencies": row["claim"]["identity_dependencies"]},
+                    }
+                    for row in suppressed_dependencies
+                )
         final_entity_ids = {row["entity_id"] for row in entities}
         final_relation_ids = {row["relation_id"] for row in relations}
         delete_entities = sorted({row["entity_id"] for row in old_entities} - final_entity_ids)
@@ -357,9 +462,7 @@ class Construction:
         check_vector_capacity(
             counts["current_chunks"], counts["current_entities"], c.settings.maintenance_scan_limit
         )
-        await self._prepare_vectors(
-            object_points, old_objects, draft, profile, persist, lookup_kb=kb_id
-        )
+        await self._prepare_vectors(object_points, old_objects, draft, profile, persist, lookup_kb=kb_id)
         if issues:
             warnings.append({"code": "CANDIDATE_ISSUES", "count": len(issues)})
         old_revisions = {
@@ -378,7 +481,7 @@ class Construction:
         evidence_chunk_ids.update(ev["chunk_id"] for row in contributions for ev in row["evidence"])
         activate = [document_id] if operation == "IMPORT" else []
         plan = {
-            "schema_version": 4,
+            "schema_version": 5,
             "write_mode": "delta",
             "plan_id": draft["plan_id"],
             "job_id": job["job_id"],
@@ -392,6 +495,11 @@ class Construction:
             "entities": entities,
             "relations": relations,
             "contributions": contributions,
+            "identity_dependency_targets": [list(item) for item in identity_dependency_targets],
+            "identity_dependency_projection": {
+                "active": sorted(row["contribution_id"] for row in active_contributions),
+                "suppressed": sorted(row["contribution_id"] for row in suppressed_dependencies),
+            },
             "chunk_points": chunk_points,
             "object_points": object_points,
             "issues": issues,
@@ -462,6 +570,7 @@ class Construction:
                 if reuse is None:
                     reuse = await self._load_extraction_reuse(kb_id)
                     reuse.update(reusable_batches(draft["documents"]))
+                reuse.update(entry.get("retry_reuse", {}))
                 entry["extracted"] = await extract_text(
                     c.language,
                     parsed,
@@ -469,8 +578,11 @@ class Construction:
                     entry.setdefault("extraction_batches", {}),
                     persist,
                     reuse=reuse,
+                    scope_policy=c.settings.extraction_scope_policy,
+                    structure_window_chars=c.settings.extraction_structure_window_chars,
                 )
-                entry["mapping_issues"] = []
+                entry["mapping_issues"] = entry["extracted"].pop("issues", [])
+                entry.pop("retry_reuse", None)
             await persist()
         if "contributions" not in entry:
             adopted, issues = await align(
@@ -563,7 +675,9 @@ class Construction:
         preparation = ChunkVectorPreparation(self.c, job, plan["embedding_profile"])
         index = await preparation.prepare(plan["chunk_points"], draft, persist, self._prepare_vectors)
         plan["chunk_index"] = index
-        plan["document_ids"] = sorted(set(plan["document_ids"]) | {row["document_id"] for row in index["members"]})
+        plan["document_ids"] = sorted(
+            set(plan["document_ids"]) | {row["document_id"] for row in index["members"]}
+        )
         plan["counts"]["current_chunk_vectors"] = index["current_count"]
         if draft.get("chunk_decision_failed"):
             plan["warnings"].append({"code": "CHUNK_COVERAGE_UNAVAILABLE"})
@@ -571,6 +685,20 @@ class Construction:
     async def _publish(self, job, draft, plan, previous):
         c, operation = self.c, job["operation"]
         counts = plan["counts"]
+        literal_methods = Counter()
+        for row in plan["contributions"]:
+            provenance = (
+                row["value"].get("literal_provenance", {})
+                if row["field_path"].startswith("/atomic_groups/")
+                else row["claim"].get("literal_provenance", {})
+            )
+            if row["field_path"].startswith("/atomic_groups/"):
+                literal_methods.update(
+                    value["selection_method"] for value in provenance.values() if "selection_method" in value
+                )
+            elif provenance.get("selection_method"):
+                literal_methods[provenance["selection_method"]] += 1
+        counts["literal_values_by_method"] = dict(sorted(literal_methods.items()))
         plan["write_set"] = build_write_set(plan, previous)
         writes = select_writes(plan)
         counts.update(
@@ -604,8 +732,13 @@ class Construction:
                 job["job_id"], state="PREPARED", plan_path=plan_path, plan_id=plan["plan_id"], error_json=None
             )
         elif not await c.metadata.update_preparation(
-            job, state="PREPARED", plan_path=plan_path, plan_id=plan["plan_id"],
-            last_step="prepared", error_json=None, next_attempt_at=0,
+            job,
+            state="PREPARED",
+            plan_path=plan_path,
+            plan_id=plan["plan_id"],
+            last_step="prepared",
+            error_json=None,
+            next_attempt_at=0,
         ):
             raise KGError("PREPARATION_REPLACED", "Another attempt owns this preparation", 409)
         return plan

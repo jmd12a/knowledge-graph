@@ -1,0 +1,28 @@
+name: labeled-quality-micro
+node_types:
+  Service:
+    description: 业务服务；app_id 是唯一可靠身份，同名可能代表不同服务。
+    identity: {namespace: service, fields: [app_id]}
+    identity_match: {stable_fields: [app_id], explicit_alias: true}
+    properties:
+      app_id: {type: string, required: true, queryable: true}
+      name: {type: string, merge: alternatives}
+      aliases: {type: string, merge: union}
+  Clause:
+    description: 文档中的独立条款；heading 是当前弱身份配置，重复标题可能误合并。
+    identity: {namespace: clause, fields: [heading], scope: document}
+    name_field: heading
+    properties:
+      heading: {type: string, required: true}
+      definition: {type: string, source_mode: literal, merge: supported_text}
+relation_types:
+  CALLS:
+    description: 调用方服务指向被调用方服务。
+    source_types: [Service]
+    target_types: [Service]
+    properties: {}
+extraction:
+  instructions:
+    - 只采用原文直接支持的服务、条款和 CALLS 关系；“不同”不代表调用。
+    - 两个同名条款正文不同，应视为不同条款；同一条款的别称不产生第二个条款。
+domains: []

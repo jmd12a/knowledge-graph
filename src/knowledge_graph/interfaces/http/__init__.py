@@ -204,9 +204,7 @@ def create_router(context):
         return await management.issues(job_id, limit, offset)
 
     @router.post("/jobs/{job_id}/retry", status_code=202)
-    async def retry(
-        job_id: str, generation: int = Query(ge=0)
-    ):
+    async def retry(job_id: str, generation: int = Query(ge=0)):
         return metadata_result(await management.retry(job_id, generation))
 
     @router.get("/kbs/{kb_id}/model", **result_options)

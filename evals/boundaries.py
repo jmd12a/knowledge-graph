@@ -10,7 +10,7 @@ from uuid import uuid4
 
 import yaml
 
-from .evidence import Evidence, PaidValidationStopped, ROOT, now
+from .evidence import ROOT, Evidence, PaidValidationStopped, now
 from .runtime import Runtime
 
 

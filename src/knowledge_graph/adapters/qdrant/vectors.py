@@ -2,20 +2,18 @@
 
 from __future__ import annotations
 
-import os
-from hashlib import sha256
 import math
+import os
 import re
 from collections import Counter
 from functools import wraps
+from hashlib import sha256
 
 import httpx
+from qdrant_client import AsyncQdrantClient, models
 from qdrant_client.http.exceptions import ResponseHandlingException, UnexpectedResponse
 
-from qdrant_client import AsyncQdrantClient, models
-
 from ...domain import EmbeddingProfile, KGError, canonical, valid_id
-
 
 _REUSE_FIELD = "_embedding_key"
 
@@ -81,32 +79,49 @@ class Vectors:
             if exists and recreate:
                 await self.client.delete_collection(name)
                 exists = False
-            vectors = {} if kind == "chunks" else models.VectorParams(
-                size=profile.dimension, distance=models.Distance(profile.distance)
+            vectors = (
+                {}
+                if kind == "chunks"
+                else models.VectorParams(size=profile.dimension, distance=models.Distance(profile.distance))
             )
             if not exists:
                 await self.client.create_collection(name, vectors_config=vectors)
-                fields = ("kb_id", "document_id", "domain_ids", _REUSE_FIELD) if kind == "chunks" else (
-                    ("kb_id", "entity_type", "domain_ids", "object_id", _REUSE_FIELD)
-                    if kind == "objects" else ("kb_id", _REUSE_FIELD)
+                fields = (
+                    ("kb_id", "document_id", "domain_ids", _REUSE_FIELD)
+                    if kind == "chunks"
+                    else (
+                        ("kb_id", "entity_type", "domain_ids", "object_id", _REUSE_FIELD)
+                        if kind == "objects"
+                        else ("kb_id", _REUSE_FIELD)
+                    )
                 )
                 for field in fields:
-                    await self.client.create_payload_index(name, field, models.PayloadSchemaType.KEYWORD, wait=True)
+                    await self.client.create_payload_index(
+                        name, field, models.PayloadSchemaType.KEYWORD, wait=True
+                    )
                 if kind == "chunks":
                     await self.client.create_payload_index(
-                        name, "text", models.TextIndexParams(type="text", tokenizer=models.TokenizerType.MULTILINGUAL),
+                        name,
+                        "text",
+                        models.TextIndexParams(type="text", tokenizer=models.TokenizerType.MULTILINGUAL),
                         wait=True,
                     )
 
             info = await self.client.get_collection(name)
             config = info.config.params.vectors
-            matches = config == {} if kind == "chunks" else (
-                isinstance(config, models.VectorParams)
-                and config.size == profile.dimension
-                and config.distance == models.Distance(profile.distance)
+            matches = (
+                config == {}
+                if kind == "chunks"
+                else (
+                    isinstance(config, models.VectorParams)
+                    and config.size == profile.dimension
+                    and config.distance == models.Distance(profile.distance)
+                )
             )
             if not matches:
-                raise KGError("INDEX_PROFILE_MISMATCH", "Collection does not match the effective embedding profile", 503)
+                raise KGError(
+                    "INDEX_PROFILE_MISMATCH", "Collection does not match the effective embedding profile", 503
+                )
 
     @staticmethod
     def filter(kb_id, *, document_ids=None, entity_types=None, domain_ids=None):
@@ -140,7 +155,11 @@ class Vectors:
             with_vectors=with_vectors,
         )
         items = [
-            {"id": str(point.id), "payload": _business_payload(point.payload), "vector": None if kind == "chunks" else point.vector}
+            {
+                "id": str(point.id),
+                "payload": _business_payload(point.payload),
+                "vector": None if kind == "chunks" else point.vector,
+            }
             for point in points
         ]
         return {
@@ -228,16 +247,20 @@ class Vectors:
         text_field = "search_text" if kind == "objects" else "text"
         dense = kind != "chunks"
         for start in range(0, len(texts), 64):
-            batch = texts[start:start + 64]
+            batch = texts[start : start + 64]
             requests = [
                 models.QueryRequest(
-                    filter=models.Filter(must=[
-                        models.FieldCondition(key="kb_id", match=models.MatchValue(value=kb_id)),
-                        models.FieldCondition(
-                            key=_REUSE_FIELD, match=models.MatchValue(value=_embedding_key(text, profile))
-                        ),
-                    ]),
-                    limit=1, with_vector=dense, with_payload=True,
+                    filter=models.Filter(
+                        must=[
+                            models.FieldCondition(key="kb_id", match=models.MatchValue(value=kb_id)),
+                            models.FieldCondition(
+                                key=_REUSE_FIELD, match=models.MatchValue(value=_embedding_key(text, profile))
+                            ),
+                        ]
+                    ),
+                    limit=1,
+                    with_vector=dense,
+                    with_payload=True,
                 )
                 for text in batch
             ]
@@ -250,7 +273,9 @@ class Vectors:
                         and (not dense or point.vector is not None)
                     ):
                         found[text] = {
-                            "id": str(point.id), "payload": _business_payload(point.payload), "vector": point.vector,
+                            "id": str(point.id),
+                            "payload": _business_payload(point.payload),
+                            "vector": point.vector,
                         }
         return found
 
@@ -265,7 +290,9 @@ class Vectors:
     @storage_request
     async def reusable_vectors(self, kb_id, texts, profile):
         chunks = await self._exact_vectors(kb_id, "chunk_vectors", texts, profile)
-        objects = await self._exact_vectors(kb_id, "objects", [text for text in texts if text not in chunks], profile)
+        objects = await self._exact_vectors(
+            kb_id, "objects", [text for text in texts if text not in chunks], profile
+        )
         return {text: point["vector"] for text, point in (chunks | objects).items()}
 
     @storage_request
@@ -274,15 +301,21 @@ class Vectors:
             return {}
         found = {}
         for start in range(0, len(points), 64):
-            batch = points[start:start + 64]
+            batch = points[start : start + 64]
             requests = [
                 models.QueryRequest(
-                    query=point["vector"], filter=self.filter(kb_id), score_threshold=threshold,
-                    limit=3, with_payload=True, with_vector=True,
+                    query=point["vector"],
+                    filter=self.filter(kb_id),
+                    score_threshold=threshold,
+                    limit=3,
+                    with_payload=True,
+                    with_vector=True,
                 )
                 for point in batch
             ]
-            responses = await self.client.query_batch_points(self.collection(kb_id, "chunk_vectors"), requests=requests)
+            responses = await self.client.query_batch_points(
+                self.collection(kb_id, "chunk_vectors"), requests=requests
+            )
             for point, response in zip(batch, responses, strict=True):
                 found[point["id"]] = [
                     {"id": str(hit.id), "payload": _business_payload(hit.payload), "vector": hit.vector}
@@ -312,17 +345,24 @@ class Vectors:
             if dense:
                 profile = EmbeddingProfile.model_validate(payload["embedding_profile"])
                 if (
-                    not isinstance(vector, list) or profile.dimension != dimension or len(vector) != dimension
-                    or any(isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v) for v in vector)
+                    not isinstance(vector, list)
+                    or profile.dimension != dimension
+                    or len(vector) != dimension
+                    or any(
+                        isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v)
+                        for v in vector
+                    )
                 ):
                     raise KGError("INVALID_ARGUMENT", "Index vector does not match the collection dimension")
             elif vector is not None:
                 raise KGError("INVALID_ARGUMENT", "Source chunks store payload only")
-            payload = payload | {_REUSE_FIELD: _embedding_key(payload[text_field], payload["embedding_profile"])}
+            payload = payload | {
+                _REUSE_FIELD: _embedding_key(payload[text_field], payload["embedding_profile"])
+            }
             batch.append(models.PointStruct(id=point["id"], vector=vector if dense else {}, payload=payload))
 
         for start in range(0, len(batch), 100):
-            ack = await self.client.upsert(name, batch[start:start + 100], wait=True)
+            ack = await self.client.upsert(name, batch[start : start + 100], wait=True)
             if ack.status != models.UpdateStatus.COMPLETED:
                 raise KGError("UPSTREAM_UNAVAILABLE", "Qdrant did not confirm the write", 503, retryable=True)
 
@@ -369,7 +409,11 @@ class Vectors:
                 return []
             scope.must.append(models.HasIdCondition(has_id=point_ids))
         result = await self.client.query_points(
-            self.collection(kb_id, kind), query=vector, query_filter=scope, limit=limit, with_payload=True,
+            self.collection(kb_id, kind),
+            query=vector,
+            query_filter=scope,
+            limit=limit,
+            with_payload=True,
         )
         return [
             {"id": str(point.id), "payload": _business_payload(point.payload), "score": point.score}

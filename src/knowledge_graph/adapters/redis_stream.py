@@ -10,7 +10,6 @@ from redis.exceptions import ResponseError
 
 from ..domain import KGError, new_id
 
-
 _ENQUEUE = """
 local current = redis.call('HGET', KEYS[2], ARGV[1])
 if current and #redis.call('XRANGE', KEYS[1], current, current, 'COUNT', 1) ~= 0 then
@@ -80,9 +79,7 @@ class PreparationQueue:
                 raise
 
     async def enqueue(self, job_id, queue_seq):
-        return await self.enqueue_script(
-            keys=self.keys, args=[f"{job_id}:{queue_seq}", job_id, queue_seq]
-        )
+        return await self.enqueue_script(keys=self.keys, args=[f"{job_id}:{queue_seq}", job_id, queue_seq])
 
     async def receive(self, *, once=False):
         self.cursor, claimed, *_ = await self.client.xautoclaim(
@@ -92,7 +89,10 @@ class PreparationQueue:
             identifier, fields = claimed[0]
         else:
             response = await self.client.xreadgroup(
-                self.group, self.consumer, {self.stream: ">"}, count=1,
+                self.group,
+                self.consumer,
+                {self.stream: ">"},
+                count=1,
                 block=None if once else 1000,
             )
             if not response:
@@ -102,7 +102,8 @@ class PreparationQueue:
 
     async def _change_pending(self, message, action, value=0):
         result = await self.pending_script(
-            keys=self.keys, args=[self.group, self.consumer, message.id, message.identity, action, value],
+            keys=self.keys,
+            args=[self.group, self.consumer, message.id, message.identity, action, value],
         )
         return bool(result)
 

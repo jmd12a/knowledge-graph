@@ -102,7 +102,9 @@ class Management:
             ".json": "json",
         }
         if extension not in formats:
-            raise KGError("UNSUPPORTED_FORMAT", "Supported formats are TXT, Markdown, DOCX, CSV, JSON and text PDF")
+            raise KGError(
+                "UNSUPPORTED_FORMAT", "Supported formats are TXT, Markdown, DOCX, CSV, JSON and text PDF"
+            )
         # 重放沿用原请求的映射选择，不能由当前模型重新解释旧请求。
         requested_mapping_id = mapping_id
         old = await self.c.metadata.request(kb_id, "IMPORT", key)

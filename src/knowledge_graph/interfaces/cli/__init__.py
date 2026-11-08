@@ -267,7 +267,9 @@ def job_issues(ctx: typer.Context, job_id: str, limit: int = 100, offset: int = 
 
 
 @job_app.command("retry")
-def retry_job(ctx: typer.Context, job_id: str, generation: Annotated[int, typer.Option("--generation", min=0)]):
+def retry_job(
+    ctx: typer.Context, job_id: str, generation: Annotated[int, typer.Option("--generation", min=0)]
+):
     request(ctx, "POST", "/jobs/" + segment(job_id) + "/retry", params={"generation": generation})
 
 

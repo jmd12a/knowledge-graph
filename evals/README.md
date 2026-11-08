@@ -68,6 +68,29 @@
 
 ## 完整 CUAD 长合同
 
+效果优化的确定性边界检查可单独执行：
+
+```bash
+.venv/bin/python -B -m evals.quality_deterministic
+```
+
+可单独执行 `.venv/bin/python -B -m evals.quality_retrieval_evidence` 检查原召回扫描预算、精确命中、来源隔离、主证据预算，以及模型返回未知候选或超时时的行为。真实检索对照固定已发布快照、问题、过滤范围、Top K 和模型配置，分别记录融合候选、实际送模数量、原文完整覆盖、token 和耗时。
+
+该检查覆盖逐字字段的原文范围、DOCX/PDF 规范化分隔、别名身份判别与依赖投影、分批端点授权、缓存恢复和准备计划的版本/篡改拒绝。它不调用模型，不能替代真实效果评测。
+旧协议的逐字字段优先使用模型返回的 `literal_parts`；只有完全缺失范围且完整字段值在本次已声明、可见的单个规则单元中唯一逐字命中时，程序才反查范围。构建计数 `literal_values_by_method` 分别记录 `model_range` 和 `unique_visible_match`；错误范围、改写和重复文本仍拒绝。
+
+比较两种构建方式时固定资料、业务模型和模型参数。
+
+```bash
+KG_EXTRACTION_SCOPE_POLICY=whole .venv/bin/python -B -m evals.long_contract --port 8766
+KG_EXTRACTION_SCOPE_POLICY=structure .venv/bin/python -B -m evals.long_contract --port 8766
+.venv/bin/python -B -m evals.quality_compare evals/records/<whole-run-id> evals/records/<structure-run-id>
+```
+
+`structure` 按原文结构组窗。首轮按 `KG_EXTRACTION_STRUCTURE_WINDOW_CHARS` 设置去重后可见原文的目标大小，默认 10000 字符，单个完整块仍以模型硬预算为上限。模型以块 ID 或块内原样引文选择逐字字段，程序验证后从原文取值，并计入 `source_selection`。只有选区接到当前不可见的同一来源块时才扩窗补全，窗口内的待处理字段合并请求。确定性检查覆盖行内编号、完整与断开的候选、字段补丁和截断后恢复。
+
+`whole` 优先在一次请求内覆盖全文，超过预算时按章节分批。对照脚本按路线读取正确的 Top-K 主指标：实体看详情后的条款文本，切片和自然语言检索看初始返回的原文切片；同时列出图中条款字面/证据覆盖及首轮、修复、组装、连接、嵌入、规划、重排的物理模型调用、耗时和上游返回的 token 用量。该长合同只有部分正例 span 标注，不计算总体 precision 或误合并率；独立身份负例与完整标注集仍需扩大到更多来源和业务场景。
+
 `corpus/cuad-long/` 冻结 AlliedEsports Content License Agreement 的全部 35,525 字节原文、41 类官方 QA、固定问题和评分口径。19 类正例共30个官方 span；12题分别执行 entity/chunk TopK5，共24个语义搜索（每路18个参考span），另有2个自然语言 retrieve（9个人工原文参考段落），合计26个动作。官方标注只供评分，不进入模型构建。坐标覆盖不等于语义正确率，22个未查询负例不计幻觉率。
 
 ```bash
@@ -78,6 +101,20 @@
 第二条会调用真实模型。使用[OpenRouter 配置示例](../examples/contracts/openrouter-quality.yaml)中的语言、向量和检索配置，并提供 `OPENROUTER_API_KEY` 环境变量；密钥不写入版本控制。完整配置和运行准备见[合同示例说明](../examples/contracts/README.md)。
 
 新代码或配置运行使用新 UUID，不覆盖当前保留档案。最新一轮采用完整冻结原文，模型与向量化都走 OpenRouter；结果和三次未通过查询见[最新验证证据](published/README.md)。
+
+### 效果优化实测记录（2026-11-08）
+
+下面三次长合同运行使用同一份 35,525 字节原文、业务模型、`z-ai/glm-5.3` 和 `google/gemini-embedding-2`。`b1afbd7c-620a-43ee-b814-24840f42a6eb` 是改动前基线；`93e251c9-af60-4fa6-b3f3-977253b4dcc1` 是逐字字段新协议后的全文单批；`1bbcd6e7-3da5-4009-b146-7151d228534d` 是组装边界修复后每批 3 个切片。各 run 的程序快照、参数、模型响应、完整报告都保存在 `evals/records/<run-id>/`，运行产物不进入 Git。全文 run 早于最后的词边界和组装修复，因此它与小批 run 是参考对照，不是同代码的因果 A/B。
+
+| run / 范围 | 首轮批次 | 实体 / 关系 / 来源贡献 | 完整 Clause.definition | 图事实证据覆盖 | Top-K 路线主指标 | 物理模型调用 / 墙钟耗时 |
+| --- | ---: | ---: | ---: | ---: | --- | ---: |
+| `b1afbd7c…` / 全文旧基线 | 1 | 60 / 59 / 296 | 10/30 | 28/30 | 23/26 | 65 / 447.8 秒 |
+| `93e251c9…` / 全文 | 1 | 60 / 61 / 301 | 17/30 | 29/30 | 24/26（实体 11/12、切片 11/12、检索 2/2） | 65 / 482.5 秒 |
+| `1bbcd6e7…` / 小批 3 | 7 | 54 / 51 / 296 | 3/30 | 23/30 | **未完成**：额度耗尽前实体 4/5、切片 4/5，检索 0/2 已执行 | 106 / 1782.4 秒 |
+
+小批 run 的 106 次物理调用包括首轮抽取 7、证据修复 6、JSON 纠正 2、规则组装 55、跨批连接 5、构建向量 9 和检索阶段 22。检索第 6 题遇到 `quota_exhausted`，剩余题目未执行，不能将 8/10 推断成 26 题得分，也不能与 24/26 直接相减。构建阶段产生 41 个候选问题：`EVIDENCE_MISSING` 13、`RULE_ASSEMBLY_UNRESOLVED` 10、`INVALID_ENDPOINT` 9、`LITERAL_RANGE_MISSING` 5、`LITERAL_BOUNDARY_UNRESOLVED` 4。全文 run 的完整条款和事实证据覆盖均高于本次小批 run；小批策略没有达到更改默认值的门槛，默认继续采用全文优先。模型额度耗尽后未运行最终代码的同代码全文对照。
+
+另有一个全量标注的小语料，包含 TXT 与 Markdown、3 个 Service、3 个 Clause 实例和 1 条 CALLS 关系，并同时覆盖同名不同实体、别名同实体与同标题不同条款。早期无原子组装配置的 run `c0f51673-0f03-463c-a5f2-cd984e8eac45`：全文 Clause TP/FP/FN 为 2/0/1，小批为 0/2/3；两者 Service 均为 3/0/0、CALLS 均为 1/0/0。中间版本加 `full_statement` 的 run `761d1470-a869-4c02-8338-2bd91363b744` 小批 Clause 为 1/1/2，全文因模型结构错误失败。这些是诊断样本，不是最终代码的跨场景效果估计；标注集很小，不代表总体 precision。普通逐字模式只保证来源保真，不保证句子完整；模型在完全可见单元内仍可能选择词边界正确但语义未完的片段。不同完整身份但同义标题的安全归并留待下一轮独立设计和评测。
 
 ## 分布式 Worker 故障验收
 

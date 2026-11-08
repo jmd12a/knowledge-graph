@@ -67,18 +67,39 @@ class MetadataPort(Protocol):
     async def target_contributions(
         self, kb_id: str, targets: list[tuple[str, str]], *, active_only: bool = False
     ) -> list[Contribution]: ...
+    async def dependent_contributions(
+        self, kb_id: str, entity_ids: list[str], max_rows: int
+    ) -> list[Contribution]:
+        """Find active cross-document rows whose identity depends on affected entities."""
+        ...
+
     async def contribution_count(self, kb_id: str) -> int: ...
 
     async def replace_contributions(
-        self, kb_id: str, contributions: list[Contribution], issues: list[dict], issue_documents: list[str],
-        *, document_ids: list[str] | None = None,
+        self,
+        kb_id: str,
+        contributions: list[Contribution],
+        issues: list[dict],
+        issue_documents: list[str],
+        *,
+        document_ids: list[str] | None = None,
     ) -> None:
         """None 替换全库贡献；列表仅替换指定来源，其他来源保持不变。"""
         ...
+
     async def vector_members(
-        self, kb_id: str, *, chunk_ids=None, document_ids=None, vector_ids=None, domain_ids=None, active_only=False
+        self,
+        kb_id: str,
+        *,
+        chunk_ids=None,
+        document_ids=None,
+        vector_ids=None,
+        domain_ids=None,
+        active_only=False,
     ) -> list[dict]: ...
-    async def replace_vector_members(self, kb_id: str, vector_ids: list[str] | None, members: list[dict]) -> None: ...
+    async def replace_vector_members(
+        self, kb_id: str, vector_ids: list[str] | None, members: list[dict]
+    ) -> None: ...
     async def finish(self, job_id: str, plan: dict) -> bool:
         """提交可查询状态，返回删除任务是否还有物理清理。"""
         ...

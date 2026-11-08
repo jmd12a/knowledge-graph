@@ -10,10 +10,14 @@ from datetime import datetime, timedelta, timezone
 from typing import Protocol
 
 from .bootstrap import Context
-from .domain import KGError, SUCCESS_STATES, WRITE_STATES, canonical
+from .domain import SUCCESS_STATES, WRITE_STATES, KGError, canonical
 from .ports.resources import Resources
 from .runtime import blocking
-from .services.construction.preparation_worker import PreparationDispatcher, PreparationWorker, execution_error
+from .services.construction.preparation_worker import (
+    PreparationDispatcher,
+    PreparationWorker,
+    execution_error,
+)
 
 log = logging.getLogger(__name__)
 
@@ -133,8 +137,10 @@ class Worker:
             if modified >= cutoff:
                 continue
             job = jobs.get(path.parts[1])
-            if job and str(job["queue_seq"]) == path.parts[2] and (
-                job["plan_path"] or job["state"] not in SUCCESS_STATES | {"INVALIDATED"}
+            if (
+                job
+                and str(job["queue_seq"]) == path.parts[2]
+                and (job["plan_path"] or job["state"] not in SUCCESS_STATES | {"INVALIDATED"})
             ):
                 continue
             await blocking(c.files.retire_attempt, path)

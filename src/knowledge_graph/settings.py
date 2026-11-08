@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 from pydantic import Field, model_validator
 
 from .domain.model import EmbeddingProfile, StrictModel
+from .domain.source import DEFAULT_STRUCTURE_WINDOW_CHARS
 
 
 class LanguageProfile(StrictModel):
@@ -21,6 +22,7 @@ class LanguageProfile(StrictModel):
     timeout: float = Field(default=60, gt=0)
     max_input_chars: int = Field(default=60000, ge=1000)
     max_output_tokens: int = Field(default=12000, ge=1)
+    max_context_tokens: int | None = Field(default=None, ge=1)
     stream: bool = False
     structured_output: Literal["json_object", "json_schema"] = "json_object"
     extra_body: dict[str, Any] = Field(default_factory=dict)
@@ -33,6 +35,9 @@ class LanguageProfile(StrictModel):
             or not self.base_url.startswith(("https://", "http://"))
         ):
             raise ValueError("LLM base URL must not contain credentials or query parameters")
+
+        if self.max_context_tokens is not None and self.max_context_tokens <= self.max_output_tokens:
+            raise ValueError("LLM context budget must reserve space for input as well as output")
 
         # 扩展参数不能覆盖请求结构和预算，也不能携带凭据字段。
         reserved = {
@@ -71,7 +76,13 @@ class WorkerDistribution(StrictModel):
         from urllib.parse import urlsplit
 
         url = urlsplit(self.minio_endpoint)
-        if url.scheme not in {"http", "https"} or not url.hostname or url.username or url.query or url.fragment:
+        if (
+            url.scheme not in {"http", "https"}
+            or not url.hostname
+            or url.username
+            or url.query
+            or url.fragment
+        ):
             raise ValueError("MinIO endpoint must be an HTTP URL without credentials")
         if not self.stream or not self.group or self.claim_idle_seconds <= 2 * self.heartbeat_seconds:
             raise ValueError("Redis requires a stream, group and an idle timeout over twice the heartbeat")
@@ -96,10 +107,13 @@ class Settings(StrictModel):
     chunk_target: int = Field(default=1200, ge=100)
     chunk_max: int = Field(default=2000, ge=100)
     chunk_overlap: int = Field(default=150, ge=0)
+    extraction_scope_policy: Literal["whole", "structure"] = "whole"
+    extraction_structure_window_chars: int = Field(default=DEFAULT_STRUCTURE_WINDOW_CHARS, ge=1)
     drain_timeout: float = Field(default=30, gt=0)
     poll_interval: float = Field(default=1, gt=0)
     graph_timeout: float = Field(default=3, gt=0)
     retrieval_timeout: float = Field(default=15, gt=0)
+    retrieval_rerank_snippet_chars: int = Field(default=2000, ge=80, le=12000)
     rerank_enabled: bool = True
     rerank_candidate_limit: int = Field(default=80, ge=1, le=100)
     rerank_timeout: float = Field(default=45, gt=0)

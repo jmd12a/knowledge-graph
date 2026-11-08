@@ -140,11 +140,18 @@ def estimate(case):
     from knowledge_graph.adapters.models.http import Language
     from knowledge_graph.adapters.parsers.documents import Parser
     from knowledge_graph.domain import BusinessModel
-    from knowledge_graph.prompts.extraction import EXTRACTION_SYSTEM
-    from knowledge_graph.services.construction.extraction import Extraction, _plan_scopes, build_rule_context
+    from knowledge_graph.prompts.extraction import EXTRACTION_SYSTEM, STRUCTURE_EXTRACTION_SYSTEM
+    from knowledge_graph.services.construction.extraction import (
+        Extraction,
+        StructuredExtraction,
+        _plan_scopes,
+        build_rule_context,
+    )
+    from knowledge_graph.services.construction.extraction_batches import ExtractionBatch
     from knowledge_graph.settings import LanguageProfile
 
     budgets = SimpleNamespace(chunk_target=1200, chunk_max=2000, chunk_overlap=150)
+    business_model = BusinessModel.model_validate(model())
     parsed = Parser(budgets).parse(
         {
             "raw_path": str(case["path"]),
@@ -152,17 +159,32 @@ def estimate(case):
             "source": {"encoding": "utf-8"},
             "document_id": str(uuid4()),
         },
-        BusinessModel.model_validate(model()),
+        business_model,
     )
     # Only pure serialization methods are used; Language.__init__ would construct an HTTP client.
     language = object.__new__(Language)
     profile = yaml.safe_load((ROOT / "examples/contracts/openrouter-quality.yaml").read_text())
     language.profile = LanguageProfile.model_validate(profile["construction_llm"])
     chunks = {item["chunk_id"]: item for item in parsed["chunks"]}
-    context = build_rule_context(parsed)
-    business_model = BusinessModel.model_validate(model()).model_dump()
-    schema = Extraction.model_json_schema()
-    scopes = _plan_scopes(language, chunks, context, business_model, schema)
+    model_data = business_model.model_dump()
+    estimates = {}
+    for policy, system, output in (
+        ("whole", EXTRACTION_SYSTEM, Extraction),
+        ("structure", STRUCTURE_EXTRACTION_SYSTEM, StructuredExtraction),
+    ):
+        context = build_rule_context(parsed, structured=policy == "structure")
+        schema = output.model_json_schema()
+        scopes = _plan_scopes(language, chunks, context, model_data, schema, scope_policy=policy)
+        estimates[policy] = {
+            "source_rule_units": len(context),
+            "extraction_batches": len(scopes),
+            "batch_request_chars": [
+                language.json_request_chars(
+                    system, ExtractionBatch(scope, chunks, model_data, scope_policy=policy).request, schema
+                )
+                for scope in scopes
+            ],
+        }
     return {
         "basis": "Parser and scope planner using the published OpenRouter profile; no Settings.load",
         "chunk_target": 1200,
@@ -171,20 +193,8 @@ def estimate(case):
         "max_input_chars": language.profile.max_input_chars,
         "max_output_tokens": language.profile.max_output_tokens,
         "chunks": len(chunks),
-        "source_rule_units": len(context),
-        "extraction_batches": len(scopes),
-        "batch_request_chars": [
-            language.json_request_chars(
-                EXTRACTION_SYSTEM,
-                {
-                    "business_model": business_model,
-                    "chunks": [chunks[key] for key in scope["input_chunk_ids"]],
-                    "rule_units": scope["unit_views"],
-                },
-                schema,
-            )
-            for scope in scopes
-        ],
+        **estimates["whole"],
+        "structure": estimates["structure"],
         "chunk_embedding_batches_at_size_10": math.ceil(len(chunks) / 10),
         "fixed_semantic_searches": len(case["fixed"]["positive_queries"]) * 2,
         "fixed_natural_language_retrievals": 2,

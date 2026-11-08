@@ -31,6 +31,10 @@ chunk_decision_model: typesafe/jev-1.13
 drain_timeout: 30
 poll_interval: 1
 graph_timeout: 3
+# whole 优先全文抽取，structure 按来源结构组织窗口。
+extraction_scope_policy: whole
+# structure 首轮按去重后的可见原文计数。
+extraction_structure_window_chars: 10000
 retrieval_timeout: 180
 candidate_scan_limit: 5000
 maintenance_scan_limit: 100000
@@ -90,6 +94,7 @@ embedding:
   batch_size: 10
   timeout: 90
   extra_body: {}
+retrieval_rerank_snippet_chars: 2000
 rerank_enabled: true
 rerank_candidate_limit: 80
 rerank_timeout: 60

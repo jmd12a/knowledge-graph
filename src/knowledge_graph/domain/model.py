@@ -10,7 +10,6 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 from .common import canonical, new_id, valid_id
 from .errors import KGError
 
-
 # 身份保留完整 JSON；超出存储预算时拒绝，不截断或替换为摘要。
 MAX_IDENTITY_KEY_BYTES = 4096
 MIN_PROJECTED_INTEGER = -(1 << 63)
@@ -45,11 +44,14 @@ class PropertyDef(StrictModel):
     required: bool = False
     merge: Literal["single", "alternatives", "union", "supported_text"] = "single"
     queryable: bool = False
+    source_mode: Literal["generated", "literal"] = "generated"
     description: str = ""
     enum: list[Any] | None = None
 
     @model_validator(mode="after")
     def check(self):
+        if self.source_mode == "literal" and self.type != "string":
+            raise ValueError("literal source mode requires string")
         if self.queryable and self.type not in {"string", "integer", "number", "boolean", "date"}:
             raise ValueError("Only scalar properties can be queryable")
         if self.merge == "supported_text" and self.type != "string":
@@ -102,11 +104,21 @@ class AtomicGroup(StrictModel):
     fields: list[str] = Field(min_length=1)
 
 
+class IdentityMatchDef(StrictModel):
+    stable_fields: list[str] = Field(default_factory=list)
+    explicit_alias: bool = False
+
+
+def is_alias_field(field: str) -> bool:
+    return field.casefold() in {"alias", "aliases", "aka", "alternate_name", "alternative_name"}
+
+
 class NodeType(StrictModel):
     description: str = ""
     identity: IdentityDef
     properties: dict[str, PropertyDef]
     atomic_groups: list[AtomicGroup] = Field(default_factory=list)
+    identity_match: IdentityMatchDef = Field(default_factory=IdentityMatchDef)
     name_field: str = "name"
     name_priority: list[str] = Field(default_factory=list)
     domain_ids: list[str] = Field(default_factory=list)
@@ -137,6 +149,19 @@ class BusinessModel(StrictModel):
                 raise ValueError("Invalid node type name")
             if set(node.identity.fields) - node.properties.keys():
                 raise ValueError(f"Unknown identity property in {name}")
+            if len(node.identity_match.stable_fields) != len(set(node.identity_match.stable_fields)):
+                raise ValueError("Identity match stable fields must be distinct")
+            if set(node.identity_match.stable_fields) - node.properties.keys():
+                raise ValueError("Identity match names an unknown property")
+            if any(
+                node.properties[field].type not in {"string", "integer", "number", "date"}
+                or not node.properties[field].queryable
+                or node.properties[field].merge != "single"
+                or field == node.name_field
+                or is_alias_field(field)
+                for field in node.identity_match.stable_fields
+            ):
+                raise ValueError("Identity match stable fields must be single-valued non-display scalars")
             if any(
                 node.properties[field].type not in {"string", "integer", "number", "boolean", "date"}
                 for field in node.identity.fields

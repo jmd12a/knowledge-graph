@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import math
 import re
 from collections import defaultdict
@@ -10,9 +11,14 @@ from typing import Any
 from pydantic import Field, StrictBool, StrictInt, ValidationError
 
 from ...domain import KGError, StrictModel, canonical
-from ...domain.model import identity_value
-from ...prompts.extraction import EXTRACTION_SYSTEM, RULE_ASSEMBLY_SYSTEM
-from .extraction_batches import ExtractionBatch, chapter_groups
+from ...domain.model import NodeType, identity_value
+from ...domain.source import DEFAULT_STRUCTURE_WINDOW_CHARS
+from ...prompts.extraction import EXTRACTION_SYSTEM, RULE_ASSEMBLY_SYSTEM, STRUCTURE_EXTRACTION_SYSTEM
+from .alignment import _atomic_statement
+from .extraction_batches import ExtractionBatch, chapter_groups, request_fits
+from .extraction_grounding import complete_windows, repair_window
+from .extraction_windows import plan_source_windows, source_block_ranges
+from .literal import SourceSelection, normalize_candidate_literals
 from .source_references import evidence_positions as evidence_positions
 from .source_references import origin_key, unit_visible_parts, units_by_chunk
 from .source_references import verify_evidence as verify_evidence
@@ -45,12 +51,29 @@ class ResolvedReference(StrictModel):
     )
 
 
+class LiteralPart(StrictModel):
+    unit_key: str = Field(min_length=1, description="Visible source-unit key supplied in this call.")
+    start: StrictInt = Field(description="Start in the source unit's text, inclusive.")
+    end: StrictInt = Field(description="End in the source unit's text, exclusive.")
+
+
+class IdentityEquivalence(StrictModel):
+    identity_fields: dict[str, Any] = Field(
+        description="Complete identity values explicitly equated with the current mention in source text."
+    )
+    evidence: list[InputEvidence] = Field(min_length=1)
+
+
 class AtomicDeclaration(StrictModel):
     fields: dict[str, Any] = Field(
         description="Configured atomic-group field names mapped to raw business values."
     )
     evidence: dict[str, list[InputEvidence]] = Field(
         description="Each atomic field name mapped to its exact source evidence."
+    )
+    literal_parts: dict[str, list[LiteralPart]] = Field(
+        default_factory=dict,
+        description="Ordered source-unit ranges for fields configured with source_mode=literal.",
     )
     complete: StrictBool = Field(
         default=False,
@@ -110,7 +133,14 @@ class EntityCandidate(StrictModel):
             "separate from the raw properties map."
         )
     )
+    literal_parts: dict[str, list[LiteralPart]] = Field(
+        default_factory=dict,
+        description="Ordered source-unit ranges for non-atomic fields configured as literal.",
+    )
     identity_only: StrictBool = False
+    mention: str | None = None
+    mention_evidence: list[InputEvidence] = Field(default_factory=list)
+    identity_equivalence: IdentityEquivalence | None = None
     domain_ids: list[str] = Field(default_factory=list)
     atomic_groups: dict[str, AtomicDeclaration] = Field(
         default_factory=dict,
@@ -144,9 +174,43 @@ class Extraction(StrictModel):
     relations: list[RelationCandidate]
 
 
-def _validate_output(value, stage):
+class StructuredReference(ResolvedReference):
+    reference: list[UnitEvidenceRef] = Field(min_length=1)
+    target: list[UnitEvidenceRef] = Field(min_length=1)
+
+
+class StructuredIdentityEquivalence(IdentityEquivalence):
+    evidence: list[UnitEvidenceRef] = Field(min_length=1)
+
+
+class StructuredAtomicDeclaration(AtomicDeclaration):
+    evidence: dict[str, list[UnitEvidenceRef]]
+    section_evidence: list[UnitEvidenceRef] = Field(default_factory=list)
+    resolved_references: list[StructuredReference] = Field(default_factory=list)
+    literal_parts: dict[str, list[SourceSelection]] = Field(default_factory=dict)
+
+
+class StructuredEntityCandidate(EntityCandidate):
+    evidence: dict[str, list[UnitEvidenceRef]]
+    mention_evidence: list[UnitEvidenceRef] = Field(default_factory=list)
+    identity_equivalence: StructuredIdentityEquivalence | None = None
+    literal_parts: dict[str, list[SourceSelection]] = Field(default_factory=dict)
+    atomic_groups: dict[str, StructuredAtomicDeclaration] = Field(default_factory=dict)
+
+
+class StructuredRelationCandidate(RelationCandidate):
+    evidence: list[UnitEvidenceRef]
+    property_evidence: dict[str, list[UnitEvidenceRef]] = Field(default_factory=dict)
+
+
+class StructuredExtraction(Extraction):
+    entities: list[StructuredEntityCandidate]
+    relations: list[StructuredRelationCandidate]
+
+
+def _validate_output(value, stage, output_type=Extraction):
     try:
-        return Extraction.model_validate(value).model_dump()
+        return output_type.model_validate(value).model_dump()
     except ValidationError as exc:
         violations = [
             {"path": list(error["loc"]), "type": error["type"]}
@@ -289,8 +353,8 @@ _CONTINUATION = re.compile(
 )
 
 
-def build_rule_context(parsed):
-    """Expose complete source paragraphs, including continuation paragraphs, to extraction."""
+def build_rule_context(parsed, *, structured=False):
+    """把完整来源段落及其续段提供给抽取流程。"""
     if parsed.get("mapping_id"):
         return []
     sources = {}
@@ -310,12 +374,17 @@ def build_rule_context(parsed):
             entry = sources.setdefault(
                 anchor,
                 {
-                    "origin": {k: v for k, v in origin.items() if k not in {key, "line_range"}},
                     "coordinate": key,
                     "pieces": [],
+                    "boundaries": set(),
                 },
             )
             entry["pieces"].append((start, end, text))
+            native_section = origin["format"] == "md" or (
+                origin["format"] == "docx" and "paragraph" in origin and chunk.get("section_path")
+            )
+            if structured and native_section and a == 0 and chunk.get("block_range", [None])[0] == 0:
+                entry["boundaries"].add(start)
     units = []
     for anchor, source in sources.items():
         text, base, cursor = "", None, None
@@ -330,17 +399,24 @@ def build_rule_context(parsed):
             if end > cursor:
                 text += piece[overlap:]
                 cursor = end
-        paragraphs = list(re.finditer(r"[\s\S]+?(?:\r?\n[ \t]*\r?\n+|$)", text))
-        for paragraph in paragraphs:
-            body = paragraph.group()
-            if not body:
-                continue
+        origin = json.loads(anchor) if structured else {}
+        ranges = (
+            source_block_ranges(
+                text,
+                inline_headings=origin["format"] in {"txt", "pdf"} or "paragraph" in origin,
+                parser_boundaries=tuple(position - base for position in source["boundaries"]),
+            )
+            if structured
+            else [match.span() for match in re.finditer(r"[\s\S]+?(?:\r?\n[ \t]*\r?\n+|$)", text)]
+        )
+        for left, right in ranges:
+            body = text[left:right]
             region = {
                 "origin": anchor,
                 "coordinate": source["coordinate"],
-                "range": [base + paragraph.start(), base + paragraph.end()],
+                "range": [base + left, base + right],
             }
-            if units and _CONTINUATION.match(body.lstrip()):
+            if units and base + left not in source["boundaries"] and _CONTINUATION.match(body.lstrip()):
                 units[-1]["regions"].append(region)
                 units[-1]["text"] += body
             else:
@@ -370,23 +446,23 @@ def _region_references(regions, chunks):
                 next_remaining = []
                 for left, right in remaining:
                     a, b = max(left, start), min(right, end)
-                    if a < b:
-                        begin = span["chunk_range"][0] + a - start
-                        finish = begin + b - a
-                        references.append(
-                            {
-                                "chunk_id": chunk["chunk_id"],
-                                "start": begin,
-                                "end": finish,
-                                "quote": chunk["text"][begin:finish],
-                            }
-                        )
-                        if left < a:
-                            next_remaining.append([left, a])
-                        if b < right:
-                            next_remaining.append([b, right])
-                    else:
+                    if a >= b:
                         next_remaining.append([left, right])
+                        continue
+                    begin = span["chunk_range"][0] + a - start
+                    finish = begin + b - a
+                    references.append(
+                        {
+                            "chunk_id": chunk["chunk_id"],
+                            "start": begin,
+                            "end": finish,
+                            "quote": chunk["text"][begin:finish],
+                        }
+                    )
+                    if left < a:
+                        next_remaining.append([left, a])
+                    if b < right:
+                        next_remaining.append([b, right])
                 remaining = next_remaining
         if remaining:
             raise KGError("PARSE_FAILED", "A complete rule context cannot be mapped to chunks")
@@ -416,7 +492,7 @@ def _scope(chunks, context, *, key=None):
     return scope
 
 
-def _check_scope(scope, chunks, context):
+def _check_scope(scope, chunks, context) -> None:
     catalog = {unit["unit_key"]: unit for unit in context}
     if (
         not isinstance(scope, dict)
@@ -448,69 +524,108 @@ def _check_scope(scope, chunks, context):
                 "PREPARATION_SCOPE_UNAVAILABLE",
                 "Saved visible source-unit text differs from its authorized chunks",
             )
-    return scope
 
 
-def _plan_scopes(language, chunks, context, model_data, schema):
-    index = units_by_chunk(context, chunks)
+def _plan_scopes(
+    language,
+    chunks,
+    context,
+    model_data,
+    schema,
+    *,
+    scope_policy="whole",
+    structure_window_chars: int = DEFAULT_STRUCTURE_WINDOW_CHARS,
+):
+    system = STRUCTURE_EXTRACTION_SYSTEM if scope_policy == "structure" else EXTRACTION_SYSTEM
 
-    def local_context(group):
-        if index is None:
-            return context
-        selected = set().union(*(index[chunk_id] for chunk_id in group))
-        return [context[position] for position in sorted(selected)]
+    def fits_budget(batch_chunks, scope):
+        request = ExtractionBatch(scope, batch_chunks, model_data, scope_policy=scope_policy).request
+        return request_fits(language, system, request, schema)
 
-    def fits(group, scope):
-        request = ExtractionBatch(scope, group, model_data).request
-        return language.json_request_chars(EXTRACTION_SYSTEM, request, schema) <= language.profile.max_input_chars
+    if scope_policy == "structure":
+        whole_limit = min(structure_window_chars, language.profile.max_input_chars)
+        if sum(len(unit["text"]) for unit in context) <= whole_limit:
+            whole = _scope(chunks, context, key="batch/0")
+            if fits_budget(chunks, whole):
+                return [whole]
+        return plan_source_windows(
+            chunks,
+            context,
+            _scope,
+            lambda scope: fits_budget(chunks, scope),
+            target_source_chars=structure_window_chars,
+        )
 
     # 单批能容纳全文时保留跨章节上下文；长文档再按章节独立装箱。
+    if scope_policy != "whole":
+        raise KGError("INVALID_ARGUMENT", "Unknown extraction strategy")
     if sum(len(chunk["text"]) for chunk in chunks.values()) <= language.profile.max_input_chars:
         whole = _scope(chunks, context, key="batch/0")
-        if fits(chunks, whole):
+        if fits_budget(chunks, whole):
             return [whole]
 
-    groups = []
+    unit_positions_by_chunk = units_by_chunk(context, chunks)
+
+    def context_for_chunks(batch_chunks):
+        if unit_positions_by_chunk is None:
+            return context
+        selected = set().union(*(unit_positions_by_chunk[chunk_id] for chunk_id in batch_chunks))
+        return [context[position] for position in sorted(selected)]
+
+    chapter_batches = []
     for chapter in chapter_groups(chunks):
-        batch = {}
+        batch_chunks = {}
         for chunk_id, chunk in chapter.items():
-            proposed = batch | {chunk_id: chunk}
-            if fits(proposed, _scope(proposed, local_context(proposed))):
-                batch = proposed
+            expanded_batch = batch_chunks | {chunk_id: chunk}
+            if fits_budget(expanded_batch, _scope(expanded_batch, context_for_chunks(expanded_batch))):
+                batch_chunks = expanded_batch
             else:
-                if not batch:
+                if not batch_chunks:
                     raise KGError(
                         "MODEL_INPUT_TOO_LARGE", "One source chunk and model exceed the extraction budget"
                     )
-                groups.append(batch)
-                batch = {chunk_id: chunk}
-        if batch:
-            groups.append(batch)
+                chapter_batches.append(batch_chunks)
+                batch_chunks = {chunk_id: chunk}
+        if batch_chunks:
+            chapter_batches.append(batch_chunks)
 
-    # 边界处的规则单元需要更多原文时，仍尽量带齐它的切片。
+    # 全文超过模型预算时，尽量把相邻的完整规则单元带入同一批。
     scopes = []
-    for position, group in enumerate(groups):
-        for unit in local_context(group):
-            required = {ref["chunk_id"]: chunks[ref["chunk_id"]] for ref in unit["evidence"]}
-            if required.keys() <= group.keys():
+    for position, batch_chunks in enumerate(chapter_batches):
+        for unit in context_for_chunks(batch_chunks):
+            unit_chunks = {ref["chunk_id"]: chunks[ref["chunk_id"]] for ref in unit["evidence"]}
+            if unit_chunks.keys() <= batch_chunks.keys():
                 continue
-            proposed = group | required
-            if fits(proposed, _scope(proposed, local_context(proposed))):
-                group = proposed
-        scope = _scope(group, local_context(group), key=f"batch/{position}")
-        if not fits(group, scope):
+            expanded_batch = batch_chunks | unit_chunks
+            if fits_budget(expanded_batch, _scope(expanded_batch, context_for_chunks(expanded_batch))):
+                batch_chunks = expanded_batch
+        scope = _scope(batch_chunks, context_for_chunks(batch_chunks), key=f"batch/{position}")
+        if not fits_budget(batch_chunks, scope):
             raise KGError("MODEL_INPUT_TOO_LARGE", "Source context exceeds the extraction budget")
         scopes.append(scope)
     return scopes
 
 
-async def extract_text(language, parsed, model, checkpoint, persist, *, reuse=None):
+async def extract_text(
+    language,
+    parsed,
+    model,
+    checkpoint,
+    persist,
+    *,
+    reuse=None,
+    scope_policy="whole",
+    structure_window_chars: int = DEFAULT_STRUCTURE_WINDOW_CHARS,
+):
     """按持久化输入范围分批抽取，复用已校验的批次结果并组装完整规则。"""
+    structured = scope_policy == "structure"
+    output_type = StructuredExtraction if structured else Extraction
+    system = STRUCTURE_EXTRACTION_SYSTEM if structured else EXTRACTION_SYSTEM
     if "rule_units" not in parsed:
-        parsed["rule_units"] = build_rule_context(parsed)
+        parsed["rule_units"] = build_rule_context(parsed, structured=structured)
     context = parsed["rule_units"]
     chunks = {chunk["chunk_id"]: chunk for chunk in parsed["chunks"]}
-    schema, model_data = Extraction.model_json_schema(), model.model_dump()
+    schema, model_data = output_type.model_json_schema(), model.model_dump()
 
     # 输入范围与模型响应一起固定，恢复时不能让旧响应获得额外来源授权。
     saved = checkpoint.get("_input_scopes")
@@ -524,8 +639,20 @@ async def extract_text(language, parsed, model, checkpoint, persist, *, reuse=No
                 )
             scopes = [_scope(chunks, context, key="batch/0")]
         else:
-            scopes = _plan_scopes(language, chunks, context, model_data, schema)
-        checkpoint["_input_scopes"] = {"version": 1 if cached else 2, "batches": scopes}
+            scopes = _plan_scopes(
+                language,
+                chunks,
+                context,
+                model_data,
+                schema,
+                scope_policy=scope_policy,
+                structure_window_chars=structure_window_chars,
+            )
+        checkpoint["_input_scopes"] = {
+            "version": 1 if cached else 2,
+            "scope_policy": scope_policy,
+            "batches": scopes,
+        }
         await persist()
     else:
         if (
@@ -537,12 +664,24 @@ async def extract_text(language, parsed, model, checkpoint, persist, *, reuse=No
                 "PREPARATION_SCOPE_UNAVAILABLE", "The saved extraction input plan has an invalid structure"
             )
         scopes = saved["batches"]
+        if saved.get("scope_policy", "whole") != scope_policy:
+            raise KGError("PREPARATION_SCOPE_UNAVAILABLE", "Saved extraction strategy changed")
     if not scopes:
         raise KGError(
             "PREPARATION_SCOPE_UNAVAILABLE", "The saved extraction input plan has no source batches"
         )
+    by_chunk = units_by_chunk(context, chunks) if structured else None
     for scope in scopes:
         _check_scope(scope, chunks, context)
+        if structured:
+            selected = set(scope["input_unit_keys"])
+            if by_chunk is None:
+                local = {key: chunks[key] for key in scope["input_chunk_ids"]}
+                expected = set(_scope(local, context)["input_unit_keys"])
+            else:
+                expected = {context[i]["unit_key"] for key in scope["input_chunk_ids"] for i in by_chunk[key]}
+            if selected != expected:
+                raise KGError("PREPARATION_SCOPE_UNAVAILABLE", "Saved source windows omit visible blocks")
     scoped_chunks = [key for scope in scopes for key in scope["input_chunk_ids"]]
     if set(scoped_chunks) != set(chunks):
         raise KGError(
@@ -550,56 +689,102 @@ async def extract_text(language, parsed, model, checkpoint, persist, *, reuse=No
             "Saved model input batches do not cover the parsed source",
         )
     expected_batches = {scope.get("key") for scope in scopes}
-    if {key for key in checkpoint if key.startswith("batch/")} - expected_batches:
+    if len(expected_batches) != len(scopes) or (
+        {key for key in checkpoint if key.startswith("batch/")} - expected_batches
+    ):
         raise KGError("PREPARATION_SCOPE_UNAVAILABLE", "A cached model response lacks its saved input scope")
 
     local_refs = checkpoint["_input_scopes"]["version"] == 2
     reuse = {} if reuse is None else reuse
-    combined = {"entities": [], "relations": []}
-    for index, scope in enumerate(scopes):
+    combined = {"entities": [], "relations": [], "issues": []}
+    catalog = {unit["unit_key"]: unit for unit in context}
+    index = 0
+    while index < len(scopes):
+        scope = scopes[index]
         key = scope.get("key")
-        if key != "batch/" + str(index):
+        valid_key = (
+            isinstance(key, str) and re.fullmatch(r"batch/[0-9]+(?:\.[01])*", key)
+            if structured
+            else key == f"batch/{index}"
+        )
+        if not valid_key:
             raise KGError("PREPARATION_SCOPE_UNAVAILABLE", "Saved extraction batch ownership is inconsistent")
-        batch = ExtractionBatch(scope, chunks, model_data) if local_refs else None
+        batch = ExtractionBatch(scope, chunks, model_data, scope_policy=scope_policy) if local_refs else None
         if key not in checkpoint:
-            request = batch.request if batch else {
-                "business_model": model_data,
-                "chunks": [chunks[item] for item in scope["input_chunk_ids"]],
-                "rule_units": scope["unit_views"],
-            }
-            if (
-                language.json_request_chars(EXTRACTION_SYSTEM, request, schema)
-                > language.profile.max_input_chars
-            ):
-                raise KGError(
-                    "MODEL_INPUT_TOO_LARGE", "The saved model input exceeds the current request budget"
-                )
-            request_key = batch.request_key(language, EXTRACTION_SYSTEM, schema) if batch else None
+            request = (
+                batch.request
+                if batch
+                else {
+                    "business_model": model_data,
+                    "chunks": [chunks[item] for item in scope["input_chunk_ids"]],
+                    "rule_units": scope["unit_views"],
+                }
+            )
+            request_key = batch.request_key(language, system, schema) if batch else None
             result = reuse.get(request_key)
             reused = result is not None
-            if not reused:
-                result = await language.json(EXTRACTION_SYSTEM, request, schema)
-            result = _validate_output(result, "Extraction")
+            try:
+                if not request_fits(language, system, request, schema):
+                    raise KGError(
+                        "MODEL_INPUT_TOO_LARGE", "The saved model input exceeds the current request budget"
+                    )
+                if not reused:
+                    result = await language.json(system, request, schema)
+            except KGError as exc:
+                ids = scope["input_chunk_ids"]
+                if (
+                    not structured
+                    or len(ids) < 2
+                    or exc.code
+                    not in {
+                        "MODEL_INPUT_TOO_LARGE",
+                        "MODEL_OUTPUT_TOO_LARGE",
+                    }
+                ):
+                    raise
+                # 先保存拆分结果，接管时只执行较小的窗口。
+                middle = len(ids) // 2
+                scopes[index : index + 1] = [
+                    _scope({item: chunks[item] for item in half}, context, key=f"{key}.{side}")
+                    for side, half in enumerate((ids[:middle], ids[middle:]))
+                ]
+                await persist()
+                continue
+            result = _validate_output(result, "Extraction", output_type)
             checkpoint[key] = (
                 {"request_key": request_key, "result": result, "reused": reused} if batch else result
             )
             await persist()
         saved_batch = checkpoint[key]
-        data = _validate_output(saved_batch["result"] if batch else saved_batch, "Checkpoint extraction")
+        if batch and saved_batch.get("request_key") != batch.request_key(language, system, schema):
+            raise KGError(
+                "PREPARATION_SCOPE_UNAVAILABLE",
+                "A saved extraction response has a different parser, prompt, schema, or model input",
+            )
+        data = _validate_output(
+            saved_batch["result"] if batch else saved_batch, "Checkpoint extraction", output_type
+        )
         if batch:
             data, all_known = batch.bind(data)
-        repaired = await _repair_evidence(
-            language, data, scope, chunks, context, model_data, schema, checkpoint, persist
-        )
-        if batch and all_known and repaired is data:
+        if structured:
+            valid_without_repair = await repair_window(
+                language, data, scope, chunks, catalog, model, checkpoint, persist, reuse, combined["issues"]
+            )
+        else:
+            repaired = await _repair_evidence(
+                language, data, scope, chunks, context, model_data, schema, checkpoint, persist
+            )
+            valid_without_repair = repaired is data
+            data = repaired
+        if batch and all_known and valid_without_repair:
             saved_batch["reusable"] = True
             reuse[saved_batch["request_key"]] = saved_batch["result"]
-        data = repaired
         authorization = {field: list(scope[field]) for field in ("input_chunk_ids", "input_unit_keys")}
         # 局部引用加批次前缀，避免不同调用中同名 ref 相互连接。
         namespace = key + "/"
         for candidate in data["entities"]:
-            combined["entities"].append(candidate | {"ref": namespace + candidate["ref"], **authorization})
+            visible = candidate if structured else _mark_partial_source(candidate, scope)
+            combined["entities"].append(visible | {"ref": namespace + candidate["ref"], **authorization})
         for candidate in data["relations"]:
             combined["relations"].append(
                 candidate
@@ -609,12 +794,37 @@ async def extract_text(language, parsed, model, checkpoint, persist, *, reuse=No
                     **authorization,
                 }
             )
-    await _assemble_rules(language, parsed, model, combined, checkpoint, persist)
+        index += 1
+    if structured:
+        await complete_windows(
+            language, combined, scopes, chunks, catalog, model, _scope, checkpoint, persist, reuse
+        )
+    else:
+        await _assemble_rules(language, parsed, model, combined, checkpoint, persist)
+    if len(scopes) > 1:
+        from .extraction_links import link_batches
+
+        linked, issues = await link_batches(
+            language,
+            parsed,
+            model,
+            scopes,
+            chunks,
+            combined,
+            checkpoint,
+            persist,
+            schema,
+            lambda value, stage: _validate_output(value, stage, output_type),
+            structured=structured,
+            reuse=reuse,
+        )
+        combined["relations"].extend(linked)
+        combined["issues"].extend(issues)
     return combined
 
 
 async def _repair_evidence(language, data, scope, chunks, context, model_data, schema, checkpoint, persist):
-    """One targeted correction for invalid citations; preserve every valid original candidate."""
+    """只纠正无效引用，保留原响应中已通过校验的候选。"""
     local_chunks = {key: chunks[key] for key in scope["input_chunk_ids"]}
     failures, bad_entities, bad_relations = [], [], []
 
@@ -622,8 +832,21 @@ async def _repair_evidence(language, data, scope, chunks, context, model_data, s
         verify_evidence(refs, local_chunks, units=context, input_unit_keys=scope["input_unit_keys"])
 
     def check_entity_evidence(candidate):
+        definition = model_data["node_types"].get(candidate["type"])
+        if definition is not None:
+            normalize_candidate_literals(
+                candidate,
+                NodeType.model_validate(definition),
+                {unit["unit_key"]: unit for unit in context},
+                local_chunks,
+                scope["input_unit_keys"],
+            )
         for field in candidate["properties"]:
             check(candidate["evidence"].get(field, []))
+        if candidate.get("mention"):
+            check(candidate.get("mention_evidence", []))
+        if candidate.get("identity_equivalence"):
+            check(candidate["identity_equivalence"]["evidence"])
         for declaration in candidate.get("atomic_groups", {}).values():
             for field in declaration["fields"]:
                 check(declaration["evidence"].get(field, []))
@@ -674,7 +897,7 @@ async def _repair_evidence(language, data, scope, chunks, context, model_data, s
             "Never omit supported clause wording to shorten output; repair its citations. "
             "Do not return other endpoints or new facts."
         )
-        if language.json_request_chars(system, request, schema) > language.profile.max_input_chars:
+        if not request_fits(language, system, request, schema):
             checkpoint[cache_key] = {"entities": [], "relations": [], "skipped": "input_budget"}
         else:
             try:
@@ -727,9 +950,24 @@ async def _repair_evidence(language, data, scope, chunks, context, model_data, s
     }
 
 
+def _mark_partial_source(candidate, scope):
+    """A model cannot certify a complete rule from an incomplete source-unit window."""
+    partial = {view["unit_key"] for view in scope["unit_views"] if not view["fully_supplied"]}
+    result = deepcopy(candidate)
+    for declaration in result.get("atomic_groups", {}).values():
+        used = set(declaration.get("rule_units", []))
+        if declaration.get("section_key"):
+            used.add(declaration["section_key"])
+        if used & partial:
+            declaration["complete"] = False
+            result.setdefault("source_incomplete_unit_keys", []).extend(sorted(used & partial))
+    return result
+
+
 async def _assemble_rules(language, parsed, model, extracted, checkpoint, persist):
-    """Reconcile bounded partial declarations only within one document and reliable identity."""
+    """只在同一资料和可靠身份范围内组装局部规则声明。"""
     schema = Extraction.model_json_schema()
+    units = {unit["unit_key"]: unit for unit in parsed.get("rule_units", [])}
     grouped = defaultdict(list)
     for candidate in extracted["entities"]:
         definition = model.node_types.get(candidate["type"])
@@ -742,25 +980,33 @@ async def _assemble_rules(language, parsed, model, extracted, checkpoint, persis
         for name, declaration in candidate.get("atomic_groups", {}).items():
             if not isinstance(declaration, dict) or declaration.get("complete") is True:
                 continue
-            section_key = declaration.get("section_key")
-            if section_key and declaration.get("segment_complete") is True:
-                grouped[(candidate["type"], canonical(identity), name, section_key)].append(candidate)
-    units = {unit["unit_key"]: unit for unit in parsed.get("rule_units", [])}
+            rule_keys = set(declaration.get("rule_units", []))
+            if declaration.get("section_key") in units:
+                rule_keys.add(declaration["section_key"])
+            incomplete = rule_keys & set(candidate.get("source_incomplete_unit_keys", []))
+            owners = incomplete or (rule_keys if declaration.get("segment_complete") is True else set())
+            owners &= units.keys()
+            if owners:
+                owner_key = min(owners, key=lambda key: (units[key]["order"], key))
+                grouped[(candidate["type"], canonical(identity), name, owner_key)].append(candidate)
     chunks = {chunk["chunk_id"]: chunk for chunk in parsed["chunks"]}
-    for index, ((type_name, identity, group_name, section_key), candidates) in enumerate(
+    for index, ((type_name, identity, group_name, owner_key), candidates) in enumerate(
         sorted(grouped.items())
     ):
-        if len(candidates) < 2:
+        if len(candidates) < 2 and not any(
+            owner_key in candidate.get("source_incomplete_unit_keys", []) for candidate in candidates
+        ):
             continue
         selected = {
             key
             for candidate in candidates
             for key in candidate["atomic_groups"][group_name].get("rule_units", [])
         }
+        selected.add(owner_key)
         if not selected or any(key not in units for key in selected):
             continue
         selected = sorted(selected, key=lambda key: units[key]["order"])
-        orders = sorted(units[key]["order"] for key in selected)
+        orders = [units[key]["order"] for key in selected]
         if orders != list(range(orders[0], orders[-1] + 1)):
             continue
         selected_chunks = sorted({ref["chunk_id"] for key in selected for ref in units[key]["evidence"]})
@@ -774,7 +1020,7 @@ async def _assemble_rules(language, parsed, model, extracted, checkpoint, persis
             "entity_type": type_name,
             "identity": identity,
             "atomic_group": group_name,
-            "section_key": section_key,
+            "section_key": owner_key,
         }
         scope = scopes.get(cache_key)
         if scope is None:
@@ -803,25 +1049,30 @@ async def _assemble_rules(language, parsed, model, extracted, checkpoint, persis
             "entity_type": type_name,
             "identity": identity,
             "atomic_group": group_name,
-            "section_key": section_key,
+            "section_key": owner_key,
             "parts": candidates,
             "chunks": [chunks[key] for key in scope["input_chunk_ids"]],
             "rule_units": scope["unit_views"],
         }
         if cache_key not in checkpoint:
-            request_chars = language.json_request_chars(RULE_ASSEMBLY_SYSTEM, data, schema)
-            if request_chars > language.profile.max_input_chars:
-                raise KGError(
-                    "RULE_CONTEXT_BUDGET_EXCEEDED",
-                    "The complete rule assembly exceeds the model input budget",
-                    422,
-                    section_key=section_key,
-                    required_chars=request_chars,
-                    max_chars=language.profile.max_input_chars,
+            if not request_fits(language, RULE_ASSEMBLY_SYSTEM, data, schema):
+                request_chars = language.json_request_chars(RULE_ASSEMBLY_SYSTEM, data, schema)
+                extracted.setdefault("issues", []).append(
+                    {
+                        "candidate": anchor,
+                        "reason_code": "RULE_CONTEXT_BUDGET_EXCEEDED",
+                        "details": {
+                            "required_chars": request_chars,
+                            "max_chars": language.profile.max_input_chars,
+                        },
+                    }
                 )
+                continue
             response = await language.json(RULE_ASSEMBLY_SYSTEM, data, schema)
             checkpoint[cache_key] = _validate_output(response, "Rule assembly")
             await persist()
+        valid, rejected = [], []
+        local_chunks = {key: chunks[key] for key in scope["input_chunk_ids"]}
         for candidate in _validate_output(checkpoint[cache_key], "Checkpoint rule assembly")["entities"]:
             if candidate["type"] != type_name:
                 continue
@@ -833,11 +1084,74 @@ async def _assemble_rules(language, parsed, model, extracted, checkpoint, persis
                 continue
             if canonical(candidate_identity) != identity:
                 continue
-            # Preserve the original refs and endpoint relationships; replace only this atomic statement.
-            declaration = candidate.get("atomic_groups", {}).get(group_name)
-            if declaration:
-                for original in candidates:
-                    original["atomic_groups"][group_name] = deepcopy(declaration)
-                    original.setdefault("atomic_group_scopes", {})[group_name] = {
-                        key: list(scope[key]) for key in ("input_chunk_ids", "input_unit_keys")
-                    }
+            candidate = deepcopy(candidate)
+            try:
+                normalize_candidate_literals(
+                    candidate,
+                    model.node_types[type_name],
+                    units,
+                    local_chunks,
+                    scope["input_unit_keys"],
+                )
+                declaration = candidate.get("atomic_groups", {}).get(group_name)
+                if not declaration or declaration.get("complete") is not True:
+                    continue
+                cited_units = declaration.get("rule_units", [])
+                if (
+                    owner_key not in cited_units
+                    or len(cited_units) != len(set(cited_units))
+                    or not set(cited_units) <= set(scope["input_unit_keys"])
+                ):
+                    continue
+                group = next(
+                    group for group in model.node_types[type_name].atomic_groups if group.name == group_name
+                )
+                _atomic_statement(
+                    candidate,
+                    group,
+                    model.node_types[type_name],
+                    {"document_id": parsed["chunks"][0]["document_id"]},
+                    local_chunks,
+                    units,
+                    model,
+                    input_unit_keys=scope["input_unit_keys"],
+                )
+            except (KGError, KeyError, TypeError) as exc:
+                rejected.append(exc.code if isinstance(exc, KGError) else type(exc).__name__)
+                continue
+            valid.append(declaration)
+        # A section may contain separate subclauses with the same identity.
+        if len(valid) == 1 and _same_assembly_source(candidates, group_name, units):
+            for original in candidates:
+                original["atomic_groups"][group_name] = deepcopy(valid[0])
+                original.setdefault("atomic_group_scopes", {})[group_name] = {
+                    key: list(scope[key]) for key in ("input_chunk_ids", "input_unit_keys")
+                }
+        else:
+            extracted.setdefault("issues", []).append(
+                {
+                    "candidate": anchor,
+                    "reason_code": "RULE_ASSEMBLY_UNRESOLVED",
+                    "details": {
+                        "candidate_count": len(candidates),
+                        "valid_outputs": len(valid),
+                        "rejected": rejected,
+                    },
+                }
+            )
+
+
+def _same_assembly_source(candidates, group_name, units):
+    """Share an assembly only for duplicate claims with exactly the same source range."""
+    if len(candidates) == 1:
+        return True
+    occupied, claims = [], []
+    for candidate in candidates:
+        declaration = candidate["atomic_groups"][group_name]
+        by_field = declaration.get("literal_parts", {})
+        parts = [part for values in by_field.values() for part in values]
+        if not parts or any(part.get("unit_key") not in units for part in parts):
+            return False
+        occupied.append(canonical(by_field))
+        claims.append(canonical(declaration["fields"]))
+    return all(parts == occupied[0] for parts in occupied[1:]) and len(set(claims)) == 1

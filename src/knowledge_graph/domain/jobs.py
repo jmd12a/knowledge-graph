@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from typing import Any, Literal
-from typing_extensions import NotRequired, TypedDict
 
 from pydantic import Field
+from typing_extensions import NotRequired, TypedDict
 
 from .knowledge import Entity, Relation
 from .model import StrictModel
@@ -12,7 +12,14 @@ from .source import Contribution, VectorPoint, validate_stored_evidence
 SUCCESS_STATES = {"SUCCEEDED", "SUCCEEDED_WITH_WARNINGS"}
 # 队首未完成任务占据知识库维护顺序；正式写入后的状态必须优先修复。
 HEAD_STATES = {
-    "PREPARING", "PREPARED", "DRAINING", "APPLYING", "VERIFYING", "NEEDS_REPAIR", "CLEANING", "CLEANUP_FAILED",
+    "PREPARING",
+    "PREPARED",
+    "DRAINING",
+    "APPLYING",
+    "VERIFYING",
+    "NEEDS_REPAIR",
+    "CLEANING",
+    "CLEANUP_FAILED",
 }
 WRITE_STATES = {"APPLYING", "VERIFYING", "NEEDS_REPAIR"}
 
@@ -69,7 +76,7 @@ class ChunkIndexPlan(StrictModel):
 
 
 class PreparedMutation(StrictModel):
-    schema_version: Literal[4]
+    schema_version: Literal[4, 5]
     chunk_index: ChunkIndexPlan
     verification: VerificationScope | None = None
     write_mode: Literal["full", "delta"] | None = None
@@ -86,6 +93,8 @@ class PreparedMutation(StrictModel):
     entities: list[Entity]
     relations: list[Relation]
     contributions: list[Contribution]
+    identity_dependency_targets: list[list[str]] = Field(default_factory=list)
+    identity_dependency_projection: dict[str, list[str]] | None = None
     chunk_points: list[VectorPoint]
     object_points: list[VectorPoint]
     issues: list[dict[str, Any]]
@@ -106,7 +115,11 @@ PREPARED_FIELDS = frozenset(PreparedMutation.model_fields)
 
 
 def prepared_fields(plan: dict) -> frozenset[str]:
-    return PREPARED_FIELDS
+    return (
+        PREPARED_FIELDS - {"identity_dependency_targets", "identity_dependency_projection"}
+        if plan.get("schema_version") == 4
+        else PREPARED_FIELDS
+    )
 
 
 def validate_write_set(plan: dict, groups: dict, job: dict | None) -> None:
@@ -115,8 +128,10 @@ def validate_write_set(plan: dict, groups: dict, job: dict | None) -> None:
     if mode != expected_mode or not isinstance(scope, dict):
         raise ValueError("Write mode does not match the maintenance operation")
     for field, group in (
-        ("entity_ids", "entities"), ("relation_ids", "relations"),
-        ("chunk_ids", "chunks"), ("object_ids", "objects"),
+        ("entity_ids", "entities"),
+        ("relation_ids", "relations"),
+        ("chunk_ids", "chunks"),
+        ("object_ids", "objects"),
     ):
         values = scope[field]
         selected, final = set(values), set(groups[group])
@@ -245,15 +260,22 @@ def _validate_chunk_index(plan, chunks, document_ids):
     members = {row["chunk_id"]: row for row in index["members"]}
     writes, deleted = set(index["write_ids"]), set(index["delete_ids"])
     if (
-        len(points) != len(index["points"]) or len(members) != len(index["members"])
-        or len(writes) != len(index["write_ids"]) or len(deleted) != len(index["delete_ids"])
-        or writes - points.keys() or deleted & points.keys()
+        len(points) != len(index["points"])
+        or len(members) != len(index["members"])
+        or len(writes) != len(index["write_ids"])
+        or len(deleted) != len(index["delete_ids"])
+        or writes - points.keys()
+        or deleted & points.keys()
         or {row["vector_id"] for row in members.values()} != points.keys()
-        or chunks.keys() - members.keys() or members.keys() & set(plan["delete_chunks"])
+        or chunks.keys() - members.keys()
+        or members.keys() & set(plan["delete_chunks"])
     ):
         raise ValueError("Chunk vector groups do not match the write and verification scope")
     if plan["write_mode"] == "full" and (
-        members.keys() != chunks.keys() or writes != points.keys() or deleted or index["current_count"] != len(points)
+        members.keys() != chunks.keys()
+        or writes != points.keys()
+        or deleted
+        or index["current_count"] != len(points)
     ):
         raise ValueError("Full rebuild must cover all chunk vector groups")
     for key in points.keys() | deleted | members.keys():
@@ -273,14 +295,15 @@ def _validate_chunk_index(plan, chunks, document_ids):
             raise ValueError("Representative text differs from its source chunk")
 
 
-
 def validate_prepared_mutation(plan: dict, job: dict | None = None) -> None:
     """校验持久化计划的结构、任务绑定和跨存储引用，拒绝不可安全重放的计划。"""
     import math
     from uuid import UUID
+
     from .common import canonical, valid_id
     from .errors import KGError
     from .model import BusinessModel, EmbeddingProfile, check_value, validate_identity_key
+    from .source import effective_contributions
 
     try:
         PreparedMutation.model_validate(plan)
@@ -319,6 +342,23 @@ def validate_prepared_mutation(plan: dict, job: dict | None = None) -> None:
                 valid_id(value)
                 if UUID(value).version != 4:
                     raise ValueError("Prepared object identifiers must use UUIDv4")
+        active_contributions, suppressed_dependencies = effective_contributions(plan["contributions"])
+        if plan["schema_version"] == 5:
+            projection = plan["identity_dependency_projection"]
+            if (
+                projection is None
+                or set(projection) != {"active", "suppressed"}
+                or (
+                    projection["active"] != sorted(row["contribution_id"] for row in active_contributions)
+                    or projection["suppressed"]
+                    != sorted(row["contribution_id"] for row in suppressed_dependencies)
+                )
+            ):
+                raise ValueError("Identity dependency projection differs from its raw contributions")
+            for pair in plan["identity_dependency_targets"]:
+                if len(pair) != 2 or pair[0] not in {"entity", "relation"}:
+                    raise ValueError("Invalid identity dependency target")
+                valid_id(pair[1])
         validate_write_set(plan, groups, job)
         entity_ids, relation_ids = set(groups["entities"]), set(groups["relations"])
         if set(groups["objects"]) != entity_ids:
@@ -361,8 +401,13 @@ def validate_prepared_mutation(plan: dict, job: dict | None = None) -> None:
             raise ValueError("Source chunks must be stored as payload-only points")
         for point in plan["object_points"] + plan["chunk_index"]["points"]:
             vector = point["vector"]
-            if not isinstance(vector, list) or len(vector) != profile.dimension or any(
-                isinstance(x, bool) or not isinstance(x, (int, float)) or not math.isfinite(x) for x in vector
+            if (
+                not isinstance(vector, list)
+                or len(vector) != profile.dimension
+                or any(
+                    isinstance(x, bool) or not isinstance(x, (int, float)) or not math.isfinite(x)
+                    for x in vector
+                )
             ):
                 raise ValueError("Invalid prepared vector")
             if profile.distance == "Cosine" and not any(vector):
@@ -412,11 +457,15 @@ def validate_prepared_mutation(plan: dict, job: dict | None = None) -> None:
 
         # 引用必须同时满足知识库、来源资料、目标对象和精确证据映射约束。
         by_target = {}
+        active_ids = {row["contribution_id"] for row in active_contributions}
         for contribution in plan["contributions"]:
             target_ids = entity_ids if contribution["target_kind"] == "entity" else relation_ids
             if (
                 contribution["kb_id"] != plan["kb_id"]
-                or contribution["target_id"] not in target_ids
+                or (
+                    contribution["contribution_id"] in active_ids
+                    and contribution["target_id"] not in target_ids
+                )
                 or contribution["document_id"] not in document_ids
                 or (
                     contribution["chunk_id"] not in chunks and contribution["chunk_id"] not in external_chunks
@@ -425,7 +474,8 @@ def validate_prepared_mutation(plan: dict, job: dict | None = None) -> None:
                 raise ValueError("Invalid contribution references")
             if not contribution["evidence"]:
                 raise ValueError("Contribution has no evidence")
-            by_target.setdefault(contribution["target_id"], set()).add(contribution["contribution_id"])
+            if contribution["contribution_id"] in active_ids:
+                by_target.setdefault(contribution["target_id"], set()).add(contribution["contribution_id"])
             for evidence in contribution["evidence"]:
                 if evidence["document_id"] != contribution["document_id"]:
                     raise ValueError("Evidence crosses document scope")
@@ -438,7 +488,7 @@ def validate_prepared_mutation(plan: dict, job: dict | None = None) -> None:
                     raise ValueError("Evidence is outside the verification scope")
         # 旧来源切片由写后校验按 ID 读取，避免在计划中复制它们的正文。
         if not external_chunks:
-            validate_atomic_reference_mappings(plan["contributions"], chunks, plan["entities"])
+            validate_atomic_reference_mappings(active_contributions, chunks, plan["entities"])
         for item in plan["entities"] + plan["relations"]:
             definition = (
                 model.node_types[item["entity_type"]]

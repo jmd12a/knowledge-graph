@@ -29,7 +29,11 @@ class Metadata:
     def _connect(self):
         dsn = os.getenv(self.dsn_env)
         if not dsn:
-            raise KGError("STORAGE_NOT_CONFIGURED", f"PostgreSQL DSN environment variable is missing: {self.dsn_env}", 503)
+            raise KGError(
+                "STORAGE_NOT_CONFIGURED",
+                f"PostgreSQL DSN environment variable is missing: {self.dsn_env}",
+                503,
+            )
         return psycopg.connect(dsn, autocommit=True, row_factory=dict_row, connect_timeout=5)
 
     def initialize(self):
@@ -110,7 +114,9 @@ class Metadata:
         return await self.kb(kb_id)
 
     async def document(self, kb_id: str, document_id: str):
-        row = await self._one("SELECT * FROM documents WHERE kb_id=%s AND document_id=%s", (kb_id, document_id))
+        row = await self._one(
+            "SELECT * FROM documents WHERE kb_id=%s AND document_id=%s", (kb_id, document_id)
+        )
         if not row:
             raise KGError("NOT_FOUND", "Document does not exist", 404)
         row["source"] = json.loads(row["source_json"])
@@ -121,7 +127,9 @@ class Metadata:
         if active is not None:
             sql += " AND active=%s AND deleted_at IS NULL"
             args.append(active)
-        return await self._all(sql + " ORDER BY created_at,document_id LIMIT %s OFFSET %s", (*args, limit, offset))
+        return await self._all(
+            sql + " ORDER BY created_at,document_id LIMIT %s OFFSET %s", (*args, limit, offset)
+        )
 
     async def request(self, kb_id, operation, key):
         return await self._one(
@@ -135,10 +143,20 @@ class Metadata:
         c.execute(
             (
                 "INSERT INTO jobs(job_id,kb_id,operation,document_id,input_json,state,created_at,updated_at,"
-            "idempotency_key,request_json)"
+                "idempotency_key,request_json)"
                 " VALUES(%s,%s,%s,%s,%s,'QUEUED',%s,%s,%s,%s)"
             ),
-            (job_id, kb_id, operation, document_id, canonical(input_data), now, now, key, canonical(request_data)),
+            (
+                job_id,
+                kb_id,
+                operation,
+                document_id,
+                canonical(input_data),
+                now,
+                now,
+                key,
+                canonical(request_data),
+            ),
         )
 
     async def register_upload(self, doc: dict, input_data: dict, key: str, request_data: dict):
@@ -170,7 +188,9 @@ class Metadata:
                     utcnow(),
                 ),
             )
-            self._insert_job(c, doc["kb_id"], "IMPORT", doc["document_id"], input_data, job_id, key, request_data)
+            self._insert_job(
+                c, doc["kb_id"], "IMPORT", doc["document_id"], input_data, job_id, key, request_data
+            )
             return {
                 "document_id": doc["document_id"],
                 "job_id": job_id,
@@ -256,7 +276,8 @@ class Metadata:
 
         def change(c):
             old = c.execute(
-                "SELECT maintenance_state,maintenance_job_id FROM knowledge_bases WHERE kb_id=%s FOR UPDATE", (kb_id,)
+                "SELECT maintenance_state,maintenance_job_id FROM knowledge_bases WHERE kb_id=%s FOR UPDATE",
+                (kb_id,),
             ).fetchone()
             if not old:
                 raise KGError("NOT_FOUND", "Knowledge base does not exist", 404)
@@ -301,12 +322,10 @@ class Metadata:
         """领取可执行的队头，正式写入修复优先。"""
         eligible = (
             "j.state IN ('PREPARED','DRAINING','APPLYING','VERIFYING','NEEDS_REPAIR','CLEANING')"
-            if publication_only else
-            "j.state IN ('QUEUED','PREPARING','PREPARED','DRAINING','APPLYING','VERIFYING','NEEDS_REPAIR','CLEANING')"
+            if publication_only
+            else "j.state IN ('QUEUED','PREPARING','PREPARED','DRAINING','APPLYING','VERIFYING','NEEDS_REPAIR','CLEANING')"
         )
-        budget = (
-            f"(j.attempt<3 OR ({_FIRST_PUBLICATION}))" if publication_only else "j.attempt<3"
-        )
+        budget = f"(j.attempt<3 OR ({_FIRST_PUBLICATION}))" if publication_only else "j.attempt<3"
 
         def claim_one(c):
             # 单发布 Worker 领取下一任务时，已没有正在执行的清理。
@@ -314,10 +333,14 @@ class Metadata:
                 "UPDATE jobs SET state='CLEANUP_FAILED',error_json=%s,updated_at=%s"
                 " WHERE state='CLEANING' AND attempt>=3",
                 (
-                    canonical(KGError(
-                        "CLEANUP_INTERRUPTED", "File cleanup did not finish within its retry budget", 503,
-                        retryable=True,
-                    ).as_dict()),
+                    canonical(
+                        KGError(
+                            "CLEANUP_INTERRUPTED",
+                            "File cleanup did not finish within its retry budget",
+                            503,
+                            retryable=True,
+                        ).as_dict()
+                    ),
                     utcnow(),
                 ),
             )
@@ -336,7 +359,8 @@ class Metadata:
                 if self._skip_deleted(c, row):
                     continue
                 if (
-                    publication_only and row["state"] == "PREPARED"
+                    publication_only
+                    and row["state"] == "PREPARED"
                     and row["last_step"] in {"prepared", "publish_draining"}
                 ):
                     return row
@@ -355,19 +379,22 @@ class Metadata:
             "SELECT j.job_id,j.queue_seq FROM jobs j JOIN knowledge_bases k USING(kb_id)"
             " WHERE j.queue_seq>%s AND j.state IN ('QUEUED','PREPARING')"
             " AND j.next_attempt_at<=%s AND k.maintenance_state='READY'"
-            + _QUEUE_HEAD + " ORDER BY j.queue_seq LIMIT %s",
+            + _QUEUE_HEAD
+            + " ORDER BY j.queue_seq LIMIT %s",
             (after, now, limit),
         )
 
     async def claim_preparation(self, observed, now):
         """仅为 Redis 已领取的队头登记下一次准备尝试。"""
+
         def claim_one(c):
             c.execute("SELECT kb_id FROM knowledge_bases WHERE kb_id=%s FOR UPDATE", (observed["kb_id"],))
             row = c.execute(
                 "SELECT j.* FROM jobs j JOIN knowledge_bases k USING(kb_id)"
                 " WHERE j.job_id=%s AND j.queue_seq=%s AND j.attempt=%s AND j.state=%s"
                 " AND j.state IN ('QUEUED','PREPARING') AND j.next_attempt_at<=%s AND k.maintenance_state='READY'"
-                + _QUEUE_HEAD + " FOR UPDATE OF j",
+                + _QUEUE_HEAD
+                + " FOR UPDATE OF j",
                 (observed["job_id"], observed["queue_seq"], observed["attempt"], observed["state"], now),
             ).fetchone()
             if row is None:
@@ -376,8 +403,10 @@ class Metadata:
                 return c.execute("SELECT * FROM jobs WHERE job_id=%s", (row["job_id"],)).fetchone()
             if row["attempt"] >= 3:
                 error = KGError(
-                    "PREPARATION_INTERRUPTED", "Preparation was interrupted after the automatic recovery limit",
-                    503, retryable=True,
+                    "PREPARATION_INTERRUPTED",
+                    "Preparation was interrupted after the automatic recovery limit",
+                    503,
+                    retryable=True,
                 )
                 return c.execute(
                     "UPDATE jobs SET state='PREPARE_FAILED',error_json=%s,updated_at=%s"
@@ -394,17 +423,21 @@ class Metadata:
         return self._decode_job(row) if row else None
 
     async def owns_preparation(self, job):
-        return await self._one(
-            "SELECT 1 FROM jobs WHERE job_id=%s AND queue_seq=%s AND attempt=%s AND state='PREPARING'",
-            (job["job_id"], job["queue_seq"], job["attempt"]),
-        ) is not None
+        return (
+            await self._one(
+                "SELECT 1 FROM jobs WHERE job_id=%s AND queue_seq=%s AND attempt=%s AND state='PREPARING'",
+                (job["job_id"], job["queue_seq"], job["attempt"]),
+            )
+            is not None
+        )
 
     async def update_preparation(self, job, **fields):
         if set(fields) - {"state", "plan_path", "plan_id", "last_step", "error_json", "next_attempt_at"}:
             raise ValueError("Invalid preparation update")
         fields["updated_at"] = utcnow()
         updated = await self._one(
-            "UPDATE jobs SET " + ",".join(key + "=%s" for key in fields)
+            "UPDATE jobs SET "
+            + ",".join(key + "=%s" for key in fields)
             + " WHERE job_id=%s AND queue_seq=%s AND attempt=%s AND state='PREPARING' RETURNING job_id",
             (*fields.values(), job["job_id"], job["queue_seq"], job["attempt"]),
         )
@@ -412,6 +445,7 @@ class Metadata:
 
     async def start_publication(self, job):
         """一次事务登记排空与领取，保留初次排空可恢复的边界。"""
+
         def start(c):
             kb = c.execute(
                 "SELECT maintenance_state,maintenance_job_id FROM knowledge_bases WHERE kb_id=%s FOR UPDATE",
@@ -437,6 +471,7 @@ class Metadata:
 
     async def cancel_publication(self, job):
         """在写入开始前同时恢复知识库可读和任务可重试。"""
+
         def cancel(c):
             gate = c.execute(
                 "SELECT 1 FROM knowledge_bases WHERE kb_id=%s AND maintenance_job_id=%s"
@@ -460,6 +495,7 @@ class Metadata:
 
     async def begin_publication_writes(self, job):
         """排空后同时更新门禁、任务和手动重试的计数。"""
+
         def begin(c):
             kb = c.execute(
                 "SELECT maintenance_state,maintenance_job_id FROM knowledge_bases WHERE kb_id=%s FOR UPDATE",
@@ -493,13 +529,15 @@ class Metadata:
 
     async def artifact_jobs(self, job_ids):
         return {
-            row["job_id"]: row for row in await self._all(
+            row["job_id"]: row
+            for row in await self._all(
                 "SELECT job_id,queue_seq,state,plan_path FROM jobs WHERE job_id=ANY(%s)", (job_ids,)
             )
         }
 
     async def retry(self, job_id, generation):
         """接受一次针对当前失败代次的重试。"""
+
         def retry_one(c):
             reference = c.execute("SELECT kb_id FROM jobs WHERE job_id=%s", (job_id,)).fetchone()
             if not reference:
@@ -516,7 +554,13 @@ class Metadata:
                 ).fetchone()
                 if doc["deleted_at"]:
                     raise KGError("INVALID_JOB_STATE", "Deleted document imports cannot be retried", 409)
-            if row["state"] not in {"PREPARE_FAILED", "PREPARED", "NEEDS_REPAIR", "DRAINING", "CLEANUP_FAILED"}:
+            if row["state"] not in {
+                "PREPARE_FAILED",
+                "PREPARED",
+                "NEEDS_REPAIR",
+                "DRAINING",
+                "CLEANUP_FAILED",
+            }:
                 raise KGError("INVALID_JOB_STATE", "This job cannot be retried", 409)
             requeue = row["state"] == "PREPARE_FAILED"
             changes = ""
@@ -525,7 +569,8 @@ class Metadata:
             elif row["state"] == "CLEANUP_FAILED":
                 changes = "state='CLEANING',error_json=NULL,"
             c.execute(
-                "UPDATE jobs SET " + changes
+                "UPDATE jobs SET "
+                + changes
                 + "attempt=0,next_attempt_at=0,retry_generation=retry_generation+1,updated_at=%s WHERE job_id=%s",
                 (utcnow(), job_id),
             )
@@ -567,6 +612,23 @@ class Metadata:
         )
         return self._decode_contributions(rows)
 
+    async def dependent_contributions(self, kb_id, entity_ids, max_rows):
+        if not entity_ids:
+            return []
+        rows = await self._all(
+            "SELECT c.* FROM source_contributions c"
+            " WHERE c.kb_id=%s AND EXISTS ("
+            " SELECT 1 FROM jsonb_array_elements(c.claim_json::jsonb->'identity_dependencies') dep"
+            " WHERE dep->>'target_id'=ANY(%s))"
+            " AND EXISTS (SELECT 1 FROM documents d WHERE d.document_id=c.document_id"
+            " AND d.active=true AND d.deleted_at IS NULL)"
+            " ORDER BY c.contribution_id LIMIT %s",
+            (kb_id, entity_ids, max_rows + 1),
+        )
+        if len(rows) > max_rows:
+            raise KGError("SCAN_BUDGET_EXCEEDED", "Identity dependencies exceed the maintenance budget")
+        return self._decode_contributions(rows)
+
     async def contribution_count(self, kb_id):
         row = await self._one("SELECT count(*) AS n FROM source_contributions WHERE kb_id=%s", (kb_id,))
         return row["n"]
@@ -587,8 +649,7 @@ class Metadata:
                 c.execute("DELETE FROM source_contributions WHERE kb_id=%s", (kb_id,))
             elif document_ids:
                 c.execute(
-                    "DELETE FROM source_contributions WHERE kb_id=%s "
-                    "AND document_id=ANY(%s)",
+                    "DELETE FROM source_contributions WHERE kb_id=%s AND document_id=ANY(%s)",
                     (kb_id, document_ids),
                 )
             for row in contributions:
@@ -639,7 +700,11 @@ class Metadata:
             sql += " JOIN documents d ON d.document_id=m.document_id AND d.kb_id=m.kb_id"
         sql += " WHERE m.kb_id=%s"
         args = [kb_id]
-        for field, values in (("chunk_id", chunk_ids), ("document_id", document_ids), ("vector_id", vector_ids)):
+        for field, values in (
+            ("chunk_id", chunk_ids),
+            ("document_id", document_ids),
+            ("vector_id", vector_ids),
+        ):
             if values is not None:
                 sql += f" AND m.{field}=ANY(%s)"
                 args.append(values)
@@ -652,12 +717,14 @@ class Metadata:
 
     async def replace_vector_members(self, kb_id, vector_ids, members):
         """用计划记录的分组完整替换其成员，重复执行得到同一映射。"""
+
         def replace(conn):
             if vector_ids is None:
                 conn.execute("DELETE FROM chunk_vector_members WHERE kb_id=%s", (kb_id,))
             elif vector_ids:
                 conn.execute(
-                    "DELETE FROM chunk_vector_members WHERE kb_id=%s AND vector_id=ANY(%s)", (kb_id, vector_ids)
+                    "DELETE FROM chunk_vector_members WHERE kb_id=%s AND vector_id=ANY(%s)",
+                    (kb_id, vector_ids),
                 )
             if members:
                 with conn.cursor() as cursor:
@@ -727,7 +794,8 @@ class Metadata:
                 cleanup_attempt = ",attempt=1,next_attempt_at=0"
             c.execute(
                 "UPDATE jobs SET state=%s,last_step=%s,error_json=NULL,counts_json=%s,updated_at=%s"
-                + cleanup_attempt + " WHERE job_id=%s",
+                + cleanup_attempt
+                + " WHERE job_id=%s",
                 (state, step, canonical(plan["counts"] | {"warnings": plan["warnings"]}), utcnow(), job_id),
             )
             return cleanup

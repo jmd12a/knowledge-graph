@@ -4,6 +4,7 @@ import unicodedata
 from collections import defaultdict
 
 from ...domain import KGError, canonical, new_id
+from ...domain.source import effective_contributions
 
 
 def _values(contributions, merge):
@@ -55,6 +56,11 @@ def _atomic_values(contributions):
                 "field_evidence": statement.get("field_evidence", {}),
                 "resolved_references": statement.get("resolved_references", []),
                 "completeness_check": statement.get("completeness_check", {}),
+                **(
+                    {"literal_provenance": statement["literal_provenance"]}
+                    if statement.get("literal_provenance")
+                    else {}
+                ),
             }
         )
     result = []
@@ -83,6 +89,7 @@ def aggregate(
     """合并传入的目标贡献；局部维护可引用已经存在的外部端点。"""
     old_entities = {item["entity_id"]: item for item in previous_entities or []}
     old_relations = {item["relation_id"]: item for item in previous_relations or []}
+    contributions, _ = effective_contributions(contributions)
     by_target = defaultdict(list)
     for contribution in contributions:
         if contribution["kb_id"] != kb_id:

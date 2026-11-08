@@ -8,7 +8,6 @@ from collections import defaultdict
 
 from ...domain import KGError, new_id
 
-
 log = logging.getLogger(__name__)
 
 
@@ -60,7 +59,9 @@ class ChunkVectorPreparation:
                 count = await self.c.vectors.count(self.kb_id, "chunk_vectors") + len(writes) - len(deleted)
             else:
                 importing = operation == "IMPORT"
-                points, members, writes = await self._group(chunks, draft, persist, embed, importing=importing)
+                points, members, writes = await self._group(
+                    chunks, draft, persist, embed, importing=importing
+                )
                 count = len(points)
                 if importing:
                     previous = await self.c.vectors.count(self.kb_id, "chunk_vectors")
@@ -95,15 +96,15 @@ class ChunkVectorPreparation:
         can_compare = self.profile["distance"] == "Cosine" and bool(c.settings.chunk_decision_model)
         neighbors = (
             await c.vectors.near_chunk_vectors(kb_id, pending, c.settings.chunk_similarity_threshold)
-            if importing and can_compare else {}
+            if importing and can_compare
+            else {}
         )
         assignments = {text: point["id"] for text, point in exact.items()}
         points = {point["id"]: point for point in exact.values()}
         previous_ids, writes = set(points), set()
         new_sources = {chunk["id"]: chunk["payload"] for chunk in chunks}
         neighbor_sources = {
-            hit["payload"]["representative_chunk_id"]
-            for hits in neighbors.values() for hit in hits
+            hit["payload"]["representative_chunk_id"] for hits in neighbors.values() for hit in hits
         } - new_sources.keys()
         sources = new_sources | {
             point["id"]: point["payload"]
@@ -145,7 +146,9 @@ class ChunkVectorPreparation:
                 writes.add(match)
             assignments[text] = match
 
-        members = await c.metadata.vector_members(kb_id, vector_ids=sorted(previous_ids)) if previous_ids else []
+        members = (
+            await c.metadata.vector_members(kb_id, vector_ids=sorted(previous_ids)) if previous_ids else []
+        )
         members.extend(_membership(chunk, assignments[chunk["payload"]["text"]]) for chunk in chunks)
         return points, members, writes
 
@@ -155,7 +158,8 @@ class ChunkVectorPreparation:
         missing = [text for text in first_by_text if text not in exact]
         sources = await c.vectors.exact_source_chunks(kb_id, missing, self.profile)
         compatible = {
-            text: point for text, point in sources.items()
+            text: point
+            for text, point in sources.items()
             if set(point["payload"]["domain_ids"]) == set(first_by_text[text]["payload"]["domain_ids"])
         }
         if not compatible:
@@ -166,7 +170,9 @@ class ChunkVectorPreparation:
         by_chunk = {row["chunk_id"]: row["vector_id"] for row in members}
         ids = sorted(set(by_chunk.values()))
         points = await c.vectors.read(kb_id, "chunk_vectors", ids, with_vectors=True)
-        by_id = {point["id"]: point for point in points if point["payload"]["embedding_profile"] == self.profile}
+        by_id = {
+            point["id"]: point for point in points if point["payload"]["embedding_profile"] == self.profile
+        }
         for text, point in compatible.items():
             representative = by_id.get(by_chunk.get(point["id"]))
             if representative is not None:
@@ -187,13 +193,19 @@ class ChunkVectorPreparation:
                 "text": chunk["text"],
                 "section": chunk.get("section_path", []),
                 "document": document["original_name"],
-                "source": {key: source[key] for key in ("published_at", "effective_at", "source_type") if key in source},
+                "source": {
+                    key: source[key]
+                    for key in ("published_at", "effective_at", "source_type")
+                    if key in source
+                },
                 "ingested_at": document["created_at"],
             }
 
         old_state, new_state = await state(old), await state(new)
         try:
-            return await self.c.language.chunk_coverage(old_state, new_state, self.c.settings.chunk_decision_model)
+            return await self.c.language.chunk_coverage(
+                old_state, new_state, self.c.settings.chunk_decision_model
+            )
         except KGError as exc:
             self.decision_failed = True
             log.warning("Chunk coverage unavailable for job %s (%s)", self.job["job_id"], exc.code)
@@ -240,14 +252,15 @@ class ChunkVectorPreparation:
             kb_id, "chunk_vectors", with_vectors=False, max_points=self.c.settings.maintenance_scan_limit
         )
         source_chunks = {chunk["id"]: chunk for chunk in chunks}
-        if (
-            {row["chunk_id"] for row in members} != source_chunks.keys()
-            or {row["vector_id"] for row in members} != {point["id"] for point in old_points}
-        ):
+        if {row["chunk_id"] for row in members} != source_chunks.keys() or {
+            row["vector_id"] for row in members
+        } != {point["id"] for point in old_points}:
             raise KGError("SOURCE_UNAVAILABLE", "Chunk vector membership is incomplete", 503)
         representatives = await self._embed(
             [source_chunks[point["payload"]["representative_chunk_id"]] for point in old_points],
-            draft, persist, embed,
+            draft,
+            persist,
+            embed,
         )
         points = {
             point["id"]: _representative(kb_id, rep, self.profile, point["id"])

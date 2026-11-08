@@ -8,14 +8,15 @@ import json
 import re
 from pathlib import Path
 
-from pypdf import PdfReader, __version__ as pypdf_version
+from pypdf import PdfReader
+from pypdf import __version__ as pypdf_version
 from pypdf.errors import PyPdfError
 
 from ...domain import KGError, canonical, new_id, select_mapping
 from .sections import count_line_breaks, markdown_sections
 from .word import word_blocks
 
-PARSER_PROFILE = {"name": "source-spans", "revision": 1, "coordinates": "unicode_code_points_half_open"}
+PARSER_PROFILE = {"name": "source-spans", "revision": 2, "coordinates": "unicode_code_points_half_open"}
 
 
 def pointer(value, path):
@@ -44,8 +45,18 @@ class Parser:
         self.settings = settings
 
     def _chunk_text(
-        self, text, origin, document_id, domain_ids, *, overlap=True, spans=None, section_path=None,
-        char_offset=0, line_offset=0,
+        self,
+        text,
+        origin,
+        document_id,
+        domain_ids,
+        *,
+        overlap=True,
+        spans=None,
+        section_path=None,
+        char_offset=0,
+        line_offset=0,
+        block_order=0,
     ):
         """按长度与边界切片，将原文或字段坐标映射到切片内的半开区间。"""
         chunks, start = [], 0
@@ -112,8 +123,11 @@ class Parser:
                     "parser_profile": PARSER_PROFILE
                     | {
                         "format": origin["format"],
+                        "block_order": block_order,
+                        "block_length": len(text),
                         **({"pypdf_version": pypdf_version} if origin["format"] == "pdf" else {}),
                     },
+                    "block_range": [start, end],
                     "domain_ids": domain_ids,
                 }
             )
@@ -151,11 +165,17 @@ class Parser:
             origin = {"format": media_type}
             if media_type == "md":
                 chunks = []
-                for start, end, line, path in markdown_sections(text):
+                for block_order, (start, end, line, path) in enumerate(markdown_sections(text)):
                     chunks.extend(
                         self._chunk_text(
-                            text[start:end], origin, doc["document_id"], domains,
-                            section_path=path, char_offset=start, line_offset=line,
+                            text[start:end],
+                            origin,
+                            doc["document_id"],
+                            domains,
+                            section_path=path,
+                            char_offset=start,
+                            line_offset=line,
+                            block_order=block_order,
                         )
                     )
             else:
@@ -164,11 +184,17 @@ class Parser:
 
         if media_type == "docx":
             chunks = []
-            for block in word_blocks(filename):
+            for block_order, block in enumerate(word_blocks(filename)):
                 chunks.extend(
                     self._chunk_text(
-                        block.text, block.locator, doc["document_id"], domains,
-                        overlap=block.overlap, spans=block.spans, section_path=block.section_path,
+                        block.text,
+                        block.locator,
+                        doc["document_id"],
+                        domains,
+                        overlap=block.overlap,
+                        spans=block.spans,
+                        section_path=block.section_path,
+                        block_order=block_order,
                     )
                 )
             if not chunks:
@@ -195,7 +221,11 @@ class Parser:
                         page=page_index,
                     )
                 chunks += self._chunk_text(
-                    text, {"format": "pdf", "page": page_index}, doc["document_id"], domains
+                    text,
+                    {"format": "pdf", "page": page_index},
+                    doc["document_id"],
+                    domains,
+                    block_order=page_index - 1,
                 )
             return {"chunks": chunks, "records": [], "mapping_id": None}
 

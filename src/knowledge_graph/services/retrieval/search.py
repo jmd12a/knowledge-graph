@@ -9,8 +9,8 @@ from copy import deepcopy
 from ...domain import valid_id
 from ...domain.errors import KGError
 from ...domain.model import BusinessModel, check_value
-from ...prompts.retrieval import RERANK_SYSTEM
 from ..contracts import Filters, SearchRequest, coverage, envelope
+from .rerank import compact_rerank
 
 
 def scalar_equal(left, right):
@@ -114,10 +114,14 @@ class SearchMixin:
             valid_id(document_id)
 
     async def _validate_documents(self, kb_id, document_ids):
+        documents = {}
         for document_id in document_ids:
             document = await self.r.metadata.document(kb_id, document_id)
             if document.get("deleted_at"):
                 raise KGError("NOT_FOUND", "Selected document has been deleted", 404, document_id=document_id)
+            title = document.get("source", {}).get("title")
+            documents[document_id] = str(title or document.get("original_name") or "")[:200]
+        return documents
 
     async def _scope(self, kb, filters):
         """仅用所选资料的贡献重聚合知识；未指定资料时返回 None。"""
@@ -125,12 +129,13 @@ class SearchMixin:
         self.validate_filters(model, filters)
         if not filters.document_ids:
             return None
-        await self._validate_documents(kb["kb_id"], filters.document_ids)
-        from ..construction.merge import aggregate
+        documents = await self._validate_documents(kb["kb_id"], filters.document_ids)
+        from ..construction.merge import aggregate, effective_contributions
 
         # 整库聚合可能包含其他来源的值，不能仅按 document_ids 过滤后复用。
         contributions = await self.r.metadata.contributions(kb["kb_id"], filters.document_ids)
-        entities, relations = aggregate(kb["kb_id"], contributions, model)
+        active, suppressed = effective_contributions(contributions)
+        entities, relations = aggregate(kb["kb_id"], active, model)
         for item in entities + relations:
             item["scope"] = "selected_documents"
             item["selected_document_ids"] = list(filters.document_ids)
@@ -140,7 +145,9 @@ class SearchMixin:
         return {
             "entity": {item["entity_id"]: item for item in entities},
             "relation": {item["relation_id"]: item for item in relations},
-            "contributions": contributions,
+            "contributions": active,
+            "documents": documents,
+            "suppressed_dependencies": len(suppressed),
         }
 
     @staticmethod
@@ -334,65 +341,37 @@ class SearchMixin:
                     "TIMEOUT", "Search exceeded the total query budget", 504, retryable=True
                 ) from exc
 
-    async def _rerank(self, request, ordered, records, result, component):
-        if not request.semantic or not self.r.settings.rerank_enabled or len(ordered) <= 1:
+    async def _rank_search(
+        self, kb_id, request, ordered, records, result, component, scope, documents, *, has_exact=False
+    ):
+        settings = self.r.settings
+        if not request.semantic or not settings.rerank_enabled or len(ordered) <= 1 or has_exact:
             return ordered, set()
-        schema = {
-            "type": "object",
-            "properties": {"ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": True}},
-            "required": ["ids"],
-            "additionalProperties": False,
-        }
-        data = {"query": request.query, "limit": min(request.limit, len(ordered)), "candidates": []}
-        candidate_keys = {}
-        for index, key in enumerate(ordered[: self.r.settings.rerank_candidate_limit], 1):
-            item = records[key]
-            text = item.get("text", item.get("search_text", ""))
-            number = str(index)
-            candidate = {"id": number, "name": item.get("canonical_name", ""), "text": text[:12000]}
-            proposed = data | {"candidates": data["candidates"] + [candidate]}
-            if (
-                self.r.language.json_request_chars(RERANK_SYSTEM, proposed, schema)
-                > self.r.language.profile.max_input_chars
-            ):
-                break
-            data = proposed
-            candidate_keys[number] = key
-        if len(candidate_keys) <= 1:
-            return ordered, set()
-        data["limit"] = min(request.limit, len(candidate_keys))
         try:
-            async with asyncio.timeout(
-                min(self.r.settings.rerank_timeout, self.r.settings.retrieval_timeout / 3)
-            ):
-                response = await self.r.language.json(RERANK_SYSTEM, data, schema)
-            numbers = response["ids"]
-            if not isinstance(numbers, list) or any(not isinstance(number, str) for number in numbers):
-                raise ValueError("Reranker IDs must be strings")
-            selected = [candidate_keys[number] for number in numbers if number in candidate_keys]
-            invalid_count = len(numbers) - len(selected)
-            if invalid_count:
-                result["warnings"].append({"code": "RERANK_IDS_IGNORED", "count": invalid_count})
-            # 保留有效的重排结果，从原候选顺序补齐。
-            selected = list(dict.fromkeys(selected))[: data["limit"]]
+            order, reranked, metrics = await compact_rerank(
+                self.r, kb_id, request, ordered, records, component, scope, documents
+            )
         except (KGError, ValueError, KeyError, TypeError, TimeoutError) as exc:
             add_warning(
                 result,
                 "RERANK_UNAVAILABLE",
                 component=component,
-                reason=getattr(exc, "code", "INVALID_RANKING"),
+                reason="TIMEOUT"
+                if isinstance(exc, TimeoutError)
+                else getattr(exc, "code", "INVALID_RANKING"),
+                scope=request.filters.model_dump(),
             )
             return ordered, set()
-        result["coverage"].append(
-            coverage(
-                component,
-                "top_k",
-                request.filters.model_dump(),
-                {"rerank_candidates": len(candidate_keys), "limit": request.limit},
+        if invalid_ids := metrics.get("invalid_rerank_ids"):
+            result["warnings"].append({"code": "RERANK_IDS_IGNORED", "count": invalid_ids})
+        if invalid_evidence := metrics["invalid_rerank_evidence"]:
+            result["warnings"].append(
+                {"code": "RERANK_EVIDENCE_IGNORED", "stored": invalid_evidence, "model": 0}
             )
+        result["coverage"].append(
+            coverage(component, "top_k", request.filters.model_dump(), metrics | {"limit": request.limit})
         )
-        selected_keys = set(selected)
-        return selected + [key for key in ordered if key not in selected_keys], set(candidate_keys.values())
+        return order, reranked
 
     async def _search_chunk_vectors(self, kb_id, vector, limit, filters):
         r = self.r
@@ -401,7 +380,9 @@ class SearchMixin:
         ids = None
         if scoped:
             members = await r.metadata.vector_members(
-                kb_id, document_ids=filters.document_ids or None, domain_ids=filters.domain_ids or None,
+                kb_id,
+                document_ids=filters.document_ids or None,
+                domain_ids=filters.domain_ids or None,
                 active_only=True,
             )
             ids = sorted({row["vector_id"] for row in members})
@@ -431,7 +412,8 @@ class SearchMixin:
         }
         return [
             {"id": key, "payload": chunks[key], "score": hit["score"], "member_chunk_ids": group}
-            for hit, key, group in selected if key in chunks
+            for hit, key, group in selected
+            if key in chunks
         ]
 
     async def _search(self, kb, request, scope=None):
@@ -439,15 +421,25 @@ class SearchMixin:
         r, kb_id = self.r, kb["kb_id"]
         model = BusinessModel.model_validate(kb["model"])
         self.validate_filters(model, request.filters)
+        documents = {}
         if scope is None and request.filters.document_ids:
             if "entity" in request.kinds:
                 scope = await self._scope(kb, request.filters)
             else:
-                await self._validate_documents(kb_id, request.filters.document_ids)
+                documents = await self._validate_documents(kb_id, request.filters.document_ids)
+        if scope is not None:
+            documents = scope.get("documents", {})
         result, scan = envelope(kb_id), r.settings.candidate_scan_limit
         actual_scope = request.filters.model_dump()
         records, channels, ranks = {}, defaultdict(set), defaultdict(float)
         candidate_budget = {"limit": request.limit, "scan_limit": scan}
+        if scope and scope.get("suppressed_dependencies"):
+            add_warning(
+                result,
+                "IDENTITY_DEPENDENCY_OUT_OF_SCOPE",
+                component="object_candidates",
+                scope=actual_scope,
+            )
 
         def admit(item, channel, rank, *, ranked=True):
             item = deepcopy(item)
@@ -477,7 +469,12 @@ class SearchMixin:
                     "domain_ids": request.filters.domain_ids,
                     "document_ids": request.filters.document_ids,
                 }
-                exact, keyword = await r.graph.candidates(kb_id, request.query, scan, **selectors)
+                exact, keyword = await r.graph.candidates(
+                    kb_id,
+                    request.query,
+                    scan,
+                    **selectors,
+                )
                 try:
                     fulltext = await r.graph.fulltext(kb_id, request.query, scan, **selectors)
                 except KGError as exc:
@@ -578,7 +575,17 @@ class SearchMixin:
                     object_id,
                 ),
             )
-            selected, reranked = await self._rerank(request, selected, records, result, "object_candidates")
+            selected, reranked = await self._rank_search(
+                kb_id,
+                request,
+                selected,
+                records,
+                result,
+                "object_candidates",
+                scope,
+                documents,
+                has_exact=any(values & {"exact_identity", "exact_name"} for values in channels.values()),
+            )
             selected.sort(
                 key=lambda key: ("exact_identity" not in channels[key], "exact_name" not in channels[key])
             )
@@ -593,7 +600,10 @@ class SearchMixin:
             used_channels = sorted({name for values in channels.values() for name in values})
             result["coverage"].append(
                 coverage(
-                    "object_candidates", "top_k", actual_scope, candidate_budget | {"channels": used_channels}
+                    "object_candidates",
+                    "top_k",
+                    actual_scope,
+                    candidate_budget | {"channels": used_channels, "fused_candidates": len(records)},
                 )
             )
         if "chunk" in request.kinds:
@@ -626,7 +636,9 @@ class SearchMixin:
                     chunk_channels[hit["id"]].add("vector")
                     scores[hit["id"]] += 1 / (60 + rank)
             ordered = sorted(chunks, key=lambda key: (-scores[key], key))
-            ordered, reranked = await self._rerank(request, ordered, chunks, result, "documents")
+            ordered, reranked = await self._rank_search(
+                kb_id, request, ordered, chunks, result, "documents", scope, documents
+            )
             for rank, chunk_id in enumerate(ordered, 1):
                 if chunk_id in reranked:
                     chunk_channels[chunk_id].add("rerank")
@@ -659,6 +671,7 @@ class SearchMixin:
                         + (["vector"] if vector is not None else [])
                         + (["rerank"] if reranked else []),
                         "entity_filters_apply_to": "object_candidates",
+                        "fused_candidates": len(chunks),
                     },
                 )
             )

@@ -10,7 +10,6 @@ from redis.exceptions import RedisError
 
 from ...domain import KGError, canonical
 
-
 log = logging.getLogger(__name__)
 
 
@@ -18,7 +17,10 @@ def execution_error(exc):
     if isinstance(exc, KGError):
         return exc.as_dict()
     return KGError(
-        "EXECUTION_FAILED", "An internal execution error occurred", 503, retryable=True,
+        "EXECUTION_FAILED",
+        "An internal execution error occurred",
+        503,
+        retryable=True,
         exception_type=type(exc).__name__,
     ).as_dict()
 
@@ -112,14 +114,18 @@ class PreparationWorker:
         retry = error["retryable"] and job["attempt"] < 3
         delay = min(30, 2 ** job["attempt"]) if retry else 0
         if not await metadata.update_preparation(
-            job, state="PREPARING" if retry else "PREPARE_FAILED", error_json=canonical(error),
+            job,
+            state="PREPARING" if retry else "PREPARE_FAILED",
+            error_json=canonical(error),
             next_attempt_at=time.time() + delay,
         ):
             current = await metadata.job(job["job_id"])
             if current["queue_seq"] != job["queue_seq"] or current["state"] not in {"QUEUED", "PREPARING"}:
                 await self.queue.acknowledge(message, settled=True)
             return
-        log.warning("Preparation failed for %s on attempt %s (%s)", job["job_id"], job["attempt"], error["code"])
+        log.warning(
+            "Preparation failed for %s on attempt %s (%s)", job["job_id"], job["attempt"], error["code"]
+        )
         if retry:
             await self.queue.renew(message, delay=delay)
         else:

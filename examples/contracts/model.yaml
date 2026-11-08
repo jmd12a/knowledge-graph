@@ -26,7 +26,7 @@ node_types:
     name_field: heading
     properties:
       heading: {type: string, required: true, merge: single, description: 逐字选用实际统领该段正文的原文标题；没有独立标题或标题重复时，使用该条款正文开头具有区分度的一段连续原文。标题须与definition对应，不拼接不同位置的标题，不借用相邻条款标题，不因没有标题而漏掉条款。}
-      definition: {type: string, required: true, merge: supported_text}
+      definition: {type: string, required: true, merge: supported_text, source_mode: literal}
     atomic_groups:
       - {name: full_statement, fields: [definition]}
 relation_types:

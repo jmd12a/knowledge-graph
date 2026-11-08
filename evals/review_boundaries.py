@@ -13,7 +13,7 @@ import yaml
 
 from knowledge_graph.settings import Settings
 
-from .evidence import Evidence, PaidValidationStopped, ROOT, now, write_json
+from .evidence import ROOT, Evidence, PaidValidationStopped, now, write_json
 from .runtime import Runtime
 
 

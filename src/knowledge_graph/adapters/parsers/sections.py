@@ -9,11 +9,7 @@ from markdown_it import MarkdownIt
 
 def count_line_breaks(text: str, start: int, end: int) -> int:
     """统计在字符区间内结束的换行，CRLF 只在 LF 处计一次。"""
-    return (
-        text.count("\n", start, end)
-        + text.count("\r", start, end)
-        - text.count("\r\n", start, end + 1)
-    )
+    return text.count("\n", start, end) + text.count("\r", start, end) - text.count("\r\n", start, end + 1)
 
 
 def chapter_depth(levels: list[int]) -> int:

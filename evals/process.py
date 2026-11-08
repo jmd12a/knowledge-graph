@@ -412,6 +412,7 @@ def main():
         asyncio.run(worker(context, args, directory))
     else:
         import uvicorn
+
         from knowledge_graph.server import create_app
 
         instrument_reads(context, directory)
