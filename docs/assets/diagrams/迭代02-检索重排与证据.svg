@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="373.67" viewBox="0 0 1200 590" role="img" aria-labelledby="kg-rank-title kg-rank-desc">
+  <title id="kg-rank-title">检索重排与证据返回</title>
+  <desc id="kg-rank-desc">同一个融合候选池经单次紧凑重排后分两路。实体返回事实引用和可用上下文；原文区分完全包含的同源切片与仍带来新内容的切片。</desc>
+  <defs><marker id="kg-rank-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#6f9086" /></marker></defs>
+  <rect x="0.5" y="0.5" width="1199" height="589" rx="20" fill="#f7f8f2" stroke="#c9d7ce" />
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, PingFang SC, sans-serif">
+    <text x="43" y="51" font-size="18" font-weight="700" fill="#236b57" text-anchor="start">02  /  RETRIEVE</text>
+    <text x="43" y="99" font-size="35" font-weight="700" fill="#183836" text-anchor="start">同一组召回通道，两种取证方式</text>
+    <text x="43" y="132" font-size="19" font-weight="400" fill="#526966" text-anchor="start">重排选择候选，程序核对引用和来源边界</text>
+    <rect x="43" y="158" width="310" height="86" rx="10" fill="#ffffff" stroke="#a5c3b8" />
+<text x="198" y="191" font-size="23" font-weight="700" fill="#183836" text-anchor="middle">精确、关键词、向量</text>
+<text x="198" y="220" font-size="17" font-weight="400" fill="#526966" text-anchor="middle">保留原有候选来源</text>
+    <line x1="357" y1="202" x2="427" y2="202" stroke="#6f9086" stroke-width="2.5" marker-end="url(#kg-rank-arrow)" />
+    <rect x="432" y="158" width="294" height="86" rx="10" fill="#ffffff" stroke="#a5c3b8" />
+<text x="579" y="191" font-size="23" font-weight="700" fill="#183836" text-anchor="middle">融合候选</text>
+<text x="579" y="220" font-size="17" font-weight="400" fill="#526966" text-anchor="middle">明确的精确命中优先</text>
+    <line x1="730" y1="202" x2="800" y2="202" stroke="#6f9086" stroke-width="2.5" marker-end="url(#kg-rank-arrow)" />
+    <rect x="805" y="158" width="352" height="86" rx="10" fill="#e4f0e9" stroke="#a5c3b8" />
+<text x="981" y="191" font-size="23" font-weight="700" fill="#183836" text-anchor="middle">单次紧凑重排</text>
+<text x="981" y="220" font-size="17" font-weight="400" fill="#526966" text-anchor="middle">优先主摘录，返回候选 ID</text>
+    <rect x="43" y="277" width="537" height="263" rx="10" fill="#ffffff" stroke="#a5c3b8" />
+    <text x="67" y="318" font-size="25" font-weight="700" fill="#183836" text-anchor="start">图实体详情</text>
+    <text x="67" y="348" font-size="19" font-weight="400" fill="#526966" text-anchor="start">已验证的事实引用保持原样</text>
+    <rect x="67" y="370" width="485" height="44" rx="10" fill="#e4f0e9" stroke="#a5c3b8" />
+    <text x="83" y="399" font-size="20" font-weight="700" fill="#183836" text-anchor="start">fact　　原命中句、位置与实体关联</text>
+    <rect x="67" y="428" width="485" height="44" rx="10" fill="#efedf7" stroke="#cec4e2" />
+    <text x="83" y="457" font-size="19" font-weight="700" fill="#183836" text-anchor="start">context　同一切片里的完整段落或步骤</text>
+    <text x="67" y="508" font-size="18" font-weight="400" fill="#526966" text-anchor="start">上下文单独标记，有余量才附加</text>
+    <rect x="608" y="277" width="549" height="263" rx="10" fill="#ffffff" stroke="#a5c3b8" />
+    <text x="632" y="318" font-size="25" font-weight="700" fill="#183836" text-anchor="start">原文切片</text>
+    <text x="632" y="348" font-size="19" font-weight="400" fill="#526966" text-anchor="start">同源坐标示意，区间右端不包含</text>
+    <text x="632" y="388" font-size="18" font-weight="400" fill="#183836" text-anchor="start">已选 [100, 400)</text>
+    <rect x="798" y="367" width="241" height="24" rx="5" fill="#e4f0e9" stroke="#a5c3b8" />
+    <text x="632" y="438" font-size="18" font-weight="400" fill="#183836" text-anchor="start">包含 [140, 220)</text>
+    <rect x="830" y="417" width="64" height="24" rx="5" fill="#faecdf" stroke="#a5c3b8" />
+    <text x="632" y="488" font-size="18" font-weight="400" fill="#183836" text-anchor="start">重叠 [360, 520)</text>
+    <rect x="1007" y="467" width="128" height="24" rx="5" fill="#e4f0e9" stroke="#a5c3b8" />
+    <text x="632" y="518" font-size="18" font-weight="400" fill="#526966" text-anchor="start">包含项可后移，部分重叠保留候选资格</text>
+  </g>
+</svg>

@@ -1,0 +1,165 @@
+{
+  "documents": {
+    "catalog_a": {
+      "filename": "source-a.csv",
+      "mapping": "calls_and_caller_owner",
+      "sha256": "6c54afab55277f6196bfc428fcf6d039bada2c0257e149abaf3d5afb6fc058ec"
+    },
+    "catalog_b": {
+      "filename": "source-b.json",
+      "mapping": "calls_and_callee_owner",
+      "sha256": "9122f943634701e6d6196cd6a2d59b82e5991adaeb17cd2cfef47d3f9b2af264"
+    },
+    "reconciliation": {
+      "filename": "reconciliation.csv",
+      "mapping": "calls_and_caller_owner",
+      "sha256": "b4a9f87f29984fc99113f8374dbef41ea7c3023cfcff24e07dbc05d608f31b74"
+    },
+    "incident": {
+      "filename": "incident.csv",
+      "mapping": "calls_and_caller_owner",
+      "sha256": "f0e6aa1b1baeb51270820de3c7d6d75410f25fc420effe0d0007210870260aff"
+    },
+    "distractor": {
+      "filename": "distractor.csv",
+      "mapping": "calls_and_caller_owner",
+      "sha256": "9fa13f1940b3432e59489dbdffdd48352700038373d78727be5a6d4aec8d502c"
+    }
+  },
+  "questions": [
+    {
+      "name": "exact_global",
+      "query": "pay-core",
+      "expected": [
+        "pay-core"
+      ],
+      "first": "pay-core"
+    },
+    {
+      "name": "exact_scoped",
+      "query": "pay-core",
+      "docs": [
+        "catalog_a"
+      ],
+      "expected": [
+        "pay-core"
+      ],
+      "first": "pay-core"
+    },
+    {
+      "name": "alias_scoped",
+      "query": "ONLY_A_PAY_ALIAS",
+      "docs": [
+        "catalog_a"
+      ],
+      "expected": [
+        "pay-core"
+      ],
+      "first": "pay-core",
+      "semantic": false
+    },
+    {
+      "name": "one_of_five_docs",
+      "query": "支付回执签名失败后哪个服务负责隔离商户？",
+      "docs": [
+        "catalog_a",
+        "catalog_b",
+        "reconciliation",
+        "incident",
+        "distractor"
+      ],
+      "expected": [
+        "receipt-guard"
+      ]
+    },
+    {
+      "name": "complementary_docs",
+      "query": "对照两份运维资料，分别找出负责清算差额复核、支付回执签名失败后隔离商户的服务。",
+      "docs": [
+        "reconciliation",
+        "incident"
+      ],
+      "expected": [
+        "settlement-audit",
+        "receipt-guard"
+      ]
+    },
+    {
+      "name": "complement_with_distractors",
+      "query": "哪些服务负责清算流水异常差额的人工复核，以及支付异常后的幂等消息补发？",
+      "docs": [
+        "catalog_a",
+        "catalog_b",
+        "reconciliation",
+        "incident",
+        "distractor"
+      ],
+      "expected": [
+        "settlement-audit",
+        "settlement-retry"
+      ]
+    },
+    {
+      "name": "unscoped_paraphrase",
+      "query": "哪个服务按商户幂等键给失败的支付结算重送指令？",
+      "expected": [
+        "settlement-retry"
+      ]
+    },
+    {
+      "name": "wrong_document",
+      "query": "清算流水的差额人工复核服务",
+      "docs": [
+        "incident"
+      ],
+      "expected": [],
+      "forbidden": [
+        "settlement-audit"
+      ]
+    },
+    {
+      "name": "chunk_one_of_five_docs",
+      "kind": "chunk",
+      "query": "支付回执签名失败后哪个服务负责隔离商户？",
+      "docs": [
+        "catalog_a",
+        "catalog_b",
+        "reconciliation",
+        "incident",
+        "distractor"
+      ],
+      "expected": [
+        "receipt-guard"
+      ]
+    },
+    {
+      "name": "chunk_complementary_docs",
+      "kind": "chunk",
+      "query": "对照两份运维资料，分别找出负责清算差额复核、支付回执签名失败后隔离商户的服务。",
+      "docs": [
+        "reconciliation",
+        "incident"
+      ],
+      "expected": [
+        "settlement-audit",
+        "receipt-guard"
+      ]
+    },
+    {
+      "name": "chunk_complement_with_distractors",
+      "kind": "chunk",
+      "query": "哪些服务负责清算流水异常差额的人工复核，以及支付异常后的幂等消息补发？",
+      "docs": [
+        "catalog_a",
+        "catalog_b",
+        "reconciliation",
+        "incident",
+        "distractor"
+      ],
+      "expected": [
+        "settlement-audit",
+        "settlement-retry"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "name": "independent-procedures-retrieval",
+  "node_types": {
+    "Procedure": {
+      "description": "A published procedure record scoped to its originating manual.",
+      "identity": {
+        "namespace": "procedure",
+        "fields": [
+          "record_id"
+        ],
+        "normalization": [
+          "trim"
+        ]
+      },
+      "name_field": "title",
+      "properties": {
+        "record_id": {
+          "type": "string",
+          "required": true,
+          "merge": "single",
+          "queryable": true
+        },
+        "title": {
+          "type": "string",
+          "required": true,
+          "merge": "single"
+        },
+        "body": {
+          "type": "string",
+          "required": true,
+          "merge": "supported_text"
+        }
+      }
+    }
+  },
+  "relation_types": {},
+  "mappings": {
+    "csv-procedures": {
+      "format": "csv",
+      "records": {
+        "header": true,
+        "encoding": "utf-8"
+      },
+      "entities": {
+        "procedure": {
+          "type": "Procedure",
+          "fields": {
+            "record_id": {
+              "column": "record_id",
+              "cast": "string",
+              "empty": "error"
+            },
+            "title": {
+              "column": "title",
+              "cast": "string",
+              "empty": "error"
+            },
+            "body": {
+              "column": "body",
+              "cast": "string",
+              "empty": "error"
+            }
+          }
+        }
+      },
+      "relations": []
+    },
+    "json-procedures": {
+      "format": "json",
+      "records": {
+        "pointer": "/records",
+        "encoding": "utf-8"
+      },
+      "entities": {
+        "procedure": {
+          "type": "Procedure",
+          "fields": {
+            "record_id": {
+              "pointer": "/record_id",
+              "cast": "string",
+              "empty": "error"
+            },
+            "title": {
+              "pointer": "/title",
+              "cast": "string",
+              "empty": "error"
+            },
+            "body": {
+              "pointer": "/body",
+              "cast": "string",
+              "empty": "error"
+            }
+          }
+        }
+      },
+      "relations": []
+    }
+  }
+}

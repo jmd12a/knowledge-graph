@@ -1,0 +1,14 @@
+record_id,title,body
+E-release,Return to inventory,"East Depot receiving instructions. Intake staff enter the vehicle and trailer identifiers before loading bay staff acknowledge a delivery. A receiver inspects the seal and records the reading from the shipment logger. Shipment identifiers from a supplier label are copied into the local manifest, where each individual pallet gets a separate line.
+
+Quarantined chilled pallets are put back into pickable stock only after a quality officer signs two temperature readings fifteen minutes apart.
+
+The operations dashboard reports held inventory at the next hourly refresh. For mixed loads, changes to one pallet do not release the rest of the trailer. The audit folder keeps the first inbound reading even if a later measurement is recorded. A barcode mismatch goes to the intake desk instead of the driver."
+E-water,Disposition record,"East Depot facilities staff keep absorbent pads and caution tape in a cabinet near the dock. A safety coordinator documents standing water, sets barriers and assigns staff to collect the drain covers. An audit note may use the same event number as the cleaning report.
+
+A pallet that has touched standing water goes to certified disposal, even when its temperature gauges have stabilized.
+
+The disposal contractor records the manifest identifier and truck registration. A separate vendor record is created when empty pallets are cleaned off site. Inventory staff make the adjustment after receiving the signed manifest, and must retain the shipping label with the audit note."
+E-probe,Probe maintenance,An accuracy check at the ice point is performed at the start of every Monday shift.
+E-audit,Stock report,The inventory dashboard displays quarantine and disposal totals each hour for supervisors.
+E-door,Door alarms,Call the electrical desk when a dock door stays open for over four minutes.

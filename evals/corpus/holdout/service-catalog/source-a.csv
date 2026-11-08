@@ -1,0 +1,6 @@
+caller_id,caller_name,caller_status,caller_alias,caller_description,callee_id,callee_name,callee_status,team_code,team_name
+order,订单服务,active,订单入口A,仅A支持的订单说明,pay-core,支付服务,active,order-team,订单团队
+pay-core,支付服务,active,ONLY_A_PAY_ALIAS,ONLY_A_PAY_DESCRIPTION,ledger,账本服务,active,pay-team,支付团队
+ledger,账本服务,active,,,order,订单服务,active,ledger-team,账本团队
+order,订单服务,active,订单入口A,仅A支持的订单说明,pay-demo,支付服务,active,order-team,订单团队
+pay-demo,支付服务,active,,,ledger,账本服务,active,demo-team,演示团队

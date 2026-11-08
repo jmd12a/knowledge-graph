@@ -1,0 +1,1207 @@
+{
+  "schema_version": 1,
+  "kind": "selected_results_from_saved_evaluations",
+  "contract_case": {
+    "source": "corpus/cuad-long/allied-esports-content-license.txt",
+    "source_sha256": "82411b6956e9a2144f8a1440891954249156112d44057c01f778ae577ab864a9",
+    "fixed_case": "corpus/cuad-long/fixed-case.json",
+    "fixed_case_sha256": "e3cdf0415e85eb2e388dbeaa1687f884cf5745d313cd9816886f4d690c137336"
+  },
+  "representative_current": {
+    "passed": 25,
+    "total": 26,
+    "routes": {
+      "entity": {
+        "passed": 12,
+        "total": 12
+      },
+      "chunk": {
+        "passed": 12,
+        "total": 12
+      },
+      "retrieve": {
+        "passed": 1,
+        "total": 2
+      }
+    },
+    "queries": [
+      {
+        "name": "renewal_term",
+        "route": "entity",
+        "covered_reference_spans": 1,
+        "reference_spans": 1,
+        "passed": true,
+        "retrieval_seconds": 8.379,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "object_candidates",
+            "fused_count": 69,
+            "fused_top5": [
+              "1370f71a-f1bb-4b5a-9fcd-f542e090ed55",
+              "e686c3b6-462c-417e-af34-6273ef79ba33",
+              "bc104c83-da2b-4a18-a4ae-7dd971972e96",
+              "97c48a9c-5cd4-46b2-92a1-3da5dfbdb588",
+              "48092656-d5d5-45fc-a0a0-78fe9b84a23c"
+            ],
+            "sent_candidate_count": 69,
+            "ranked_top5": [
+              "1370f71a-f1bb-4b5a-9fcd-f542e090ed55",
+              "e686c3b6-462c-417e-af34-6273ef79ba33",
+              "bc104c83-da2b-4a18-a4ae-7dd971972e96",
+              "97c48a9c-5cd4-46b2-92a1-3da5dfbdb588",
+              "48092656-d5d5-45fc-a0a0-78fe9b84a23c"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "1370f71a-f1bb-4b5a-9fcd-f542e090ed55",
+          "e686c3b6-462c-417e-af34-6273ef79ba33",
+          "bc104c83-da2b-4a18-a4ae-7dd971972e96",
+          "97c48a9c-5cd4-46b2-92a1-3da5dfbdb588",
+          "48092656-d5d5-45fc-a0a0-78fe9b84a23c"
+        ]
+      },
+      {
+        "name": "revenue_profit_sharing",
+        "route": "entity",
+        "covered_reference_spans": 2,
+        "reference_spans": 2,
+        "passed": true,
+        "retrieval_seconds": 8.982,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "object_candidates",
+            "fused_count": 69,
+            "fused_top5": [
+              "a37c46e0-9f0c-4185-b2fe-8560a64cb309",
+              "3c085dcf-a935-472d-946e-2d7a78b83f14",
+              "68b14e7a-a01b-4e7f-8830-3a19d4791a69",
+              "922e38ef-65f5-4fa6-b437-573038737ffb",
+              "6c592569-9251-488f-b50d-24de9e0a4ae7"
+            ],
+            "sent_candidate_count": 69,
+            "ranked_top5": [
+              "6c592569-9251-488f-b50d-24de9e0a4ae7",
+              "a37c46e0-9f0c-4185-b2fe-8560a64cb309",
+              "b372bc1b-d89a-486e-bf90-28b5f57da898",
+              "282a2f63-2942-4c4e-a9b2-1cab8839bf32",
+              "7ce3e704-6f3e-4993-959e-50ff517bc039"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "6c592569-9251-488f-b50d-24de9e0a4ae7",
+          "a37c46e0-9f0c-4185-b2fe-8560a64cb309",
+          "b372bc1b-d89a-486e-bf90-28b5f57da898",
+          "282a2f63-2942-4c4e-a9b2-1cab8839bf32",
+          "7ce3e704-6f3e-4993-959e-50ff517bc039"
+        ]
+      },
+      {
+        "name": "revenue_profit_sharing",
+        "route": "chunk",
+        "covered_reference_spans": 2,
+        "reference_spans": 2,
+        "passed": true,
+        "retrieval_seconds": 7.234,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "documents",
+            "fused_count": 21,
+            "fused_top5": [
+              "b3c1daf9-62df-4329-9dec-0ec508c6a05b",
+              "20e11836-47bb-4ae2-832e-053c7f7c26fe",
+              "3ce3cc9b-16e8-409d-a8e6-fab5ee878731",
+              "40ec0d9c-2fca-4ddf-a118-b77588c21e34",
+              "eebe2f91-c2a2-4c5f-9713-0bddecca3920"
+            ],
+            "sent_candidate_count": 21,
+            "ranked_top5": [
+              "40ec0d9c-2fca-4ddf-a118-b77588c21e34",
+              "b3c1daf9-62df-4329-9dec-0ec508c6a05b",
+              "20e11836-47bb-4ae2-832e-053c7f7c26fe",
+              "3ce3cc9b-16e8-409d-a8e6-fab5ee878731",
+              "eebe2f91-c2a2-4c5f-9713-0bddecca3920"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "40ec0d9c-2fca-4ddf-a118-b77588c21e34",
+          "b3c1daf9-62df-4329-9dec-0ec508c6a05b",
+          "20e11836-47bb-4ae2-832e-053c7f7c26fe",
+          "3ce3cc9b-16e8-409d-a8e6-fab5ee878731",
+          "eebe2f91-c2a2-4c5f-9713-0bddecca3920"
+        ]
+      },
+      {
+        "name": "license_grant",
+        "route": "chunk",
+        "covered_reference_spans": 4,
+        "reference_spans": 4,
+        "passed": true,
+        "retrieval_seconds": 10.198,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "documents",
+            "fused_count": 21,
+            "fused_top5": [
+              "1ac20e41-c33a-4e9b-89f8-382fdf229309",
+              "017ed0e8-150b-4446-ba54-dee9bfa00651",
+              "9fcb7bef-1ca8-42ff-9e08-5f3d312f648b",
+              "b1076fba-15cf-4cba-9769-bf0f490272b5",
+              "14970121-03ee-48fe-8e16-ee3984250ed7"
+            ],
+            "sent_candidate_count": 21,
+            "ranked_top5": [
+              "14970121-03ee-48fe-8e16-ee3984250ed7",
+              "3addcb7d-8718-4808-ad3b-61b08f8e6d8a",
+              "31b950c9-8fa6-4739-b194-fd6fb8e0973f",
+              "b1076fba-15cf-4cba-9769-bf0f490272b5",
+              "9fcb7bef-1ca8-42ff-9e08-5f3d312f648b"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "14970121-03ee-48fe-8e16-ee3984250ed7",
+          "3addcb7d-8718-4808-ad3b-61b08f8e6d8a",
+          "31b950c9-8fa6-4739-b194-fd6fb8e0973f",
+          "b1076fba-15cf-4cba-9769-bf0f490272b5",
+          "9fcb7bef-1ca8-42ff-9e08-5f3d312f648b"
+        ]
+      },
+      {
+        "name": "renewal_term",
+        "route": "chunk",
+        "covered_reference_spans": 1,
+        "reference_spans": 1,
+        "passed": true,
+        "retrieval_seconds": 41.692,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "documents",
+            "fused_count": 21,
+            "fused_top5": [
+              "40ec0d9c-2fca-4ddf-a118-b77588c21e34",
+              "3addcb7d-8718-4808-ad3b-61b08f8e6d8a",
+              "73af2371-5cf9-4f98-b5ff-54f44fdef6c4",
+              "1ac20e41-c33a-4e9b-89f8-382fdf229309",
+              "31b950c9-8fa6-4739-b194-fd6fb8e0973f"
+            ],
+            "sent_candidate_count": 21,
+            "ranked_top5": [
+              "40ec0d9c-2fca-4ddf-a118-b77588c21e34",
+              "c148f1ac-ac68-4aee-925c-ee5963e1e281",
+              "b3c1daf9-62df-4329-9dec-0ec508c6a05b",
+              "14970121-03ee-48fe-8e16-ee3984250ed7",
+              "3addcb7d-8718-4808-ad3b-61b08f8e6d8a"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "40ec0d9c-2fca-4ddf-a118-b77588c21e34",
+          "c148f1ac-ac68-4aee-925c-ee5963e1e281",
+          "b3c1daf9-62df-4329-9dec-0ec508c6a05b",
+          "14970121-03ee-48fe-8e16-ee3984250ed7",
+          "3addcb7d-8718-4808-ad3b-61b08f8e6d8a"
+        ]
+      },
+      {
+        "name": "irrevocable_or_perpetual_license",
+        "route": "entity",
+        "covered_reference_spans": 2,
+        "reference_spans": 2,
+        "passed": true,
+        "retrieval_seconds": 14.908,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "object_candidates",
+            "fused_count": 69,
+            "fused_top5": [
+              "e2c55d50-131c-4020-bf89-d18bba96dc1a",
+              "8f07d304-6532-4d8e-a61b-a642c5d3af9e",
+              "9fb1341a-9b58-4403-8f0a-53648b2a08a9",
+              "3505567c-6213-4814-87f9-188c665c6eb0",
+              "119e7644-d80d-4bf7-ab92-43e49b53365b"
+            ],
+            "sent_candidate_count": 69,
+            "ranked_top5": [
+              "e686c3b6-462c-417e-af34-6273ef79ba33",
+              "48092656-d5d5-45fc-a0a0-78fe9b84a23c",
+              "3505567c-6213-4814-87f9-188c665c6eb0",
+              "9fb1341a-9b58-4403-8f0a-53648b2a08a9",
+              "1370f71a-f1bb-4b5a-9fcd-f542e090ed55"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "e686c3b6-462c-417e-af34-6273ef79ba33",
+          "48092656-d5d5-45fc-a0a0-78fe9b84a23c",
+          "3505567c-6213-4814-87f9-188c665c6eb0",
+          "9fb1341a-9b58-4403-8f0a-53648b2a08a9",
+          "1370f71a-f1bb-4b5a-9fcd-f542e090ed55"
+        ]
+      },
+      {
+        "name": "irrevocable_or_perpetual_license",
+        "route": "chunk",
+        "covered_reference_spans": 2,
+        "reference_spans": 2,
+        "passed": true,
+        "retrieval_seconds": 18.375,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "documents",
+            "fused_count": 21,
+            "fused_top5": [
+              "017ed0e8-150b-4446-ba54-dee9bfa00651",
+              "14970121-03ee-48fe-8e16-ee3984250ed7",
+              "9fcb7bef-1ca8-42ff-9e08-5f3d312f648b",
+              "1ac20e41-c33a-4e9b-89f8-382fdf229309",
+              "b1076fba-15cf-4cba-9769-bf0f490272b5"
+            ],
+            "sent_candidate_count": 21,
+            "ranked_top5": [
+              "3addcb7d-8718-4808-ad3b-61b08f8e6d8a",
+              "31b950c9-8fa6-4739-b194-fd6fb8e0973f",
+              "14970121-03ee-48fe-8e16-ee3984250ed7",
+              "40ec0d9c-2fca-4ddf-a118-b77588c21e34",
+              "b3c1daf9-62df-4329-9dec-0ec508c6a05b"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "3addcb7d-8718-4808-ad3b-61b08f8e6d8a",
+          "31b950c9-8fa6-4739-b194-fd6fb8e0973f",
+          "14970121-03ee-48fe-8e16-ee3984250ed7",
+          "40ec0d9c-2fca-4ddf-a118-b77588c21e34",
+          "b3c1daf9-62df-4329-9dec-0ec508c6a05b"
+        ]
+      },
+      {
+        "name": "anti_assignment",
+        "route": "chunk",
+        "covered_reference_spans": 1,
+        "reference_spans": 1,
+        "passed": true,
+        "retrieval_seconds": 7.736,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "documents",
+            "fused_count": 21,
+            "fused_top5": [
+              "1f69470f-4dac-4aea-a21d-f3301ed2318e",
+              "b1076fba-15cf-4cba-9769-bf0f490272b5",
+              "73af2371-5cf9-4f98-b5ff-54f44fdef6c4",
+              "1ac20e41-c33a-4e9b-89f8-382fdf229309",
+              "eebe2f91-c2a2-4c5f-9713-0bddecca3920"
+            ],
+            "sent_candidate_count": 21,
+            "ranked_top5": [
+              "1f69470f-4dac-4aea-a21d-f3301ed2318e",
+              "b1076fba-15cf-4cba-9769-bf0f490272b5",
+              "1ac20e41-c33a-4e9b-89f8-382fdf229309",
+              "14970121-03ee-48fe-8e16-ee3984250ed7",
+              "31b950c9-8fa6-4739-b194-fd6fb8e0973f"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "1f69470f-4dac-4aea-a21d-f3301ed2318e",
+          "b1076fba-15cf-4cba-9769-bf0f490272b5",
+          "1ac20e41-c33a-4e9b-89f8-382fdf229309",
+          "14970121-03ee-48fe-8e16-ee3984250ed7",
+          "31b950c9-8fa6-4739-b194-fd6fb8e0973f"
+        ]
+      },
+      {
+        "name": "minimum_commitment",
+        "route": "chunk",
+        "covered_reference_spans": 1,
+        "reference_spans": 1,
+        "passed": true,
+        "retrieval_seconds": 8.367,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "documents",
+            "fused_count": 21,
+            "fused_top5": [
+              "3ce3cc9b-16e8-409d-a8e6-fab5ee878731",
+              "14970121-03ee-48fe-8e16-ee3984250ed7",
+              "73af2371-5cf9-4f98-b5ff-54f44fdef6c4",
+              "40ec0d9c-2fca-4ddf-a118-b77588c21e34",
+              "1f69470f-4dac-4aea-a21d-f3301ed2318e"
+            ],
+            "sent_candidate_count": 21,
+            "ranked_top5": [
+              "40ec0d9c-2fca-4ddf-a118-b77588c21e34",
+              "b3c1daf9-62df-4329-9dec-0ec508c6a05b",
+              "14970121-03ee-48fe-8e16-ee3984250ed7",
+              "c148f1ac-ac68-4aee-925c-ee5963e1e281",
+              "b1076fba-15cf-4cba-9769-bf0f490272b5"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "40ec0d9c-2fca-4ddf-a118-b77588c21e34",
+          "b3c1daf9-62df-4329-9dec-0ec508c6a05b",
+          "14970121-03ee-48fe-8e16-ee3984250ed7",
+          "c148f1ac-ac68-4aee-925c-ee5963e1e281",
+          "b1076fba-15cf-4cba-9769-bf0f490272b5"
+        ]
+      },
+      {
+        "name": "minimum_commitment",
+        "route": "entity",
+        "covered_reference_spans": 1,
+        "reference_spans": 1,
+        "passed": true,
+        "retrieval_seconds": 13.893,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "object_candidates",
+            "fused_count": 69,
+            "fused_top5": [
+              "3c085dcf-a935-472d-946e-2d7a78b83f14",
+              "799199cf-6020-4ce6-a759-42d3b1af3377",
+              "ac57d205-bf67-456f-a450-ab48537a0b12",
+              "433bfe51-8159-4d01-bd89-bed9f671ff95",
+              "a491e987-a7ec-4b8a-97d1-90b4df7ac545"
+            ],
+            "sent_candidate_count": 69,
+            "ranked_top5": [
+              "282a2f63-2942-4c4e-a9b2-1cab8839bf32",
+              "b372bc1b-d89a-486e-bf90-28b5f57da898",
+              "6c592569-9251-488f-b50d-24de9e0a4ae7",
+              "799199cf-6020-4ce6-a759-42d3b1af3377",
+              "3c085dcf-a935-472d-946e-2d7a78b83f14"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "282a2f63-2942-4c4e-a9b2-1cab8839bf32",
+          "b372bc1b-d89a-486e-bf90-28b5f57da898",
+          "6c592569-9251-488f-b50d-24de9e0a4ae7",
+          "799199cf-6020-4ce6-a759-42d3b1af3377",
+          "3c085dcf-a935-472d-946e-2d7a78b83f14"
+        ]
+      },
+      {
+        "name": "non_transferable_license",
+        "route": "chunk",
+        "covered_reference_spans": 2,
+        "reference_spans": 2,
+        "passed": true,
+        "retrieval_seconds": 19.377,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "documents",
+            "fused_count": 21,
+            "fused_top5": [
+              "1ac20e41-c33a-4e9b-89f8-382fdf229309",
+              "14970121-03ee-48fe-8e16-ee3984250ed7",
+              "b1076fba-15cf-4cba-9769-bf0f490272b5",
+              "9fcb7bef-1ca8-42ff-9e08-5f3d312f648b",
+              "c5a5e3cd-6bf8-4510-a396-11a052e0e505"
+            ],
+            "sent_candidate_count": 21,
+            "ranked_top5": [
+              "14970121-03ee-48fe-8e16-ee3984250ed7",
+              "1f69470f-4dac-4aea-a21d-f3301ed2318e",
+              "b1076fba-15cf-4cba-9769-bf0f490272b5",
+              "1ac20e41-c33a-4e9b-89f8-382fdf229309",
+              "9fcb7bef-1ca8-42ff-9e08-5f3d312f648b"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "14970121-03ee-48fe-8e16-ee3984250ed7",
+          "1f69470f-4dac-4aea-a21d-f3301ed2318e",
+          "b1076fba-15cf-4cba-9769-bf0f490272b5",
+          "1ac20e41-c33a-4e9b-89f8-382fdf229309",
+          "9fcb7bef-1ca8-42ff-9e08-5f3d312f648b"
+        ]
+      },
+      {
+        "name": "license_grant",
+        "route": "entity",
+        "covered_reference_spans": 4,
+        "reference_spans": 4,
+        "passed": true,
+        "retrieval_seconds": 51.42,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "object_candidates",
+            "fused_count": 69,
+            "fused_top5": [
+              "119e7644-d80d-4bf7-ab92-43e49b53365b",
+              "8f07d304-6532-4d8e-a61b-a642c5d3af9e",
+              "e2c55d50-131c-4020-bf89-d18bba96dc1a",
+              "12a07117-dc75-4c0b-bcb5-8f5148d1780a",
+              "bc104c83-da2b-4a18-a4ae-7dd971972e96"
+            ],
+            "sent_candidate_count": 69,
+            "ranked_top5": [
+              "9fb1341a-9b58-4403-8f0a-53648b2a08a9",
+              "3505567c-6213-4814-87f9-188c665c6eb0",
+              "e30cb21d-48c6-4cd7-861c-0841b53115d4",
+              "e686c3b6-462c-417e-af34-6273ef79ba33",
+              "48092656-d5d5-45fc-a0a0-78fe9b84a23c"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "9fb1341a-9b58-4403-8f0a-53648b2a08a9",
+          "3505567c-6213-4814-87f9-188c665c6eb0",
+          "e30cb21d-48c6-4cd7-861c-0841b53115d4",
+          "e686c3b6-462c-417e-af34-6273ef79ba33",
+          "48092656-d5d5-45fc-a0a0-78fe9b84a23c"
+        ]
+      },
+      {
+        "name": "non_transferable_license",
+        "route": "entity",
+        "covered_reference_spans": 2,
+        "reference_spans": 2,
+        "passed": true,
+        "retrieval_seconds": 63.858,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "object_candidates",
+            "fused_count": 69,
+            "fused_top5": [
+              "d761e45e-d12e-41ef-9f35-ea420cf763be",
+              "119e7644-d80d-4bf7-ab92-43e49b53365b",
+              "9fb1341a-9b58-4403-8f0a-53648b2a08a9",
+              "e2c55d50-131c-4020-bf89-d18bba96dc1a",
+              "3505567c-6213-4814-87f9-188c665c6eb0"
+            ],
+            "sent_candidate_count": 69,
+            "ranked_top5": [
+              "d761e45e-d12e-41ef-9f35-ea420cf763be",
+              "9fb1341a-9b58-4403-8f0a-53648b2a08a9",
+              "3505567c-6213-4814-87f9-188c665c6eb0",
+              "119e7644-d80d-4bf7-ab92-43e49b53365b",
+              "e2c55d50-131c-4020-bf89-d18bba96dc1a"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "d761e45e-d12e-41ef-9f35-ea420cf763be",
+          "9fb1341a-9b58-4403-8f0a-53648b2a08a9",
+          "3505567c-6213-4814-87f9-188c665c6eb0",
+          "119e7644-d80d-4bf7-ab92-43e49b53365b",
+          "e2c55d50-131c-4020-bf89-d18bba96dc1a"
+        ]
+      },
+      {
+        "name": "audit_rights",
+        "route": "entity",
+        "covered_reference_spans": 1,
+        "reference_spans": 1,
+        "passed": true,
+        "retrieval_seconds": 23.931,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "object_candidates",
+            "fused_count": 69,
+            "fused_top5": [
+              "9fae69bb-0027-4163-8c1c-22dbeab96e13",
+              "312bf649-610f-4839-97ad-063ebb48ba28",
+              "34288823-3457-423d-9cf0-0d4972985e7e",
+              "70cbbd53-0107-4e99-91a2-080d47fbad58",
+              "433bfe51-8159-4d01-bd89-bed9f671ff95"
+            ],
+            "sent_candidate_count": 69,
+            "ranked_top5": [
+              "312bf649-610f-4839-97ad-063ebb48ba28",
+              "be01a296-5686-4d64-b1e3-e2e7d01862e0",
+              "7ce3e704-6f3e-4993-959e-50ff517bc039",
+              "9fae69bb-0027-4163-8c1c-22dbeab96e13",
+              "34288823-3457-423d-9cf0-0d4972985e7e"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "312bf649-610f-4839-97ad-063ebb48ba28",
+          "be01a296-5686-4d64-b1e3-e2e7d01862e0",
+          "7ce3e704-6f3e-4993-959e-50ff517bc039",
+          "9fae69bb-0027-4163-8c1c-22dbeab96e13",
+          "34288823-3457-423d-9cf0-0d4972985e7e"
+        ]
+      },
+      {
+        "name": "audit_rights",
+        "route": "chunk",
+        "covered_reference_spans": 1,
+        "reference_spans": 1,
+        "passed": true,
+        "retrieval_seconds": 22.436,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "documents",
+            "fused_count": 21,
+            "fused_top5": [
+              "73af2371-5cf9-4f98-b5ff-54f44fdef6c4",
+              "eebe2f91-c2a2-4c5f-9713-0bddecca3920",
+              "c5a5e3cd-6bf8-4510-a396-11a052e0e505",
+              "07264176-c978-44f5-b1f4-8fa9eae18ec4",
+              "1f69470f-4dac-4aea-a21d-f3301ed2318e"
+            ],
+            "sent_candidate_count": 21,
+            "ranked_top5": [
+              "eebe2f91-c2a2-4c5f-9713-0bddecca3920",
+              "3ce3cc9b-16e8-409d-a8e6-fab5ee878731",
+              "20e11836-47bb-4ae2-832e-053c7f7c26fe",
+              "31b950c9-8fa6-4739-b194-fd6fb8e0973f",
+              "017ed0e8-150b-4446-ba54-dee9bfa00651"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "eebe2f91-c2a2-4c5f-9713-0bddecca3920",
+          "3ce3cc9b-16e8-409d-a8e6-fab5ee878731",
+          "20e11836-47bb-4ae2-832e-053c7f7c26fe",
+          "31b950c9-8fa6-4739-b194-fd6fb8e0973f",
+          "017ed0e8-150b-4446-ba54-dee9bfa00651"
+        ]
+      },
+      {
+        "name": "cap_on_liability",
+        "route": "chunk",
+        "covered_reference_spans": 1,
+        "reference_spans": 1,
+        "passed": true,
+        "retrieval_seconds": 3.169,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "documents",
+            "fused_count": 21,
+            "fused_top5": [
+              "9dfc2554-ab51-4c67-8ce3-a38b08dfada5",
+              "c5a5e3cd-6bf8-4510-a396-11a052e0e505",
+              "73af2371-5cf9-4f98-b5ff-54f44fdef6c4",
+              "eebe2f91-c2a2-4c5f-9713-0bddecca3920",
+              "31b950c9-8fa6-4739-b194-fd6fb8e0973f"
+            ],
+            "sent_candidate_count": 21,
+            "ranked_top5": [
+              "c5a5e3cd-6bf8-4510-a396-11a052e0e505",
+              "9dfc2554-ab51-4c67-8ce3-a38b08dfada5",
+              "73af2371-5cf9-4f98-b5ff-54f44fdef6c4",
+              "31b950c9-8fa6-4739-b194-fd6fb8e0973f",
+              "eebe2f91-c2a2-4c5f-9713-0bddecca3920"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "c5a5e3cd-6bf8-4510-a396-11a052e0e505",
+          "9dfc2554-ab51-4c67-8ce3-a38b08dfada5",
+          "73af2371-5cf9-4f98-b5ff-54f44fdef6c4",
+          "31b950c9-8fa6-4739-b194-fd6fb8e0973f",
+          "eebe2f91-c2a2-4c5f-9713-0bddecca3920"
+        ]
+      },
+      {
+        "name": "cap_on_liability",
+        "route": "entity",
+        "covered_reference_spans": 1,
+        "reference_spans": 1,
+        "passed": true,
+        "retrieval_seconds": 8.519,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "object_candidates",
+            "fused_count": 69,
+            "fused_top5": [
+              "70cbbd53-0107-4e99-91a2-080d47fbad58",
+              "68b14e7a-a01b-4e7f-8830-3a19d4791a69",
+              "3d30b966-a239-4ffb-aa9f-7b5d78360784",
+              "674a67c7-1cd0-4784-b15f-95a5e9feda9b",
+              "a491e987-a7ec-4b8a-97d1-90b4df7ac545"
+            ],
+            "sent_candidate_count": 69,
+            "ranked_top5": [
+              "68b14e7a-a01b-4e7f-8830-3a19d4791a69",
+              "a491e987-a7ec-4b8a-97d1-90b4df7ac545",
+              "3d30b966-a239-4ffb-aa9f-7b5d78360784",
+              "674a67c7-1cd0-4784-b15f-95a5e9feda9b",
+              "be01a296-5686-4d64-b1e3-e2e7d01862e0"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "68b14e7a-a01b-4e7f-8830-3a19d4791a69",
+          "a491e987-a7ec-4b8a-97d1-90b4df7ac545",
+          "3d30b966-a239-4ffb-aa9f-7b5d78360784",
+          "674a67c7-1cd0-4784-b15f-95a5e9feda9b",
+          "be01a296-5686-4d64-b1e3-e2e7d01862e0"
+        ]
+      },
+      {
+        "name": "non_compete",
+        "route": "entity",
+        "covered_reference_spans": 1,
+        "reference_spans": 1,
+        "passed": true,
+        "retrieval_seconds": 13.628,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "object_candidates",
+            "fused_count": 69,
+            "fused_top5": [
+              "68b14e7a-a01b-4e7f-8830-3a19d4791a69",
+              "cf55cb3e-e40d-4ac5-953e-00bcd90494c1",
+              "d761e45e-d12e-41ef-9f35-ea420cf763be",
+              "521aa2dd-5bd1-40f7-a811-ed2ed32c4318",
+              "b15684ce-f8d1-407f-9530-a4aca51eb374"
+            ],
+            "sent_candidate_count": 69,
+            "ranked_top5": [
+              "e2c55d50-131c-4020-bf89-d18bba96dc1a",
+              "1370f71a-f1bb-4b5a-9fcd-f542e090ed55",
+              "e30cb21d-48c6-4cd7-861c-0841b53115d4",
+              "9fb1341a-9b58-4403-8f0a-53648b2a08a9",
+              "3505567c-6213-4814-87f9-188c665c6eb0"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "e2c55d50-131c-4020-bf89-d18bba96dc1a",
+          "1370f71a-f1bb-4b5a-9fcd-f542e090ed55",
+          "e30cb21d-48c6-4cd7-861c-0841b53115d4",
+          "9fb1341a-9b58-4403-8f0a-53648b2a08a9",
+          "3505567c-6213-4814-87f9-188c665c6eb0"
+        ]
+      },
+      {
+        "name": "uncapped_liability",
+        "route": "chunk",
+        "covered_reference_spans": 1,
+        "reference_spans": 1,
+        "passed": true,
+        "retrieval_seconds": 32.439,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "documents",
+            "fused_count": 21,
+            "fused_top5": [
+              "c5a5e3cd-6bf8-4510-a396-11a052e0e505",
+              "eebe2f91-c2a2-4c5f-9713-0bddecca3920",
+              "1ac20e41-c33a-4e9b-89f8-382fdf229309",
+              "31b950c9-8fa6-4739-b194-fd6fb8e0973f",
+              "9dfc2554-ab51-4c67-8ce3-a38b08dfada5"
+            ],
+            "sent_candidate_count": 21,
+            "ranked_top5": [
+              "c5a5e3cd-6bf8-4510-a396-11a052e0e505",
+              "9dfc2554-ab51-4c67-8ce3-a38b08dfada5",
+              "31b950c9-8fa6-4739-b194-fd6fb8e0973f",
+              "73af2371-5cf9-4f98-b5ff-54f44fdef6c4",
+              "eebe2f91-c2a2-4c5f-9713-0bddecca3920"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "c5a5e3cd-6bf8-4510-a396-11a052e0e505",
+          "9dfc2554-ab51-4c67-8ce3-a38b08dfada5",
+          "31b950c9-8fa6-4739-b194-fd6fb8e0973f",
+          "73af2371-5cf9-4f98-b5ff-54f44fdef6c4",
+          "eebe2f91-c2a2-4c5f-9713-0bddecca3920"
+        ]
+      },
+      {
+        "name": "covenant_not_to_sue",
+        "route": "entity",
+        "covered_reference_spans": 1,
+        "reference_spans": 1,
+        "passed": true,
+        "retrieval_seconds": 10.385,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "object_candidates",
+            "fused_count": 69,
+            "fused_top5": [
+              "a491e987-a7ec-4b8a-97d1-90b4df7ac545",
+              "9fae69bb-0027-4163-8c1c-22dbeab96e13",
+              "8f07d304-6532-4d8e-a61b-a642c5d3af9e",
+              "3d30b966-a239-4ffb-aa9f-7b5d78360784",
+              "70cbbd53-0107-4e99-91a2-080d47fbad58"
+            ],
+            "sent_candidate_count": 69,
+            "ranked_top5": [
+              "8f07d304-6532-4d8e-a61b-a642c5d3af9e",
+              "9fae69bb-0027-4163-8c1c-22dbeab96e13",
+              "922e38ef-65f5-4fa6-b437-573038737ffb",
+              "68b14e7a-a01b-4e7f-8830-3a19d4791a69",
+              "e954be60-ffec-4d45-84a9-aa21906d6fca"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "8f07d304-6532-4d8e-a61b-a642c5d3af9e",
+          "9fae69bb-0027-4163-8c1c-22dbeab96e13",
+          "922e38ef-65f5-4fa6-b437-573038737ffb",
+          "68b14e7a-a01b-4e7f-8830-3a19d4791a69",
+          "e954be60-ffec-4d45-84a9-aa21906d6fca"
+        ]
+      },
+      {
+        "name": "non_compete",
+        "route": "chunk",
+        "covered_reference_spans": 1,
+        "reference_spans": 1,
+        "passed": true,
+        "retrieval_seconds": 45.579,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "documents",
+            "fused_count": 21,
+            "fused_top5": [
+              "73af2371-5cf9-4f98-b5ff-54f44fdef6c4",
+              "b1076fba-15cf-4cba-9769-bf0f490272b5",
+              "c5a5e3cd-6bf8-4510-a396-11a052e0e505",
+              "31b950c9-8fa6-4739-b194-fd6fb8e0973f",
+              "eebe2f91-c2a2-4c5f-9713-0bddecca3920"
+            ],
+            "sent_candidate_count": 21,
+            "ranked_top5": [
+              "da903864-c32e-4d74-b695-6202c484245a",
+              "b3c1daf9-62df-4329-9dec-0ec508c6a05b",
+              "40ec0d9c-2fca-4ddf-a118-b77588c21e34",
+              "9fcb7bef-1ca8-42ff-9e08-5f3d312f648b",
+              "14970121-03ee-48fe-8e16-ee3984250ed7"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "da903864-c32e-4d74-b695-6202c484245a",
+          "b3c1daf9-62df-4329-9dec-0ec508c6a05b",
+          "40ec0d9c-2fca-4ddf-a118-b77588c21e34",
+          "9fcb7bef-1ca8-42ff-9e08-5f3d312f648b",
+          "14970121-03ee-48fe-8e16-ee3984250ed7"
+        ]
+      },
+      {
+        "name": "uncapped_liability",
+        "route": "entity",
+        "covered_reference_spans": 1,
+        "reference_spans": 1,
+        "passed": true,
+        "retrieval_seconds": 10.77,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "object_candidates",
+            "fused_count": 69,
+            "fused_top5": [
+              "70cbbd53-0107-4e99-91a2-080d47fbad58",
+              "68b14e7a-a01b-4e7f-8830-3a19d4791a69",
+              "bc104c83-da2b-4a18-a4ae-7dd971972e96",
+              "521aa2dd-5bd1-40f7-a811-ed2ed32c4318",
+              "cf55cb3e-e40d-4ac5-953e-00bcd90494c1"
+            ],
+            "sent_candidate_count": 69,
+            "ranked_top5": [
+              "68b14e7a-a01b-4e7f-8830-3a19d4791a69",
+              "3d30b966-a239-4ffb-aa9f-7b5d78360784",
+              "674a67c7-1cd0-4784-b15f-95a5e9feda9b",
+              "cf55cb3e-e40d-4ac5-953e-00bcd90494c1",
+              "70cbbd53-0107-4e99-91a2-080d47fbad58"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "68b14e7a-a01b-4e7f-8830-3a19d4791a69",
+          "3d30b966-a239-4ffb-aa9f-7b5d78360784",
+          "674a67c7-1cd0-4784-b15f-95a5e9feda9b",
+          "cf55cb3e-e40d-4ac5-953e-00bcd90494c1",
+          "70cbbd53-0107-4e99-91a2-080d47fbad58"
+        ]
+      },
+      {
+        "name": "covenant_not_to_sue",
+        "route": "chunk",
+        "covered_reference_spans": 1,
+        "reference_spans": 1,
+        "passed": true,
+        "retrieval_seconds": 16.348,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "documents",
+            "fused_count": 21,
+            "fused_top5": [
+              "73af2371-5cf9-4f98-b5ff-54f44fdef6c4",
+              "9dfc2554-ab51-4c67-8ce3-a38b08dfada5",
+              "c5a5e3cd-6bf8-4510-a396-11a052e0e505",
+              "07264176-c978-44f5-b1f4-8fa9eae18ec4",
+              "017ed0e8-150b-4446-ba54-dee9bfa00651"
+            ],
+            "sent_candidate_count": 21,
+            "ranked_top5": [
+              "017ed0e8-150b-4446-ba54-dee9bfa00651",
+              "07264176-c978-44f5-b1f4-8fa9eae18ec4",
+              "73af2371-5cf9-4f98-b5ff-54f44fdef6c4",
+              "b3c1daf9-62df-4329-9dec-0ec508c6a05b",
+              "1f69470f-4dac-4aea-a21d-f3301ed2318e"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "017ed0e8-150b-4446-ba54-dee9bfa00651",
+          "07264176-c978-44f5-b1f4-8fa9eae18ec4",
+          "73af2371-5cf9-4f98-b5ff-54f44fdef6c4",
+          "b3c1daf9-62df-4329-9dec-0ec508c6a05b",
+          "1f69470f-4dac-4aea-a21d-f3301ed2318e"
+        ]
+      },
+      {
+        "name": "post_termination_licensed_property",
+        "route": "retrieve",
+        "covered_reference_spans": 4,
+        "reference_spans": 5,
+        "passed": false,
+        "retrieval_seconds": 68.757,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "documents",
+            "fused_count": 21,
+            "fused_top5": [
+              "3addcb7d-8718-4808-ad3b-61b08f8e6d8a",
+              "14970121-03ee-48fe-8e16-ee3984250ed7",
+              "31b950c9-8fa6-4739-b194-fd6fb8e0973f",
+              "1ac20e41-c33a-4e9b-89f8-382fdf229309",
+              "da903864-c32e-4d74-b695-6202c484245a"
+            ],
+            "sent_candidate_count": 21,
+            "ranked_top5": [
+              "3addcb7d-8718-4808-ad3b-61b08f8e6d8a",
+              "31b950c9-8fa6-4739-b194-fd6fb8e0973f",
+              "017ed0e8-150b-4446-ba54-dee9bfa00651",
+              "eebe2f91-c2a2-4c5f-9713-0bddecca3920",
+              "3ce3cc9b-16e8-409d-a8e6-fab5ee878731"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "3addcb7d-8718-4808-ad3b-61b08f8e6d8a",
+          "31b950c9-8fa6-4739-b194-fd6fb8e0973f",
+          "017ed0e8-150b-4446-ba54-dee9bfa00651",
+          "eebe2f91-c2a2-4c5f-9713-0bddecca3920",
+          "3ce3cc9b-16e8-409d-a8e6-fab5ee878731"
+        ]
+      },
+      {
+        "name": "anti_assignment",
+        "route": "entity",
+        "covered_reference_spans": 1,
+        "reference_spans": 1,
+        "passed": true,
+        "retrieval_seconds": 31.751,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "object_candidates",
+            "fused_count": 69,
+            "fused_top5": [
+              "d761e45e-d12e-41ef-9f35-ea420cf763be",
+              "bc104c83-da2b-4a18-a4ae-7dd971972e96",
+              "34288823-3457-423d-9cf0-0d4972985e7e",
+              "a491e987-a7ec-4b8a-97d1-90b4df7ac545",
+              "9fae69bb-0027-4163-8c1c-22dbeab96e13"
+            ],
+            "sent_candidate_count": 69,
+            "ranked_top5": [
+              "d761e45e-d12e-41ef-9f35-ea420cf763be",
+              "bc104c83-da2b-4a18-a4ae-7dd971972e96",
+              "3505567c-6213-4814-87f9-188c665c6eb0",
+              "9fb1341a-9b58-4403-8f0a-53648b2a08a9",
+              "34288823-3457-423d-9cf0-0d4972985e7e"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "d761e45e-d12e-41ef-9f35-ea420cf763be",
+          "bc104c83-da2b-4a18-a4ae-7dd971972e96",
+          "3505567c-6213-4814-87f9-188c665c6eb0",
+          "9fb1341a-9b58-4403-8f0a-53648b2a08a9",
+          "34288823-3457-423d-9cf0-0d4972985e7e"
+        ]
+      },
+      {
+        "name": "minimum_guarantee_royalty_offsets",
+        "route": "retrieve",
+        "covered_reference_spans": 4,
+        "reference_spans": 4,
+        "passed": true,
+        "retrieval_seconds": 62.69,
+        "response_status": "ok",
+        "warning_codes": [],
+        "candidate_traces": [
+          {
+            "component": "documents",
+            "fused_count": 21,
+            "fused_top5": [
+              "3ce3cc9b-16e8-409d-a8e6-fab5ee878731",
+              "b3c1daf9-62df-4329-9dec-0ec508c6a05b",
+              "20e11836-47bb-4ae2-832e-053c7f7c26fe",
+              "40ec0d9c-2fca-4ddf-a118-b77588c21e34",
+              "14970121-03ee-48fe-8e16-ee3984250ed7"
+            ],
+            "sent_candidate_count": 21,
+            "ranked_top5": [
+              "40ec0d9c-2fca-4ddf-a118-b77588c21e34",
+              "b3c1daf9-62df-4329-9dec-0ec508c6a05b",
+              "20e11836-47bb-4ae2-832e-053c7f7c26fe",
+              "3ce3cc9b-16e8-409d-a8e6-fab5ee878731",
+              "14970121-03ee-48fe-8e16-ee3984250ed7"
+            ]
+          }
+        ],
+        "returned_ids": [
+          "40ec0d9c-2fca-4ddf-a118-b77588c21e34",
+          "b3c1daf9-62df-4329-9dec-0ec508c6a05b",
+          "20e11836-47bb-4ae2-832e-053c7f7c26fe",
+          "3ce3cc9b-16e8-409d-a8e6-fab5ee878731",
+          "14970121-03ee-48fe-8e16-ee3984250ed7"
+        ]
+      }
+    ],
+    "retrieval_revision": "4531b68",
+    "integrated_revision": "8e0a5ce",
+    "language_model": "gpt-6-sol",
+    "embedding": "text-embedding-3-large",
+    "top_k": 5,
+    "retrieval_timeout_seconds": 150.0,
+    "conditions": "Existing structured graph snapshot. Language model used for reranking and two natural-language plans."
+  },
+  "same_model_rebuild": {
+    "model": "gpt-6-sol",
+    "embedding": "text-embedding-3-large",
+    "top_k": 5,
+    "conditions": "Each revision rebuilt the same source with its own contract model. OpenAI output-limit field spelling was adapted for the older transport.",
+    "versions": {
+      "ed87884": {
+        "passed": 15,
+        "total": 26,
+        "routes": {
+          "entity": {
+            "passed": 1,
+            "total": 12
+          },
+          "chunk": {
+            "passed": 12,
+            "total": 12
+          },
+          "retrieve": {
+            "passed": 2,
+            "total": 2
+          }
+        },
+        "revision": "ed878845a10dcdee0042bc2567a5e2c759aa5fb6",
+        "construction_llm_attempts": 1,
+        "graph_fact_evidence": [
+          12,
+          30
+        ],
+        "adopted_clause_text": [
+          4,
+          30
+        ]
+      },
+      "8e0a5ce": {
+        "passed": 24,
+        "total": 26,
+        "routes": {
+          "entity": {
+            "passed": 11,
+            "total": 12
+          },
+          "chunk": {
+            "passed": 12,
+            "total": 12
+          },
+          "retrieve": {
+            "passed": 1,
+            "total": 2
+          }
+        },
+        "revision": "8e0a5ce4f36f6db5f27d3d997d00238899715971",
+        "construction_llm_attempts": 14,
+        "graph_fact_evidence": [
+          29,
+          30
+        ],
+        "adopted_clause_text": [
+          21,
+          30
+        ]
+      }
+    }
+  },
+  "same_graph_retrieval": {
+    "model": "gpt-6-sol",
+    "top_k": 5,
+    "conditions": "Frozen original retrieval and current retrieval used one published structured graph snapshot.",
+    "versions": {
+      "original": {
+        "passed": 26,
+        "total": 26,
+        "routes": {
+          "entity": {
+            "passed": 12,
+            "total": 12
+          },
+          "chunk": {
+            "passed": 12,
+            "total": 12
+          },
+          "retrieve": {
+            "passed": 2,
+            "total": 2
+          }
+        }
+      },
+      "current": {
+        "passed": 25,
+        "total": 26,
+        "routes": {
+          "chunk": {
+            "passed": 12,
+            "total": 12
+          },
+          "entity": {
+            "passed": 11,
+            "total": 12
+          },
+          "retrieve": {
+            "passed": 2,
+            "total": 2
+          }
+        }
+      }
+    }
+  },
+  "construction_batching": {
+    "fixed_three_chunks": {
+      "model": "gpt-5.6-sol",
+      "construction_llm_attempts": 84,
+      "planned_windows": 7,
+      "coverage": {
+        "adopted_clause_definition": [
+          10,
+          30
+        ],
+        "adopted_clause_text": [
+          21,
+          30
+        ],
+        "graph_fact_evidence": [
+          29,
+          30
+        ]
+      }
+    },
+    "structured_windows": {
+      "model": "gpt-5.6-sol",
+      "construction_llm_attempts": 14,
+      "planned_windows": 5,
+      "coverage": {
+        "adopted_clause_definition": [
+          8,
+          30
+        ],
+        "adopted_clause_text": [
+          21,
+          30
+        ],
+        "graph_fact_evidence": [
+          29,
+          30
+        ]
+      }
+    }
+  },
+  "entity_context_replay": {
+    "conditions": "Fixed sorted entity candidates and original fact evidence. Only returned context differs.",
+    "datasets": {
+      "qasper-1": {
+        "total": 7,
+        "before": 0,
+        "after": 4
+      },
+      "qasper-2": {
+        "total": 3,
+        "before": 0,
+        "after": 1
+      },
+      "cuad-1": {
+        "total": 7,
+        "before": 6,
+        "after": 6
+      },
+      "techqa": {
+        "total": 8,
+        "before": 7,
+        "after": 7
+      },
+      "hotpot": {
+        "total": 8,
+        "before": 7,
+        "after": 8
+      },
+      "original-contract": {
+        "total": 12,
+        "before": 12,
+        "after": 12
+      }
+    }
+  }
+}

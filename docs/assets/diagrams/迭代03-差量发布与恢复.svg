@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="386.33" viewBox="0 0 1200 610" role="img" aria-labelledby="kg-publish-title kg-publish-desc">
+  <title id="kg-publish-title">差量维护与发布恢复</title>
+  <desc id="kg-publish-desc">不同知识库可同时准备，同一知识库按队头，单发布 Worker 串行应用并验证。删除来源只撤回其贡献，中断后重放原计划。</desc>
+  <defs><marker id="kg-publish-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#6f9086" /></marker></defs>
+  <rect x="0.5" y="0.5" width="1199" height="609" rx="20" fill="#f7f8f2" stroke="#c9d7ce" />
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, PingFang SC, sans-serif">
+    <text x="43" y="51" font-size="18" font-weight="700" fill="#236b57" text-anchor="start">03  /  PUBLISH</text>
+    <text x="43" y="99" font-size="35" font-weight="700" fill="#183836" text-anchor="start">准备可并行，写入与恢复按计划执行</text>
+    <text x="43" y="132" font-size="19" font-weight="400" fill="#526966" text-anchor="start">同一知识库按队列顺序，跨知识库可分开准备</text>
+    <rect x="43" y="163" width="519" height="244" rx="10" fill="#ffffff" stroke="#a5c3b8" />
+    <text x="66" y="201" font-size="24" font-weight="700" fill="#183836" text-anchor="start">多个准备 Worker</text>
+    <text x="66" y="229" font-size="18" font-weight="400" fill="#526966" text-anchor="start">准备期间，已发布知识可查</text>
+    <rect x="66" y="252" width="224" height="80" rx="10" fill="#e4f0e9" stroke="#a5c3b8" />
+<text x="178" y="285" font-size="23" font-weight="700" fill="#183836" text-anchor="middle">知识库 A 队头</text>
+<text x="178" y="314" font-size="17" font-weight="400" fill="#526966" text-anchor="middle">计算差量与向量</text>
+    <rect x="310" y="252" width="224" height="80" rx="10" fill="#e4f0e9" stroke="#a5c3b8" />
+<text x="422" y="285" font-size="23" font-weight="700" fill="#183836" text-anchor="middle">知识库 B 队头</text>
+<text x="422" y="314" font-size="17" font-weight="400" fill="#526966" text-anchor="middle">准备独立计划</text>
+    <text x="66" y="371" font-size="18" font-weight="400" fill="#526966" text-anchor="start">失联可接管，沿用同一任务的草稿和计划</text>
+    <line x1="569" y1="287" x2="624" y2="287" stroke="#6f9086" stroke-width="2.5" marker-end="url(#kg-publish-arrow)" />
+    <rect x="633" y="163" width="524" height="244" rx="10" fill="#ffffff" stroke="#a5c3b8" />
+    <text x="656" y="201" font-size="24" font-weight="700" fill="#183836" text-anchor="start">单个发布 Worker</text>
+    <text x="656" y="229" font-size="18" font-weight="400" fill="#526966" text-anchor="start">API 与发布进程同机协调查询门禁</text>
+    <rect x="656" y="254" width="37" height="29" rx="5" fill="#e4f0e9" stroke="#a5c3b8" />
+    <text x="675" y="275" font-size="16" font-weight="700" fill="#183836" text-anchor="middle">01</text>
+    <text x="707" y="276" font-size="19" font-weight="700" fill="#183836" text-anchor="start">排空该库在途查询</text>
+    <rect x="656" y="294" width="37" height="29" rx="5" fill="#e4f0e9" stroke="#a5c3b8" />
+    <text x="675" y="315" font-size="16" font-weight="700" fill="#183836" text-anchor="middle">02</text>
+    <text x="707" y="316" font-size="19" font-weight="700" fill="#183836" text-anchor="start">按计划并行写入图、索引和贡献</text>
+    <rect x="656" y="334" width="37" height="29" rx="5" fill="#e4f0e9" stroke="#a5c3b8" />
+    <text x="675" y="355" font-size="16" font-weight="700" fill="#183836" text-anchor="middle">03</text>
+    <text x="707" y="356" font-size="19" font-weight="700" fill="#183836" text-anchor="start">核验结果，提交状态并恢复查询</text>
+    <rect x="43" y="434" width="1114" height="57" rx="10" fill="#e4f0e9" stroke="#a5c3b8" />
+    <text x="66" y="470" font-size="20" font-weight="700" fill="#183836" text-anchor="start">撤回资料 A</text>
+    <text x="228" y="470" font-size="20" font-weight="400" fill="#183836" text-anchor="start">只重算 A 影响的对象与依赖，保留 B 仍支持的对象</text>
+    <rect x="43" y="509" width="1114" height="57" rx="10" fill="#faecdf" stroke="#dfb693" />
+    <text x="66" y="545" font-size="20" font-weight="700" fill="#8a5025" text-anchor="start">写入中断</text>
+    <text x="228" y="545" font-size="20" font-weight="400" fill="#183836" text-anchor="start">沿用计划 ID、对象 ID 和已计算向量，重放核验后恢复查询</text>
+  </g>
+</svg>

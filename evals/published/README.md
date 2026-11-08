@@ -1,6 +1,8 @@
-# 最新验证证据
+# 评测证据与摘要
 
-仅保留运行 `e316c7ca-7974-4b6d-9392-45868da2d2d7`，该目录包含这一轮的查询、覆盖与来源证据。
+## 首版详细证据
+
+`latest/` 对应首版运行 `e316c7ca-7974-4b6d-9392-45868da2d2d7`，包含该轮的查询、覆盖与来源证据。
 
 完整 CUAD 长合同的 **26 次查询有 23 次达到原文证据完整覆盖**：entity 10/12、chunk 11/12、retrieve 2/2。Top-K 为 5，原文、固定问题及评分口径未修改。55 项机械检查通过，不与查询通过数相加，也不表示业务语义验收完成。
 
@@ -20,3 +22,7 @@
 构建与向量化均通过 OpenRouter：`z-ai/glm-5.3`、`google/gemini-embedding-2`（3072 维）。检索成绩绑定该次运行的源码与配置，后续静态修改不计为新验证。
 
 尚未通过：minimum_commitment/entity、license_grant/entity、license_grant/chunk。原因及口径见[评测说明](../../docs/03-使用与验证/评测说明与结果.md)。本轮不覆盖完整 CUAD、22 类负例的幻觉率或最终法律答案正确率。语料来源与 CC BY 4.0 许可见[清单](../corpus/cuad-long/source-manifest.json)。
+
+## 优化后的对照摘要
+
+[optimization-summary.json](optimization-summary.json) 从已有运行结果提取逐题计分、构建覆盖和模型调用数。包含当前版代表性 25/26、同模型重建、固定图检索、分批构建和实体补段回放。合同以仓库内原文与固定问题的 SHA-256 绑定。复跑条件和本地材料见[评测复现清单](../README.md#从仓库能复现什么)。

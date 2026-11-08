@@ -1,0 +1,82 @@
+{
+  "source_id": "USASYNTHETICFUELCORP_10_21_2010-EX-10.10-STRATEGIC ALLIANCE AGREEMENT",
+  "title": "USASYNTHETICFUELCORP_10_21_2010-EX-10.10-STRATEGIC ALLIANCE AGREEMENT",
+  "format": "txt",
+  "questions": [
+    {
+      "id": "Minimum Commitment",
+      "question": "Highlight the parts (if any) of this contract related to \"Minimum Commitment\" that should be reviewed by a lawyer. Details: Is there a minimum order size or minimum amount or units per-time period that one party must buy from the counterparty under the contract?",
+      "spans": [
+        [
+          5954,
+          6349
+        ],
+        [
+          9056,
+          9145
+        ],
+        [
+          35454,
+          35735
+        ]
+      ]
+    },
+    {
+      "id": "Most Favored Nation",
+      "question": "Highlight the parts (if any) of this contract related to \"Most Favored Nation\" that should be reviewed by a lawyer. Details: Is there a clause that if a third party gets better terms on the licensing or sale of technology/goods/services described in the contract, the buyer of such technology/goods/services under the contract shall be entitled to those better terms?",
+      "spans": [
+        [
+          34538,
+          35292
+        ]
+      ]
+    },
+    {
+      "id": "Cap On Liability",
+      "question": "Highlight the parts (if any) of this contract related to \"Cap On Liability\" that should be reviewed by a lawyer. Details: Does the contract include a cap on liability upon the breach of a party’s obligation? This includes time limitation for the counterparty to bring claims or maximum amount for recovery.",
+      "spans": [
+        [
+          49975,
+          50362
+        ]
+      ]
+    },
+    {
+      "id": "Exclusivity",
+      "question": "Highlight the parts (if any) of this contract related to \"Exclusivity\" that should be reviewed by a lawyer. Details: Is there an exclusive dealing  commitment with the counterparty? This includes a commitment to procure all “requirements” from one party of certain technology, goods, or services or a prohibition on licensing or selling technology, goods or services to third parties, or a prohibition on  collaborating or working with other parties), whether during the contract or  after the contract ends (or both).",
+      "spans": [
+        [
+          34234,
+          34512
+        ]
+      ]
+    },
+    {
+      "id": "Expiration Date",
+      "question": "Highlight the parts (if any) of this contract related to \"Expiration Date\" that should be reviewed by a lawyer. Details: On what date will the contract's initial term expire?",
+      "spans": [
+        [
+          35787,
+          35993
+        ]
+      ]
+    },
+    {
+      "id": "Governing Law",
+      "question": "Highlight the parts (if any) of this contract related to \"Governing Law\" that should be reviewed by a lawyer. Details: Which state/country's law governs the interpretation of the contract?",
+      "spans": [
+        [
+          51461,
+          51623
+        ]
+      ]
+    }
+  ],
+  "dataset": "cuad",
+  "selected_length_band": [
+    40000,
+    60000
+  ],
+  "seed": 61108,
+  "source_sha256": "0fb8cd828f5c763b777f5eb8d80e5f92c46dbcd65a1cc5b3b911aae1c4ab9974"
+}

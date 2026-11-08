@@ -1,6 +1,79 @@
 # 端到端评测
 
-本目录区分三类证据：真实依赖与进程检查、代表性机制 case、真实文档与模型效果。检查通过只覆盖实际执行到的范围；未运行、凭据缺失和中途失败单独记录，不计为通过。
+查看成绩、样本和对照图，先读[评测说明与结果](../docs/03-使用与验证/评测说明与结果.md)。本目录保留真实依赖和进程检查、代表性机制用例、真实文档及模型效果的执行入口。未运行、凭据缺失和中途失败分别记录。
+
+## 从仓库能复现什么
+
+新检出可以运行下面的入口，运行配置、真实存储和模型凭据按用例另行准备。历史成绩与具体版本、快照和模型绑定。
+
+| 测试 | 仓库里的输入与入口 | 还需准备 |
+| --- | --- | --- |
+| 静态预检 | `python -B -m evals.run --check`、`python -B -m evals.long_contract --check`、`python -B -m evals.quality_labeled --check` | 项目虚拟环境。 |
+| 确定性回归 | `python -B -m evals.quality_deterministic`。它也运行分窗、检索证据和评审回归。`python -B -m evals.quality_retrieval_evidence` 可单独跑检索边界。 | 项目虚拟环境。用固定输入验证程序行为。 |
+| 构建、删除、恢复和短合同 | `evals.run` 的 `mechanisms`、`contract`、`recovery` 阶段。输入在 `examples/` 与 `corpus/cuad/`。 | 隔离的真实存储。合同与语义检索使用有效模型配置。 |
+| 长合同与小标注集 | `corpus/cuad-long/` 含原文、题目和官方范围，入口是 `evals.long_contract`。`corpus/quality-labeled/` 含小标注集，入口是 `evals.quality_labeled`。 | 两组都需要真实模型。长合同还需要隔离存储，小标注集用内存图。全文与结构化策略对照见下文。 |
+| 分布式准备故障 | `evals.distributed_worker --config <测试配置>`。用例在代码中，模型响应用固定数据。 | 运行指南中的隔离测试存储及配置。 |
+
+### 历史结果与额外实验
+
+| 评测 | 仓库可核对的内容 | 完整复跑所需的本地材料 |
+| --- | --- | --- |
+| 首版长合同 23/26 | 冻结语料、[逐题与原始响应](published/README.md)。 | 首版真实模型与隔离存储。旧源码和运行配置快照另存于原始运行档案。 |
+| 当前版 25/26、同模型重建及固定图检索 | 长合同原文与题目、版本号、[逐题计分摘要](published/optimization-summary.json)。 | 固定结构化快照、历史运行配置和版本对照脚本。仓库现有长合同入口可创建新快照。 |
+| TechQA、HotpotQA、Qasper 与额外 CUAD 长文 | [原文、题目与发行件清单](corpus/public/README.md)，入口是 `evals.public_quality`。 | Qasper 和 CUAD 合同 2 需下载发行件。历史固定候选对照还需要当时的图和候选顺序。 |
+| 独立多文档留出样本 | [5 篇服务目录和 7 篇独立手册](corpus/holdout/README.md)，入口是 `evals.holdout_quality`。 | 真实存储与模型。已退出主链路的历史重排变体需对应源码与快照。 |
+
+原始模型载荷、凭据和运行数据通过本地配置及运行目录管理。仓库摘要用于核对分数和分母，完整复跑以对应的输入、代码、配置和快照为准。
+
+## 公开语料与多文档留出样本
+
+[公开评测语料](corpus/public/README.md)列出可直接打开的原文、题目和来源。仓库直接保存 12 篇 TechQA、24 篇 HotpotQA 摘要和 1 篇完整 CUAD 合同。[独立多文档留出集](corpus/holdout/README.md)另含两组共 12 篇原文。预检只读本地文件并核对 SHA-256、标注和业务模型。
+
+```bash
+for case in techqa hotpot cuad-1 cuad-1-cross; do
+  .venv/bin/python -m evals.public_quality "$case" --check || exit 1
+done
+for case in service-catalog procedures; do
+  .venv/bin/python -m evals.holdout_quality "$case" --check || exit 1
+done
+```
+
+### 还原其余长文
+
+在项目根目录下载 Ai2 Qasper v0.3 和 CUAD v1 测试集，按清单的文件名保存。脚本检查发行件和生成样本的校验值，并固定问题 ID、Qasper 标注者与 CUAD 条款。完整语料和复跑输出放在已忽略的 `evals/records/`。
+
+```bash
+replay=evals/records/public-replay
+mkdir -p "$replay/sources"
+curl -fL 'https://qasper-dataset.s3.us-west-2.amazonaws.com/qasper-test-and-evaluator-v0.3.tgz' \
+  -o "$replay/sources/qasper-test-v0.3.tgz"
+curl -fL 'https://raw.githubusercontent.com/Break-Through-Tech/Accenture-1T-contract-review-challenge/main/data/test.json' \
+  -o "$replay/sources/cuad-test.json"
+
+.venv/bin/python -m evals.public_corpus --sources "$replay/sources" --fixtures "$replay/fixtures" \
+  qasper-1 qasper-1-cross qasper-2 cuad-2
+.venv/bin/python -m evals.public_quality qasper-1 --fixtures "$replay/fixtures" --check
+```
+
+也可从[清单中的发行件](corpus/public/manifest.json)重建仓库内置样本。HotpotQA 的上游文件为 Parquet，只有从该文件还原时需要 PyArrow。直接预检或复跑仓库内置样本不需要安装它。
+
+### 运行当前链路
+
+用隔离 PostgreSQL、Neo4j、Qdrant 和真实模型，按[运行指南](../docs/03-使用与验证/运行指南.md)初始化测试存储。使用单 Worker 配置。公开样本历史构建采用 `extraction_scope_policy: structure`、GLM 5.3、Gemini Embedding 2 和 15 秒检索预算。复跑使用所给配置，并记录实际版本和参数。
+
+```bash
+.venv/bin/python -m evals.public_quality hotpot --config configs/eval.local.yaml --max-requests 240
+.venv/bin/python -m evals.public_quality qasper-1 --fixtures "$replay/fixtures" \
+  --config configs/eval.local.yaml --modes compact --max-requests 140
+.venv/bin/python -m evals.holdout_quality service-catalog \
+  --config configs/eval.local.yaml --max-requests 100
+.venv/bin/python -m evals.holdout_quality procedures --rounds 2 \
+  --config configs/eval.local.yaml --max-requests 180
+```
+
+运行器为每轮创建新的知识库及 `evals/records/<运行 ID>/`。输出记录文档和任务 ID、版本与模型、候选顺序、逐题覆盖、降级警告和请求次数。公开样本默认在同一份新图上分别执行融合顺序和紧凑重排，实体和原文各取 Top 5。TechQA 的无答案题可用 `--techqa-probe` 单独检查候选能否提供足够证据，不计入正题覆盖率。跨窗补充题可直接使用 `qasper-1-cross` 或 `cuad-1-cross`。
+
+该入口复用历史样本和评分口径，构建、召回和重排走当前实现。历史运行的网关变更、模型波动、固定候选回放及已归档变体需使用对应配置和快照。超过调用上限或构建未发布时，运行退出并保留已生成记录。
 
 ## 资料
 
@@ -33,7 +106,7 @@
 
 ## 结果状态
 
-仅保留运行 `e316c7ca-7974-4b6d-9392-45868da2d2d7`：26 次长合同查询通过 23 次，entity 10/12、chunk 11/12、retrieve 2/2。55 项机械检查通过，与查询通过数分开统计。语料和评测入口随仓库提供。
+`published/latest/` 保留首版运行 `e316c7ca-7974-4b6d-9392-45868da2d2d7` 的详细证据。长合同 26 个动作通过 23 个，entity 10/12、chunk 11/12、retrieve 2/2。55 项机械检查通过，另行计数。后续对照的精简证据见[优化对照摘要](published/optimization-summary.json)。
 
 [逐题结果](published/latest/questions.json)、[原始摘要](published/latest/summary.json)与[证据导航](published/README.md)保存本轮通过和未通过项。完整原件留在本地 `records/e316c7ca-7974-4b6d-9392-45868da2d2d7/`。结果绑定该次运行保存的源码和配置。
 
@@ -116,12 +189,12 @@ KG_EXTRACTION_SCOPE_POLICY=structure .venv/bin/python -B -m evals.long_contract 
 
 另有一个全量标注的小语料，包含 TXT 与 Markdown、3 个 Service、3 个 Clause 实例和 1 条 CALLS 关系，并同时覆盖同名不同实体、别名同实体与同标题不同条款。早期无原子组装配置的 run `c0f51673-0f03-463c-a5f2-cd984e8eac45`：全文 Clause TP/FP/FN 为 2/0/1，小批为 0/2/3；两者 Service 均为 3/0/0、CALLS 均为 1/0/0。中间版本加 `full_statement` 的 run `761d1470-a869-4c02-8338-2bd91363b744` 小批 Clause 为 1/1/2，全文因模型结构错误失败。这些是诊断样本，不是最终代码的跨场景效果估计；标注集很小，不代表总体 precision。普通逐字模式只保证来源保真，不保证句子完整；模型在完全可见单元内仍可能选择词边界正确但语义未完的片段。不同完整身份但同义标题的安全归并留待下一轮独立设计和评测。
 
-### 保留的两条检索评测基线
+### 冻结基线与当前版复测记录
 
 - **最早的全文旧基线**在 `evals/records/b1afbd7c-620a-43ee-b814-24840f42a6eb/`。GLM‑5.3 搭配 Gemini Embedding 2，原始长合同通过 **23/26**。该目录的 `program-sources/` 保存当时实际执行的程序，`manifest.json` 保存配置，`long-contract-retrieval.json` 保存逐题结果。复现旧版时以冻结程序为准。
-- **当前推荐版**的代码快照为 `4531b68`。采用结构化构建快照、原召回和紧凑重排，图实体详情补完整段落，原文保留来源坐标与备选。GPT‑6 Sol 在原始合同上通过 **25/26**，图实体 12/12、原文 12/12、自然语言 1/2。复测复用了已发布的结构化快照，GPT‑6 Sol 用于重排及两次自然语言规划。逐题结果在评测工作区的 `contract-26-model-ab-gpt-6-sol-structure-verified/compact.json`。
+- **当前推荐版**的代码快照为 `4531b68`。采用结构化构建快照、原召回和紧凑重排，图实体详情补完整段落，原文保留来源坐标与备选。GPT‑6 Sol 在原始合同上通过 **25/26**，图实体 12/12、原文 12/12、自然语言 1/2。复测复用了已发布的结构化快照，GPT‑6 Sol 用于重排及两次自然语言规划。逐题计分见[优化对照摘要](published/optimization-summary.json)。详细运行记录在评测工作区的 `contract-26-model-ab-gpt-6-sol-structure-verified/compact.json`。
 
-两版沿用同一套证据覆盖口径，模型与构建快照不同，适合做历史参照。共享证据组装保存在 `experiment/evidence-assembly` 分支的 `e7d25fa`。它在同模型的 59 组配对中总体持平，混合查询耗时下降，同时出现公开长文覆盖回归。
+上面的旧基线为内部冻结归档。对外展示的首版同为 23/26，对应[已发布的原始运行](published/README.md)。代表性成绩、完整版本对照及公开数据集结果统一见[评测说明与结果](../docs/03-使用与验证/评测说明与结果.md)。各轮保留自己的模型、快照与预算。共享证据组装保存在 `experiment/evidence-assembly` 分支的 `e7d25fa`。它在同模型的 59 组配对中总体持平，混合查询耗时下降，同时出现公开长文覆盖回归。
 
 ## 分布式 Worker 故障验收
 

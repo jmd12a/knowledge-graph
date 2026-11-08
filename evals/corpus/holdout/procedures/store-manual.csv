@@ -1,0 +1,14 @@
+record_id,title,body
+S-return,Merchandise adjustment,"Direct-store intake. The front desk first determines where the item was originally purchased and records the channel on the intake form. An unopened product keeps its original seal and label. Staff record the item identifier before taking custody of it.
+
+Direct-store shoppers may recover the purchase price on unopened units within thirty days if they provide a receipt.
+
+After collecting the required paperwork, the staff member adds the order reference and payment method to the worksheet. Exchanges and credit vouchers use separate entries. Printed copies of the worksheet are archived by register number and date."
+S-bulletin,Service bulletin appendix,"Technical notices are delivered to the service desk and recorded by issue date. Staff first identify the manufacturer and check the serial list. A photograph helps the service desk resolve a worn label. A bulletin may contain models that were sold through more than one channel.
+
+When a factory safety bulletin lists the serial number, the store repays the purchase price even if the package is gone or more than thirty days have passed.
+
+The service desk archives the serial check and its decision. The bulletin number is copied into the intake worksheet. The paper copy is retained after any vendor settlement. Routine support notices are filed by manufacturer but follow separate procedures."
+S-gift,Voucher conditions,"A store gift voucher can be exchanged for another voucher at the desk, with no cash payment."
+S-repair,Repair records,"After thirty days, items with broken seals may be sent for a repair estimate."
+S-admin,Receipt lookup,A till receipt is reprinted only when the cashier can identify the original register number.

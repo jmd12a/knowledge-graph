@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="338.83" viewBox="0 0 1200 535" role="img" aria-labelledby="kg-build-title kg-build-desc">
+  <title id="kg-build-title">长文分窗与抽取</title>
+  <desc id="kg-build-desc">来源块保留条款结构，物理切片用于索引。固定批次可能切开条款；结构分窗尽量在来源边界处组窗，引用校验后只补有缺口的条款。</desc>
+  <defs><marker id="kg-build-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#6f9086" /></marker></defs>
+  <rect x="0.5" y="0.5" width="1199" height="534" rx="20" fill="#f7f8f2" stroke="#c9d7ce" />
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, PingFang SC, sans-serif">
+    <text x="43" y="51" font-size="18" font-weight="700" fill="#236b57" text-anchor="start">01  /  BUILD</text>
+    <text x="43" y="99" font-size="35" font-weight="700" fill="#183836" text-anchor="start">来源块、物理切片与抽取窗口</text>
+    <text x="43" y="132" font-size="19" font-weight="400" fill="#526966" text-anchor="start">示意：同一份文档中，付款安排跨 3 个物理切片，授权条款跨 2 个</text>
+    <text x="43" y="189" font-size="22" font-weight="700" fill="#183836" text-anchor="start">原文结构</text>
+    <rect x="228" y="159" width="548" height="47" rx="10" fill="#e4f0e9" stroke="#a5c3b8" />
+    <text x="502" y="190" font-size="19" font-weight="700" fill="#183836" text-anchor="middle">付款安排：共同条件与清单</text>
+    <rect x="789" y="159" width="361" height="47" rx="10" fill="#e4f0e9" stroke="#a5c3b8" />
+    <text x="969.5" y="190" font-size="19" font-weight="700" fill="#183836" text-anchor="middle">独立授权条款</text>
+    <text x="43" y="257" font-size="22" font-weight="700" fill="#183836" text-anchor="start">物理切片</text>
+    <rect x="228" y="227" width="174" height="47" rx="10" fill="#ffffff" stroke="#a5c3b8" />
+    <text x="315" y="258" font-size="19" font-weight="700" fill="#183836" text-anchor="middle">切片 1</text>
+    <rect x="415" y="227" width="174" height="47" rx="10" fill="#ffffff" stroke="#a5c3b8" />
+    <text x="502" y="258" font-size="19" font-weight="700" fill="#183836" text-anchor="middle">切片 2</text>
+    <rect x="602" y="227" width="174" height="47" rx="10" fill="#ffffff" stroke="#a5c3b8" />
+    <text x="689" y="258" font-size="19" font-weight="700" fill="#183836" text-anchor="middle">切片 3</text>
+    <rect x="789" y="227" width="174" height="47" rx="10" fill="#ffffff" stroke="#a5c3b8" />
+    <text x="876" y="258" font-size="19" font-weight="700" fill="#183836" text-anchor="middle">切片 4</text>
+    <rect x="976" y="227" width="174" height="47" rx="10" fill="#ffffff" stroke="#a5c3b8" />
+    <text x="1063" y="258" font-size="19" font-weight="700" fill="#183836" text-anchor="middle">切片 5</text>
+    <text x="43" y="325" font-size="22" font-weight="700" fill="#8a5025" text-anchor="start">固定两片一批</text>
+    <rect x="228" y="295" width="361" height="47" rx="10" fill="#faecdf" stroke="#a5c3b8" />
+    <text x="408.5" y="326" font-size="19" font-weight="700" fill="#183836" text-anchor="middle">批 1</text>
+    <rect x="602" y="295" width="361" height="47" rx="10" fill="#faecdf" stroke="#a5c3b8" />
+    <text x="782.5" y="326" font-size="19" font-weight="700" fill="#183836" text-anchor="middle">批 2</text>
+    <rect x="976" y="295" width="174" height="47" rx="10" fill="#faecdf" stroke="#a5c3b8" />
+    <text x="1063" y="326" font-size="19" font-weight="700" fill="#183836" text-anchor="middle">批 3</text>
+    <line x1="596" y1="285" x2="596" y2="352" stroke="#ae6736" stroke-width="2.5" stroke-dasharray="4 4" />
+    <line x1="970" y1="285" x2="970" y2="352" stroke="#ae6736" stroke-width="2.5" stroke-dasharray="4 4" />
+    <text x="43" y="393" font-size="22" font-weight="700" fill="#183836" text-anchor="start">结构化分窗</text>
+    <rect x="228" y="363" width="548" height="47" rx="10" fill="#e4f0e9" stroke="#a5c3b8" />
+    <text x="502" y="394" font-size="19" font-weight="700" fill="#183836" text-anchor="middle">窗口 A：付款安排</text>
+    <rect x="789" y="363" width="361" height="47" rx="10" fill="#e4f0e9" stroke="#a5c3b8" />
+    <text x="969.5" y="394" font-size="19" font-weight="700" fill="#183836" text-anchor="middle">窗口 B：授权条款</text>
+    <line x1="43" y1="437" x2="1150" y2="437" stroke="#6f9086" stroke-width="1.5" />
+    <text x="43" y="481" font-size="22" font-weight="700" fill="#183836" text-anchor="start">抽取之后</text>
+    <text x="228" y="481" font-size="21" font-weight="400" fill="#183836" text-anchor="start">模型给字段和精确引文</text>
+    <line x1="450" y1="474" x2="490" y2="474" stroke="#6f9086" stroke-width="2.5" marker-end="url(#kg-build-arrow)" />
+    <text x="506" y="481" font-size="21" font-weight="400" fill="#183836" text-anchor="start">程序校验原文与范围</text>
+    <line x1="731" y1="474" x2="771" y2="474" stroke="#6f9086" stroke-width="2.5" marker-end="url(#kg-build-arrow)" />
+    <text x="789" y="481" font-size="21" font-weight="700" fill="#183836" text-anchor="start">仅对证据有缺口的条款补全</text>
+  </g>
+</svg>

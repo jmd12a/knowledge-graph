@@ -1,0 +1,3 @@
+caller_id,caller_name,caller_status,caller_alias,caller_description,callee_id,callee_name,callee_status,team_code,team_name
+settlement-audit,清算复核,active,,逐日比对支付清算明细与账务流水。发现渠道差额时暂停自动结算并转人工对账复核。,event-ledger,事件总账,active,clearing-sre,清结算运维
+merchant-routing,商户路由,active,,根据地区和商户所属通道选择出款路由；不负责复核账务差额。,event-ledger,事件总账,active,clearing-sre,清结算运维

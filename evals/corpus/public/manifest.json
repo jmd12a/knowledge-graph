@@ -1,0 +1,304 @@
+{
+  "schema_version": 1,
+  "sources": {
+    "techqa": {
+      "filename": "techqa.json",
+      "sha256": "69d97231509482ed6bd5ec1c4bc0607acb82a88d11169eb8383592d0ca8b93c7",
+      "url": "https://huggingface.co/datasets/nvidia/TechQA-RAG-Eval/resolve/0b5bbc8/train.json"
+    },
+    "hotpot": {
+      "filename": "hotpotqa.parquet",
+      "sha256": "c20b638ca82b21d04fe12e14ff417ad05153d4d215a65de54497fca4e972f7c6",
+      "url": "https://huggingface.co/datasets/hotpotqa/hotpot_qa/resolve/d3686a5/distractor/validation-00000-of-00001.parquet"
+    },
+    "qasper": {
+      "filename": "qasper-test-v0.3.tgz",
+      "sha256": "72a52a41193e2838b8074f80ac074b94f956b84886c36a61c58a7df4171bdd72",
+      "url": "https://qasper-dataset.s3.us-west-2.amazonaws.com/qasper-test-and-evaluator-v0.3.tgz"
+    },
+    "cuad": {
+      "filename": "cuad-test.json",
+      "sha256": "007b6a40b0c65247f881627375c3d2e9b6aeeb5dfa89957494feed0765a1a073",
+      "url": "https://raw.githubusercontent.com/Break-Through-Tech/Accenture-1T-contract-review-challenge/main/data/test.json"
+    }
+  },
+  "cases": {
+    "hotpot": {
+      "dataset": "hotpot",
+      "sha256": "7fd74b747313137861123cf650f452fd0fd6520061ff231e5e696496be83be11",
+      "questions": [
+        {
+          "id": "5a835478554299123d8c20ed"
+        },
+        {
+          "id": "5a85b2d95542997b5ce40028"
+        },
+        {
+          "id": "5a78bd9b554299078472774a"
+        },
+        {
+          "id": "5a7166395542994082a3e814"
+        },
+        {
+          "id": "5aba749055429901930fa7d8"
+        },
+        {
+          "id": "5a8db19d5542994ba4e3dd00"
+        },
+        {
+          "id": "5abc0a5d5542993f40c73c64"
+        },
+        {
+          "id": "5a84c4135542994c784dda31"
+        }
+      ],
+      "documents": {
+        "wiki-001.md": "Mrs. Bixby and the Colonel's Coat",
+        "wiki-002.md": "Roald Dahl",
+        "wiki-003.md": "Roald Dahl Plass",
+        "wiki-004.md": "Eenasul Fateh",
+        "wiki-005.md": "Management consulting",
+        "wiki-006.md": "Mick (DJ)",
+        "wiki-007.md": "Alfred Gell",
+        "wiki-008.md": "Edmund Leach",
+        "wiki-009.md": "Coral Gardens and Their Magic",
+        "wiki-010.md": "Kansas Song",
+        "wiki-011.md": "University of Kansas",
+        "wiki-012.md": "Downtown Kansas City",
+        "wiki-013.md": "Aram Avakian",
+        "wiki-014.md": "Chris Menges",
+        "wiki-015.md": "Linda Mvusi",
+        "wiki-016.md": "Local H",
+        "wiki-017.md": "For Against",
+        "wiki-018.md": "Hallelujah! I'm a Bum (album)",
+        "wiki-019.md": "Freakonomics (film)",
+        "wiki-020.md": "In the Realm of the Hackers",
+        "wiki-021.md": "Heidi Ewing",
+        "wiki-022.md": "Yingkou",
+        "wiki-023.md": "Fuding",
+        "wiki-024.md": "Tongcheng Subdistrict, Fuding"
+      }
+    },
+    "techqa": {
+      "dataset": "techqa",
+      "sha256": "3baa2c1a5143141bdaaf0cfe142a3d6ae45fc77ddada1eb44f811f1afda6e670",
+      "questions": [
+        {
+          "id": "DEV_Q121"
+        },
+        {
+          "id": "DEV_Q245"
+        },
+        {
+          "id": "DEV_Q088"
+        },
+        {
+          "id": "DEV_Q206"
+        },
+        {
+          "id": "DEV_Q262"
+        },
+        {
+          "id": "DEV_Q254"
+        },
+        {
+          "id": "DEV_Q120"
+        },
+        {
+          "id": "DEV_Q303"
+        },
+        {
+          "id": "DEV_Q087"
+        },
+        {
+          "id": "DEV_Q101"
+        },
+        {
+          "id": "DEV_Q097"
+        },
+        {
+          "id": "DEV_Q065"
+        },
+        {
+          "id": "DEV_Q222"
+        },
+        {
+          "id": "DEV_Q078"
+        },
+        {
+          "id": "DEV_Q169"
+        },
+        {
+          "id": "DEV_Q248"
+        }
+      ],
+      "documents": {
+        "swg24017225.txt": null,
+        "swg21988389.txt": null,
+        "swg21320206.txt": null,
+        "swg21672071.txt": null,
+        "swg21412846.txt": null,
+        "swg21980860.txt": null,
+        "swg21982354.txt": null,
+        "swg21690658.txt": null,
+        "swg24041394.txt": null,
+        "swg21412061.txt": null,
+        "swg21317981.txt": null,
+        "swg1PI34677.txt": null
+      }
+    },
+    "cuad-1-cross": {
+      "dataset": "cuad",
+      "sha256": "21df9d99eaec4570ddc0da40ee49a90146955aa38f447e729aa5f10e11ef2f76",
+      "questions": [
+        {
+          "id": "Revenue/Profit Sharing"
+        }
+      ],
+      "source_id": "USASYNTHETICFUELCORP_10_21_2010-EX-10.10-STRATEGIC ALLIANCE AGREEMENT",
+      "selected_length_band": [
+        40000,
+        60000
+      ],
+      "seed": 61108,
+      "supplement": "cross-window"
+    },
+    "cuad-1": {
+      "dataset": "cuad",
+      "sha256": "cf09088fe5008145f66c552ea2b9d106700524a5dcd541be4810b8559e8b52ca",
+      "questions": [
+        {
+          "id": "Minimum Commitment"
+        },
+        {
+          "id": "Most Favored Nation"
+        },
+        {
+          "id": "Cap On Liability"
+        },
+        {
+          "id": "Exclusivity"
+        },
+        {
+          "id": "Expiration Date"
+        },
+        {
+          "id": "Governing Law"
+        }
+      ],
+      "source_id": "USASYNTHETICFUELCORP_10_21_2010-EX-10.10-STRATEGIC ALLIANCE AGREEMENT",
+      "selected_length_band": [
+        40000,
+        60000
+      ],
+      "seed": 61108
+    },
+    "cuad-2": {
+      "dataset": "cuad",
+      "sha256": "f39666e84ed2b6927dc892c8987133c969e5baa546ce80163d255f5f96511521",
+      "questions": [
+        {
+          "id": "Non-Transferable License"
+        },
+        {
+          "id": "Minimum Commitment"
+        },
+        {
+          "id": "Governing Law"
+        },
+        {
+          "id": "Irrevocable Or Perpetual License"
+        },
+        {
+          "id": "Expiration Date"
+        },
+        {
+          "id": "License Grant"
+        }
+      ],
+      "source_id": "PROFOUNDMEDICALCORP_08_29_2019-EX-4.5-SUPPLY AGREEMENT",
+      "selected_length_band": [
+        60000,
+        85000
+      ],
+      "seed": 61108
+    },
+    "qasper-1-cross": {
+      "dataset": "qasper",
+      "sha256": "3e795d030398a937dac21fed2ca8b92f0dd24f2d0c3bd2f68edddd327be6cbb0",
+      "questions": [
+        {
+          "id": "8fdb4f521d3ba4179f8ccc4c28ba399aab6c3550",
+          "annotator_index": 1
+        }
+      ],
+      "source_id": "1803.08419",
+      "selected_length_band": [
+        40000,
+        60000
+      ],
+      "seed": 61108,
+      "supplement": "cross-window"
+    },
+    "qasper-1": {
+      "dataset": "qasper",
+      "sha256": "83c7b7b399da0c61eac11d99544dde8e1808bb5f4d1d52156df927b81830b44f",
+      "questions": [
+        {
+          "id": "833d3ae7613500f2867ed8b33d233d71781014e7",
+          "annotator_index": 1
+        },
+        {
+          "id": "a0d45b71feb74774cfdc0d5c6e23cd41bc6bc1f2",
+          "annotator_index": 0
+        },
+        {
+          "id": "b10388e343868ca8e5c7c601ebb903f52e756e61",
+          "annotator_index": 0
+        },
+        {
+          "id": "64f7337970e8d1989b2e1f7106d86f73c4a3d0af",
+          "annotator_index": 0
+        },
+        {
+          "id": "f92c344e9b1a986754277fd0f08a47dc3e5f9feb",
+          "annotator_index": 0
+        },
+        {
+          "id": "e8cdeb3a081d51cc143c7090a54c82d393f1a2ca",
+          "annotator_index": 0
+        }
+      ],
+      "source_id": "1803.08419",
+      "selected_length_band": [
+        40000,
+        60000
+      ],
+      "seed": 61108
+    },
+    "qasper-2": {
+      "dataset": "qasper",
+      "sha256": "0cd5556d3a567641f20fe272954a4423ca5d0fafeda3b9bef21ca86f35304489",
+      "questions": [
+        {
+          "id": "6606160e210d05b94f7cbd9c5ff91947339f9d02",
+          "annotator_index": 0
+        },
+        {
+          "id": "3699927c6c1146f5057576034d226a99946d52cb",
+          "annotator_index": 0
+        },
+        {
+          "id": "0dc9050c832a6091bc9db3f7fa7be72139f51177",
+          "annotator_index": 0
+        }
+      ],
+      "source_id": "1902.08830",
+      "selected_length_band": [
+        60000,
+        85000
+      ],
+      "seed": 61108
+    }
+  }
+}

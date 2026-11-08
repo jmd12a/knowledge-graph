@@ -1,0 +1,17 @@
+caller_id,caller_name,caller_status,caller_alias,caller_description,callee_id,callee_name,callee_status,team_code,team_name
+aux-risk,风险看板,active,,统计支付异常频次并展示商户风险趋势。,metrics-hub,监控中心,active,data-ops,数据运维
+aux-ledger,记账导出,active,,导出日终账务流水与汇总金额供财务查看。,metrics-hub,监控中心,active,data-ops,数据运维
+aux-timeout,超时统计,active,,统计支付接口重试次数和商户超时比率。,metrics-hub,监控中心,active,data-ops,数据运维
+aux-channel,通道审核,active,,审核商户入网材料和通道配置。,metrics-hub,监控中心,active,data-ops,数据运维
+aux-receipt,回执归档,active,,保存回执原始内容供审计追溯。,metrics-hub,监控中心,active,data-ops,数据运维
+aux-notify,商户通知,active,,将回执处理状态和交易结果发送给商户。,metrics-hub,监控中心,active,data-ops,数据运维
+aux-idempotency,会员幂等,active,,以会员幂等键保证优惠券只发放一次。,metrics-hub,监控中心,active,data-ops,数据运维
+aux-reports,结算报表,active,,生成各商户清算日结报表并通知财务。,metrics-hub,监控中心,active,data-ops,数据运维
+aux-routing,路由监控,active,,检测出款通道的网络状态和请求延迟。,metrics-hub,监控中心,active,data-ops,数据运维
+aux-approvals,付款审批,active,,人工审批付款金额及大额支付风险。,metrics-hub,监控中心,active,data-ops,数据运维
+aux-audit,商户审计,active,,核对商户的支付权限和账号申请记录。,metrics-hub,监控中心,active,data-ops,数据运维
+aux-checkout,收银客户端,active,,为终端商户提供支付和退款入口。,metrics-hub,监控中心,active,data-ops,数据运维
+aux-events,事件镜像,active,,将业务消息复制到数据分析队列。,metrics-hub,监控中心,active,data-ops,数据运维
+aux-onboarding,商户入驻,active,,验证商户账号、证件及法人信息。,metrics-hub,监控中心,active,data-ops,数据运维
+aux-archives,账单存档,active,,按月归档商户结算报表和发票。,metrics-hub,监控中心,active,data-ops,数据运维
+aux-support,支付工单,active,,接收支付签名校验相关咨询并转交安全团队。,metrics-hub,监控中心,active,data-ops,数据运维

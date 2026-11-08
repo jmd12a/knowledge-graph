@@ -1,0 +1,6 @@
+{
+  "calls": [
+    {"caller_id": "order", "caller_name": "订单服务", "caller_status": "active", "callee_id": "pay-core", "callee_status": "degraded", "team_code": "ops-team", "team_name": "运维团队"},
+    {"caller_id": "audit", "caller_name": "审计服务", "caller_status": "active", "callee_id": "pay-core", "callee_status": "degraded", "team_code": "ops-team", "team_name": "运维团队"}
+  ]
+}

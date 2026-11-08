@@ -1,0 +1,202 @@
+{
+  "documents": {
+    "wiki-001.md": {
+      "title": "Mrs. Bixby and the Colonel's Coat"
+    },
+    "wiki-002.md": {
+      "title": "Roald Dahl"
+    },
+    "wiki-003.md": {
+      "title": "Roald Dahl Plass"
+    },
+    "wiki-004.md": {
+      "title": "Eenasul Fateh"
+    },
+    "wiki-005.md": {
+      "title": "Management consulting"
+    },
+    "wiki-006.md": {
+      "title": "Mick (DJ)"
+    },
+    "wiki-007.md": {
+      "title": "Alfred Gell"
+    },
+    "wiki-008.md": {
+      "title": "Edmund Leach"
+    },
+    "wiki-009.md": {
+      "title": "Coral Gardens and Their Magic"
+    },
+    "wiki-010.md": {
+      "title": "Kansas Song"
+    },
+    "wiki-011.md": {
+      "title": "University of Kansas"
+    },
+    "wiki-012.md": {
+      "title": "Downtown Kansas City"
+    },
+    "wiki-013.md": {
+      "title": "Aram Avakian"
+    },
+    "wiki-014.md": {
+      "title": "Chris Menges"
+    },
+    "wiki-015.md": {
+      "title": "Linda Mvusi"
+    },
+    "wiki-016.md": {
+      "title": "Local H"
+    },
+    "wiki-017.md": {
+      "title": "For Against"
+    },
+    "wiki-018.md": {
+      "title": "Hallelujah! I'm a Bum (album)"
+    },
+    "wiki-019.md": {
+      "title": "Freakonomics (film)"
+    },
+    "wiki-020.md": {
+      "title": "In the Realm of the Hackers"
+    },
+    "wiki-021.md": {
+      "title": "Heidi Ewing"
+    },
+    "wiki-022.md": {
+      "title": "Yingkou"
+    },
+    "wiki-023.md": {
+      "title": "Fuding"
+    },
+    "wiki-024.md": {
+      "title": "Tongcheng Subdistrict, Fuding"
+    }
+  },
+  "questions": [
+    {
+      "id": "5a835478554299123d8c20ed",
+      "question": "How many copies of Roald Dahl's variation on a popular anecdote sold?",
+      "type": "bridge",
+      "supports": [
+        {
+          "doc": "wiki-001.md",
+          "text": "The story is Dahl's variation on a popular anecdote dating back at least to 1939: a married woman receives a glamorous mink coat from a man with whom she had an affair."
+        },
+        {
+          "doc": "wiki-002.md",
+          "text": "His books have sold more than 250 million copies worldwide."
+        }
+      ]
+    },
+    {
+      "id": "5a85b2d95542997b5ce40028",
+      "question": "Who was known by his stage name Aladin and helped organizations improve their performance as a consultant?",
+      "type": "bridge",
+      "supports": [
+        {
+          "doc": "wiki-004.md",
+          "text": "Eenasul Fateh (Bengali: ঈনাসুল ফাতেহ ; born 3 April 1959), also known by his stage name Aladin, is a Bangladeshi-British cultural practitioner, magician, live artist and former international management consultant."
+        },
+        {
+          "doc": "wiki-005.md",
+          "text": "Management consulting is the practice of helping organizations to improve their performance, operating primarily through the analysis of existing organizational problems and the development of plans for improvement."
+        }
+      ]
+    },
+    {
+      "id": "5a78bd9b554299078472774a",
+      "question": "What nationality were social anthropologists Alfred Gell and Edmund Leach?",
+      "type": "bridge",
+      "supports": [
+        {
+          "doc": "wiki-007.md",
+          "text": "Alfred Antony Francis Gell, {'1': \", '2': \", '3': \", '4': \"} ( ; June 12, 1945 – January 28, 1997) was a British social anthropologist whose most influential work concerned art, language, symbolism and ritual."
+        },
+        {
+          "doc": "wiki-008.md",
+          "text": "Sir Edmund Ronald Leach (7 November 1910 – 6 January 1989) was a British social anthropologist."
+        }
+      ]
+    },
+    {
+      "id": "5a7166395542994082a3e814",
+      "question": "What is the name of the fight song of the university whose main campus is in Lawrence, Kansas and whose branch campuses are in the Kansas City metropolitan area?",
+      "type": "bridge",
+      "supports": [
+        {
+          "doc": "wiki-010.md",
+          "text": "Kansas Song (We’re From Kansas) is a fight song of the University of Kansas."
+        },
+        {
+          "doc": "wiki-011.md",
+          "text": "The main campus in Lawrence, one of the largest college towns in Kansas, is on Mount Oread, the highest elevation in Lawrence."
+        },
+        {
+          "doc": "wiki-011.md",
+          "text": "Two branch campuses are in the Kansas City metropolitan area: the Edwards Campus in Overland Park, and the university's medical school and hospital in Kansas City."
+        }
+      ]
+    },
+    {
+      "id": "5aba749055429901930fa7d8",
+      "question": "What occupation do Chris Menges and Aram Avakian share?",
+      "type": "comparison",
+      "supports": [
+        {
+          "doc": "wiki-013.md",
+          "text": "Aram A. Avakian (April 23, 1926 – January 17, 1987) was an Armenian-American film editor and director."
+        },
+        {
+          "doc": "wiki-014.md",
+          "text": "Chris Menges BSC, ASC (born 15 September 1940) is an English cinematographer and film director."
+        }
+      ]
+    },
+    {
+      "id": "5a8db19d5542994ba4e3dd00",
+      "question": "Are Local H and For Against both from the United States?",
+      "type": "comparison",
+      "supports": [
+        {
+          "doc": "wiki-016.md",
+          "text": "Local H is an American rock band originally formed by guitarist and vocalist Scott Lucas, bassist Matt Garcia, drummer Joe Daniels, and lead guitarist John Sparkman in Zion, Illinois in 1987."
+        },
+        {
+          "doc": "wiki-017.md",
+          "text": "For Against is a United States post-punk/dream pop band from Lincoln, Nebraska."
+        }
+      ]
+    },
+    {
+      "id": "5abc0a5d5542993f40c73c64",
+      "question": "Are Freakonomics and In the Realm of the Hackers both American documentaries?",
+      "type": "comparison",
+      "supports": [
+        {
+          "doc": "wiki-019.md",
+          "text": "Freakonomics: The Movie is a 2010 American documentary film based on the 2005 book \"Freakonomics: A Rogue Economist Explores the Hidden Side of Everything\" by economist Steven D. Levitt and writer Stephen J. Dubner."
+        },
+        {
+          "doc": "wiki-020.md",
+          "text": "In The Realm of the Hackers is a 2003 Australian documentary directed by Kevin Anderson about the prominent hacker community, centered in Melbourne, Australia in the late 1980s until early 1990."
+        }
+      ]
+    },
+    {
+      "id": "5a84c4135542994c784dda31",
+      "question": "Are Yingkou and Fuding the same level of city?",
+      "type": "comparison",
+      "supports": [
+        {
+          "doc": "wiki-022.md",
+          "text": "Yingkou () is a prefecture-level city of Liaoning province, People's Republic of China."
+        },
+        {
+          "doc": "wiki-023.md",
+          "text": "() is a county-level city in northeastern Ningde prefecture level city, on Fujian's border with Zhejiang province."
+        }
+      ]
+    }
+  ]
+}

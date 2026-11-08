@@ -1,0 +1,394 @@
+{
+  "documents": {
+    "east": {
+      "filename": "east-manual.csv",
+      "title": "East Manual",
+      "mapping": "csv-procedures",
+      "sha256": "3b8a5fd815a5b54cd90698051c2b5729ff34a71df21484c4fafa18babd89902e"
+    },
+    "west": {
+      "filename": "west-manual.json",
+      "title": "West Manual",
+      "mapping": "json-procedures",
+      "sha256": "da6fad156e3d452b086c296815fc8ee713920a41408f187fe4847956207a0940"
+    },
+    "prod": {
+      "filename": "prod-manual.json",
+      "title": "Prod Manual",
+      "mapping": "json-procedures",
+      "sha256": "25df1c2466266abe1cbf3e9da7fd86fb0a31606aa6262e2639c7eb9978b64fa5"
+    },
+    "partner": {
+      "filename": "partner-manual.csv",
+      "title": "Partner Manual",
+      "mapping": "csv-procedures",
+      "sha256": "6ef64e10c74caf9ba41044373806fb9ec5a7fa8968d575f216ceb77ef92e2617"
+    },
+    "store": {
+      "filename": "store-manual.csv",
+      "title": "Store Manual",
+      "mapping": "csv-procedures",
+      "sha256": "0b2b6ebce758bf54107e91eef8d6b475073da1b9b03075545a9de811e671d320"
+    },
+    "market": {
+      "filename": "market-manual.json",
+      "title": "Market Manual",
+      "mapping": "json-procedures",
+      "sha256": "4c675753d6eaee80b151e7911f99c63c352ad4b3f11ae40f5bf37d90c0af8ab2"
+    },
+    "index": {
+      "filename": "index-manual.json",
+      "title": "Index Manual",
+      "mapping": "json-procedures",
+      "sha256": "d0804fb3ba6357dcf9456b5f65c58eb6cff8712c4a6fdf94be236bf72ad254a7"
+    }
+  },
+  "anchors": {
+    "E-release": {
+      "document": "east",
+      "text": "Quarantined chilled pallets are put back into pickable stock only after a quality officer signs two temperature readings fifteen minutes apart."
+    },
+    "E-water": {
+      "document": "east",
+      "text": "A pallet that has touched standing water goes to certified disposal, even when its temperature gauges have stabilized."
+    },
+    "E-probe": {
+      "document": "east",
+      "text": "An accuracy check at the ice point is performed at the start of every Monday shift."
+    },
+    "E-audit": {
+      "document": "east",
+      "text": "The inventory dashboard displays quarantine and disposal totals each hour for supervisors."
+    },
+    "E-door": {
+      "document": "east",
+      "text": "Call the electrical desk when a dock door stays open for over four minutes."
+    },
+    "W-release": {
+      "document": "west",
+      "text": "At West Depot the operations lead may restore chilled pallets to sale after a continuous forty-five-minute logger trace within range."
+    },
+    "W-water": {
+      "document": "west",
+      "text": "When packaging is damp on the outside but its inner liner is dry, isolate the pallet for a packaging inspection."
+    },
+    "W-time": {
+      "document": "west",
+      "text": "Forty-five minutes is the interval for receiving supervisors to update the board during a network outage."
+    },
+    "W-clean": {
+      "document": "west",
+      "text": "Document standing water using a location photograph before the cleaning crew enters."
+    },
+    "W-trace": {
+      "document": "west",
+      "text": "The maintenance office keeps calibration files for eighteen months."
+    },
+    "P-window": {
+      "document": "prod",
+      "text": "生产环境的常规发布每周三二十点到二十二点进行，须由两名值班人员确认。"
+    },
+    "P-egress": {
+      "document": "prod",
+      "text": "确认有未授权的对外数据流时，值班员可立即切断该连接，并在操作完成后十五分钟内通知值班台。"
+    },
+    "P-retain": {
+      "document": "prod",
+      "text": "内部生产操作审计记录保留九十天，按创建日计时。"
+    },
+    "P-test": {
+      "document": "prod",
+      "text": "压测环境的发布可以在周三十六点进行，结果发给压测负责人。"
+    },
+    "P-ingress": {
+      "document": "prod",
+      "text": "入口请求失败时值班员查看延迟指标，连续超时不构成切断对外连接的依据。"
+    },
+    "X-window": {
+      "document": "partner",
+      "text": "合作方网关的常规发布只可在周日凌晨一点到三点执行，由一名合作方负责人确认。"
+    },
+    "X-retain": {
+      "document": "partner",
+      "text": "合作方网关审计记录保留三十天，按创建日计时。"
+    },
+    "X-file": {
+      "document": "partner",
+      "text": "网关配置副本保留九十天，和操作审计记录分开管理。"
+    },
+    "X-notify": {
+      "document": "partner",
+      "text": "合作方值班台在十五分钟内确认收到工单回执。"
+    },
+    "X-alert": {
+      "document": "partner",
+      "text": "联调期间出现外连告警时先记录工单编号，再联系合作方负责人核实。"
+    },
+    "S-return": {
+      "document": "store",
+      "text": "Direct-store shoppers may recover the purchase price on unopened units within thirty days if they provide a receipt."
+    },
+    "S-bulletin": {
+      "document": "store",
+      "text": "When a factory safety bulletin lists the serial number, the store repays the purchase price even if the package is gone or more than thirty days have passed."
+    },
+    "S-gift": {
+      "document": "store",
+      "text": "A store gift voucher can be exchanged for another voucher at the desk, with no cash payment."
+    },
+    "S-repair": {
+      "document": "store",
+      "text": "After thirty days, items with broken seals may be sent for a repair estimate."
+    },
+    "S-admin": {
+      "document": "store",
+      "text": "A till receipt is reprinted only when the cashier can identify the original register number."
+    },
+    "M-return": {
+      "document": "market",
+      "text": "Marketplace orders qualify for reimbursement within fourteen days when the seal is intact and the seller approves the request."
+    },
+    "M-bulletin": {
+      "document": "market",
+      "text": "For a marketplace product listed in a factory safety bulletin, send the serial number to the original seller for collection and repayment."
+    },
+    "M-voucher": {
+      "document": "market",
+      "text": "A marketplace promotional credit expires after thirty days and may be used by the original account holder."
+    },
+    "M-broker": {
+      "document": "market",
+      "text": "Claims about a seller response can be escalated to the marketplace mediation desk after seven days."
+    },
+    "M-admin": {
+      "document": "market",
+      "text": "The marketplace portal can export an invoice for staff who know the original order reference."
+    },
+    "I-release": {
+      "document": "index",
+      "text": "This is a search topic in the training index. It points staff to the local depot receiving instructions."
+    },
+    "I-water": {
+      "document": "index",
+      "text": "The incident tracker counts reports about leaking pallets and posts the monthly total."
+    },
+    "I-outage": {
+      "document": "index",
+      "text": "Use the incident board to locate the ticket. This index collects questions for future training."
+    },
+    "I-retain": {
+      "document": "index",
+      "text": "This index tracks common questions about days in a data retention schedule and reports the number of training requests."
+    },
+    "I-return": {
+      "document": "index",
+      "text": "The customer help team collects the number of inquiries about refunds after packaging has been lost."
+    },
+    "I-bulletin": {
+      "document": "index",
+      "text": "This worksheet lists ticket tags and does not define who makes a payment."
+    },
+    "I-window": {
+      "document": "index",
+      "text": "培训索引记录每个变更窗口的问题次数，实际安排见各自的运维手册。"
+    }
+  },
+  "questions": [
+    {
+      "name": "cold_clearance",
+      "category": "paraphrase",
+      "query": "At East Depot, what needs to happen before a held chilled load can be sold again?",
+      "docs": [
+        "east",
+        "west",
+        "index"
+      ],
+      "expected": [
+        "E-release"
+      ]
+    },
+    {
+      "name": "cold_exception",
+      "category": "exception",
+      "query": "For East Depot explain the ordinary clearance for a rejected chilled load and what happens instead if the cargo sat in a puddle.",
+      "docs": [
+        "east",
+        "west",
+        "index"
+      ],
+      "expected": [
+        "E-release",
+        "E-water"
+      ]
+    },
+    {
+      "name": "cold_compare",
+      "category": "comparison",
+      "query": "Compare East Depot and West Depot. Who can authorize the release of chilled freight, and what record is required at each depot?",
+      "docs": [
+        "east",
+        "west",
+        "index"
+      ],
+      "expected": [
+        "E-release",
+        "W-release"
+      ]
+    },
+    {
+      "name": "cold_damp",
+      "category": "paraphrase",
+      "query": "In the West Depot procedure, rain has reached the outer wrapping but the barrier underneath is intact. What should happen to that stock?",
+      "docs": [
+        "west",
+        "east",
+        "index"
+      ],
+      "expected": [
+        "W-water"
+      ]
+    },
+    {
+      "name": "cold_selected",
+      "category": "scope",
+      "query": "Who restores chilled freight to sale and after what evidence?",
+      "docs": [
+        "west"
+      ],
+      "expected": [
+        "W-release"
+      ]
+    },
+    {
+      "name": "prod_exfil",
+      "category": "paraphrase",
+      "query": "发现资料正在被传给外部未获授权的人，能否立即阻断？事后多久告知谁？",
+      "docs": [
+        "prod",
+        "partner",
+        "index"
+      ],
+      "expected": [
+        "P-egress"
+      ]
+    },
+    {
+      "name": "prod_exception",
+      "category": "exception",
+      "query": "内部线上系统通常何时上线？若发现有人正在向外窃取资料，如何处理以及何时上报？",
+      "docs": [
+        "prod",
+        "partner",
+        "index"
+      ],
+      "expected": [
+        "P-window",
+        "P-egress"
+      ]
+    },
+    {
+      "name": "prod_compare",
+      "category": "comparison",
+      "query": "对照内部生产和合作方网关，各自的常规上线时间与批准人数是什么？",
+      "docs": [
+        "prod",
+        "partner",
+        "index"
+      ],
+      "expected": [
+        "P-window",
+        "X-window"
+      ]
+    },
+    {
+      "name": "audit_conflict",
+      "category": "comparison",
+      "query": "对比两份手册，内部生产与合作方网关的操作留痕分别要存多久？",
+      "docs": [
+        "prod",
+        "partner",
+        "index"
+      ],
+      "expected": [
+        "P-retain",
+        "X-retain"
+      ]
+    },
+    {
+      "name": "audit_scope",
+      "category": "scope",
+      "query": "这份手册规定，操作痕迹何时才能删除？",
+      "docs": [
+        "partner"
+      ],
+      "expected": [
+        "X-retain"
+      ]
+    },
+    {
+      "name": "refund_sealed",
+      "category": "paraphrase",
+      "query": "When does a direct-store buyer of a still-sealed item get their money back, and what proof do they need?",
+      "docs": [
+        "store",
+        "market",
+        "index"
+      ],
+      "expected": [
+        "S-return"
+      ]
+    },
+    {
+      "name": "refund_exception",
+      "category": "exception",
+      "query": "What are the usual direct-store reimbursement requirements, and what happens to an older purchase without a box when its unit has a documented factory hazard?",
+      "docs": [
+        "store",
+        "market",
+        "index"
+      ],
+      "expected": [
+        "S-return",
+        "S-bulletin"
+      ]
+    },
+    {
+      "name": "refund_compare",
+      "category": "comparison",
+      "query": "Compare the standard reimbursement deadlines and proof or approval for direct-store and marketplace purchases.",
+      "docs": [
+        "store",
+        "market",
+        "index"
+      ],
+      "expected": [
+        "S-return",
+        "M-return"
+      ]
+    },
+    {
+      "name": "bulletin_compare",
+      "category": "comparison",
+      "query": "A manufacturer flags a serial number for safety. Compare who makes the repayment for a direct-store purchase and for a marketplace purchase.",
+      "docs": [
+        "store",
+        "market",
+        "index"
+      ],
+      "expected": [
+        "S-bulletin",
+        "M-bulletin"
+      ]
+    },
+    {
+      "name": "refund_unscoped",
+      "category": "paraphrase",
+      "query": "Whom should a web-market buyer contact to arrange a pickup and be repaid after a hazardous batch is identified?",
+      "docs": [],
+      "expected": [
+        "M-bulletin"
+      ]
+    }
+  ],
+  "historical_freeze_sha256": "554d27f80c0c6aa8f49e0f2f4486beb0594e470f637a3606539b38914430d6bb"
+}

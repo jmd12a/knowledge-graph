@@ -1,0 +1,3 @@
+caller_id,caller_name,caller_status,caller_alias,caller_description,callee_id,callee_name,callee_status,team_code,team_name
+receipt-guard,回执安全,active,,校验支付回执的签名。签名不通过时立即隔离商户账户并生成安全告警。,event-ledger,事件总账,active,clearing-sre,清结算运维
+settlement-retry,清算重试,active,,支付异常后按商户幂等键补发结算消息，保证同一交易的结算指令只发一次。,event-ledger,事件总账,active,clearing-sre,清结算运维

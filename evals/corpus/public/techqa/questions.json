@@ -1,0 +1,178 @@
+{
+  "documents": {
+    "swg24017225.txt": {
+      "title": "IBM IA9Z:  WebSphere Message Broker - Job Execution Node - United States"
+    },
+    "swg21988389.txt": {
+      "title": "IBM Map does not complete when using xmllib functions on z/OS - United States"
+    },
+    "swg21320206.txt": {
+      "title": "IBM ERROR: Default DB path is not set, when adding database set on RHEL 5 - United States"
+    },
+    "swg21672071.txt": {
+      "title": "IBM Netcool conf pack command - United States"
+    },
+    "swg21412846.txt": {
+      "title": "IBM Wrong codepoints for non-ASCII characters inserted in UTF-8 database using CLP - United States"
+    },
+    "swg21980860.txt": {
+      "title": "IBM RDz TSO EXIT IKJEESX0 TERMINATES with RC04 - United States"
+    },
+    "swg21982354.txt": {
+      "title": "IBM Server Error Message when running BIRT Reports after upgrading to Atlas 6.0.3.3 - United States"
+    },
+    "swg21690658.txt": {
+      "title": "IBM Setting a big session time-out value in DASH causes session lock-out - United States"
+    },
+    "swg24041394.txt": {
+      "title": "IBM PI50993:Apache HTTPComponents vulnerabilities in WebSphere Application Server (CVE-2012-6153, CVE-2014-3577) - United States"
+    },
+    "swg21412061.txt": {
+      "title": "IBM How to export and import keys from an HSM-enabled IBM WebSphere DataPower SOA Appliance - United States"
+    },
+    "swg21317981.txt": {
+      "title": "IBM 'EJPDB0160E: The sanity checks of the database layer failed' error occurs during startup after successful database transfer - United States"
+    },
+    "swg1PI34677.txt": {
+      "title": "IBM PI34677: MBEANSTARTER LOADEXTENSIONS FAILED TO LOAD EXTENSION - United States"
+    }
+  },
+  "questions": [
+    {
+      "id": "DEV_Q121",
+      "question": "Job Execution Node for IIB V10\n\nI'm looking for a way in IIB V10 to execute/invoke scripts or jobs on different operating systems like windows or System i (AS400). After a little research i found out that there is a Job Execution Node for the IIB V9, which seems to cover the requirements. Is there a Job Execution Node for the IIB V10, or an other appropriate node for the requirements?\n",
+      "type": "answerable",
+      "supports": [
+        {
+          "doc": "swg24017225.txt",
+          "text": "The JobExecutionNode, a Java-based plugin, allows you to execute operating system commands, and invoke jobs in the form of batch/shell scripts from within the message flow. The jobs can be specified on the node property or as a part of the input message."
+        }
+      ]
+    },
+    {
+      "id": "DEV_Q245",
+      "question": "Problem with XMLLIB->VALIDATEEX during XML Validation\n\nI am using XMLLIB VALIDATEXX in WTX 8.3.0.5 for XML Validations and it is running fine on Windows.\nWhen deployed same code on zos map is executing in loop(output card having rule with xmllib method call is not completing) \nPlease suggest.Thanks",
+      "type": "answerable",
+      "supports": [
+        {
+          "doc": "swg21988389.txt",
+          "text": "Add the XML toolkit xml4c library directory to the LIBPATH environment variable.\n\nExample:\n\nexport LIBPATH=$LIBPATH:/usr/lpp/ixm/xslt4c-1_11/lib/"
+        }
+      ]
+    },
+    {
+      "id": "DEV_Q088",
+      "question": "CQWEB  can\\'t retrieve repository dropdown list options in RedHat Linux, how to deal with it ?\n\nI setup a cq demo env in redhat linux with oracle database, CQ 7.1.2, LRKS 8.1.3,  Linux CQ client can login CQ as the following picture 1, but CQWEB login page can't retrieve the repository dropdown list options as the following picture 2.  I used cqreg to register CQ database:\n\ncqreg add_dbset -v ORACLE -s 192.168.0.84 -d ESBDB -u cqadmin -p cqadmin -dbset CQ_DEMO_ORACLE -co LOB_TYPE=CLOB -force\n\nWhat's matter for this happen? ",
+      "type": "answerable",
+      "supports": [
+        {
+          "doc": "swg21320206.txt",
+          "text": "Normally, at the end of a ClearQuest installation on UNIX® based platforms, the cqreg initialize command runs automatically. The command creates the registry structure for database sets. During the installation, the command did not run successfully."
+        }
+      ]
+    },
+    {
+      "id": "DEV_Q206",
+      "question": "Why does nco_confpack -export fail with the message \"Tool in menu but not found\"?\n\n\n\nI tried to export OMNIbus configuration using nco_confpack command and I get the following message:\n\nTool in menu but not found, menu: AlertsMenu, tool: Close\n\nI've also tried using it with -list command and I get the same error.\n\nWhy is this happening?",
+      "type": "answerable",
+      "supports": [
+        {
+          "doc": "swg21672071.txt",
+          "text": "The menu AlertsMenu has a tool in it called CLEAR_LWY, however the tool no longer exists."
+        }
+      ]
+    },
+    {
+      "id": "DEV_Q262",
+      "question": "Table \"\".\"\" could not be found\n\n\n\nWhen doing a table mapping with DB2 as source, selecting a table which contains special characters on column comments like:\n\nCOMMENT ON COLUMN .. IS 'Test comment ‘1’ complete';\n\nMapping fails with following error message: Table . could not be found in the database.  What's the reason for the error?",
+      "type": "answerable",
+      "supports": [
+        {
+          "doc": "swg21412846.txt",
+          "text": "During an insert of data using CLP characters, they do not go through codepage conversion.\nIf operating system and database codepage both are UTF-8, but the data to be inserted is not Unicode, then data in the database might have incorrect codepoints (not-Unicode) and the above error will be a result during data retrieval."
+        }
+      ]
+    },
+    {
+      "id": "DEV_Q254",
+      "question": "Why do I receive the message, \"IKJ79154I INSTALLATION EXIT IKJEESX0 REQUESTED TERMINATION. \" for a TSO SEND command?\n\nIf you issue the TSO SEND command in a batch job and receive this message:\n\nIKJ79154I INSTALLATION EXIT IKJEESX0 REQUESTED TERMINATION.\nIKJ79154I REASON CODE X'00000004'.",
+      "type": "answerable",
+      "supports": [
+        {
+          "doc": "swg21980860.txt",
+          "text": "coded a facility class for the FEK.CMD.SEND and FEK.CMD.SEND.CLEAR."
+        }
+      ]
+    },
+    {
+      "id": "DEV_Q120",
+      "question": "Why do we get server error message when running BIRT reports after upgrading to Atlas 6.0.3.3?\n\nWhy do we get server error message when running BIRT reports after upgrading to Atlas 6.0.3.3? ",
+      "type": "answerable",
+      "supports": [
+        {
+          "doc": "swg21982354.txt",
+          "text": "This happens when the BIRT Reports is running in Standalone mode and happens due to a new configuration - report.standalone.userid"
+        }
+      ]
+    },
+    {
+      "id": "DEV_Q303",
+      "question": "Why are the users unable to login to Web GUI 8.1 after I modify timeout to 2147483647 in security.xml file ?\n\n\n\nI followed the Web GUI 8.1 reference guide here to switching off the session timeout\n\nhttp://www-01.ibm.com/support/knowledgecenter/SSSHTQ_8.1.0/com.ibm.netcool_OMNIbus.doc_8.1.0/webtop/wip/task/web_adm_settimeout.html\n\nAfter I edited /config/cells/JazzSMNode01Cell/security.xml file, modified timeout setting to 2147483647, users are not able to login anymore.",
+      "type": "answerable",
+      "supports": [
+        {
+          "doc": "swg21690658.txt",
+          "text": "1. On DASH server, navigate to <JazzSM Home>/profile/config/cells/JazzSMNode01Cell/applications/isc.ear/deployments/isc/isclite.war/WEB-INF\n\n\n2. Take a backup of consoleProperties.xml\n\n\n3. Open consoleProperties.xml in edit-mode.\n\n\n4. Search for \"LTPAFIX\" and change the value from \"true\" to \"false\"."
+        }
+      ]
+    },
+    {
+      "id": "DEV_Q087",
+      "question": "Is WMB v7 compatible with MQ v8?\n\nThis Q&A is abstracted from a PMR\nPlanning a tiered upgrade, MQ then broker.",
+      "type": "unanswerable",
+      "supports": []
+    },
+    {
+      "id": "DEV_Q101",
+      "question": "Help with Security Bulletin: WMB and IIB Toolkit cannot connect to a remote WMB broker or IIB node with a TLS-compliant cipher (CVE-2015-0118)\n\nI need to understand details regarding Security Bulletin: WebSphere Message Broker Toolkit and IBM Integration Toolkit cannot connect to a remote WebSphere Message Broker broker or IBM Integration Bus node with a TLS-compliant cipher (CVE-2015-0118). Where can I find this information?",
+      "type": "unanswerable",
+      "supports": []
+    },
+    {
+      "id": "DEV_Q097",
+      "question": "Security Bulletin: MQ Explorer directory created with owner '555' on Linux x86-64 vulnerability affects IBM MQ (CVE-2016-6089)\n\nI need to understand details regarding Security Bulletin: MQ Explorer directory created with owner '555' on Linux x86-64 vulnerability affects IBM MQ (CVE-2016-6089). Where can I find this information?",
+      "type": "unanswerable",
+      "supports": []
+    },
+    {
+      "id": "DEV_Q065",
+      "question": "How do I enable my Applications to show up in the App Health view for the WAS agent?\n\nHow do I enable my Applications to show up in the App Health view for the WAS agent?",
+      "type": "unanswerable",
+      "supports": []
+    },
+    {
+      "id": "DEV_Q222",
+      "question": "Help with Action required for IIB H.E. V9 & WMB H.E. V8 for security vulnerabilities in Red Hat Linux\n\n\n\nI need to understand details regarding Action required for IBM Integration Bus Hypervisor Edition V9.0 and WebSphere Message Broker Hypervisor Edition V8.0 for security vulnerabilities in Red Hat Linux.\n\nThis is related to CVEID: CVE-2017-16546\n\nWhere can I find this information?",
+      "type": "unanswerable",
+      "supports": []
+    },
+    {
+      "id": "DEV_Q078",
+      "question": "WebSphere MQ Hypervisor Edition requires customer action for the GNU C library (glibc) vulnerabilities (CVE-2015-1472)\n\nWhere can I find additional information on what action is required?",
+      "type": "unanswerable",
+      "supports": []
+    },
+    {
+      "id": "DEV_Q169",
+      "question": "Migrating to JRules v7.1\n\nHow do I migrate to WebSphere ILOG JRules v7.1? ",
+      "type": "unanswerable",
+      "supports": []
+    },
+    {
+      "id": "DEV_Q248",
+      "question": "missing VM manager data\n\n\n\nwe are missing VM manager data for 13 servers. error: invalid credentials - suspended. there are no recent changes done for the ID/pwd.\n\nplease suggest the action need to be taken.\n1039699\n",
+      "type": "unanswerable",
+      "supports": []
+    }
+  ]
+}

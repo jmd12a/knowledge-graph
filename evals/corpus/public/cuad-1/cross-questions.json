@@ -1,0 +1,33 @@
+{
+  "source_id": "USASYNTHETICFUELCORP_10_21_2010-EX-10.10-STRATEGIC ALLIANCE AGREEMENT",
+  "title": "USASYNTHETICFUELCORP_10_21_2010-EX-10.10-STRATEGIC ALLIANCE AGREEMENT",
+  "format": "txt",
+  "questions": [
+    {
+      "id": "Revenue/Profit Sharing",
+      "question": "Highlight the parts (if any) of this contract related to \"Revenue/Profit Sharing\" that should be reviewed by a lawyer. Details: Is one party required to share revenue or profit with the counterparty for any technology, goods, or services?",
+      "spans": [
+        [
+          6676,
+          7070
+        ],
+        [
+          7087,
+          7352
+        ],
+        [
+          8753,
+          9052
+        ]
+      ]
+    }
+  ],
+  "dataset": "cuad",
+  "selected_length_band": [
+    40000,
+    60000
+  ],
+  "seed": 61108,
+  "source_sha256": "0fb8cd828f5c763b777f5eb8d80e5f92c46dbcd65a1cc5b3b911aae1c4ab9974",
+  "supplement": "cross-window"
+}
