@@ -17,3 +17,5 @@
 
 # Frozen evaluation inputs retain their original bytes and line endings.
 evals/corpus/** -text
+evals/corpus/construction-terra-public-store/00-store-registry.md whitespace=-blank-at-eof
+evals/corpus/construction-terra-public-store/01-checkout-observation.md whitespace=-blank-at-eof

@@ -1,0 +1,32 @@
+Section 1. Scope and evidence clock
+This runbook governs vaccines held between two and eight degrees Celsius at the Bayline distribution depot. Start the incident clock at the first verified sensor reading outside that band. A missing reading alone does not start an excursion clock.
+
+Section 2. Quarantine release
+A quarantined vaccine tote may be released only after the duty pharmacist completes the release criteria in Section 7. A carrier status of delivered is not release evidence. Dry-ice sampling pallets and ambient training stock are outside this release pathway.
+
+Section 3. Logger handoff
+When a carrier logger signature fails verification, use the sealed-copy reconciliation steps in Section 9. Failure of the signature is not proof of a temperature excursion. Leave the tote quarantined until a valid manual reconciliation is recorded.
+
+Section 4. Evidence retention
+Retain the original temperature trace, the carrier signature and the review decision together for the time stated in the regional quality schedule. Store the local time zone with the first alarm. Changing a tote label does not reset a trace or shorten retention.
+
+Section 5. Escalation packet
+If two customer deliveries are affected, the shift supervisor must open an incident and use the regulator routing matrix in Section 12. The depot copy of this runbook contains no regulator routing matrix. Record a pending route and keep the original evidence intact.
+
+Section 6. Witness independence
+The person who first packed a shipment cannot sign as its independent witness. A shift supervisor can coordinate staff without becoming a witness. Capture the witness staff ID and sign-off time in the evidence bundle before moving the tote.
+
+Section 7. Refrigerated release criteria
+Release requires a calibrated trace with no verified exposure above eight degrees Celsius for more than thirty cumulative minutes. The duty pharmacist must sign the trace and an independent witness must countersign. A passing carrier scan does not meet either sign-off requirement.
+
+Section 7.1. Ambient training stock
+The training supervisor may release simulated ambient stock after a single barcode check. No pharmacist approval or independent countersignature is required for training stock. This rule does not apply to refrigerated vaccine totes, quarantined shipment units or real orders.
+
+Section 8. Repacking controls
+If the seal is broken, move the tote to a new quarantine bay and record both bay IDs. An intact inner carton cannot substitute for a missing carrier seal. A repack does not grant release or remove a previously recorded excursion.
+
+Section 9. Sealed-copy reconciliation
+Retrieve the depot copy and match the tote ID, the dispatch timestamp and the seal serial against the receiving log. Obtain signatures from two distinct dispatch staff before closing a failed-signature handoff. Do not discard the failed carrier file.
+
+Section 9.1. Export job reconciliation
+For nightly billing exports only, compare the file checksum and batch number. One billing analyst may close an export mismatch. This approval applies to billing files and excludes carrier logger failures, regulated shipment evidence and release decisions.

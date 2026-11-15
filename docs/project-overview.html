@@ -106,7 +106,7 @@
 </head>
 <body>
 <a class="skip" href="#main">跳到正文</a>
-<header class="mast"><div class="wrap"><a class="brand" href="#main">Knowledge<span> / </span>Graph</a><nav aria-label="章节导航"><a href="#architecture">架构</a><a href="#flows">流程</a><a href="#iteration">本轮设计</a><a href="#results">评测</a><a href="#start">开始使用</a></nav><span class="edition">PROJECT NOTES · 2026.11</span></div></header>
+<header class="mast"><div class="wrap"><a class="brand" href="#main">Knowledge<span> / </span>Graph</a><nav aria-label="章节导航"><a href="#architecture">架构</a><a href="#flows">流程</a><a href="#iteration">前次迭代</a><a href="#results">评测</a><a href="#start">开始使用</a></nav><span class="edition">PROJECT NOTES · 2026.11</span></div></header>
 <main class="wrap" id="main">
 <section class="hero" aria-labelledby="title">
   <div>
@@ -114,15 +114,15 @@
     <h1 id="title">从文档构建<br><em>可追溯的图知识</em></h1>
     <p class="lead">把合同条款、技术说明和业务资料组织成实体与关系。查询可以沿图定位，也可以直接找原文，每条采用的知识都能回查来源。</p>
     <aside class="release-note" aria-labelledby="release-title">
-      <h2 id="release-title">本轮迭代 <time datetime="2026-11-08">2026-11-08</time></h2>
+      <h2 id="release-title">本轮迭代 <time datetime="2026-11-15">2026-11-15</time></h2>
       <ul>
-        <li><strong>构建</strong> 保留全文抽取，长文按标题和段落分窗，针对证据缺口补抽。</li>
-        <li><strong>检索</strong> 沿用融合召回，用核验过的摘录做紧凑重排，按需补同源段落。</li>
-        <li><strong>发布</strong> 按来源差量更新，写入中断后可按原计划恢复。</li>
+        <li><strong>长文构建</strong> 跨窗候选共用关系原文和端点身份依据，结构化构建可配置额外复查预算。</li>
+        <li><strong>连续导入</strong> 模型可关键词或语义检索已发布实体和原文，判断复用或新建。</li>
+        <li><strong>构建评测</strong> 固定基础草稿和登记图，退货与工资关账的关系召回从 6/13 到 13/13。</li>
       </ul>
       <div class="links">
-        <a href="https://github.com/jmd12a/knowledge-graph/blob/HEAD/docs/02-项目设计/迭代优化设计-2026-11-08.md">迭代优化设计</a>
-        <a href="https://github.com/jmd12a/knowledge-graph/blob/HEAD/docs/03-使用与验证/评测说明与结果.md">评测说明与结果</a>
+        <a href="https://github.com/jmd12a/knowledge-graph/blob/HEAD/docs/02-项目设计/迭代优化设计-2026-11-15.md">本轮迭代设计</a>
+        <a href="https://github.com/jmd12a/knowledge-graph/blob/HEAD/docs/03-使用与验证/评测说明与结果.md#6-构建复查与连续导入">构建对照</a>
       </div>
     </aside>
     <div class="links"><a href="https://github.com/jmd12a/knowledge-graph">查看 GitHub 仓库 ↗</a><a href="#architecture">查看读写架构</a><a href="#results">查看长合同成绩</a></div>

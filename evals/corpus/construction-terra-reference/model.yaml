@@ -1,0 +1,20 @@
+name: Cold-chain excursion runbook
+node_types:
+  Clause:
+    identity:
+      namespace: clause
+      fields:
+        - heading
+      scope: document
+    properties:
+      heading:
+        type: string
+        required: true
+      definition:
+        type: string
+        required: true
+        source_mode: literal
+    atomic_groups:
+      - name: full_statement
+        fields:
+          - definition

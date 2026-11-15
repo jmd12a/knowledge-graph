@@ -1,0 +1,501 @@
+{
+  "schema_version": 1,
+  "business_model": "../quality-labeled/model.yaml",
+  "scope": "Four fictional retail imports inspired by public Astronomy Shop. Score stable identities, directional calls, evidence, late endpoint aliases and withdrawal.",
+  "window_chars": 1600,
+  "imports": [
+    {
+      "source": "00-store-registry.md",
+      "service_app_ids": [
+        "store-checkout-live",
+        "store-checkout-test",
+        "store-cart-live",
+        "store-payment-live",
+        "store-payment-test",
+        "store-shipping-live",
+        "store-email-live",
+        "store-order-ledger",
+        "store-order-replica"
+      ],
+      "calls": [],
+      "forbidden_calls": [
+        [
+          "store-cart-live",
+          "store-checkout-live"
+        ],
+        [
+          "store-payment-live",
+          "store-checkout-live"
+        ],
+        [
+          "store-checkout-live",
+          "store-payment-test"
+        ],
+        [
+          "store-checkout-test",
+          "store-payment-live"
+        ],
+        [
+          "store-shipping-live",
+          "store-checkout-live"
+        ],
+        [
+          "store-order-replica",
+          "store-order-ledger"
+        ]
+      ]
+    },
+    {
+      "source": "01-checkout-observation.md",
+      "service_app_ids": [
+        "store-checkout-live",
+        "store-checkout-test",
+        "store-cart-live",
+        "store-payment-live",
+        "store-payment-test",
+        "store-shipping-live",
+        "store-email-live",
+        "store-order-ledger",
+        "store-order-replica"
+      ],
+      "calls": [
+        {
+          "source_app_id": "store-checkout-live",
+          "target_app_id": "store-cart-live",
+          "contribution_sources": [
+            "01-checkout-observation.md"
+          ],
+          "evidence": {
+            "01-checkout-observation.md": "Checkout Live (app_id store-checkout-live) calls Cart Live (app_id store-cart-live) to read the basket for the accepted order."
+          }
+        },
+        {
+          "source_app_id": "store-checkout-live",
+          "target_app_id": "store-payment-live",
+          "contribution_sources": [
+            "01-checkout-observation.md"
+          ],
+          "evidence": {
+            "01-checkout-observation.md": "Checkout Live (app_id store-checkout-live) calls Payment Live (app_id store-payment-live) to authorize the accepted order."
+          }
+        },
+        {
+          "source_app_id": "store-checkout-live",
+          "target_app_id": "store-email-live",
+          "contribution_sources": [
+            "01-checkout-observation.md"
+          ],
+          "evidence": {
+            "01-checkout-observation.md": "Checkout Live (app_id store-checkout-live) calls Email Live (app_id store-email-live) to send the order confirmation."
+          }
+        }
+      ],
+      "forbidden_calls": [
+        [
+          "store-cart-live",
+          "store-checkout-live"
+        ],
+        [
+          "store-payment-live",
+          "store-checkout-live"
+        ],
+        [
+          "store-checkout-live",
+          "store-payment-test"
+        ],
+        [
+          "store-checkout-test",
+          "store-payment-live"
+        ],
+        [
+          "store-shipping-live",
+          "store-checkout-live"
+        ],
+        [
+          "store-order-replica",
+          "store-order-ledger"
+        ]
+      ]
+    },
+    {
+      "source": "02-shipping-aliases.md",
+      "service_app_ids": [
+        "store-checkout-live",
+        "store-checkout-test",
+        "store-cart-live",
+        "store-payment-live",
+        "store-payment-test",
+        "store-shipping-live",
+        "store-email-live",
+        "store-order-ledger",
+        "store-order-replica"
+      ],
+      "calls": [
+        {
+          "source_app_id": "store-checkout-live",
+          "target_app_id": "store-cart-live",
+          "contribution_sources": [
+            "01-checkout-observation.md"
+          ],
+          "evidence": {
+            "01-checkout-observation.md": "Checkout Live (app_id store-checkout-live) calls Cart Live (app_id store-cart-live) to read the basket for the accepted order."
+          }
+        },
+        {
+          "source_app_id": "store-checkout-live",
+          "target_app_id": "store-payment-live",
+          "contribution_sources": [
+            "01-checkout-observation.md"
+          ],
+          "evidence": {
+            "01-checkout-observation.md": "Checkout Live (app_id store-checkout-live) calls Payment Live (app_id store-payment-live) to authorize the accepted order."
+          }
+        },
+        {
+          "source_app_id": "store-checkout-live",
+          "target_app_id": "store-email-live",
+          "contribution_sources": [
+            "01-checkout-observation.md"
+          ],
+          "evidence": {
+            "01-checkout-observation.md": "Checkout Live (app_id store-checkout-live) calls Email Live (app_id store-email-live) to send the order confirmation."
+          }
+        },
+        {
+          "source_app_id": "store-checkout-live",
+          "target_app_id": "store-shipping-live",
+          "contribution_sources": [
+            "02-shipping-aliases.md"
+          ],
+          "evidence": {
+            "02-shipping-aliases.md": "Night Counter calls Parcel Desk to request the delivery quote for the held order."
+          }
+        }
+      ],
+      "forbidden_calls": [
+        [
+          "store-cart-live",
+          "store-checkout-live"
+        ],
+        [
+          "store-payment-live",
+          "store-checkout-live"
+        ],
+        [
+          "store-checkout-live",
+          "store-payment-test"
+        ],
+        [
+          "store-checkout-test",
+          "store-payment-live"
+        ],
+        [
+          "store-shipping-live",
+          "store-checkout-live"
+        ],
+        [
+          "store-order-replica",
+          "store-order-ledger"
+        ]
+      ]
+    },
+    {
+      "source": "03-order-recovery.md",
+      "service_app_ids": [
+        "store-checkout-live",
+        "store-checkout-test",
+        "store-cart-live",
+        "store-payment-live",
+        "store-payment-test",
+        "store-shipping-live",
+        "store-email-live",
+        "store-order-ledger",
+        "store-order-replica"
+      ],
+      "calls": [
+        {
+          "source_app_id": "store-checkout-live",
+          "target_app_id": "store-cart-live",
+          "contribution_sources": [
+            "01-checkout-observation.md"
+          ],
+          "evidence": {
+            "01-checkout-observation.md": "Checkout Live (app_id store-checkout-live) calls Cart Live (app_id store-cart-live) to read the basket for the accepted order."
+          }
+        },
+        {
+          "source_app_id": "store-checkout-live",
+          "target_app_id": "store-payment-live",
+          "contribution_sources": [
+            "01-checkout-observation.md",
+            "03-order-recovery.md"
+          ],
+          "evidence": {
+            "01-checkout-observation.md": "Checkout Live (app_id store-checkout-live) calls Payment Live (app_id store-payment-live) to authorize the accepted order.",
+            "03-order-recovery.md": "Checkout Live (app_id store-checkout-live) calls Payment Live (app_id store-payment-live) to authorize the recovered order."
+          }
+        },
+        {
+          "source_app_id": "store-checkout-live",
+          "target_app_id": "store-email-live",
+          "contribution_sources": [
+            "01-checkout-observation.md"
+          ],
+          "evidence": {
+            "01-checkout-observation.md": "Checkout Live (app_id store-checkout-live) calls Email Live (app_id store-email-live) to send the order confirmation."
+          }
+        },
+        {
+          "source_app_id": "store-checkout-live",
+          "target_app_id": "store-shipping-live",
+          "contribution_sources": [
+            "02-shipping-aliases.md"
+          ],
+          "evidence": {
+            "02-shipping-aliases.md": "Night Counter calls Parcel Desk to request the delivery quote for the held order."
+          }
+        },
+        {
+          "source_app_id": "store-checkout-live",
+          "target_app_id": "store-order-ledger",
+          "contribution_sources": [
+            "03-order-recovery.md"
+          ],
+          "evidence": {
+            "03-order-recovery.md": "Checkout Live (app_id store-checkout-live) calls Order Ledger (app_id store-order-ledger) to record the recovered order."
+          }
+        },
+        {
+          "source_app_id": "store-order-ledger",
+          "target_app_id": "store-order-replica",
+          "contribution_sources": [
+            "03-order-recovery.md"
+          ],
+          "evidence": {
+            "03-order-recovery.md": "Order Ledger (app_id store-order-ledger) calls Order Replica (app_id store-order-replica) to verify the recovery copy."
+          }
+        }
+      ],
+      "forbidden_calls": [
+        [
+          "store-cart-live",
+          "store-checkout-live"
+        ],
+        [
+          "store-payment-live",
+          "store-checkout-live"
+        ],
+        [
+          "store-checkout-live",
+          "store-payment-test"
+        ],
+        [
+          "store-checkout-test",
+          "store-payment-live"
+        ],
+        [
+          "store-shipping-live",
+          "store-checkout-live"
+        ],
+        [
+          "store-order-replica",
+          "store-order-ledger"
+        ]
+      ]
+    }
+  ],
+  "repeat": {
+    "source": "03-order-recovery.md",
+    "service_app_ids": [
+      "store-checkout-live",
+      "store-checkout-test",
+      "store-cart-live",
+      "store-payment-live",
+      "store-payment-test",
+      "store-shipping-live",
+      "store-email-live",
+      "store-order-ledger",
+      "store-order-replica"
+    ],
+    "calls": [
+      {
+        "source_app_id": "store-checkout-live",
+        "target_app_id": "store-cart-live",
+        "contribution_sources": [
+          "01-checkout-observation.md"
+        ],
+        "evidence": {
+          "01-checkout-observation.md": "Checkout Live (app_id store-checkout-live) calls Cart Live (app_id store-cart-live) to read the basket for the accepted order."
+        }
+      },
+      {
+        "source_app_id": "store-checkout-live",
+        "target_app_id": "store-payment-live",
+        "contribution_sources": [
+          "01-checkout-observation.md",
+          "03-order-recovery.md"
+        ],
+        "evidence": {
+          "01-checkout-observation.md": "Checkout Live (app_id store-checkout-live) calls Payment Live (app_id store-payment-live) to authorize the accepted order.",
+          "03-order-recovery.md": "Checkout Live (app_id store-checkout-live) calls Payment Live (app_id store-payment-live) to authorize the recovered order."
+        }
+      },
+      {
+        "source_app_id": "store-checkout-live",
+        "target_app_id": "store-email-live",
+        "contribution_sources": [
+          "01-checkout-observation.md"
+        ],
+        "evidence": {
+          "01-checkout-observation.md": "Checkout Live (app_id store-checkout-live) calls Email Live (app_id store-email-live) to send the order confirmation."
+        }
+      },
+      {
+        "source_app_id": "store-checkout-live",
+        "target_app_id": "store-shipping-live",
+        "contribution_sources": [
+          "02-shipping-aliases.md"
+        ],
+        "evidence": {
+          "02-shipping-aliases.md": "Night Counter calls Parcel Desk to request the delivery quote for the held order."
+        }
+      },
+      {
+        "source_app_id": "store-checkout-live",
+        "target_app_id": "store-order-ledger",
+        "contribution_sources": [
+          "03-order-recovery.md"
+        ],
+        "evidence": {
+          "03-order-recovery.md": "Checkout Live (app_id store-checkout-live) calls Order Ledger (app_id store-order-ledger) to record the recovered order."
+        }
+      },
+      {
+        "source_app_id": "store-order-ledger",
+        "target_app_id": "store-order-replica",
+        "contribution_sources": [
+          "03-order-recovery.md"
+        ],
+        "evidence": {
+          "03-order-recovery.md": "Order Ledger (app_id store-order-ledger) calls Order Replica (app_id store-order-replica) to verify the recovery copy."
+        }
+      }
+    ],
+    "forbidden_calls": [
+      [
+        "store-cart-live",
+        "store-checkout-live"
+      ],
+      [
+        "store-payment-live",
+        "store-checkout-live"
+      ],
+      [
+        "store-checkout-live",
+        "store-payment-test"
+      ],
+      [
+        "store-checkout-test",
+        "store-payment-live"
+      ],
+      [
+        "store-shipping-live",
+        "store-checkout-live"
+      ],
+      [
+        "store-order-replica",
+        "store-order-ledger"
+      ]
+    ]
+  },
+  "withdraw": {
+    "source": "01-checkout-observation.md",
+    "service_app_ids": [
+      "store-checkout-live",
+      "store-checkout-test",
+      "store-cart-live",
+      "store-payment-live",
+      "store-payment-test",
+      "store-shipping-live",
+      "store-email-live",
+      "store-order-ledger",
+      "store-order-replica"
+    ],
+    "calls": [
+      {
+        "source_app_id": "store-checkout-live",
+        "target_app_id": "store-payment-live",
+        "contribution_sources": [
+          "03-order-recovery.md"
+        ],
+        "evidence": {
+          "03-order-recovery.md": "Checkout Live (app_id store-checkout-live) calls Payment Live (app_id store-payment-live) to authorize the recovered order."
+        }
+      },
+      {
+        "source_app_id": "store-checkout-live",
+        "target_app_id": "store-shipping-live",
+        "contribution_sources": [
+          "02-shipping-aliases.md"
+        ],
+        "evidence": {
+          "02-shipping-aliases.md": "Night Counter calls Parcel Desk to request the delivery quote for the held order."
+        }
+      },
+      {
+        "source_app_id": "store-checkout-live",
+        "target_app_id": "store-order-ledger",
+        "contribution_sources": [
+          "03-order-recovery.md"
+        ],
+        "evidence": {
+          "03-order-recovery.md": "Checkout Live (app_id store-checkout-live) calls Order Ledger (app_id store-order-ledger) to record the recovered order."
+        }
+      },
+      {
+        "source_app_id": "store-order-ledger",
+        "target_app_id": "store-order-replica",
+        "contribution_sources": [
+          "03-order-recovery.md"
+        ],
+        "evidence": {
+          "03-order-recovery.md": "Order Ledger (app_id store-order-ledger) calls Order Replica (app_id store-order-replica) to verify the recovery copy."
+        }
+      }
+    ],
+    "forbidden_calls": [
+      [
+        "store-cart-live",
+        "store-checkout-live"
+      ],
+      [
+        "store-payment-live",
+        "store-checkout-live"
+      ],
+      [
+        "store-checkout-live",
+        "store-payment-test"
+      ],
+      [
+        "store-checkout-test",
+        "store-payment-live"
+      ],
+      [
+        "store-shipping-live",
+        "store-checkout-live"
+      ],
+      [
+        "store-order-replica",
+        "store-order-ledger"
+      ],
+      [
+        "store-checkout-live",
+        "store-cart-live"
+      ],
+      [
+        "store-checkout-live",
+        "store-email-live"
+      ]
+    ]
+  }
+}

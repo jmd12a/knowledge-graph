@@ -26,3 +26,7 @@
 ## 优化后的对照摘要
 
 [optimization-summary.json](optimization-summary.json) 从已有运行结果提取逐题计分、构建覆盖和模型调用数。包含当前版代表性 25/26、同模型重建、固定图检索、分批构建和实体补段回放。合同以仓库内原文与固定问题的 SHA-256 绑定。复跑条件和本地材料见[评测复现清单](../README.md#从仓库能复现什么)。
+
+## 构建复查与连续导入
+
+[construction-review-summary.json](construction-review-summary.json)记录 GPT‑6.1 Terra 的构建复查开关和预算对照、历史八组连续导入、全篇审查与故障注入。摘要保留计数、来源报告索引和冻结语料 SHA-256，去掉本机配置、运行日志和模型原始请求。索引内 `evals/records/` 路径用于定位本机原始档案。[评分解释和结果](../../docs/03-使用与验证/评测说明与结果.md#6-构建复查与连续导入) · [复跑入口](../README.md#构建复查对照)

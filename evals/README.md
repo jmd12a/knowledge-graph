@@ -196,6 +196,68 @@ KG_EXTRACTION_SCOPE_POLICY=structure .venv/bin/python -B -m evals.long_contract 
 
 上面的旧基线为内部冻结归档。对外展示的首版同为 23/26，对应[已发布的原始运行](published/README.md)。代表性成绩、完整版本对照及公开数据集结果统一见[评测说明与结果](../docs/03-使用与验证/评测说明与结果.md)。各轮保留自己的模型、快照与预算。共享证据组装保存在 `experiment/evidence-assembly` 分支的 `e7d25fa`。它在同模型的 59 组配对中总体持平，混合查询耗时下降，同时出现公开长文覆盖回归。
 
+## 构建复查对照
+
+已完成的 GPT‑6.1 Terra 对照见[构建复查与连续导入](../docs/03-使用与验证/评测说明与结果.md#6-构建复查与连续导入)及[发布摘要](published/construction-review-summary.json)。
+
+构建评测结果的 `metrics` 使用同一套计数。实体和有方向的关系按预期身份或源目标匹配，
+报告正确数、预测数、预期数、精确率和召回率。已标注的原文片段单独计证据覆盖率。
+多轮用例还统计关系来源集合和上一轮实体 ID 的保留率。分母为 0 时比率记为 `null`。
+
+冷链按标注引用计算关系精确率和召回率，并分别检查标注正文的实质内容覆盖与整节原文回读。
+每节须有证据支持整段正文回读，正文内容覆盖允许从多条事实取证，并忽略句间空白。
+单条声明包含整段正文仍保留在历史指标 `body_hits` 中，用于比较章节和规则的粒度。
+冷链的评测标签以章节和引用为单位，独立规则节点的精确率和召回率暂记为 `null`。
+
+```bash
+.venv/bin/python -B -m evals.quality_construction_loop
+.venv/bin/python -B -m evals.quality_incremental_construction
+```
+
+离线回归固定首轮响应，分别验证付款制度的同窗漏项和跨窗证据，以及服务目录后续导入的端点复用、歧义处理、检查点恢复和来源撤回。三轮服务导入还验证了复合身份冲突反馈、纠正后的关系，以及后续导入按简称查到带原文的旧节点。离线结果反映机制和校验规则的效果。
+
+两组真实模型对照各自固定窗口和首抽响应。连续导入对照另外共用首批资料的已发布实体与来源快照。报告分别记录条款覆盖、跨窗引用、错误引用、实际 HTTP 请求数和耗时：
+
+```bash
+.venv/bin/python -B -m evals.quality_construction_loop --live \
+  --config /absolute/path/to/model.yaml --output /absolute/path/to/payment-report.json
+.venv/bin/python -B -m evals.quality_incremental_construction --live \
+  --config /absolute/path/to/model.yaml --output /absolute/path/to/import-report.json
+```
+
+### 复杂构建对照
+
+冷链放行手册评测完整条款正文、分段累计覆盖、跨窗目标与关键证据，并保留缺失引用检查。
+四轮服务图评测共用首批已发布实体和每批首抽响应，在两个随机知识库范围内逐次写入 Neo4j，
+核对实体 ID、关系方向、精确来源、重复写入和撤回来源后的投影。运行需要可用的语言模型和
+已初始化的 Neo4j。该入口直接验证构建、对齐及图适配器，可独立于 API 和 Worker 调度运行。
+
+```bash
+.venv/bin/python -B -m evals.quality_terra_construction references --config /path/to/model.yaml --output /path/to/references.json
+.venv/bin/python -B -m evals.quality_terra_construction sequence --config /path/to/model.yaml --output /path/to/sequence.json
+```
+
+长文档连续导入用例可用 `sequence --corpus construction-terra-long-payments` 或
+`sequence --corpus construction-terra-long-logistics` 或
+`sequence --corpus construction-terra-public-store` 复跑，配置和输出参数与上面的命令相同。
+每组四份独立文档。报告逐轮记录来源长度、窗口、证据与旧实体 ID，并核对重复投影和撤回后的图。
+上述命令默认比较关闭与每份最多 12 次请求，使用 `--loop-calls 24` 可改变实验组预算。每次在线复跑都只在该次对照内共享首抽。
+在候选草稿相同的条件下，两组为两端都在其他窗口的关系构造相同的原文范围、端点身份摘录、提示和输出约束。
+
+### 综合文档审查对照
+
+```bash
+.venv/bin/python -B -m evals.quality_terra_audit_ab sequence \
+  --corpus construction-terra-audit-workforce --config /path/to/model.yaml --output /path/to/audit-ab.json
+```
+
+每批只构建一次基础草稿。两组共享跨窗连接、端点身份原文和基础草稿摘要，仅实验组执行全篇关系审查。
+第一批登记资料用作共同的已发布目录。退货退款与设备检修案例可分别用 `construction-terra-audit-returns` 和
+`construction-terra-audit-maintenance`。报告记录 Neo4j 逐批结果与实际模型用量，检查点保留审查动作。
+
+隔离故障探针可通过 `KG_EVAL_AUDIT_FAULTS_FILE` 提供 JSON，包含目标文档 `source`、应倒置的 `reverse`
+和应移除的 `omit` 两组原始 app_id 对。两组使用同一份注入后的草稿，探针成绩独立于自然语料结果。
+
 ## 分布式 Worker 故障验收
 
 为评测准备独立的 PostgreSQL 数据库、Redis、无版本历史的 MinIO 私有桶及 Neo4j、Qdrant 环境。配置方式见[运行指南](../docs/03-使用与验证/运行指南.md)。使用隔离配置运行机制用例：

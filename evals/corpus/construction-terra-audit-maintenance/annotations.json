@@ -1,0 +1,441 @@
+{
+  "schema_version": 1,
+  "business_model": "../quality-labeled/model.yaml",
+  "scope": "Fleet maintenance: stable identities, executed directional requests, independent confirmation, appendix evidence, repeat and selective withdrawal.",
+  "window_chars": 2300,
+  "imports": [
+    {
+      "source": "00-service-register.md",
+      "service_app_ids": [
+        "fleet-dispatch-north",
+        "fleet-dispatch-south",
+        "fleet-dispatch-stage",
+        "asset-health-live",
+        "asset-health-stage",
+        "work-order-journal",
+        "depot-pager"
+      ],
+      "calls": [],
+      "forbidden_calls": []
+    },
+    {
+      "source": "01-north-cutover.md",
+      "service_app_ids": [
+        "fleet-dispatch-north",
+        "fleet-dispatch-south",
+        "fleet-dispatch-stage",
+        "asset-health-live",
+        "asset-health-stage",
+        "work-order-journal",
+        "depot-pager"
+      ],
+      "calls": [
+        {
+          "source_app_id": "fleet-dispatch-north",
+          "target_app_id": "asset-health-live",
+          "contribution_sources": [
+            "01-north-cutover.md"
+          ],
+          "evidence": {
+            "01-north-cutover.md": "Dispatch-N (app_id fleet-dispatch-north) calls Health-Live (app_id asset-health-live) to retrieve the current inspection reading for an active maintenance job."
+          }
+        },
+        {
+          "source_app_id": "fleet-dispatch-north",
+          "target_app_id": "work-order-journal",
+          "contribution_sources": [
+            "01-north-cutover.md"
+          ],
+          "evidence": {
+            "01-north-cutover.md": "Dispatch-N (app_id fleet-dispatch-north) calls Journal (app_id work-order-journal) to record the approved isolation decision."
+          }
+        },
+        {
+          "source_app_id": "fleet-dispatch-north",
+          "target_app_id": "depot-pager",
+          "contribution_sources": [
+            "01-north-cutover.md"
+          ],
+          "evidence": {
+            "01-north-cutover.md": "Dispatch-N (app_id fleet-dispatch-north) calls Pager (app_id depot-pager) to deliver the north depot isolation alert."
+          }
+        }
+      ],
+      "forbidden_calls": [
+        [
+          "asset-health-live",
+          "fleet-dispatch-north"
+        ],
+        [
+          "work-order-journal",
+          "fleet-dispatch-north"
+        ],
+        [
+          "depot-pager",
+          "fleet-dispatch-north"
+        ],
+        [
+          "fleet-dispatch-north",
+          "asset-health-stage"
+        ],
+        [
+          "fleet-dispatch-stage",
+          "asset-health-live"
+        ],
+        [
+          "fleet-dispatch-south",
+          "depot-pager"
+        ],
+        [
+          "asset-health-stage",
+          "work-order-journal"
+        ],
+        [
+          "depot-pager",
+          "fleet-dispatch-south"
+        ],
+        [
+          "asset-health-live",
+          "fleet-dispatch-south"
+        ]
+      ]
+    },
+    {
+      "source": "02-handover-review.md",
+      "service_app_ids": [
+        "fleet-dispatch-north",
+        "fleet-dispatch-south",
+        "fleet-dispatch-stage",
+        "asset-health-live",
+        "asset-health-stage",
+        "work-order-journal",
+        "depot-pager"
+      ],
+      "calls": [
+        {
+          "source_app_id": "fleet-dispatch-north",
+          "target_app_id": "asset-health-live",
+          "contribution_sources": [
+            "01-north-cutover.md",
+            "02-handover-review.md"
+          ],
+          "evidence": {
+            "01-north-cutover.md": "Dispatch-N (app_id fleet-dispatch-north) calls Health-Live (app_id asset-health-live) to retrieve the current inspection reading for an active maintenance job.",
+            "02-handover-review.md": "Dispatch-N (app_id fleet-dispatch-north) calls Health-Live (app_id asset-health-live) to retrieve the current inspection reading for the duty desk's sampled job."
+          }
+        },
+        {
+          "source_app_id": "fleet-dispatch-north",
+          "target_app_id": "work-order-journal",
+          "contribution_sources": [
+            "01-north-cutover.md"
+          ],
+          "evidence": {
+            "01-north-cutover.md": "Dispatch-N (app_id fleet-dispatch-north) calls Journal (app_id work-order-journal) to record the approved isolation decision."
+          }
+        },
+        {
+          "source_app_id": "fleet-dispatch-north",
+          "target_app_id": "depot-pager",
+          "contribution_sources": [
+            "01-north-cutover.md"
+          ],
+          "evidence": {
+            "01-north-cutover.md": "Dispatch-N (app_id fleet-dispatch-north) calls Pager (app_id depot-pager) to deliver the north depot isolation alert."
+          }
+        },
+        {
+          "source_app_id": "fleet-dispatch-south",
+          "target_app_id": "asset-health-live",
+          "contribution_sources": [
+            "02-handover-review.md"
+          ],
+          "evidence": {
+            "02-handover-review.md": "Dispatch-S (app_id fleet-dispatch-south) calls Health-Live (app_id asset-health-live) to check the inspection reading before allocating a repair bay."
+          }
+        },
+        {
+          "source_app_id": "fleet-dispatch-stage",
+          "target_app_id": "asset-health-stage",
+          "contribution_sources": [
+            "02-handover-review.md"
+          ],
+          "evidence": {
+            "02-handover-review.md": "Dispatch-Test (app_id fleet-dispatch-stage) calls Health-Test (app_id asset-health-stage) to check a simulated meter reading during the staging exercise."
+          }
+        }
+      ],
+      "forbidden_calls": [
+        [
+          "asset-health-live",
+          "fleet-dispatch-north"
+        ],
+        [
+          "work-order-journal",
+          "fleet-dispatch-north"
+        ],
+        [
+          "depot-pager",
+          "fleet-dispatch-north"
+        ],
+        [
+          "fleet-dispatch-north",
+          "asset-health-stage"
+        ],
+        [
+          "fleet-dispatch-stage",
+          "asset-health-live"
+        ],
+        [
+          "fleet-dispatch-south",
+          "depot-pager"
+        ],
+        [
+          "asset-health-stage",
+          "work-order-journal"
+        ],
+        [
+          "depot-pager",
+          "fleet-dispatch-south"
+        ],
+        [
+          "asset-health-live",
+          "fleet-dispatch-south"
+        ]
+      ]
+    }
+  ],
+  "identity_cases": [
+    {
+      "kind": "same_display_name",
+      "groups": [
+        [
+          "fleet-dispatch-north",
+          "fleet-dispatch-south",
+          "fleet-dispatch-stage"
+        ],
+        [
+          "asset-health-live",
+          "asset-health-stage"
+        ]
+      ]
+    },
+    {
+      "kind": "ambiguous_alias",
+      "alias": "Dispatch",
+      "app_ids": [
+        "fleet-dispatch-north",
+        "fleet-dispatch-south"
+      ],
+      "sources": [
+        "00-service-register.md"
+      ]
+    },
+    {
+      "kind": "stable_identity_reuse",
+      "app_ids": [
+        "fleet-dispatch-north",
+        "fleet-dispatch-south",
+        "fleet-dispatch-stage",
+        "asset-health-live",
+        "asset-health-stage",
+        "work-order-journal",
+        "depot-pager"
+      ]
+    }
+  ],
+  "repeat": {
+    "source": "02-handover-review.md",
+    "service_app_ids": [
+      "fleet-dispatch-north",
+      "fleet-dispatch-south",
+      "fleet-dispatch-stage",
+      "asset-health-live",
+      "asset-health-stage",
+      "work-order-journal",
+      "depot-pager"
+    ],
+    "calls": [
+      {
+        "source_app_id": "fleet-dispatch-north",
+        "target_app_id": "asset-health-live",
+        "contribution_sources": [
+          "01-north-cutover.md",
+          "02-handover-review.md"
+        ],
+        "evidence": {
+          "01-north-cutover.md": "Dispatch-N (app_id fleet-dispatch-north) calls Health-Live (app_id asset-health-live) to retrieve the current inspection reading for an active maintenance job.",
+          "02-handover-review.md": "Dispatch-N (app_id fleet-dispatch-north) calls Health-Live (app_id asset-health-live) to retrieve the current inspection reading for the duty desk's sampled job."
+        }
+      },
+      {
+        "source_app_id": "fleet-dispatch-north",
+        "target_app_id": "work-order-journal",
+        "contribution_sources": [
+          "01-north-cutover.md"
+        ],
+        "evidence": {
+          "01-north-cutover.md": "Dispatch-N (app_id fleet-dispatch-north) calls Journal (app_id work-order-journal) to record the approved isolation decision."
+        }
+      },
+      {
+        "source_app_id": "fleet-dispatch-north",
+        "target_app_id": "depot-pager",
+        "contribution_sources": [
+          "01-north-cutover.md"
+        ],
+        "evidence": {
+          "01-north-cutover.md": "Dispatch-N (app_id fleet-dispatch-north) calls Pager (app_id depot-pager) to deliver the north depot isolation alert."
+        }
+      },
+      {
+        "source_app_id": "fleet-dispatch-south",
+        "target_app_id": "asset-health-live",
+        "contribution_sources": [
+          "02-handover-review.md"
+        ],
+        "evidence": {
+          "02-handover-review.md": "Dispatch-S (app_id fleet-dispatch-south) calls Health-Live (app_id asset-health-live) to check the inspection reading before allocating a repair bay."
+        }
+      },
+      {
+        "source_app_id": "fleet-dispatch-stage",
+        "target_app_id": "asset-health-stage",
+        "contribution_sources": [
+          "02-handover-review.md"
+        ],
+        "evidence": {
+          "02-handover-review.md": "Dispatch-Test (app_id fleet-dispatch-stage) calls Health-Test (app_id asset-health-stage) to check a simulated meter reading during the staging exercise."
+        }
+      }
+    ],
+    "forbidden_calls": [
+      [
+        "asset-health-live",
+        "fleet-dispatch-north"
+      ],
+      [
+        "work-order-journal",
+        "fleet-dispatch-north"
+      ],
+      [
+        "depot-pager",
+        "fleet-dispatch-north"
+      ],
+      [
+        "fleet-dispatch-north",
+        "asset-health-stage"
+      ],
+      [
+        "fleet-dispatch-stage",
+        "asset-health-live"
+      ],
+      [
+        "fleet-dispatch-south",
+        "depot-pager"
+      ],
+      [
+        "asset-health-stage",
+        "work-order-journal"
+      ],
+      [
+        "depot-pager",
+        "fleet-dispatch-south"
+      ],
+      [
+        "asset-health-live",
+        "fleet-dispatch-south"
+      ]
+    ]
+  },
+  "withdraw": {
+    "source": "01-north-cutover.md",
+    "service_app_ids": [
+      "fleet-dispatch-north",
+      "fleet-dispatch-south",
+      "fleet-dispatch-stage",
+      "asset-health-live",
+      "asset-health-stage",
+      "work-order-journal",
+      "depot-pager"
+    ],
+    "calls": [
+      {
+        "source_app_id": "fleet-dispatch-north",
+        "target_app_id": "asset-health-live",
+        "contribution_sources": [
+          "02-handover-review.md"
+        ],
+        "evidence": {
+          "02-handover-review.md": "Dispatch-N (app_id fleet-dispatch-north) calls Health-Live (app_id asset-health-live) to retrieve the current inspection reading for the duty desk's sampled job."
+        }
+      },
+      {
+        "source_app_id": "fleet-dispatch-south",
+        "target_app_id": "asset-health-live",
+        "contribution_sources": [
+          "02-handover-review.md"
+        ],
+        "evidence": {
+          "02-handover-review.md": "Dispatch-S (app_id fleet-dispatch-south) calls Health-Live (app_id asset-health-live) to check the inspection reading before allocating a repair bay."
+        }
+      },
+      {
+        "source_app_id": "fleet-dispatch-stage",
+        "target_app_id": "asset-health-stage",
+        "contribution_sources": [
+          "02-handover-review.md"
+        ],
+        "evidence": {
+          "02-handover-review.md": "Dispatch-Test (app_id fleet-dispatch-stage) calls Health-Test (app_id asset-health-stage) to check a simulated meter reading during the staging exercise."
+        }
+      }
+    ],
+    "forbidden_calls": [
+      [
+        "asset-health-live",
+        "fleet-dispatch-north"
+      ],
+      [
+        "work-order-journal",
+        "fleet-dispatch-north"
+      ],
+      [
+        "depot-pager",
+        "fleet-dispatch-north"
+      ],
+      [
+        "fleet-dispatch-north",
+        "asset-health-stage"
+      ],
+      [
+        "fleet-dispatch-stage",
+        "asset-health-live"
+      ],
+      [
+        "fleet-dispatch-south",
+        "depot-pager"
+      ],
+      [
+        "asset-health-stage",
+        "work-order-journal"
+      ],
+      [
+        "depot-pager",
+        "fleet-dispatch-south"
+      ],
+      [
+        "asset-health-live",
+        "fleet-dispatch-south"
+      ],
+      [
+        "fleet-dispatch-north",
+        "work-order-journal"
+      ],
+      [
+        "fleet-dispatch-north",
+        "depot-pager"
+      ]
+    ]
+  }
+}

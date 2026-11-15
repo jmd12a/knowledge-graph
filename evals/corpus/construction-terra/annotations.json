@@ -1,0 +1,540 @@
+{
+  "schema_version": 1,
+  "business_model": "../quality-labeled/model.yaml",
+  "scope": "Four sequential imports to one knowledge base. Score cumulative Service identities and CALLS topology, exact source provenance, stable IDs, and source withdrawal.",
+  "imports": [
+    {
+      "source": "00-registry.md",
+      "service_app_ids": [
+        "pay-east",
+        "pay-west",
+        "pay-qa",
+        "clear-prod",
+        "clear-sandbox",
+        "audit-ledger",
+        "notify-hub"
+      ],
+      "calls": [],
+      "forbidden_calls": []
+    },
+    {
+      "source": "01-east-cutover.md",
+      "service_app_ids": [
+        "pay-east",
+        "pay-west",
+        "pay-qa",
+        "clear-prod",
+        "clear-sandbox",
+        "audit-ledger",
+        "notify-hub"
+      ],
+      "calls": [
+        {
+          "source_app_id": "pay-east",
+          "target_app_id": "clear-prod",
+          "contribution_sources": [
+            "01-east-cutover.md"
+          ],
+          "evidence": {
+            "01-east-cutover.md": "PGW-East (app_id pay-east) calls Clear-Prod (app_id clear-prod) to settle captured transactions."
+          }
+        },
+        {
+          "source_app_id": "pay-east",
+          "target_app_id": "audit-ledger",
+          "contribution_sources": [
+            "01-east-cutover.md"
+          ],
+          "evidence": {
+            "01-east-cutover.md": "The audit exporter within PGW-East, registered as app_id pay-east, calls the Audit Ledger at app_id audit-ledger to deliver the settlement event."
+          }
+        }
+      ],
+      "forbidden_calls": [
+        [
+          "clear-prod",
+          "pay-east"
+        ],
+        [
+          "audit-ledger",
+          "pay-east"
+        ],
+        [
+          "pay-west",
+          "clear-prod"
+        ],
+        [
+          "pay-east",
+          "clear-sandbox"
+        ],
+        [
+          "pay-west",
+          "clear-sandbox"
+        ]
+      ]
+    },
+    {
+      "source": "02-west-cutover.md",
+      "service_app_ids": [
+        "pay-east",
+        "pay-west",
+        "pay-qa",
+        "clear-prod",
+        "clear-sandbox",
+        "audit-ledger",
+        "notify-hub"
+      ],
+      "calls": [
+        {
+          "source_app_id": "pay-east",
+          "target_app_id": "clear-prod",
+          "contribution_sources": [
+            "01-east-cutover.md",
+            "02-west-cutover.md"
+          ],
+          "evidence": {
+            "01-east-cutover.md": "PGW-East (app_id pay-east) calls Clear-Prod (app_id clear-prod) to settle captured transactions.",
+            "02-west-cutover.md": "PGW-East (app_id pay-east) calls Clear-Prod (app_id clear-prod) to check East settlement availability."
+          }
+        },
+        {
+          "source_app_id": "pay-east",
+          "target_app_id": "audit-ledger",
+          "contribution_sources": [
+            "01-east-cutover.md"
+          ],
+          "evidence": {
+            "01-east-cutover.md": "The audit exporter within PGW-East, registered as app_id pay-east, calls the Audit Ledger at app_id audit-ledger to deliver the settlement event."
+          }
+        },
+        {
+          "source_app_id": "pay-west",
+          "target_app_id": "clear-prod",
+          "contribution_sources": [
+            "02-west-cutover.md"
+          ],
+          "evidence": {
+            "02-west-cutover.md": "PGW-West (app_id pay-west) calls Clear-Prod (app_id clear-prod) to settle West captures."
+          }
+        },
+        {
+          "source_app_id": "pay-qa",
+          "target_app_id": "clear-sandbox",
+          "contribution_sources": [
+            "02-west-cutover.md"
+          ],
+          "evidence": {
+            "02-west-cutover.md": "PGW-QA (app_id pay-qa) calls Clear-Sandbox (app_id clear-sandbox) with synthetic transactions."
+          }
+        }
+      ],
+      "forbidden_calls": [
+        [
+          "clear-prod",
+          "pay-east"
+        ],
+        [
+          "audit-ledger",
+          "pay-east"
+        ],
+        [
+          "pay-east",
+          "clear-sandbox"
+        ],
+        [
+          "pay-west",
+          "clear-sandbox"
+        ],
+        [
+          "clear-prod",
+          "pay-west"
+        ],
+        [
+          "pay-qa",
+          "clear-prod"
+        ],
+        [
+          "pay-east",
+          "pay-west"
+        ],
+        [
+          "pay-west",
+          "pay-east"
+        ]
+      ]
+    },
+    {
+      "source": "03-disaster-recovery.md",
+      "service_app_ids": [
+        "pay-east",
+        "pay-west",
+        "pay-qa",
+        "clear-prod",
+        "clear-sandbox",
+        "audit-ledger",
+        "notify-hub",
+        "audit-archive"
+      ],
+      "calls": [
+        {
+          "source_app_id": "pay-east",
+          "target_app_id": "clear-prod",
+          "contribution_sources": [
+            "01-east-cutover.md",
+            "02-west-cutover.md"
+          ],
+          "evidence": {
+            "01-east-cutover.md": "PGW-East (app_id pay-east) calls Clear-Prod (app_id clear-prod) to settle captured transactions.",
+            "02-west-cutover.md": "PGW-East (app_id pay-east) calls Clear-Prod (app_id clear-prod) to check East settlement availability."
+          }
+        },
+        {
+          "source_app_id": "pay-east",
+          "target_app_id": "audit-ledger",
+          "contribution_sources": [
+            "01-east-cutover.md"
+          ],
+          "evidence": {
+            "01-east-cutover.md": "The audit exporter within PGW-East, registered as app_id pay-east, calls the Audit Ledger at app_id audit-ledger to deliver the settlement event."
+          }
+        },
+        {
+          "source_app_id": "pay-west",
+          "target_app_id": "clear-prod",
+          "contribution_sources": [
+            "02-west-cutover.md",
+            "03-disaster-recovery.md"
+          ],
+          "evidence": {
+            "02-west-cutover.md": "PGW-West (app_id pay-west) calls Clear-Prod (app_id clear-prod) to settle West captures.",
+            "03-disaster-recovery.md": "PGW-West (app_id pay-west) calls the production Clearing Service (app_id clear-prod) to replay unsettled West captures."
+          }
+        },
+        {
+          "source_app_id": "pay-qa",
+          "target_app_id": "clear-sandbox",
+          "contribution_sources": [
+            "02-west-cutover.md"
+          ],
+          "evidence": {
+            "02-west-cutover.md": "PGW-QA (app_id pay-qa) calls Clear-Sandbox (app_id clear-sandbox) with synthetic transactions."
+          }
+        },
+        {
+          "source_app_id": "pay-east",
+          "target_app_id": "notify-hub",
+          "contribution_sources": [
+            "03-disaster-recovery.md"
+          ],
+          "evidence": {
+            "03-disaster-recovery.md": "PGW-East, registered as app_id pay-east, calls Notify-Hub (app_id notify-hub) to notify the East incident team."
+          }
+        },
+        {
+          "source_app_id": "clear-prod",
+          "target_app_id": "audit-ledger",
+          "contribution_sources": [
+            "03-disaster-recovery.md"
+          ],
+          "evidence": {
+            "03-disaster-recovery.md": "Clear-Prod (app_id clear-prod) calls Ledger-Prod (app_id audit-ledger) to write the settlement control record."
+          }
+        }
+      ],
+      "forbidden_calls": [
+        [
+          "clear-prod",
+          "pay-east"
+        ],
+        [
+          "audit-ledger",
+          "pay-east"
+        ],
+        [
+          "pay-east",
+          "clear-sandbox"
+        ],
+        [
+          "pay-west",
+          "clear-sandbox"
+        ],
+        [
+          "clear-prod",
+          "pay-west"
+        ],
+        [
+          "pay-qa",
+          "clear-prod"
+        ],
+        [
+          "pay-east",
+          "pay-west"
+        ],
+        [
+          "pay-west",
+          "pay-east"
+        ],
+        [
+          "clear-prod",
+          "audit-archive"
+        ],
+        [
+          "notify-hub",
+          "pay-east"
+        ],
+        [
+          "pay-west",
+          "notify-hub"
+        ],
+        [
+          "clear-sandbox",
+          "audit-ledger"
+        ]
+      ]
+    }
+  ],
+  "identity_cases": [
+    {
+      "kind": "same_display_name",
+      "groups": [
+        [
+          "pay-east",
+          "pay-west",
+          "pay-qa"
+        ],
+        [
+          "clear-prod",
+          "clear-sandbox"
+        ],
+        [
+          "audit-ledger",
+          "audit-archive"
+        ]
+      ]
+    },
+    {
+      "kind": "ambiguous_alias",
+      "alias": "PGW",
+      "app_ids": [
+        "pay-east",
+        "pay-west"
+      ],
+      "sources": [
+        "01-east-cutover.md",
+        "03-disaster-recovery.md"
+      ]
+    },
+    {
+      "kind": "stable_identity_reuse",
+      "app_ids": [
+        "pay-east",
+        "pay-west",
+        "pay-qa",
+        "clear-prod",
+        "clear-sandbox",
+        "audit-ledger",
+        "notify-hub"
+      ]
+    }
+  ],
+  "repeat": {
+    "source": "03-disaster-recovery.md",
+    "service_app_ids": [
+      "pay-east",
+      "pay-west",
+      "pay-qa",
+      "clear-prod",
+      "clear-sandbox",
+      "audit-ledger",
+      "notify-hub",
+      "audit-archive"
+    ],
+    "calls": [
+      {
+        "source_app_id": "pay-east",
+        "target_app_id": "clear-prod",
+        "contribution_sources": [
+          "01-east-cutover.md",
+          "02-west-cutover.md"
+        ],
+        "evidence": {
+          "01-east-cutover.md": "PGW-East (app_id pay-east) calls Clear-Prod (app_id clear-prod) to settle captured transactions.",
+          "02-west-cutover.md": "PGW-East (app_id pay-east) calls Clear-Prod (app_id clear-prod) to check East settlement availability."
+        }
+      },
+      {
+        "source_app_id": "pay-east",
+        "target_app_id": "audit-ledger",
+        "contribution_sources": [
+          "01-east-cutover.md"
+        ],
+        "evidence": {
+          "01-east-cutover.md": "The audit exporter within PGW-East, registered as app_id pay-east, calls the Audit Ledger at app_id audit-ledger to deliver the settlement event."
+        }
+      },
+      {
+        "source_app_id": "pay-west",
+        "target_app_id": "clear-prod",
+        "contribution_sources": [
+          "02-west-cutover.md",
+          "03-disaster-recovery.md"
+        ],
+        "evidence": {
+          "02-west-cutover.md": "PGW-West (app_id pay-west) calls Clear-Prod (app_id clear-prod) to settle West captures.",
+          "03-disaster-recovery.md": "PGW-West (app_id pay-west) calls the production Clearing Service (app_id clear-prod) to replay unsettled West captures."
+        }
+      },
+      {
+        "source_app_id": "pay-qa",
+        "target_app_id": "clear-sandbox",
+        "contribution_sources": [
+          "02-west-cutover.md"
+        ],
+        "evidence": {
+          "02-west-cutover.md": "PGW-QA (app_id pay-qa) calls Clear-Sandbox (app_id clear-sandbox) with synthetic transactions."
+        }
+      },
+      {
+        "source_app_id": "pay-east",
+        "target_app_id": "notify-hub",
+        "contribution_sources": [
+          "03-disaster-recovery.md"
+        ],
+        "evidence": {
+          "03-disaster-recovery.md": "PGW-East, registered as app_id pay-east, calls Notify-Hub (app_id notify-hub) to notify the East incident team."
+        }
+      },
+      {
+        "source_app_id": "clear-prod",
+        "target_app_id": "audit-ledger",
+        "contribution_sources": [
+          "03-disaster-recovery.md"
+        ],
+        "evidence": {
+          "03-disaster-recovery.md": "Clear-Prod (app_id clear-prod) calls Ledger-Prod (app_id audit-ledger) to write the settlement control record."
+        }
+      }
+    ]
+  },
+  "withdraw": {
+    "source": "01-east-cutover.md",
+    "service_app_ids": [
+      "pay-east",
+      "pay-west",
+      "pay-qa",
+      "clear-prod",
+      "clear-sandbox",
+      "audit-ledger",
+      "notify-hub",
+      "audit-archive"
+    ],
+    "calls": [
+      {
+        "source_app_id": "pay-east",
+        "target_app_id": "clear-prod",
+        "contribution_sources": [
+          "02-west-cutover.md"
+        ],
+        "evidence": {
+          "02-west-cutover.md": "PGW-East (app_id pay-east) calls Clear-Prod (app_id clear-prod) to check East settlement availability."
+        }
+      },
+      {
+        "source_app_id": "pay-west",
+        "target_app_id": "clear-prod",
+        "contribution_sources": [
+          "02-west-cutover.md",
+          "03-disaster-recovery.md"
+        ],
+        "evidence": {
+          "02-west-cutover.md": "PGW-West (app_id pay-west) calls Clear-Prod (app_id clear-prod) to settle West captures.",
+          "03-disaster-recovery.md": "PGW-West (app_id pay-west) calls the production Clearing Service (app_id clear-prod) to replay unsettled West captures."
+        }
+      },
+      {
+        "source_app_id": "pay-qa",
+        "target_app_id": "clear-sandbox",
+        "contribution_sources": [
+          "02-west-cutover.md"
+        ],
+        "evidence": {
+          "02-west-cutover.md": "PGW-QA (app_id pay-qa) calls Clear-Sandbox (app_id clear-sandbox) with synthetic transactions."
+        }
+      },
+      {
+        "source_app_id": "pay-east",
+        "target_app_id": "notify-hub",
+        "contribution_sources": [
+          "03-disaster-recovery.md"
+        ],
+        "evidence": {
+          "03-disaster-recovery.md": "PGW-East, registered as app_id pay-east, calls Notify-Hub (app_id notify-hub) to notify the East incident team."
+        }
+      },
+      {
+        "source_app_id": "clear-prod",
+        "target_app_id": "audit-ledger",
+        "contribution_sources": [
+          "03-disaster-recovery.md"
+        ],
+        "evidence": {
+          "03-disaster-recovery.md": "Clear-Prod (app_id clear-prod) calls Ledger-Prod (app_id audit-ledger) to write the settlement control record."
+        }
+      }
+    ],
+    "forbidden_calls": [
+      [
+        "clear-prod",
+        "pay-east"
+      ],
+      [
+        "audit-ledger",
+        "pay-east"
+      ],
+      [
+        "pay-east",
+        "clear-sandbox"
+      ],
+      [
+        "pay-west",
+        "clear-sandbox"
+      ],
+      [
+        "clear-prod",
+        "pay-west"
+      ],
+      [
+        "pay-qa",
+        "clear-prod"
+      ],
+      [
+        "pay-east",
+        "pay-west"
+      ],
+      [
+        "pay-west",
+        "pay-east"
+      ],
+      [
+        "clear-prod",
+        "audit-archive"
+      ],
+      [
+        "notify-hub",
+        "pay-east"
+      ],
+      [
+        "pay-west",
+        "notify-hub"
+      ],
+      [
+        "clear-sandbox",
+        "audit-ledger"
+      ],
+      [
+        "pay-east",
+        "audit-ledger"
+      ]
+    ]
+  }
+}

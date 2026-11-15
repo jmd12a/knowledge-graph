@@ -1,0 +1,497 @@
+{
+  "schema_version": 1,
+  "business_model": "../quality-labeled/model.yaml",
+  "scope": "Three sequential imports of fictional workforce payroll and timekeeping records. Score cumulative service identities, directed observed calls, exact evidence, independent support, and withdrawal of the regular close record.",
+  "window_chars": 2300,
+  "imports": [
+    {
+      "source": "00-workforce-registry.md",
+      "service_app_ids": [
+        "payroll-close",
+        "payroll-correction",
+        "time-live",
+        "time-standby",
+        "wage-ledger",
+        "worker-notice",
+        "audit-vault"
+      ],
+      "calls": [],
+      "forbidden_calls": []
+    },
+    {
+      "source": "01-payroll-close.md",
+      "service_app_ids": [
+        "payroll-close",
+        "payroll-correction",
+        "time-live",
+        "time-standby",
+        "wage-ledger",
+        "worker-notice",
+        "audit-vault"
+      ],
+      "calls": [
+        {
+          "source_app_id": "payroll-close",
+          "target_app_id": "time-live",
+          "contribution_sources": [
+            "01-payroll-close.md"
+          ],
+          "evidence": {
+            "01-payroll-close.md": "Close-Run (app_id payroll-close) calls Clock-Live (app_id time-live) to obtain the approved time snapshot for the regular payroll close."
+          }
+        },
+        {
+          "source_app_id": "payroll-close",
+          "target_app_id": "wage-ledger",
+          "contribution_sources": [
+            "01-payroll-close.md"
+          ],
+          "evidence": {
+            "01-payroll-close.md": "Close-Run (app_id payroll-close) calls Wage-Book (app_id wage-ledger) to record the approved reconciliation adjustment."
+          }
+        },
+        {
+          "source_app_id": "payroll-close",
+          "target_app_id": "worker-notice",
+          "contribution_sources": [
+            "01-payroll-close.md"
+          ],
+          "evidence": {
+            "01-payroll-close.md": "Close-Run calls Worker-Post to deliver the worker reconciliation notice."
+          }
+        }
+      ],
+      "forbidden_calls": [
+        [
+          "time-live",
+          "payroll-close"
+        ],
+        [
+          "payroll-close",
+          "time-standby"
+        ],
+        [
+          "payroll-close",
+          "audit-vault"
+        ],
+        [
+          "worker-notice",
+          "payroll-close"
+        ],
+        [
+          "wage-ledger",
+          "payroll-close"
+        ]
+      ]
+    },
+    {
+      "source": "02-late-corrections.md",
+      "service_app_ids": [
+        "payroll-close",
+        "payroll-correction",
+        "time-live",
+        "time-standby",
+        "wage-ledger",
+        "worker-notice",
+        "audit-vault"
+      ],
+      "calls": [
+        {
+          "source_app_id": "payroll-close",
+          "target_app_id": "time-live",
+          "contribution_sources": [
+            "01-payroll-close.md",
+            "02-late-corrections.md"
+          ],
+          "evidence": {
+            "01-payroll-close.md": "Close-Run (app_id payroll-close) calls Clock-Live (app_id time-live) to obtain the approved time snapshot for the regular payroll close.",
+            "02-late-corrections.md": "Close-Run (app_id payroll-close) calls Clock-Live (app_id time-live) to recheck the approved snapshot before late corrections are released."
+          }
+        },
+        {
+          "source_app_id": "payroll-close",
+          "target_app_id": "wage-ledger",
+          "contribution_sources": [
+            "01-payroll-close.md"
+          ],
+          "evidence": {
+            "01-payroll-close.md": "Close-Run (app_id payroll-close) calls Wage-Book (app_id wage-ledger) to record the approved reconciliation adjustment."
+          }
+        },
+        {
+          "source_app_id": "payroll-close",
+          "target_app_id": "worker-notice",
+          "contribution_sources": [
+            "01-payroll-close.md"
+          ],
+          "evidence": {
+            "01-payroll-close.md": "Close-Run calls Worker-Post to deliver the worker reconciliation notice."
+          }
+        },
+        {
+          "source_app_id": "payroll-correction",
+          "target_app_id": "time-live",
+          "contribution_sources": [
+            "02-late-corrections.md"
+          ],
+          "evidence": {
+            "02-late-corrections.md": "Correct-Run (app_id payroll-correction) calls Clock-Live (app_id time-live) to retrieve the corrected time snapshot."
+          }
+        },
+        {
+          "source_app_id": "payroll-correction",
+          "target_app_id": "wage-ledger",
+          "contribution_sources": [
+            "02-late-corrections.md"
+          ],
+          "evidence": {
+            "02-late-corrections.md": "Correct-Run calls Wage-Book to post the approved late adjustment."
+          }
+        },
+        {
+          "source_app_id": "wage-ledger",
+          "target_app_id": "audit-vault",
+          "contribution_sources": [
+            "02-late-corrections.md"
+          ],
+          "evidence": {
+            "02-late-corrections.md": "Wage-Book (app_id wage-ledger) calls Audit-Shelf (app_id audit-vault) to retain the signed adjustment receipt."
+          }
+        },
+        {
+          "source_app_id": "payroll-correction",
+          "target_app_id": "worker-notice",
+          "contribution_sources": [
+            "02-late-corrections.md"
+          ],
+          "evidence": {
+            "02-late-corrections.md": "Correct-Run (app_id payroll-correction) calls Worker-Post (app_id worker-notice) to deliver the correction notice."
+          }
+        }
+      ],
+      "forbidden_calls": [
+        [
+          "time-live",
+          "payroll-close"
+        ],
+        [
+          "payroll-close",
+          "time-standby"
+        ],
+        [
+          "payroll-close",
+          "audit-vault"
+        ],
+        [
+          "worker-notice",
+          "payroll-close"
+        ],
+        [
+          "wage-ledger",
+          "payroll-close"
+        ],
+        [
+          "payroll-correction",
+          "time-standby"
+        ],
+        [
+          "audit-vault",
+          "wage-ledger"
+        ],
+        [
+          "payroll-correction",
+          "payroll-close"
+        ],
+        [
+          "time-live",
+          "worker-notice"
+        ],
+        [
+          "time-live",
+          "payroll-correction"
+        ],
+        [
+          "wage-ledger",
+          "payroll-correction"
+        ]
+      ]
+    }
+  ],
+  "identity_cases": [
+    {
+      "kind": "conflicting_alias",
+      "alias": "Clock",
+      "app_ids": [
+        "time-live",
+        "time-standby"
+      ],
+      "sources": [
+        "00-workforce-registry.md",
+        "01-payroll-close.md",
+        "02-late-corrections.md"
+      ]
+    },
+    {
+      "kind": "stable_identity_reuse",
+      "app_ids": [
+        "payroll-close",
+        "payroll-correction",
+        "time-live",
+        "time-standby",
+        "wage-ledger",
+        "worker-notice",
+        "audit-vault"
+      ]
+    }
+  ],
+  "repeat": {
+    "source": "02-late-corrections.md",
+    "service_app_ids": [
+      "payroll-close",
+      "payroll-correction",
+      "time-live",
+      "time-standby",
+      "wage-ledger",
+      "worker-notice",
+      "audit-vault"
+    ],
+    "calls": [
+      {
+        "source_app_id": "payroll-close",
+        "target_app_id": "time-live",
+        "contribution_sources": [
+          "01-payroll-close.md",
+          "02-late-corrections.md"
+        ],
+        "evidence": {
+          "01-payroll-close.md": "Close-Run (app_id payroll-close) calls Clock-Live (app_id time-live) to obtain the approved time snapshot for the regular payroll close.",
+          "02-late-corrections.md": "Close-Run (app_id payroll-close) calls Clock-Live (app_id time-live) to recheck the approved snapshot before late corrections are released."
+        }
+      },
+      {
+        "source_app_id": "payroll-close",
+        "target_app_id": "wage-ledger",
+        "contribution_sources": [
+          "01-payroll-close.md"
+        ],
+        "evidence": {
+          "01-payroll-close.md": "Close-Run (app_id payroll-close) calls Wage-Book (app_id wage-ledger) to record the approved reconciliation adjustment."
+        }
+      },
+      {
+        "source_app_id": "payroll-close",
+        "target_app_id": "worker-notice",
+        "contribution_sources": [
+          "01-payroll-close.md"
+        ],
+        "evidence": {
+          "01-payroll-close.md": "Close-Run calls Worker-Post to deliver the worker reconciliation notice."
+        }
+      },
+      {
+        "source_app_id": "payroll-correction",
+        "target_app_id": "time-live",
+        "contribution_sources": [
+          "02-late-corrections.md"
+        ],
+        "evidence": {
+          "02-late-corrections.md": "Correct-Run (app_id payroll-correction) calls Clock-Live (app_id time-live) to retrieve the corrected time snapshot."
+        }
+      },
+      {
+        "source_app_id": "payroll-correction",
+        "target_app_id": "wage-ledger",
+        "contribution_sources": [
+          "02-late-corrections.md"
+        ],
+        "evidence": {
+          "02-late-corrections.md": "Correct-Run calls Wage-Book to post the approved late adjustment."
+        }
+      },
+      {
+        "source_app_id": "wage-ledger",
+        "target_app_id": "audit-vault",
+        "contribution_sources": [
+          "02-late-corrections.md"
+        ],
+        "evidence": {
+          "02-late-corrections.md": "Wage-Book (app_id wage-ledger) calls Audit-Shelf (app_id audit-vault) to retain the signed adjustment receipt."
+        }
+      },
+      {
+        "source_app_id": "payroll-correction",
+        "target_app_id": "worker-notice",
+        "contribution_sources": [
+          "02-late-corrections.md"
+        ],
+        "evidence": {
+          "02-late-corrections.md": "Correct-Run (app_id payroll-correction) calls Worker-Post (app_id worker-notice) to deliver the correction notice."
+        }
+      }
+    ],
+    "forbidden_calls": [
+      [
+        "time-live",
+        "payroll-close"
+      ],
+      [
+        "payroll-close",
+        "time-standby"
+      ],
+      [
+        "payroll-close",
+        "audit-vault"
+      ],
+      [
+        "worker-notice",
+        "payroll-close"
+      ],
+      [
+        "wage-ledger",
+        "payroll-close"
+      ],
+      [
+        "payroll-correction",
+        "time-standby"
+      ],
+      [
+        "audit-vault",
+        "wage-ledger"
+      ],
+      [
+        "payroll-correction",
+        "payroll-close"
+      ],
+      [
+        "time-live",
+        "worker-notice"
+      ],
+      [
+        "time-live",
+        "payroll-correction"
+      ],
+      [
+        "wage-ledger",
+        "payroll-correction"
+      ]
+    ]
+  },
+  "withdraw": {
+    "source": "01-payroll-close.md",
+    "service_app_ids": [
+      "payroll-close",
+      "payroll-correction",
+      "time-live",
+      "time-standby",
+      "wage-ledger",
+      "worker-notice",
+      "audit-vault"
+    ],
+    "calls": [
+      {
+        "source_app_id": "payroll-close",
+        "target_app_id": "time-live",
+        "contribution_sources": [
+          "02-late-corrections.md"
+        ],
+        "evidence": {
+          "02-late-corrections.md": "Close-Run (app_id payroll-close) calls Clock-Live (app_id time-live) to recheck the approved snapshot before late corrections are released."
+        }
+      },
+      {
+        "source_app_id": "payroll-correction",
+        "target_app_id": "time-live",
+        "contribution_sources": [
+          "02-late-corrections.md"
+        ],
+        "evidence": {
+          "02-late-corrections.md": "Correct-Run (app_id payroll-correction) calls Clock-Live (app_id time-live) to retrieve the corrected time snapshot."
+        }
+      },
+      {
+        "source_app_id": "payroll-correction",
+        "target_app_id": "wage-ledger",
+        "contribution_sources": [
+          "02-late-corrections.md"
+        ],
+        "evidence": {
+          "02-late-corrections.md": "Correct-Run calls Wage-Book to post the approved late adjustment."
+        }
+      },
+      {
+        "source_app_id": "wage-ledger",
+        "target_app_id": "audit-vault",
+        "contribution_sources": [
+          "02-late-corrections.md"
+        ],
+        "evidence": {
+          "02-late-corrections.md": "Wage-Book (app_id wage-ledger) calls Audit-Shelf (app_id audit-vault) to retain the signed adjustment receipt."
+        }
+      },
+      {
+        "source_app_id": "payroll-correction",
+        "target_app_id": "worker-notice",
+        "contribution_sources": [
+          "02-late-corrections.md"
+        ],
+        "evidence": {
+          "02-late-corrections.md": "Correct-Run (app_id payroll-correction) calls Worker-Post (app_id worker-notice) to deliver the correction notice."
+        }
+      }
+    ],
+    "forbidden_calls": [
+      [
+        "time-live",
+        "payroll-close"
+      ],
+      [
+        "payroll-close",
+        "time-standby"
+      ],
+      [
+        "payroll-close",
+        "audit-vault"
+      ],
+      [
+        "worker-notice",
+        "payroll-close"
+      ],
+      [
+        "wage-ledger",
+        "payroll-close"
+      ],
+      [
+        "payroll-correction",
+        "time-standby"
+      ],
+      [
+        "audit-vault",
+        "wage-ledger"
+      ],
+      [
+        "payroll-correction",
+        "payroll-close"
+      ],
+      [
+        "time-live",
+        "worker-notice"
+      ],
+      [
+        "time-live",
+        "payroll-correction"
+      ],
+      [
+        "wage-ledger",
+        "payroll-correction"
+      ],
+      [
+        "payroll-close",
+        "wage-ledger"
+      ],
+      [
+        "payroll-close",
+        "worker-notice"
+      ]
+    ]
+  }
+}

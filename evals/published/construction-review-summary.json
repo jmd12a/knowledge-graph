@@ -1,0 +1,746 @@
+{
+  "date": "2026-11-15",
+  "language_model": "gpt-6.1-terra",
+  "summary_uses_archived_model_runs": true,
+  "corpus_sha256": {
+    "construction-loop": {
+      "annotations.json": "ffe16d20968e6c9ad312b2db01a1fd6aab5ffcbdc8bb0b0255e88c254e1d4fc4",
+      "operations.md": "14f1dc4e76944d77a296255a83a8705b6ee7b67b6c91156fae02993d45997901",
+      "registry.md": "7ea6c50e3852c8d4916ae778b4678913365108c8f9aaaf922b16a54a2e0b8b74"
+    },
+    "construction-terra": {
+      "00-registry.md": "da75ab4dd851db84dcbcd5b251133159ddba580374272ed96a6cd0939bdd738e",
+      "01-east-cutover.md": "2598e8293ef830a35c2f854c824abd5b3c1770e98bda37fab1c20da3f86df193",
+      "02-west-cutover.md": "951444d30c132d7e3fc5349f7cafe30c2f4f72aa83bb9692623cdf75d7196811",
+      "03-disaster-recovery.md": "0ecd5e984144b334ee385a656ecbfa6ad1c11b1cbd256b18ae3a00c035a177ae",
+      "annotations.json": "c520409829b8237eb22cbd60436c9cb27fdf64dae72453f5d8816493309130b9"
+    },
+    "construction-terra-audit-maintenance": {
+      "00-service-register.md": "2cfc77207fb4f418e5883f435301773221b6ebde4c6f1d02e2a03755535c2a0a",
+      "01-north-cutover.md": "a3373315bd630ef705d7a2cc8354585ea257bc5c7be2c822b61ad865e76ddfd5",
+      "02-handover-review.md": "5b200e9dcbbc55c1d7b76db3621fd16d2eb3a1accb5cd90e4fa7cb7c67e022e3",
+      "annotations.json": "04a51703f714704c27a0ff99c721f88fde0d1b27a37e80da2b5d51afb74e9339"
+    },
+    "construction-terra-audit-returns": {
+      "00-registry.md": "9d6f12ce1525561d26b5d6efc6aa9ee0cd1452c8865eb76ff66cd8e9debdb4c5",
+      "01-dispute.md": "4038d9a3e6f2c30b228730662c6e62818f78993e5a74c4a2cb1eb2095c885382",
+      "02-reconciliation.md": "1466641cbcff4a46618f8325b3bc68bc728e6d69f9c283a746886575294e3e4a",
+      "annotations.json": "abf3f276a841998490f7c610ad217b2bbf64ccf4778bb68a2bb8342d3599ba15"
+    },
+    "construction-terra-audit-workforce": {
+      "00-workforce-registry.md": "062f705285b00d732ce0632c3a2d0d3d716de4ba455bfa8c54ee095a9be4344a",
+      "01-payroll-close.md": "7e8db6ea719c057da0c917bda594a8d44e5a3e95a81ac03aee11e6fc264300f0",
+      "02-late-corrections.md": "339f110293a3003ca85ec4767c774bb68510d30f7671715644d969676b521d8d",
+      "annotations.json": "9188d8c33626db2b38470b8b47891047693a523b2cdbc900abea9e4a1ff6da21"
+    },
+    "construction-terra-long-logistics": {
+      "00-fulfillment-registry.md": "a0978e50252b04c5ab8c1e06009e7d9154a7d28e27edcd0addc24382f8fae29e",
+      "01-east-cutover.md": "74facc25cd9df0019ecd87bbd6c82dbf2ccf208940cf181a35720e7f7496ca1f",
+      "02-west-and-rehearsal.md": "b82348fb6b7d1cabcb9acde1fe5ff5140e314552d634213996a49c447d1aa5d2",
+      "03-recovery-and-archive.md": "446e583b3d2e145446b4719da7d534c924205edb2a98ffd5b18a7dfc9537566b",
+      "annotations.json": "70e064521f7a91af32f6e7fcdf757c8295a839bcad9ae733a6790a508d231cf5"
+    },
+    "construction-terra-long-payments": {
+      "00-registry.md": "889a0ae64c586fe62f0c701293622ad0cbf986691ce5a1c27660961fbb6c737d",
+      "01-north-cutover.md": "609d84228b5e4f1bdece7926459a766ffba8670cb2ef2460404dde0a26f8c308",
+      "02-south-and-lab.md": "45787c37a5be9e122cf1537640fdc4b62977a980cb5c28c4f2f4d89520dcc2de",
+      "03-ledger-recovery.md": "372818321ef8dc587259c0f23fcb1b69d30e25bb287a6f617257061df3a82c88",
+      "annotations.json": "2a428e2de60c73e5e06a720c4b02a6d1a874cbd4f67d3afbf544ea13bfcd06af"
+    },
+    "construction-terra-public-store": {
+      "00-store-registry.md": "6034d1bf9de92a62fecea8febb5b24a9b97a704d132ac5899eb61fdf43e03902",
+      "01-checkout-observation.md": "e63b88e52b5f91ffd2ab71671b917bcffcb9410bb63612713d1abd293540c3be",
+      "02-shipping-aliases.md": "27a5dc9092b8ba2c6ef543e8e1c047648b1a9f13fdfc005c9bee25a67c74559c",
+      "03-order-recovery.md": "f97fd431382abd690d485f30912db1aab5aefbd1cc1d446db5a9b79b2a74d602",
+      "annotations.json": "4b1eb3cde48864b7f3ae9d382755b62d9301c5c1edbf51be6d796599cd8b342b"
+    },
+    "construction-terra-reference": {
+      "cold-chain-runbook.txt": "532ab9c5acbc07dd38fe7e540ba6781a60fb302f7f7108df9f702b6b2654b77a",
+      "gold.json": "a7b93ff4364206f65091ada27b49591091c1d4c8dbc05072fc6b54ed3035c5c9",
+      "model.yaml": "1687a095fc4492f2da55e1c77785d34fc4e3ed3a085508a0c56130028981d894"
+    }
+  },
+  "production_review": {
+    "shared_inputs": [
+      "结构化首抽",
+      "首批登记和已发布来源",
+      "跨窗候选与端点身份原文"
+    ],
+    "offline_replay_new_model_requests": 0,
+    "recent_multi_document": {
+      "returns": {
+        "0": {
+          "source_record": "evals/records/construction-identity-conflict-regression/live/construction-terra-audit-returns.json",
+          "metrics": {
+            "entities": {
+              "correct": 8,
+              "predicted": 8,
+              "expected": 8,
+              "false_positives": 0,
+              "false_negatives": 0,
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "relations": {
+              "correct": 0,
+              "predicted": 0,
+              "expected": 6,
+              "false_positives": 0,
+              "false_negatives": 6,
+              "precision": null,
+              "recall": 0.0
+            },
+            "source_evidence": {
+              "covered": 0,
+              "expected": 8,
+              "rate": 0.0
+            },
+            "relation_source_sets": {
+              "covered": 0,
+              "expected": 6,
+              "rate": 0.0
+            },
+            "prior_service_ids": {
+              "covered": 8,
+              "expected": 8,
+              "rate": 1.0
+            }
+          },
+          "additional_model_requests": 0,
+          "offline_replay": "completed"
+        },
+        "12": {
+          "source_record": "evals/records/construction-review-budget-ab/returns/12/report.json",
+          "metrics": {
+            "entities": {
+              "correct": 8,
+              "predicted": 8,
+              "expected": 8,
+              "false_positives": 0,
+              "false_negatives": 0,
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "relations": {
+              "correct": 1,
+              "predicted": 1,
+              "expected": 6,
+              "false_positives": 0,
+              "false_negatives": 5,
+              "precision": 1.0,
+              "recall": 0.16666666666666666
+            },
+            "source_evidence": {
+              "covered": 1,
+              "expected": 8,
+              "rate": 0.125
+            },
+            "relation_source_sets": {
+              "covered": 0,
+              "expected": 6,
+              "rate": 0.0
+            },
+            "prior_service_ids": {
+              "covered": 8,
+              "expected": 8,
+              "rate": 1.0
+            }
+          },
+          "additional_model_requests": 24,
+          "requests_by_document": [
+            12,
+            12
+          ],
+          "resumed_after": null
+        },
+        "24": {
+          "source_record": "evals/records/construction-review-budget-ab/returns/24/report.json",
+          "metrics": {
+            "entities": {
+              "correct": 8,
+              "predicted": 8,
+              "expected": 8,
+              "false_positives": 0,
+              "false_negatives": 0,
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "relations": {
+              "correct": 6,
+              "predicted": 6,
+              "expected": 6,
+              "false_positives": 0,
+              "false_negatives": 0,
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "source_evidence": {
+              "covered": 8,
+              "expected": 8,
+              "rate": 1.0
+            },
+            "relation_source_sets": {
+              "covered": 6,
+              "expected": 6,
+              "rate": 1.0
+            },
+            "prior_service_ids": {
+              "covered": 8,
+              "expected": 8,
+              "rate": 1.0
+            }
+          },
+          "additional_model_requests": 48,
+          "requests_by_document": [
+            24,
+            24
+          ],
+          "resumed_after": null
+        }
+      },
+      "workforce": {
+        "0": {
+          "source_record": "evals/records/construction-identity-conflict-regression/construction-terra-audit-workforce.json",
+          "metrics": {
+            "entities": {
+              "correct": 7,
+              "predicted": 7,
+              "expected": 7,
+              "false_positives": 0,
+              "false_negatives": 0,
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "relations": {
+              "correct": 6,
+              "predicted": 6,
+              "expected": 7,
+              "false_positives": 0,
+              "false_negatives": 1,
+              "precision": 1.0,
+              "recall": 0.8571428571428571
+            },
+            "source_evidence": {
+              "covered": 7,
+              "expected": 8,
+              "rate": 0.875
+            },
+            "relation_source_sets": {
+              "covered": 6,
+              "expected": 7,
+              "rate": 0.8571428571428571
+            },
+            "prior_service_ids": {
+              "covered": 7,
+              "expected": 7,
+              "rate": 1.0
+            }
+          },
+          "additional_model_requests": 0,
+          "offline_replay": "completed"
+        },
+        "12": {
+          "source_record": "evals/records/construction-review-budget-ab/workforce/12/report.json",
+          "metrics": {
+            "entities": {
+              "correct": 7,
+              "predicted": 7,
+              "expected": 7,
+              "false_positives": 0,
+              "false_negatives": 0,
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "relations": {
+              "correct": 7,
+              "predicted": 7,
+              "expected": 7,
+              "false_positives": 0,
+              "false_negatives": 0,
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "source_evidence": {
+              "covered": 8,
+              "expected": 8,
+              "rate": 1.0
+            },
+            "relation_source_sets": {
+              "covered": 7,
+              "expected": 7,
+              "rate": 1.0
+            },
+            "prior_service_ids": {
+              "covered": 7,
+              "expected": 7,
+              "rate": 1.0
+            }
+          },
+          "additional_model_requests": 24,
+          "requests_by_document": [
+            12,
+            12
+          ],
+          "resumed_after": null
+        },
+        "24": {
+          "source_record": "evals/records/construction-review-budget-ab/workforce/24/report.json",
+          "metrics": {
+            "entities": {
+              "correct": 7,
+              "predicted": 7,
+              "expected": 7,
+              "false_positives": 0,
+              "false_negatives": 0,
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "relations": {
+              "correct": 7,
+              "predicted": 7,
+              "expected": 7,
+              "false_positives": 0,
+              "false_negatives": 0,
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "source_evidence": {
+              "covered": 8,
+              "expected": 8,
+              "rate": 1.0
+            },
+            "relation_source_sets": {
+              "covered": 7,
+              "expected": 7,
+              "rate": 1.0
+            },
+            "prior_service_ids": {
+              "covered": 7,
+              "expected": 7,
+              "rate": 1.0
+            }
+          },
+          "additional_model_requests": 39,
+          "requests_by_document": [
+            20,
+            19
+          ],
+          "resumed_after": "TIMEOUT"
+        }
+      }
+    },
+    "cold_chain": {
+      "source_record": "evals/records/construction-cold-chain-budget-rerun/summary.json",
+      "cost_scope": "0 档记录公共基础请求，12 档只记录新增复查，24 档从 12 档检查点续跑，仅记录新增请求。",
+      "arms": {
+        "0": {
+          "metrics": {
+            "entities": null,
+            "relations": {
+              "correct": 0,
+              "predicted": 0,
+              "expected": 2,
+              "false_positives": 0,
+              "false_negatives": 2,
+              "precision": null,
+              "recall": 0.0
+            },
+            "source_evidence": {
+              "covered": 0,
+              "expected": 6,
+              "rate": 0.0
+            },
+            "section_source_context": {
+              "covered": 11,
+              "expected": 11,
+              "rate": 1.0
+            },
+            "section_body_content": {
+              "covered": 11,
+              "expected": 11,
+              "rate": 1.0
+            },
+            "unavailable_references": {
+              "covered": 1,
+              "expected": 1,
+              "rate": 1.0
+            }
+          },
+          "full_body_in_one_declaration": {
+            "covered": 3,
+            "expected": 11,
+            "rate": 0.2727272727272727
+          },
+          "review_attempts_cumulative": 0,
+          "stage_cost": {
+            "http_attempts": 9,
+            "tokens": {
+              "prompt_tokens": 26415,
+              "completion_tokens": 8086
+            },
+            "elapsed_seconds": 112.904
+          }
+        },
+        "12": {
+          "metrics": {
+            "entities": null,
+            "relations": {
+              "correct": 2,
+              "predicted": 2,
+              "expected": 2,
+              "false_positives": 0,
+              "false_negatives": 0,
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "source_evidence": {
+              "covered": 6,
+              "expected": 6,
+              "rate": 1.0
+            },
+            "section_source_context": {
+              "covered": 11,
+              "expected": 11,
+              "rate": 1.0
+            },
+            "section_body_content": {
+              "covered": 11,
+              "expected": 11,
+              "rate": 1.0
+            },
+            "unavailable_references": {
+              "covered": 1,
+              "expected": 1,
+              "rate": 1.0
+            }
+          },
+          "full_body_in_one_declaration": {
+            "covered": 3,
+            "expected": 11,
+            "rate": 0.2727272727272727
+          },
+          "review_attempts_cumulative": 12,
+          "stage_cost": {
+            "http_attempts": 12,
+            "tokens": {
+              "prompt_tokens": 14331,
+              "completion_tokens": 1196
+            },
+            "elapsed_seconds": 32.856
+          }
+        },
+        "24": {
+          "metrics": {
+            "entities": null,
+            "relations": {
+              "correct": 2,
+              "predicted": 2,
+              "expected": 2,
+              "false_positives": 0,
+              "false_negatives": 0,
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "source_evidence": {
+              "covered": 6,
+              "expected": 6,
+              "rate": 1.0
+            },
+            "section_source_context": {
+              "covered": 11,
+              "expected": 11,
+              "rate": 1.0
+            },
+            "section_body_content": {
+              "covered": 11,
+              "expected": 11,
+              "rate": 1.0
+            },
+            "unavailable_references": {
+              "covered": 1,
+              "expected": 1,
+              "rate": 1.0
+            }
+          },
+          "full_body_in_one_declaration": {
+            "covered": 3,
+            "expected": 11,
+            "rate": 0.2727272727272727
+          },
+          "review_attempts_cumulative": 15,
+          "stage_cost": {
+            "http_attempts": 3,
+            "tokens": {
+              "prompt_tokens": 1985,
+              "completion_tokens": 260
+            },
+            "elapsed_seconds": 7.8
+          }
+        }
+      }
+    }
+  },
+  "historical_mixed_versions": {
+    "source_records": [
+      "evals/records/construction-unified-scoring/summary.json",
+      "evals/records/construction-unified-scoring/loop-off-replay.json"
+    ],
+    "cases": 8,
+    "without_review": {
+      "entities": {
+        "correct": 61,
+        "predicted": 61,
+        "expected": 61,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "relations": {
+        "correct": 41,
+        "predicted": 41,
+        "expected": 48,
+        "false_positives": 0,
+        "false_negatives": 7,
+        "precision": 1.0,
+        "recall": 0.8541666666666666
+      },
+      "source_evidence": {
+        "covered": 46,
+        "expected": 58,
+        "rate": 0.7931034482758621
+      },
+      "relation_source_sets": {
+        "covered": 40,
+        "expected": 47,
+        "rate": 0.851063829787234
+      },
+      "prior_service_ids": {
+        "covered": 58,
+        "expected": 58,
+        "rate": 1.0
+      }
+    },
+    "with_review": {
+      "entities": {
+        "correct": 61,
+        "predicted": 61,
+        "expected": 61,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "relations": {
+        "correct": 43,
+        "predicted": 43,
+        "expected": 48,
+        "false_positives": 0,
+        "false_negatives": 5,
+        "precision": 1.0,
+        "recall": 0.8958333333333334
+      },
+      "source_evidence": {
+        "covered": 48,
+        "expected": 58,
+        "rate": 0.8275862068965517
+      },
+      "relation_source_sets": {
+        "covered": 40,
+        "expected": 47,
+        "rate": 0.851063829787234
+      },
+      "prior_service_ids": {
+        "covered": 58,
+        "expected": 58,
+        "rate": 1.0
+      }
+    }
+  },
+  "experimental_document_audit": {
+    "cost_scope": "baseline 为公共首抽与跨窗连接请求。loop 为复用基础草稿后额外发出的审查请求。",
+    "natural_cases": {
+      "short-sequence": {
+        "source_record": "evals/records/construction-terra-long/live-audit-short-sequence.json",
+        "baseline": {
+          "correct_relations": 6,
+          "expected_relations": 6,
+          "wrong_relations": 0,
+          "source_evidence": 8,
+          "http_attempts": 4,
+          "reported_tokens": 22823
+        },
+        "loop": {
+          "correct_relations": 6,
+          "expected_relations": 6,
+          "wrong_relations": 0,
+          "source_evidence": 8,
+          "http_attempts": 9,
+          "reported_tokens": 25565
+        }
+      },
+      "returns": {
+        "source_record": "evals/records/construction-terra-long/live-audit-returns.json",
+        "baseline": {
+          "correct_relations": 0,
+          "expected_relations": 6,
+          "wrong_relations": 0,
+          "source_evidence": 0,
+          "http_attempts": 17,
+          "reported_tokens": 90321
+        },
+        "loop": {
+          "correct_relations": 0,
+          "expected_relations": 6,
+          "wrong_relations": 0,
+          "source_evidence": 0,
+          "http_attempts": 24,
+          "reported_tokens": 102131
+        }
+      },
+      "maintenance": {
+        "source_record": "evals/records/construction-terra-long/live-audit-maintenance.json",
+        "baseline": {
+          "correct_relations": 5,
+          "expected_relations": 5,
+          "wrong_relations": 0,
+          "source_evidence": 6,
+          "http_attempts": 17,
+          "reported_tokens": 98722
+        },
+        "loop": {
+          "correct_relations": 5,
+          "expected_relations": 5,
+          "wrong_relations": 0,
+          "source_evidence": 6,
+          "http_attempts": 11,
+          "reported_tokens": 51782
+        }
+      },
+      "workforce": {
+        "source_record": "evals/records/construction-terra-long/live-audit-workforce.json",
+        "baseline": {
+          "correct_relations": 5,
+          "expected_relations": 7,
+          "wrong_relations": 0,
+          "source_evidence": 6,
+          "http_attempts": 17,
+          "reported_tokens": 99285
+        },
+        "loop": {
+          "correct_relations": 6,
+          "expected_relations": 7,
+          "wrong_relations": 0,
+          "source_evidence": 7,
+          "http_attempts": 12,
+          "reported_tokens": 60206
+        }
+      },
+      "payments": {
+        "source_record": "evals/records/construction-terra-long/live-audit-payments.json",
+        "baseline": {
+          "correct_relations": 9,
+          "expected_relations": 9,
+          "wrong_relations": 0,
+          "source_evidence": 10,
+          "http_attempts": 15,
+          "reported_tokens": 70922
+        },
+        "loop": {
+          "correct_relations": 9,
+          "expected_relations": 9,
+          "wrong_relations": 0,
+          "source_evidence": 10,
+          "http_attempts": 14,
+          "reported_tokens": 50967
+        }
+      },
+      "logistics": {
+        "source_record": "evals/records/construction-terra-long/live-audit-logistics.json",
+        "baseline": {
+          "correct_relations": 8,
+          "expected_relations": 8,
+          "wrong_relations": 0,
+          "source_evidence": 10,
+          "http_attempts": 20,
+          "reported_tokens": 93188
+        },
+        "loop": {
+          "correct_relations": 8,
+          "expected_relations": 8,
+          "wrong_relations": 0,
+          "source_evidence": 10,
+          "http_attempts": 19,
+          "reported_tokens": 74094
+        }
+      },
+      "public-store": {
+        "source_record": "evals/records/construction-terra-long/live-audit-public-store.json",
+        "baseline": {
+          "correct_relations": 6,
+          "expected_relations": 6,
+          "wrong_relations": 0,
+          "source_evidence": 7,
+          "http_attempts": 35,
+          "reported_tokens": 181522
+        },
+        "loop": {
+          "correct_relations": 6,
+          "expected_relations": 6,
+          "wrong_relations": 0,
+          "source_evidence": 7,
+          "http_attempts": 17,
+          "reported_tokens": 73630
+        }
+      }
+    },
+    "totals": {
+      "baseline": {
+        "correct_relations": 39,
+        "expected_relations": 47,
+        "wrong_relations": 0,
+        "source_evidence": 47,
+        "http_attempts": 125,
+        "reported_tokens": 656783
+      },
+      "loop": {
+        "correct_relations": 40,
+        "expected_relations": 47,
+        "wrong_relations": 0,
+        "source_evidence": 48,
+        "http_attempts": 106,
+        "reported_tokens": 438375
+      }
+    },
+    "fault_injection_probe": {
+      "source_record": "evals/records/construction-terra-long/live-audit-logistics-retry-probe.json",
+      "baseline": {
+        "correct_relations": 7,
+        "expected_relations": 8,
+        "wrong_relations": 1,
+        "source_evidence": 8,
+        "http_attempts": 20,
+        "reported_tokens": 93188
+      },
+      "loop": {
+        "correct_relations": 8,
+        "expected_relations": 8,
+        "wrong_relations": 0,
+        "source_evidence": 10,
+        "http_attempts": 14,
+        "reported_tokens": 52741
+      },
+      "injected_faults": {
+        "source": "01-east-cutover.md",
+        "reverse": [
+          "cold-dispatch-east",
+          "telemetry-prod"
+        ],
+        "omit": [
+          "cold-dispatch-east",
+          "depot-notify"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,748 @@
+{
+  "schema_version": 1,
+  "business_model": "../quality-labeled/model.yaml",
+  "scope": "Four sequential imports of operational cold-chain documents. Score cumulative Service identities, directed runtime CALLS, evidence sources, stable IDs and withdrawal. The West production caller and target identities are explicitly bound in Attachment D far from the observed West call.",
+  "window_chars": 1600,
+  "imports": [
+    {
+      "source": "00-fulfillment-registry.md",
+      "service_app_ids": [
+        "cold-dispatch-east",
+        "cold-dispatch-west",
+        "cold-dispatch-uat",
+        "telemetry-prod",
+        "telemetry-shadow",
+        "incident-ledger",
+        "depot-notify"
+      ],
+      "calls": [],
+      "forbidden_calls": []
+    },
+    {
+      "source": "01-east-cutover.md",
+      "service_app_ids": [
+        "cold-dispatch-east",
+        "cold-dispatch-west",
+        "cold-dispatch-uat",
+        "telemetry-prod",
+        "telemetry-shadow",
+        "incident-ledger",
+        "depot-notify"
+      ],
+      "calls": [
+        {
+          "source_app_id": "cold-dispatch-east",
+          "target_app_id": "telemetry-prod",
+          "contribution_sources": [
+            "01-east-cutover.md"
+          ],
+          "evidence": {
+            "01-east-cutover.md": "CDX-East (app_id cold-dispatch-east) calls TB-Live (app_id telemetry-prod) to validate the temperature trace for sealed chilled loads."
+          }
+        },
+        {
+          "source_app_id": "cold-dispatch-east",
+          "target_app_id": "incident-ledger",
+          "contribution_sources": [
+            "01-east-cutover.md"
+          ],
+          "evidence": {
+            "01-east-cutover.md": "CDX-East (app_id cold-dispatch-east) calls Ledger-Dispatch (app_id incident-ledger) to record the disputed seal and quarantine decision."
+          }
+        },
+        {
+          "source_app_id": "cold-dispatch-east",
+          "target_app_id": "depot-notify",
+          "contribution_sources": [
+            "01-east-cutover.md"
+          ],
+          "evidence": {
+            "01-east-cutover.md": "CDX-East (app_id cold-dispatch-east) calls Notify-Depot (app_id depot-notify) to deliver the East quarantine alert."
+          }
+        }
+      ],
+      "forbidden_calls": [
+        [
+          "telemetry-prod",
+          "cold-dispatch-east"
+        ],
+        [
+          "incident-ledger",
+          "cold-dispatch-east"
+        ],
+        [
+          "depot-notify",
+          "cold-dispatch-east"
+        ],
+        [
+          "cold-dispatch-east",
+          "telemetry-shadow"
+        ],
+        [
+          "cold-dispatch-east",
+          "cold-dispatch-west"
+        ],
+        [
+          "cold-dispatch-west",
+          "telemetry-prod"
+        ],
+        [
+          "cold-dispatch-west",
+          "telemetry-shadow"
+        ]
+      ]
+    },
+    {
+      "source": "02-west-and-rehearsal.md",
+      "service_app_ids": [
+        "cold-dispatch-east",
+        "cold-dispatch-west",
+        "cold-dispatch-uat",
+        "telemetry-prod",
+        "telemetry-shadow",
+        "incident-ledger",
+        "depot-notify"
+      ],
+      "calls": [
+        {
+          "source_app_id": "cold-dispatch-east",
+          "target_app_id": "telemetry-prod",
+          "contribution_sources": [
+            "01-east-cutover.md",
+            "02-west-and-rehearsal.md"
+          ],
+          "evidence": {
+            "01-east-cutover.md": "CDX-East (app_id cold-dispatch-east) calls TB-Live (app_id telemetry-prod) to validate the temperature trace for sealed chilled loads.",
+            "02-west-and-rehearsal.md": "CDX-East (app_id cold-dispatch-east) calls TB-Live (app_id telemetry-prod) to check East chilled-route evidence."
+          }
+        },
+        {
+          "source_app_id": "cold-dispatch-east",
+          "target_app_id": "incident-ledger",
+          "contribution_sources": [
+            "01-east-cutover.md"
+          ],
+          "evidence": {
+            "01-east-cutover.md": "CDX-East (app_id cold-dispatch-east) calls Ledger-Dispatch (app_id incident-ledger) to record the disputed seal and quarantine decision."
+          }
+        },
+        {
+          "source_app_id": "cold-dispatch-east",
+          "target_app_id": "depot-notify",
+          "contribution_sources": [
+            "01-east-cutover.md"
+          ],
+          "evidence": {
+            "01-east-cutover.md": "CDX-East (app_id cold-dispatch-east) calls Notify-Depot (app_id depot-notify) to deliver the East quarantine alert."
+          }
+        },
+        {
+          "source_app_id": "cold-dispatch-west",
+          "target_app_id": "telemetry-prod",
+          "contribution_sources": [
+            "02-west-and-rehearsal.md"
+          ],
+          "evidence": {
+            "02-west-and-rehearsal.md": "CDX-West calls TB-Live to attach the verified temperature trace to the active West dispatch record."
+          }
+        },
+        {
+          "source_app_id": "cold-dispatch-uat",
+          "target_app_id": "telemetry-shadow",
+          "contribution_sources": [
+            "02-west-and-rehearsal.md"
+          ],
+          "evidence": {
+            "02-west-and-rehearsal.md": "CDX-UAT (app_id cold-dispatch-uat) calls TB-Shadow (app_id telemetry-shadow) to validate synthetic logger packets in the rehearsal tenant."
+          }
+        }
+      ],
+      "forbidden_calls": [
+        [
+          "telemetry-prod",
+          "cold-dispatch-east"
+        ],
+        [
+          "incident-ledger",
+          "cold-dispatch-east"
+        ],
+        [
+          "depot-notify",
+          "cold-dispatch-east"
+        ],
+        [
+          "cold-dispatch-east",
+          "telemetry-shadow"
+        ],
+        [
+          "cold-dispatch-east",
+          "cold-dispatch-west"
+        ],
+        [
+          "cold-dispatch-west",
+          "cold-dispatch-east"
+        ],
+        [
+          "cold-dispatch-west",
+          "telemetry-shadow"
+        ],
+        [
+          "telemetry-prod",
+          "cold-dispatch-west"
+        ],
+        [
+          "cold-dispatch-uat",
+          "telemetry-prod"
+        ],
+        [
+          "cold-dispatch-west",
+          "depot-notify"
+        ]
+      ]
+    },
+    {
+      "source": "03-recovery-and-archive.md",
+      "service_app_ids": [
+        "cold-dispatch-east",
+        "cold-dispatch-west",
+        "cold-dispatch-uat",
+        "telemetry-prod",
+        "telemetry-shadow",
+        "incident-ledger",
+        "depot-notify",
+        "replay-vault"
+      ],
+      "calls": [
+        {
+          "source_app_id": "cold-dispatch-east",
+          "target_app_id": "telemetry-prod",
+          "contribution_sources": [
+            "01-east-cutover.md",
+            "02-west-and-rehearsal.md"
+          ],
+          "evidence": {
+            "01-east-cutover.md": "CDX-East (app_id cold-dispatch-east) calls TB-Live (app_id telemetry-prod) to validate the temperature trace for sealed chilled loads.",
+            "02-west-and-rehearsal.md": "CDX-East (app_id cold-dispatch-east) calls TB-Live (app_id telemetry-prod) to check East chilled-route evidence."
+          }
+        },
+        {
+          "source_app_id": "cold-dispatch-east",
+          "target_app_id": "incident-ledger",
+          "contribution_sources": [
+            "01-east-cutover.md"
+          ],
+          "evidence": {
+            "01-east-cutover.md": "CDX-East (app_id cold-dispatch-east) calls Ledger-Dispatch (app_id incident-ledger) to record the disputed seal and quarantine decision."
+          }
+        },
+        {
+          "source_app_id": "cold-dispatch-east",
+          "target_app_id": "depot-notify",
+          "contribution_sources": [
+            "01-east-cutover.md"
+          ],
+          "evidence": {
+            "01-east-cutover.md": "CDX-East (app_id cold-dispatch-east) calls Notify-Depot (app_id depot-notify) to deliver the East quarantine alert."
+          }
+        },
+        {
+          "source_app_id": "cold-dispatch-west",
+          "target_app_id": "telemetry-prod",
+          "contribution_sources": [
+            "02-west-and-rehearsal.md",
+            "03-recovery-and-archive.md"
+          ],
+          "evidence": {
+            "02-west-and-rehearsal.md": "CDX-West calls TB-Live to attach the verified temperature trace to the active West dispatch record.",
+            "03-recovery-and-archive.md": "CDX-West (app_id cold-dispatch-west) calls TB-Live (app_id telemetry-prod) to verify the live West recovery trace."
+          }
+        },
+        {
+          "source_app_id": "cold-dispatch-uat",
+          "target_app_id": "telemetry-shadow",
+          "contribution_sources": [
+            "02-west-and-rehearsal.md"
+          ],
+          "evidence": {
+            "02-west-and-rehearsal.md": "CDX-UAT (app_id cold-dispatch-uat) calls TB-Shadow (app_id telemetry-shadow) to validate synthetic logger packets in the rehearsal tenant."
+          }
+        },
+        {
+          "source_app_id": "cold-dispatch-west",
+          "target_app_id": "depot-notify",
+          "contribution_sources": [
+            "03-recovery-and-archive.md"
+          ],
+          "evidence": {
+            "03-recovery-and-archive.md": "CDX-West (app_id cold-dispatch-west) calls Notify-Depot (app_id depot-notify) to deliver the West recovery alert."
+          }
+        },
+        {
+          "source_app_id": "telemetry-prod",
+          "target_app_id": "incident-ledger",
+          "contribution_sources": [
+            "03-recovery-and-archive.md"
+          ],
+          "evidence": {
+            "03-recovery-and-archive.md": "TB-Live (app_id telemetry-prod) calls Ledger-Dispatch (app_id incident-ledger) to record the verified replay checksum."
+          }
+        },
+        {
+          "source_app_id": "cold-dispatch-east",
+          "target_app_id": "replay-vault",
+          "contribution_sources": [
+            "03-recovery-and-archive.md"
+          ],
+          "evidence": {
+            "03-recovery-and-archive.md": "CDX-East (app_id cold-dispatch-east) calls Vault-Manifest (app_id replay-vault) to retain the signed East replay package."
+          }
+        }
+      ],
+      "forbidden_calls": [
+        [
+          "telemetry-prod",
+          "cold-dispatch-east"
+        ],
+        [
+          "incident-ledger",
+          "cold-dispatch-east"
+        ],
+        [
+          "depot-notify",
+          "cold-dispatch-east"
+        ],
+        [
+          "cold-dispatch-east",
+          "telemetry-shadow"
+        ],
+        [
+          "cold-dispatch-east",
+          "cold-dispatch-west"
+        ],
+        [
+          "cold-dispatch-west",
+          "cold-dispatch-east"
+        ],
+        [
+          "cold-dispatch-west",
+          "telemetry-shadow"
+        ],
+        [
+          "telemetry-prod",
+          "cold-dispatch-west"
+        ],
+        [
+          "cold-dispatch-uat",
+          "telemetry-prod"
+        ],
+        [
+          "depot-notify",
+          "cold-dispatch-west"
+        ],
+        [
+          "incident-ledger",
+          "telemetry-prod"
+        ],
+        [
+          "telemetry-shadow",
+          "incident-ledger"
+        ],
+        [
+          "replay-vault",
+          "cold-dispatch-east"
+        ],
+        [
+          "telemetry-prod",
+          "replay-vault"
+        ],
+        [
+          "cold-dispatch-west",
+          "replay-vault"
+        ],
+        [
+          "incident-ledger",
+          "replay-vault"
+        ],
+        [
+          "replay-vault",
+          "incident-ledger"
+        ]
+      ]
+    }
+  ],
+  "identity_cases": [
+    {
+      "kind": "same_display_name",
+      "groups": [
+        [
+          "cold-dispatch-east",
+          "cold-dispatch-west",
+          "cold-dispatch-uat"
+        ],
+        [
+          "telemetry-prod",
+          "telemetry-shadow"
+        ]
+      ]
+    },
+    {
+      "kind": "ambiguous_alias",
+      "alias": "CDX",
+      "app_ids": [
+        "cold-dispatch-east",
+        "cold-dispatch-west"
+      ],
+      "sources": [
+        "01-east-cutover.md",
+        "03-recovery-and-archive.md"
+      ]
+    },
+    {
+      "kind": "ambiguous_alias",
+      "alias": "Thermal",
+      "app_ids": [
+        "telemetry-prod",
+        "telemetry-shadow"
+      ],
+      "sources": [
+        "01-east-cutover.md"
+      ]
+    },
+    {
+      "kind": "stable_identity_reuse",
+      "app_ids": [
+        "cold-dispatch-east",
+        "cold-dispatch-west",
+        "cold-dispatch-uat",
+        "telemetry-prod",
+        "telemetry-shadow",
+        "incident-ledger",
+        "depot-notify"
+      ]
+    }
+  ],
+  "repeat": {
+    "source": "03-recovery-and-archive.md",
+    "service_app_ids": [
+      "cold-dispatch-east",
+      "cold-dispatch-west",
+      "cold-dispatch-uat",
+      "telemetry-prod",
+      "telemetry-shadow",
+      "incident-ledger",
+      "depot-notify",
+      "replay-vault"
+    ],
+    "calls": [
+      {
+        "source_app_id": "cold-dispatch-east",
+        "target_app_id": "telemetry-prod",
+        "contribution_sources": [
+          "01-east-cutover.md",
+          "02-west-and-rehearsal.md"
+        ],
+        "evidence": {
+          "01-east-cutover.md": "CDX-East (app_id cold-dispatch-east) calls TB-Live (app_id telemetry-prod) to validate the temperature trace for sealed chilled loads.",
+          "02-west-and-rehearsal.md": "CDX-East (app_id cold-dispatch-east) calls TB-Live (app_id telemetry-prod) to check East chilled-route evidence."
+        }
+      },
+      {
+        "source_app_id": "cold-dispatch-east",
+        "target_app_id": "incident-ledger",
+        "contribution_sources": [
+          "01-east-cutover.md"
+        ],
+        "evidence": {
+          "01-east-cutover.md": "CDX-East (app_id cold-dispatch-east) calls Ledger-Dispatch (app_id incident-ledger) to record the disputed seal and quarantine decision."
+        }
+      },
+      {
+        "source_app_id": "cold-dispatch-east",
+        "target_app_id": "depot-notify",
+        "contribution_sources": [
+          "01-east-cutover.md"
+        ],
+        "evidence": {
+          "01-east-cutover.md": "CDX-East (app_id cold-dispatch-east) calls Notify-Depot (app_id depot-notify) to deliver the East quarantine alert."
+        }
+      },
+      {
+        "source_app_id": "cold-dispatch-west",
+        "target_app_id": "telemetry-prod",
+        "contribution_sources": [
+          "02-west-and-rehearsal.md",
+          "03-recovery-and-archive.md"
+        ],
+        "evidence": {
+          "02-west-and-rehearsal.md": "CDX-West calls TB-Live to attach the verified temperature trace to the active West dispatch record.",
+          "03-recovery-and-archive.md": "CDX-West (app_id cold-dispatch-west) calls TB-Live (app_id telemetry-prod) to verify the live West recovery trace."
+        }
+      },
+      {
+        "source_app_id": "cold-dispatch-uat",
+        "target_app_id": "telemetry-shadow",
+        "contribution_sources": [
+          "02-west-and-rehearsal.md"
+        ],
+        "evidence": {
+          "02-west-and-rehearsal.md": "CDX-UAT (app_id cold-dispatch-uat) calls TB-Shadow (app_id telemetry-shadow) to validate synthetic logger packets in the rehearsal tenant."
+        }
+      },
+      {
+        "source_app_id": "cold-dispatch-west",
+        "target_app_id": "depot-notify",
+        "contribution_sources": [
+          "03-recovery-and-archive.md"
+        ],
+        "evidence": {
+          "03-recovery-and-archive.md": "CDX-West (app_id cold-dispatch-west) calls Notify-Depot (app_id depot-notify) to deliver the West recovery alert."
+        }
+      },
+      {
+        "source_app_id": "telemetry-prod",
+        "target_app_id": "incident-ledger",
+        "contribution_sources": [
+          "03-recovery-and-archive.md"
+        ],
+        "evidence": {
+          "03-recovery-and-archive.md": "TB-Live (app_id telemetry-prod) calls Ledger-Dispatch (app_id incident-ledger) to record the verified replay checksum."
+        }
+      },
+      {
+        "source_app_id": "cold-dispatch-east",
+        "target_app_id": "replay-vault",
+        "contribution_sources": [
+          "03-recovery-and-archive.md"
+        ],
+        "evidence": {
+          "03-recovery-and-archive.md": "CDX-East (app_id cold-dispatch-east) calls Vault-Manifest (app_id replay-vault) to retain the signed East replay package."
+        }
+      }
+    ],
+    "forbidden_calls": [
+      [
+        "telemetry-prod",
+        "cold-dispatch-east"
+      ],
+      [
+        "incident-ledger",
+        "cold-dispatch-east"
+      ],
+      [
+        "depot-notify",
+        "cold-dispatch-east"
+      ],
+      [
+        "cold-dispatch-east",
+        "telemetry-shadow"
+      ],
+      [
+        "cold-dispatch-east",
+        "cold-dispatch-west"
+      ],
+      [
+        "cold-dispatch-west",
+        "cold-dispatch-east"
+      ],
+      [
+        "cold-dispatch-west",
+        "telemetry-shadow"
+      ],
+      [
+        "telemetry-prod",
+        "cold-dispatch-west"
+      ],
+      [
+        "cold-dispatch-uat",
+        "telemetry-prod"
+      ],
+      [
+        "depot-notify",
+        "cold-dispatch-west"
+      ],
+      [
+        "incident-ledger",
+        "telemetry-prod"
+      ],
+      [
+        "telemetry-shadow",
+        "incident-ledger"
+      ],
+      [
+        "replay-vault",
+        "cold-dispatch-east"
+      ],
+      [
+        "telemetry-prod",
+        "replay-vault"
+      ],
+      [
+        "cold-dispatch-west",
+        "replay-vault"
+      ],
+      [
+        "incident-ledger",
+        "replay-vault"
+      ],
+      [
+        "replay-vault",
+        "incident-ledger"
+      ]
+    ]
+  },
+  "withdraw": {
+    "source": "01-east-cutover.md",
+    "service_app_ids": [
+      "cold-dispatch-east",
+      "cold-dispatch-west",
+      "cold-dispatch-uat",
+      "telemetry-prod",
+      "telemetry-shadow",
+      "incident-ledger",
+      "depot-notify",
+      "replay-vault"
+    ],
+    "calls": [
+      {
+        "source_app_id": "cold-dispatch-west",
+        "target_app_id": "telemetry-prod",
+        "contribution_sources": [
+          "02-west-and-rehearsal.md",
+          "03-recovery-and-archive.md"
+        ],
+        "evidence": {
+          "02-west-and-rehearsal.md": "CDX-West calls TB-Live to attach the verified temperature trace to the active West dispatch record.",
+          "03-recovery-and-archive.md": "CDX-West (app_id cold-dispatch-west) calls TB-Live (app_id telemetry-prod) to verify the live West recovery trace."
+        }
+      },
+      {
+        "source_app_id": "cold-dispatch-uat",
+        "target_app_id": "telemetry-shadow",
+        "contribution_sources": [
+          "02-west-and-rehearsal.md"
+        ],
+        "evidence": {
+          "02-west-and-rehearsal.md": "CDX-UAT (app_id cold-dispatch-uat) calls TB-Shadow (app_id telemetry-shadow) to validate synthetic logger packets in the rehearsal tenant."
+        }
+      },
+      {
+        "source_app_id": "cold-dispatch-east",
+        "target_app_id": "telemetry-prod",
+        "contribution_sources": [
+          "02-west-and-rehearsal.md"
+        ],
+        "evidence": {
+          "02-west-and-rehearsal.md": "CDX-East (app_id cold-dispatch-east) calls TB-Live (app_id telemetry-prod) to check East chilled-route evidence."
+        }
+      },
+      {
+        "source_app_id": "cold-dispatch-west",
+        "target_app_id": "depot-notify",
+        "contribution_sources": [
+          "03-recovery-and-archive.md"
+        ],
+        "evidence": {
+          "03-recovery-and-archive.md": "CDX-West (app_id cold-dispatch-west) calls Notify-Depot (app_id depot-notify) to deliver the West recovery alert."
+        }
+      },
+      {
+        "source_app_id": "telemetry-prod",
+        "target_app_id": "incident-ledger",
+        "contribution_sources": [
+          "03-recovery-and-archive.md"
+        ],
+        "evidence": {
+          "03-recovery-and-archive.md": "TB-Live (app_id telemetry-prod) calls Ledger-Dispatch (app_id incident-ledger) to record the verified replay checksum."
+        }
+      },
+      {
+        "source_app_id": "cold-dispatch-east",
+        "target_app_id": "replay-vault",
+        "contribution_sources": [
+          "03-recovery-and-archive.md"
+        ],
+        "evidence": {
+          "03-recovery-and-archive.md": "CDX-East (app_id cold-dispatch-east) calls Vault-Manifest (app_id replay-vault) to retain the signed East replay package."
+        }
+      }
+    ],
+    "forbidden_calls": [
+      [
+        "telemetry-prod",
+        "cold-dispatch-east"
+      ],
+      [
+        "incident-ledger",
+        "cold-dispatch-east"
+      ],
+      [
+        "depot-notify",
+        "cold-dispatch-east"
+      ],
+      [
+        "cold-dispatch-east",
+        "telemetry-shadow"
+      ],
+      [
+        "cold-dispatch-east",
+        "cold-dispatch-west"
+      ],
+      [
+        "cold-dispatch-west",
+        "cold-dispatch-east"
+      ],
+      [
+        "cold-dispatch-west",
+        "telemetry-shadow"
+      ],
+      [
+        "telemetry-prod",
+        "cold-dispatch-west"
+      ],
+      [
+        "cold-dispatch-uat",
+        "telemetry-prod"
+      ],
+      [
+        "depot-notify",
+        "cold-dispatch-west"
+      ],
+      [
+        "incident-ledger",
+        "telemetry-prod"
+      ],
+      [
+        "telemetry-shadow",
+        "incident-ledger"
+      ],
+      [
+        "replay-vault",
+        "cold-dispatch-east"
+      ],
+      [
+        "telemetry-prod",
+        "replay-vault"
+      ],
+      [
+        "cold-dispatch-west",
+        "replay-vault"
+      ],
+      [
+        "incident-ledger",
+        "replay-vault"
+      ],
+      [
+        "replay-vault",
+        "incident-ledger"
+      ],
+      [
+        "cold-dispatch-east",
+        "incident-ledger"
+      ],
+      [
+        "cold-dispatch-east",
+        "depot-notify"
+      ]
+    ]
+  }
+}

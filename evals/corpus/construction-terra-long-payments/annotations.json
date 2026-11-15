@@ -1,0 +1,883 @@
+{
+  "schema_version": 1,
+  "business_model": "../quality-labeled/model.yaml",
+  "scope": "Four sequential imports of long merchant-settlement rollout reports. Score cumulative Service identities and CALLS, exact evidence, old IDs, and withdrawal of the North cutover certificate.",
+  "window_chars": 1550,
+  "imports": [
+    {
+      "source": "00-registry.md",
+      "service_app_ids": [
+        "pay-router-north",
+        "pay-router-south",
+        "clearing-bank-prod",
+        "clearing-bank-lab",
+        "merchant-risk-v2",
+        "merchant-risk-v1",
+        "merchant-audit-vault",
+        "merchant-notice-hub",
+        "merchant-recon-ledger"
+      ],
+      "calls": [],
+      "forbidden_calls": [
+        [
+          "clearing-bank-prod",
+          "pay-router-north"
+        ],
+        [
+          "clearing-bank-prod",
+          "pay-router-south"
+        ],
+        [
+          "pay-router-north",
+          "merchant-risk-v1"
+        ],
+        [
+          "pay-router-south",
+          "merchant-risk-v1"
+        ],
+        [
+          "pay-router-north",
+          "clearing-bank-lab"
+        ],
+        [
+          "pay-router-south",
+          "clearing-bank-lab"
+        ],
+        [
+          "pay-router-north",
+          "pay-router-south"
+        ],
+        [
+          "pay-router-south",
+          "pay-router-north"
+        ],
+        [
+          "merchant-risk-v2",
+          "pay-router-north"
+        ],
+        [
+          "merchant-risk-v2",
+          "pay-router-south"
+        ],
+        [
+          "merchant-audit-vault",
+          "pay-router-north"
+        ],
+        [
+          "clearing-bank-lab",
+          "merchant-risk-v2"
+        ],
+        [
+          "clearing-bank-prod",
+          "merchant-risk-v2"
+        ],
+        [
+          "clearing-bank-prod",
+          "merchant-risk-v1"
+        ],
+        [
+          "pay-router-south",
+          "merchant-notice-hub"
+        ],
+        [
+          "pay-router-south",
+          "merchant-risk-v2"
+        ],
+        [
+          "pay-router-south",
+          "clearing-bank-prod"
+        ],
+        [
+          "merchant-audit-vault",
+          "merchant-notice-hub"
+        ]
+      ]
+    },
+    {
+      "source": "01-north-cutover.md",
+      "service_app_ids": [
+        "pay-router-north",
+        "pay-router-south",
+        "clearing-bank-prod",
+        "clearing-bank-lab",
+        "merchant-risk-v2",
+        "merchant-risk-v1",
+        "merchant-audit-vault",
+        "merchant-notice-hub",
+        "merchant-recon-ledger"
+      ],
+      "calls": [
+        {
+          "source_app_id": "pay-router-north",
+          "target_app_id": "merchant-risk-v2",
+          "contribution_sources": [
+            "01-north-cutover.md"
+          ],
+          "evidence": {
+            "01-north-cutover.md": "NorthPay (app_id pay-router-north) calls RiskGate-Current (app_id merchant-risk-v2) to screen pilot captures."
+          }
+        },
+        {
+          "source_app_id": "pay-router-north",
+          "target_app_id": "clearing-bank-prod",
+          "contribution_sources": [
+            "01-north-cutover.md"
+          ],
+          "evidence": {
+            "01-north-cutover.md": "NorthFeed calls ClearBank-Live (app_id clearing-bank-prod) to submit cleared merchant captures."
+          }
+        },
+        {
+          "source_app_id": "pay-router-north",
+          "target_app_id": "merchant-audit-vault",
+          "contribution_sources": [
+            "01-north-cutover.md"
+          ],
+          "evidence": {
+            "01-north-cutover.md": "NorthPay (app_id pay-router-north) calls Vault-Write (app_id merchant-audit-vault) to lodge the pilot control packet."
+          }
+        }
+      ],
+      "forbidden_calls": [
+        [
+          "clearing-bank-prod",
+          "pay-router-north"
+        ],
+        [
+          "clearing-bank-prod",
+          "pay-router-south"
+        ],
+        [
+          "pay-router-north",
+          "merchant-risk-v1"
+        ],
+        [
+          "pay-router-south",
+          "merchant-risk-v1"
+        ],
+        [
+          "pay-router-north",
+          "clearing-bank-lab"
+        ],
+        [
+          "pay-router-south",
+          "clearing-bank-lab"
+        ],
+        [
+          "pay-router-north",
+          "pay-router-south"
+        ],
+        [
+          "pay-router-south",
+          "pay-router-north"
+        ],
+        [
+          "merchant-risk-v2",
+          "pay-router-north"
+        ],
+        [
+          "merchant-risk-v2",
+          "pay-router-south"
+        ],
+        [
+          "merchant-audit-vault",
+          "pay-router-north"
+        ],
+        [
+          "clearing-bank-lab",
+          "merchant-risk-v2"
+        ],
+        [
+          "clearing-bank-prod",
+          "merchant-risk-v2"
+        ],
+        [
+          "clearing-bank-prod",
+          "merchant-risk-v1"
+        ],
+        [
+          "pay-router-south",
+          "merchant-notice-hub"
+        ],
+        [
+          "pay-router-south",
+          "merchant-risk-v2"
+        ],
+        [
+          "pay-router-south",
+          "clearing-bank-prod"
+        ],
+        [
+          "merchant-audit-vault",
+          "merchant-notice-hub"
+        ]
+      ]
+    },
+    {
+      "source": "02-south-and-lab.md",
+      "service_app_ids": [
+        "pay-router-north",
+        "pay-router-south",
+        "clearing-bank-prod",
+        "clearing-bank-lab",
+        "merchant-risk-v2",
+        "merchant-risk-v1",
+        "merchant-audit-vault",
+        "merchant-notice-hub",
+        "merchant-recon-ledger"
+      ],
+      "calls": [
+        {
+          "source_app_id": "pay-router-north",
+          "target_app_id": "merchant-risk-v2",
+          "contribution_sources": [
+            "01-north-cutover.md"
+          ],
+          "evidence": {
+            "01-north-cutover.md": "NorthPay (app_id pay-router-north) calls RiskGate-Current (app_id merchant-risk-v2) to screen pilot captures."
+          }
+        },
+        {
+          "source_app_id": "pay-router-north",
+          "target_app_id": "clearing-bank-prod",
+          "contribution_sources": [
+            "01-north-cutover.md"
+          ],
+          "evidence": {
+            "01-north-cutover.md": "NorthFeed calls ClearBank-Live (app_id clearing-bank-prod) to submit cleared merchant captures."
+          }
+        },
+        {
+          "source_app_id": "pay-router-north",
+          "target_app_id": "merchant-audit-vault",
+          "contribution_sources": [
+            "01-north-cutover.md"
+          ],
+          "evidence": {
+            "01-north-cutover.md": "NorthPay (app_id pay-router-north) calls Vault-Write (app_id merchant-audit-vault) to lodge the pilot control packet."
+          }
+        },
+        {
+          "source_app_id": "pay-router-south",
+          "target_app_id": "merchant-risk-v2",
+          "contribution_sources": [
+            "02-south-and-lab.md"
+          ],
+          "evidence": {
+            "02-south-and-lab.md": "SouthPay (app_id pay-router-south) calls RiskGate-Current (app_id merchant-risk-v2) to screen South capture records."
+          }
+        },
+        {
+          "source_app_id": "pay-router-south",
+          "target_app_id": "clearing-bank-prod",
+          "contribution_sources": [
+            "02-south-and-lab.md"
+          ],
+          "evidence": {
+            "02-south-and-lab.md": "SouthPay (app_id pay-router-south) calls ClearBank-Live (app_id clearing-bank-prod) to settle approved South captures."
+          }
+        },
+        {
+          "source_app_id": "clearing-bank-lab",
+          "target_app_id": "merchant-risk-v1",
+          "contribution_sources": [
+            "02-south-and-lab.md"
+          ],
+          "evidence": {
+            "02-south-and-lab.md": "ClearBank-Lab (app_id clearing-bank-lab) calls RiskGate-Legacy (app_id merchant-risk-v1) to validate the laboratory replay fixture."
+          }
+        },
+        {
+          "source_app_id": "merchant-audit-vault",
+          "target_app_id": "merchant-notice-hub",
+          "contribution_sources": [
+            "02-south-and-lab.md"
+          ],
+          "evidence": {
+            "02-south-and-lab.md": "Vault-Write (app_id merchant-audit-vault) calls NoticeDesk (app_id merchant-notice-hub) to publish the attested South control-packet receipt."
+          }
+        }
+      ],
+      "forbidden_calls": [
+        [
+          "clearing-bank-prod",
+          "pay-router-north"
+        ],
+        [
+          "clearing-bank-prod",
+          "pay-router-south"
+        ],
+        [
+          "pay-router-north",
+          "merchant-risk-v1"
+        ],
+        [
+          "pay-router-south",
+          "merchant-risk-v1"
+        ],
+        [
+          "pay-router-north",
+          "clearing-bank-lab"
+        ],
+        [
+          "pay-router-south",
+          "clearing-bank-lab"
+        ],
+        [
+          "pay-router-north",
+          "pay-router-south"
+        ],
+        [
+          "pay-router-south",
+          "pay-router-north"
+        ],
+        [
+          "merchant-risk-v2",
+          "pay-router-north"
+        ],
+        [
+          "merchant-risk-v2",
+          "pay-router-south"
+        ],
+        [
+          "merchant-audit-vault",
+          "pay-router-north"
+        ],
+        [
+          "clearing-bank-lab",
+          "merchant-risk-v2"
+        ],
+        [
+          "clearing-bank-prod",
+          "merchant-risk-v2"
+        ],
+        [
+          "clearing-bank-prod",
+          "merchant-risk-v1"
+        ],
+        [
+          "pay-router-south",
+          "merchant-notice-hub"
+        ]
+      ]
+    },
+    {
+      "source": "03-ledger-recovery.md",
+      "service_app_ids": [
+        "pay-router-north",
+        "pay-router-south",
+        "clearing-bank-prod",
+        "clearing-bank-lab",
+        "merchant-risk-v2",
+        "merchant-risk-v1",
+        "merchant-audit-vault",
+        "merchant-notice-hub",
+        "merchant-recon-ledger",
+        "merchant-recon-replica"
+      ],
+      "calls": [
+        {
+          "source_app_id": "pay-router-north",
+          "target_app_id": "merchant-risk-v2",
+          "contribution_sources": [
+            "01-north-cutover.md"
+          ],
+          "evidence": {
+            "01-north-cutover.md": "NorthPay (app_id pay-router-north) calls RiskGate-Current (app_id merchant-risk-v2) to screen pilot captures."
+          }
+        },
+        {
+          "source_app_id": "pay-router-north",
+          "target_app_id": "clearing-bank-prod",
+          "contribution_sources": [
+            "01-north-cutover.md",
+            "03-ledger-recovery.md"
+          ],
+          "evidence": {
+            "01-north-cutover.md": "NorthFeed calls ClearBank-Live (app_id clearing-bank-prod) to submit cleared merchant captures.",
+            "03-ledger-recovery.md": "NorthPay (app_id pay-router-north) calls ClearBank-Live (app_id clearing-bank-prod) to replay an unsettled North capture."
+          }
+        },
+        {
+          "source_app_id": "pay-router-north",
+          "target_app_id": "merchant-audit-vault",
+          "contribution_sources": [
+            "01-north-cutover.md"
+          ],
+          "evidence": {
+            "01-north-cutover.md": "NorthPay (app_id pay-router-north) calls Vault-Write (app_id merchant-audit-vault) to lodge the pilot control packet."
+          }
+        },
+        {
+          "source_app_id": "pay-router-south",
+          "target_app_id": "merchant-risk-v2",
+          "contribution_sources": [
+            "02-south-and-lab.md"
+          ],
+          "evidence": {
+            "02-south-and-lab.md": "SouthPay (app_id pay-router-south) calls RiskGate-Current (app_id merchant-risk-v2) to screen South capture records."
+          }
+        },
+        {
+          "source_app_id": "pay-router-south",
+          "target_app_id": "clearing-bank-prod",
+          "contribution_sources": [
+            "02-south-and-lab.md"
+          ],
+          "evidence": {
+            "02-south-and-lab.md": "SouthPay (app_id pay-router-south) calls ClearBank-Live (app_id clearing-bank-prod) to settle approved South captures."
+          }
+        },
+        {
+          "source_app_id": "clearing-bank-lab",
+          "target_app_id": "merchant-risk-v1",
+          "contribution_sources": [
+            "02-south-and-lab.md"
+          ],
+          "evidence": {
+            "02-south-and-lab.md": "ClearBank-Lab (app_id clearing-bank-lab) calls RiskGate-Legacy (app_id merchant-risk-v1) to validate the laboratory replay fixture."
+          }
+        },
+        {
+          "source_app_id": "merchant-audit-vault",
+          "target_app_id": "merchant-notice-hub",
+          "contribution_sources": [
+            "02-south-and-lab.md"
+          ],
+          "evidence": {
+            "02-south-and-lab.md": "Vault-Write (app_id merchant-audit-vault) calls NoticeDesk (app_id merchant-notice-hub) to publish the attested South control-packet receipt."
+          }
+        },
+        {
+          "source_app_id": "merchant-recon-ledger",
+          "target_app_id": "clearing-bank-prod",
+          "contribution_sources": [
+            "03-ledger-recovery.md"
+          ],
+          "evidence": {
+            "03-ledger-recovery.md": "Recon-Primary (app_id merchant-recon-ledger) calls ClearBank-Live (app_id clearing-bank-prod) to obtain the recovery settlement totals."
+          }
+        },
+        {
+          "source_app_id": "merchant-recon-ledger",
+          "target_app_id": "merchant-recon-replica",
+          "contribution_sources": [
+            "03-ledger-recovery.md"
+          ],
+          "evidence": {
+            "03-ledger-recovery.md": "Recon-Primary (app_id merchant-recon-ledger) calls Recon-Replica (app_id merchant-recon-replica) to verify the promoted state."
+          }
+        }
+      ],
+      "forbidden_calls": [
+        [
+          "clearing-bank-prod",
+          "pay-router-north"
+        ],
+        [
+          "clearing-bank-prod",
+          "pay-router-south"
+        ],
+        [
+          "pay-router-north",
+          "merchant-risk-v1"
+        ],
+        [
+          "pay-router-south",
+          "merchant-risk-v1"
+        ],
+        [
+          "pay-router-north",
+          "clearing-bank-lab"
+        ],
+        [
+          "pay-router-south",
+          "clearing-bank-lab"
+        ],
+        [
+          "pay-router-north",
+          "pay-router-south"
+        ],
+        [
+          "pay-router-south",
+          "pay-router-north"
+        ],
+        [
+          "merchant-risk-v2",
+          "pay-router-north"
+        ],
+        [
+          "merchant-risk-v2",
+          "pay-router-south"
+        ],
+        [
+          "merchant-audit-vault",
+          "pay-router-north"
+        ],
+        [
+          "clearing-bank-lab",
+          "merchant-risk-v2"
+        ],
+        [
+          "clearing-bank-prod",
+          "merchant-risk-v2"
+        ],
+        [
+          "clearing-bank-prod",
+          "merchant-risk-v1"
+        ],
+        [
+          "pay-router-south",
+          "merchant-notice-hub"
+        ],
+        [
+          "merchant-recon-replica",
+          "merchant-recon-ledger"
+        ],
+        [
+          "merchant-recon-ledger",
+          "clearing-bank-lab"
+        ],
+        [
+          "merchant-recon-ledger",
+          "merchant-audit-vault"
+        ],
+        [
+          "clearing-bank-prod",
+          "merchant-recon-ledger"
+        ]
+      ]
+    }
+  ],
+  "identity_cases": [
+    {
+      "kind": "same_display_name",
+      "groups": [
+        [
+          "pay-router-north",
+          "pay-router-south"
+        ],
+        [
+          "clearing-bank-prod",
+          "clearing-bank-lab"
+        ],
+        [
+          "merchant-risk-v2",
+          "merchant-risk-v1"
+        ],
+        [
+          "merchant-recon-ledger",
+          "merchant-recon-replica"
+        ]
+      ]
+    },
+    {
+      "kind": "ambiguous_alias",
+      "alias": "Pay Router",
+      "app_ids": [
+        "pay-router-north",
+        "pay-router-south"
+      ],
+      "sources": [
+        "01-north-cutover.md",
+        "02-south-and-lab.md"
+      ]
+    },
+    {
+      "kind": "stable_identity_reuse",
+      "app_ids": [
+        "pay-router-north",
+        "pay-router-south",
+        "clearing-bank-prod",
+        "clearing-bank-lab",
+        "merchant-risk-v2",
+        "merchant-risk-v1",
+        "merchant-audit-vault",
+        "merchant-notice-hub",
+        "merchant-recon-ledger"
+      ]
+    }
+  ],
+  "repeat": {
+    "source": "03-ledger-recovery.md",
+    "service_app_ids": [
+      "pay-router-north",
+      "pay-router-south",
+      "clearing-bank-prod",
+      "clearing-bank-lab",
+      "merchant-risk-v2",
+      "merchant-risk-v1",
+      "merchant-audit-vault",
+      "merchant-notice-hub",
+      "merchant-recon-ledger",
+      "merchant-recon-replica"
+    ],
+    "calls": [
+      {
+        "source_app_id": "pay-router-north",
+        "target_app_id": "merchant-risk-v2",
+        "contribution_sources": [
+          "01-north-cutover.md"
+        ],
+        "evidence": {
+          "01-north-cutover.md": "NorthPay (app_id pay-router-north) calls RiskGate-Current (app_id merchant-risk-v2) to screen pilot captures."
+        }
+      },
+      {
+        "source_app_id": "pay-router-north",
+        "target_app_id": "clearing-bank-prod",
+        "contribution_sources": [
+          "01-north-cutover.md",
+          "03-ledger-recovery.md"
+        ],
+        "evidence": {
+          "01-north-cutover.md": "NorthFeed calls ClearBank-Live (app_id clearing-bank-prod) to submit cleared merchant captures.",
+          "03-ledger-recovery.md": "NorthPay (app_id pay-router-north) calls ClearBank-Live (app_id clearing-bank-prod) to replay an unsettled North capture."
+        }
+      },
+      {
+        "source_app_id": "pay-router-north",
+        "target_app_id": "merchant-audit-vault",
+        "contribution_sources": [
+          "01-north-cutover.md"
+        ],
+        "evidence": {
+          "01-north-cutover.md": "NorthPay (app_id pay-router-north) calls Vault-Write (app_id merchant-audit-vault) to lodge the pilot control packet."
+        }
+      },
+      {
+        "source_app_id": "pay-router-south",
+        "target_app_id": "merchant-risk-v2",
+        "contribution_sources": [
+          "02-south-and-lab.md"
+        ],
+        "evidence": {
+          "02-south-and-lab.md": "SouthPay (app_id pay-router-south) calls RiskGate-Current (app_id merchant-risk-v2) to screen South capture records."
+        }
+      },
+      {
+        "source_app_id": "pay-router-south",
+        "target_app_id": "clearing-bank-prod",
+        "contribution_sources": [
+          "02-south-and-lab.md"
+        ],
+        "evidence": {
+          "02-south-and-lab.md": "SouthPay (app_id pay-router-south) calls ClearBank-Live (app_id clearing-bank-prod) to settle approved South captures."
+        }
+      },
+      {
+        "source_app_id": "clearing-bank-lab",
+        "target_app_id": "merchant-risk-v1",
+        "contribution_sources": [
+          "02-south-and-lab.md"
+        ],
+        "evidence": {
+          "02-south-and-lab.md": "ClearBank-Lab (app_id clearing-bank-lab) calls RiskGate-Legacy (app_id merchant-risk-v1) to validate the laboratory replay fixture."
+        }
+      },
+      {
+        "source_app_id": "merchant-audit-vault",
+        "target_app_id": "merchant-notice-hub",
+        "contribution_sources": [
+          "02-south-and-lab.md"
+        ],
+        "evidence": {
+          "02-south-and-lab.md": "Vault-Write (app_id merchant-audit-vault) calls NoticeDesk (app_id merchant-notice-hub) to publish the attested South control-packet receipt."
+        }
+      },
+      {
+        "source_app_id": "merchant-recon-ledger",
+        "target_app_id": "clearing-bank-prod",
+        "contribution_sources": [
+          "03-ledger-recovery.md"
+        ],
+        "evidence": {
+          "03-ledger-recovery.md": "Recon-Primary (app_id merchant-recon-ledger) calls ClearBank-Live (app_id clearing-bank-prod) to obtain the recovery settlement totals."
+        }
+      },
+      {
+        "source_app_id": "merchant-recon-ledger",
+        "target_app_id": "merchant-recon-replica",
+        "contribution_sources": [
+          "03-ledger-recovery.md"
+        ],
+        "evidence": {
+          "03-ledger-recovery.md": "Recon-Primary (app_id merchant-recon-ledger) calls Recon-Replica (app_id merchant-recon-replica) to verify the promoted state."
+        }
+      }
+    ]
+  },
+  "withdraw": {
+    "source": "01-north-cutover.md",
+    "service_app_ids": [
+      "pay-router-north",
+      "pay-router-south",
+      "clearing-bank-prod",
+      "clearing-bank-lab",
+      "merchant-risk-v2",
+      "merchant-risk-v1",
+      "merchant-audit-vault",
+      "merchant-notice-hub",
+      "merchant-recon-ledger",
+      "merchant-recon-replica"
+    ],
+    "calls": [
+      {
+        "source_app_id": "pay-router-north",
+        "target_app_id": "clearing-bank-prod",
+        "contribution_sources": [
+          "03-ledger-recovery.md"
+        ],
+        "evidence": {
+          "03-ledger-recovery.md": "NorthPay (app_id pay-router-north) calls ClearBank-Live (app_id clearing-bank-prod) to replay an unsettled North capture."
+        }
+      },
+      {
+        "source_app_id": "pay-router-south",
+        "target_app_id": "merchant-risk-v2",
+        "contribution_sources": [
+          "02-south-and-lab.md"
+        ],
+        "evidence": {
+          "02-south-and-lab.md": "SouthPay (app_id pay-router-south) calls RiskGate-Current (app_id merchant-risk-v2) to screen South capture records."
+        }
+      },
+      {
+        "source_app_id": "pay-router-south",
+        "target_app_id": "clearing-bank-prod",
+        "contribution_sources": [
+          "02-south-and-lab.md"
+        ],
+        "evidence": {
+          "02-south-and-lab.md": "SouthPay (app_id pay-router-south) calls ClearBank-Live (app_id clearing-bank-prod) to settle approved South captures."
+        }
+      },
+      {
+        "source_app_id": "clearing-bank-lab",
+        "target_app_id": "merchant-risk-v1",
+        "contribution_sources": [
+          "02-south-and-lab.md"
+        ],
+        "evidence": {
+          "02-south-and-lab.md": "ClearBank-Lab (app_id clearing-bank-lab) calls RiskGate-Legacy (app_id merchant-risk-v1) to validate the laboratory replay fixture."
+        }
+      },
+      {
+        "source_app_id": "merchant-audit-vault",
+        "target_app_id": "merchant-notice-hub",
+        "contribution_sources": [
+          "02-south-and-lab.md"
+        ],
+        "evidence": {
+          "02-south-and-lab.md": "Vault-Write (app_id merchant-audit-vault) calls NoticeDesk (app_id merchant-notice-hub) to publish the attested South control-packet receipt."
+        }
+      },
+      {
+        "source_app_id": "merchant-recon-ledger",
+        "target_app_id": "clearing-bank-prod",
+        "contribution_sources": [
+          "03-ledger-recovery.md"
+        ],
+        "evidence": {
+          "03-ledger-recovery.md": "Recon-Primary (app_id merchant-recon-ledger) calls ClearBank-Live (app_id clearing-bank-prod) to obtain the recovery settlement totals."
+        }
+      },
+      {
+        "source_app_id": "merchant-recon-ledger",
+        "target_app_id": "merchant-recon-replica",
+        "contribution_sources": [
+          "03-ledger-recovery.md"
+        ],
+        "evidence": {
+          "03-ledger-recovery.md": "Recon-Primary (app_id merchant-recon-ledger) calls Recon-Replica (app_id merchant-recon-replica) to verify the promoted state."
+        }
+      }
+    ],
+    "forbidden_calls": [
+      [
+        "clearing-bank-prod",
+        "pay-router-north"
+      ],
+      [
+        "clearing-bank-prod",
+        "pay-router-south"
+      ],
+      [
+        "pay-router-north",
+        "merchant-risk-v1"
+      ],
+      [
+        "pay-router-south",
+        "merchant-risk-v1"
+      ],
+      [
+        "pay-router-north",
+        "clearing-bank-lab"
+      ],
+      [
+        "pay-router-south",
+        "clearing-bank-lab"
+      ],
+      [
+        "pay-router-north",
+        "pay-router-south"
+      ],
+      [
+        "pay-router-south",
+        "pay-router-north"
+      ],
+      [
+        "merchant-risk-v2",
+        "pay-router-north"
+      ],
+      [
+        "merchant-risk-v2",
+        "pay-router-south"
+      ],
+      [
+        "merchant-audit-vault",
+        "pay-router-north"
+      ],
+      [
+        "clearing-bank-lab",
+        "merchant-risk-v2"
+      ],
+      [
+        "clearing-bank-prod",
+        "merchant-risk-v2"
+      ],
+      [
+        "clearing-bank-prod",
+        "merchant-risk-v1"
+      ],
+      [
+        "pay-router-south",
+        "merchant-notice-hub"
+      ],
+      [
+        "merchant-recon-replica",
+        "merchant-recon-ledger"
+      ],
+      [
+        "merchant-recon-ledger",
+        "clearing-bank-lab"
+      ],
+      [
+        "merchant-recon-ledger",
+        "merchant-audit-vault"
+      ],
+      [
+        "clearing-bank-prod",
+        "merchant-recon-ledger"
+      ],
+      [
+        "pay-router-north",
+        "merchant-risk-v2"
+      ],
+      [
+        "pay-router-north",
+        "merchant-audit-vault"
+      ]
+    ]
+  }
+}
