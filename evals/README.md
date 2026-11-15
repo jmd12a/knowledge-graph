@@ -12,6 +12,7 @@
 | 确定性回归 | `python -B -m evals.quality_deterministic`。它也运行分窗、检索证据和评审回归。`python -B -m evals.quality_retrieval_evidence` 可单独跑检索边界。 | 项目虚拟环境。用固定输入验证程序行为。 |
 | 构建、删除、恢复和短合同 | `evals.run` 的 `mechanisms`、`contract`、`recovery` 阶段。输入在 `examples/` 与 `corpus/cuad/`。 | 隔离的真实存储。合同与语义检索使用有效模型配置。 |
 | 长合同与小标注集 | `corpus/cuad-long/` 含原文、题目和官方范围，入口是 `evals.long_contract`。`corpus/quality-labeled/` 含小标注集，入口是 `evals.quality_labeled`。 | 两组都需要真实模型。长合同还需要隔离存储，小标注集用内存图。全文与结构化策略对照见下文。 |
+| 构建复查与连续导入 | `evals.quality_construction_loop`、`evals.quality_incremental_construction` 离线验证机制。`evals.quality_terra_construction` 在线比较关闭档与一个复查预算。 | 离线使用固定响应。在线需要应用配置与模型凭据，连续导入另外需要 Neo4j。[构建复查入口](#构建复查对照) |
 | 分布式准备故障 | `evals.distributed_worker --config <测试配置>`。用例在代码中，模型响应用固定数据。 | 运行指南中的隔离测试存储及配置。 |
 
 ### 历史结果与额外实验
@@ -19,8 +20,9 @@
 | 评测 | 仓库可核对的内容 | 完整复跑所需的本地材料 |
 | --- | --- | --- |
 | 首版长合同 23/26 | 冻结语料、[逐题与原始响应](published/README.md)。 | 首版真实模型与隔离存储。旧源码和运行配置快照另存于原始运行档案。 |
-| 当前版 25/26、同模型重建及固定图检索 | 长合同原文与题目、版本号、[逐题计分摘要](published/optimization-summary.json)。 | 固定结构化快照、历史运行配置和版本对照脚本。仓库现有长合同入口可创建新快照。 |
+| 11 月 8 日迭代复测 25/26、同模型重建及固定图检索 | 长合同原文与题目、版本号、[逐题计分摘要](published/optimization-summary.json)。 | 固定结构化快照、历史运行配置和版本对照脚本。仓库现有长合同入口可创建新快照。 |
 | TechQA、HotpotQA、Qasper 与额外 CUAD 长文 | [原文、题目与发行件清单](corpus/public/README.md)，入口是 `evals.public_quality`。 | Qasper 和 CUAD 合同 2 需下载发行件。历史固定候选对照还需要当时的图和候选顺序。 |
+| 11 月 15 日三档构建对照 | [分项指标、语料哈希和档案索引](published/construction-review-summary.json)。 | 按同一次首抽准确重放三档，需要原始响应、登记图、配置及检查点。 |
 | 独立多文档留出样本 | [5 篇服务目录和 7 篇独立手册](corpus/holdout/README.md)，入口是 `evals.holdout_quality`。 | 真实存储与模型。已退出主链路的历史重排变体需对应源码与快照。 |
 
 原始模型载荷、凭据和运行数据通过本地配置及运行目录管理。仓库摘要用于核对分数和分母，完整复跑以对应的输入、代码、配置和快照为准。
@@ -189,10 +191,10 @@ KG_EXTRACTION_SCOPE_POLICY=structure .venv/bin/python -B -m evals.long_contract 
 
 另有一个全量标注的小语料，包含 TXT 与 Markdown、3 个 Service、3 个 Clause 实例和 1 条 CALLS 关系，并同时覆盖同名不同实体、别名同实体与同标题不同条款。早期无原子组装配置的 run `c0f51673-0f03-463c-a5f2-cd984e8eac45`：全文 Clause TP/FP/FN 为 2/0/1，小批为 0/2/3；两者 Service 均为 3/0/0、CALLS 均为 1/0/0。中间版本加 `full_statement` 的 run `761d1470-a869-4c02-8338-2bd91363b744` 小批 Clause 为 1/1/2，全文因模型结构错误失败。这些是诊断样本，不是最终代码的跨场景效果估计；标注集很小，不代表总体 precision。普通逐字模式只保证来源保真，不保证句子完整；模型在完全可见单元内仍可能选择词边界正确但语义未完的片段。不同完整身份但同义标题的安全归并留待下一轮独立设计和评测。
 
-### 冻结基线与当前版复测记录
+### 冻结基线与 11 月 8 日迭代复测记录
 
 - **最早的全文旧基线**在 `evals/records/b1afbd7c-620a-43ee-b814-24840f42a6eb/`。GLM‑5.3 搭配 Gemini Embedding 2，原始长合同通过 **23/26**。该目录的 `program-sources/` 保存当时实际执行的程序，`manifest.json` 保存配置，`long-contract-retrieval.json` 保存逐题结果。复现旧版时以冻结程序为准。
-- **当前推荐版**的代码快照为 `4531b68`。采用结构化构建快照、原召回和紧凑重排，图实体详情补完整段落，原文保留来源坐标与备选。GPT‑6 Sol 在原始合同上通过 **25/26**，图实体 12/12、原文 12/12、自然语言 1/2。复测复用了已发布的结构化快照，GPT‑6 Sol 用于重排及两次自然语言规划。逐题计分见[优化对照摘要](published/optimization-summary.json)。详细运行记录在评测工作区的 `contract-26-model-ab-gpt-6-sol-structure-verified/compact.json`。
+- **11 月 8 日迭代复测**的代码快照为 `4531b68`。采用结构化构建快照、原召回和紧凑重排，图实体详情补完整段落，原文保留来源坐标与备选。GPT‑6 Sol 在原始合同上通过 **25/26**，图实体 12/12、原文 12/12、自然语言 1/2。复测复用了已发布的结构化快照，GPT‑6 Sol 用于重排及两次自然语言规划。逐题计分见[优化对照摘要](published/optimization-summary.json)。详细运行记录在评测工作区的 `contract-26-model-ab-gpt-6-sol-structure-verified/compact.json`。
 
 上面的旧基线为内部冻结归档。对外展示的首版同为 23/26，对应[已发布的原始运行](published/README.md)。代表性成绩、完整版本对照及公开数据集结果统一见[评测说明与结果](../docs/03-使用与验证/评测说明与结果.md)。各轮保留自己的模型、快照与预算。共享证据组装保存在 `experiment/evidence-assembly` 分支的 `e7d25fa`。它在同模型的 59 组配对中总体持平，混合查询耗时下降，同时出现公开长文覆盖回归。
 
@@ -204,8 +206,8 @@ KG_EXTRACTION_SCOPE_POLICY=structure .venv/bin/python -B -m evals.long_contract 
 报告正确数、预测数、预期数、精确率和召回率。已标注的原文片段单独计证据覆盖率。
 多轮用例还统计关系来源集合和上一轮实体 ID 的保留率。分母为 0 时比率记为 `null`。
 
-冷链按标注引用计算关系精确率和召回率，并分别检查标注正文的实质内容覆盖与整节原文回读。
-每节须有证据支持整段正文回读，正文内容覆盖允许从多条事实取证，并忽略句间空白。
+冷链按标注引用计算关系精确率和召回率，并分别检查标注正文的实质内容覆盖与章节上下文引用覆盖。
+章节上下文覆盖按保存的引用坐标检查整节正文，正文内容覆盖允许从多条事实取证，并忽略空白。
 单条声明包含整段正文仍保留在历史指标 `body_hits` 中，用于比较章节和规则的粒度。
 冷链的评测标签以章节和引用为单位，独立规则节点的精确率和召回率暂记为 `null`。
 
@@ -220,9 +222,9 @@ KG_EXTRACTION_SCOPE_POLICY=structure .venv/bin/python -B -m evals.long_contract 
 
 ```bash
 .venv/bin/python -B -m evals.quality_construction_loop --live \
-  --config /absolute/path/to/model.yaml --output /absolute/path/to/payment-report.json
+  --config /absolute/path/to/app.yaml --output /absolute/path/to/payment-report.json
 .venv/bin/python -B -m evals.quality_incremental_construction --live \
-  --config /absolute/path/to/model.yaml --output /absolute/path/to/import-report.json
+  --config /absolute/path/to/app.yaml --output /absolute/path/to/import-report.json
 ```
 
 ### 复杂构建对照
@@ -233,22 +235,24 @@ KG_EXTRACTION_SCOPE_POLICY=structure .venv/bin/python -B -m evals.long_contract 
 已初始化的 Neo4j。该入口直接验证构建、对齐及图适配器，可独立于 API 和 Worker 调度运行。
 
 ```bash
-.venv/bin/python -B -m evals.quality_terra_construction references --config /path/to/model.yaml --output /path/to/references.json
-.venv/bin/python -B -m evals.quality_terra_construction sequence --config /path/to/model.yaml --output /path/to/sequence.json
+.venv/bin/python -B -m evals.quality_terra_construction references --config /path/to/app.yaml --output /path/to/references.json
+.venv/bin/python -B -m evals.quality_terra_construction sequence --config /path/to/app.yaml --output /path/to/sequence.json
 ```
 
 长文档连续导入用例可用 `sequence --corpus construction-terra-long-payments` 或
 `sequence --corpus construction-terra-long-logistics` 或
 `sequence --corpus construction-terra-public-store` 复跑，配置和输出参数与上面的命令相同。
 每组四份独立文档。报告逐轮记录来源长度、窗口、证据与旧实体 ID，并核对重复投影和撤回后的图。
-上述命令默认比较关闭与每份最多 12 次请求，使用 `--loop-calls 24` 可改变实验组预算。每次在线复跑都只在该次对照内共享首抽。
+上述命令默认比较关闭与每份最多 12 次请求，使用 `--loop-calls 24` 可改变实验组预算。每次在线运行只生成一组两档对照。分别运行 12 和 24 时，每次都会生成自己的首抽。要按发布表精确重放共享首抽的三档结果，需要[摘要所索引的本机归档](published/construction-review-summary.json)。
+
+`--config` 指向服务应用配置，其中包含语言模型与存储参数。命令优先使用 `construction_llm`，否则使用 `llm`。业务模型与标注由所选用例读取。连续导入入口接入关键词与已确认提及查询，向量候选的行为由固定响应回归验证。
 在候选草稿相同的条件下，两组为两端都在其他窗口的关系构造相同的原文范围、端点身份摘录、提示和输出约束。
 
 ### 综合文档审查对照
 
 ```bash
 .venv/bin/python -B -m evals.quality_terra_audit_ab sequence \
-  --corpus construction-terra-audit-workforce --config /path/to/model.yaml --output /path/to/audit-ab.json
+  --corpus construction-terra-audit-workforce --config /path/to/app.yaml --output /path/to/audit-ab.json
 ```
 
 每批只构建一次基础草稿。两组共享跨窗连接、端点身份原文和基础草稿摘要，仅实验组执行全篇关系审查。

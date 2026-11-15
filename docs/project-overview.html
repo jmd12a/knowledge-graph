@@ -98,6 +98,12 @@
 .release-note ul{list-style:none;padding:0;margin:0;color:var(--muted);font-size:14px;line-height:1.65}
 .release-note strong{color:var(--ink);margin-right:4px}
 .release-note .links{gap:4px 18px;margin-top:8px}
+.build-results{padding-bottom:32px;margin-bottom:26px;border-bottom:1px solid var(--line)}
+.build-results h3,.historical-results h3{font-size:21px;line-height:1.5;margin:0 0 8px}
+.build-results .metrics tbody th{font:inherit;color:var(--ink);padding:12px 10px 12px 0;border-bottom:1px solid var(--line)}
+.build-results .metrics thead th:last-child,.build-results .metrics td:last-child{color:var(--green)}
+.build-results .metrics td{padding:12px 0}
+@media(max-width:640px){.build-results .metrics{font-size:13px}}
 .exploration-note{padding:20px 0;border-bottom:1px solid var(--line);font-size:14px;color:var(--muted)}
 .exploration-note p{margin:0 0 4px;max-width:820px}
 .exploration-note p:last-child{margin-bottom:0}
@@ -118,18 +124,18 @@
       <ul>
         <li><strong>长文构建</strong> 跨窗候选共用关系原文和端点身份依据，结构化构建可配置额外复查预算。</li>
         <li><strong>连续导入</strong> 模型可关键词或语义检索已发布实体和原文，判断复用或新建。</li>
-        <li><strong>构建评测</strong> 固定基础草稿和登记图，退货与工资关账的关系召回从 6/13 到 13/13。</li>
+        <li><strong>构建评测</strong> 固定首抽和登记图，退货与工资关账的关系召回从 6/13 到 13/13，原文证据覆盖从 7/16 到 16/16。</li>
       </ul>
       <div class="links">
         <a href="https://github.com/jmd12a/knowledge-graph/blob/HEAD/docs/02-项目设计/迭代优化设计-2026-11-15.md">本轮迭代设计</a>
-        <a href="https://github.com/jmd12a/knowledge-graph/blob/HEAD/docs/03-使用与验证/评测说明与结果.md#6-构建复查与连续导入">构建对照</a>
+        <a href="#build-results">本轮效果与请求开销</a>
       </div>
     </aside>
-    <div class="links"><a href="https://github.com/jmd12a/knowledge-graph">查看 GitHub 仓库 ↗</a><a href="#architecture">查看读写架构</a><a href="#results">查看长合同成绩</a></div>
+    <div class="links"><a href="https://github.com/jmd12a/knowledge-graph">查看 GitHub 仓库 ↗</a><a href="#architecture">查看读写架构</a><a href="#results">查看构建与检索评测</a></div>
   </div>
 <div class="specimen"><svg viewBox="0 0 430 310" role="img" aria-labelledby="spec-title spec-desc"><title id="spec-title">从资料到知识，再回到原文</title><desc id="spec-desc">原文通过来源贡献支撑相互关联的实体和条款，检索结果可沿证据返回原文。</desc><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#bdc9bf"/></pattern></defs><rect width="430" height="310" fill="url(#dots)"/><g stroke="#84a494" stroke-width="1.5" fill="none"><path d="M84 160L210 72L344 133L274 245L84 160L344 133M210 72L274 245"/><path d="M84 160L210 72" stroke="#176451" stroke-width="3"/></g><rect x="25" y="127" width="117" height="70" rx="3" fill="#fffefa" stroke="#176451"/><path d="M43 145h35m-35 12h80m-80 12h63m-63 12h71" stroke="#84a494" stroke-width="2"/><circle cx="210" cy="72" r="30" fill="#176451"/><circle cx="344" cy="133" r="34" fill="#172a2b"/><circle cx="274" cy="245" r="26" fill="#b06027"/><g font-size="13" font-family="Microsoft YaHei, sans-serif" text-anchor="middle"><text x="210" y="77" fill="white">实体</text><text x="344" y="138" fill="white">条款</text><text x="274" y="250" fill="white">证据</text><text x="83" y="218" fill="#586867">原始资料</text><text x="281" y="64" fill="#176451">关系</text></g></svg><div class="caption">从图中的事实沿来源回查原文。</div></div>
 </section>
-<div class="facts" aria-label="项目基本信息"><div><strong>HTTP + MCP</strong><span>服务接口与 Agent 工具入口</span></div><div><strong>原文可回查</strong><span>沿条款、事实和关系定位证据</span></div><div><strong>按来源维护</strong><span>资料撤回时保留其他来源的贡献</span></div><div><strong>25 / 26</strong><span>当前版代表性长合同证据覆盖</span></div></div>
+<div class="facts" aria-label="项目基本信息"><div><strong>HTTP + MCP</strong><span>服务接口与 Agent 工具入口</span></div><div><strong>原文可回查</strong><span>沿条款、事实和关系定位证据</span></div><div><strong>按来源维护</strong><span>资料撤回时保留其他来源的贡献</span></div><div><strong>25 / 26</strong><span>11 月 8 日迭代的长合同检索复测</span></div></div>
 
 <section class="chapter" id="architecture">
   <div class="section-head">
@@ -215,7 +221,7 @@
   </div>
   <section class="query-example" aria-labelledby="example-title">
     <h3 id="example-title">一次查询返回什么</h3>
-    <p class="example-intro">取自当前版的长合同复测。问题用中文简述，原文只展示一小段，覆盖结果对应完整的参考范围。</p>
+    <p class="example-intro">取自 11 月 8 日迭代的长合同检索复测。问题用中文简述，原文只展示一小段，覆盖结果对应完整的参考范围。</p>
     <div class="example-grid">
       <div class="example-query">
         <span class="example-label">查询</span>
@@ -402,27 +408,49 @@
 <section class="chapter" id="scope"><div class="section-head"><span class="number">04</span><div><h2>接口与适用边界</h2><p>提供可追溯的知识材料，由调用方完成最终回答、业务计算与执行。</p></div></div><div class="contract"><div><h3>服务负责的事</h3><ul><li>以业务字段和数据库约束对齐身份，使用随机 UUID 标识对象。</li><li>保存精确引用、来源贡献和完整原子字段声明。</li><li>支持混合检索、图查询、资料删除、模型重建和向量重建。</li><li>对模型错误和证据错误进行有限重试，保留失败原因。</li><li>模型完整性标记作为质量信息，不单独否决已有证据支持的正文。</li></ul></div><div class="boundary"><h3>适用边界</h3><ul><li>Top-K 是候选集合，不表示知识库已经完整枚举。</li><li>字段和证据校验通过，不等于业务语义已获人工验收。</li><li>原文引用必须真实且在输入范围内，不能用近似措辞补造证据。</li><li>扫描 PDF、复杂表格、生产并发和高可用仍缺少验收结果。</li><li>默认单 API、单 Worker。可选跨库并行准备与单 Worker 串行发布，应用面向可信环境。</li></ul></div></div><div class="tools" aria-label="MCP 工具"><code>describe_model</code><code>search_knowledge</code><code>get_knowledge</code><code>query_graph</code><code>retrieve</code></div></section>
 
 <section class="chapter" id="results">
-  <div class="section-head"><span class="number">05</span><div><h2>长合同证据覆盖，首版与当前版</h2><p>AlliedEsports Content License Agreement · 35,525 字节原文 · 固定问题与 Top 5。</p></div></div>
+  <div class="section-head"><span class="number">05</span><div><h2>构建与检索评测</h2><p>本轮比较构建复查，上轮记录长合同检索取证。</p></div></div>
+  <section class="build-results" id="build-results" aria-labelledby="build-results-title">
+    <h3 id="build-results-title">11 月 15 日构建复查</h3>
+    <p class="small">GPT‑6.1 Terra。退货和工资关账各导入三份合成资料，两组用例的三档对照各自固定登记图、首抽与跨窗端点原文。</p>
+    <table class="metrics">
+      <caption class="small" style="text-align:left">两组连续导入合计，预算按单份资料设置</caption>
+      <thead><tr><th scope="col">指标</th><th scope="col">关闭</th><th scope="col">最多 12 次</th><th scope="col">最多 24 次</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">服务实体召回</th><td>15/15</td><td>15/15</td><td>15/15</td></tr>
+        <tr><th scope="row">关系召回</th><td>6/13</td><td>8/13</td><td><strong>13/13</strong></td></tr>
+        <tr><th scope="row">原文证据覆盖</th><td>7/16</td><td>9/16</td><td><strong>16/16</strong></td></tr>
+        <tr><th scope="row">额外语言模型请求</th><td>0</td><td>48</td><td>87</td></tr>
+      </tbody>
+    </table>
+    <p class="small">从 12 档到 24 档额外请求 39 次，新增 5 条正确关系，均来自退货用例。工资关账的关系和证据在 12 档已补齐，冷链也在 12 档补齐 2 条跨窗引用。</p>
+    <p class="small">结果来自归档的构建与图投影评测。额外请求数统计语言模型调用，包含传输重试。</p>
+    <div class="links"><a href="https://github.com/jmd12a/knowledge-graph/blob/HEAD/docs/03-使用与验证/评测说明与结果.md#6-构建复查与连续导入">逐用例结果、开销与复跑方式</a></div>
+  </section>
+  <section class="historical-results" aria-labelledby="historical-results-title">
+  <h3 id="historical-results-title">11 月 8 日迭代的长合同检索复测</h3>
+  <p class="small">AlliedEsports Content License Agreement · 35,525 字节原文 · 固定问题与 Top 5。</p>
   <div class="result">
-    <div><div class="score">25<span> / 26</span></div><p class="score-label">当前版代表性复测。首版基线为 23 / 26。</p><p class="small">12 个问题分别走实体与切片检索，另有 2 个自然语言动作。通过要求是找齐对应原文。</p></div>
+    <div><div class="score">25<span> / 26</span></div><p class="score-label">11 月 8 日迭代复测。首版基线为 23 / 26。</p><p class="small">12 个问题分别走实体与切片检索，另有 2 个自然语言动作。通过要求是找齐对应原文。</p></div>
     <div>
       <table class="metrics">
         <caption class="small" style="text-align:left">各路线的证据完整覆盖</caption>
-        <thead><tr><th scope="col">检索方式</th><th scope="col">首版</th><th scope="col">当前版</th></tr></thead>
+        <thead><tr><th scope="col">检索方式</th><th scope="col">首版</th><th scope="col">11 月 8 日迭代复测</th></tr></thead>
         <tbody><tr><td>图实体与详情</td><td>10 / 12</td><td>12 / 12</td></tr><tr><td>原文切片</td><td>11 / 12</td><td>12 / 12</td></tr><tr><td>自然语言组合</td><td>2 / 2</td><td>1 / 2</td></tr></tbody>
       </table>
       <p class="small">两次运行采用相同问题和计分规则，各自绑定当时的模型与构建快照。</p>
     </div>
   </div>
   <div class="known">
-    <details open><summary>两次运行用的是什么配置？</summary><p>首版用 GLM‑5.3 和 Gemini Embedding 2。当前版复用结构化构建快照，用 GPT‑6 Sol 做重排和自然语言规划，查询向量使用 text-embedding-3-large。</p></details>
-    <details><summary>哪些证据还没找齐？</summary><p>首版缺少最低付款承诺或许可授予的部分段落。当前版在「终止后授权」的自然语言检索中漏了前置的原始授权范围。跨文档和长文的独立结果见评测说明。</p></details>
+    <details open><summary>两次运行用的是什么配置？</summary><p>首版用 GLM‑5.3 和 Gemini Embedding 2。11 月 8 日迭代复测复用结构化构建快照，用 GPT‑6 Sol 做重排和自然语言规划，查询向量使用 text-embedding-3-large。</p></details>
+    <details><summary>哪些证据还没找齐？</summary><p>首版缺少最低付款承诺或许可授予的部分段落。11 月 8 日迭代复测在「终止后授权」的自然语言检索中漏了前置的原始授权范围。跨文档和长文的独立结果见评测说明。</p></details>
   </div>
   <div class="links"><a href="https://github.com/jmd12a/knowledge-graph/blob/HEAD/docs/03-使用与验证/评测说明与结果.md">评测说明与其他测试 ↗</a><a href="https://github.com/jmd12a/knowledge-graph/blob/HEAD/evals/published/README.md">首版原始证据 ↗</a></div>
+  </section>
 </section>
 
 <aside class="exploration-note" aria-labelledby="exploration-title">
-  <p><strong id="exploration-title">后续探索</strong></p>
+  <p><strong id="exploration-title">下一步与后续探索</strong></p>
+  <p>下一步接入只读业务数据表，按主键和外键映射已登记关系。文本导入可按需查询业务目录，按业务 ID 把文档关系接到同一实体。<a href="https://github.com/jmd12a/knowledge-graph/blob/HEAD/docs/02-项目设计/迭代优化设计-2026-11-15.md#下一步计划接入业务数据表">接入计划与验收用例</a></p>
   <p>基于当前实现与验证，文档梳理了资料持续更新、业务口径、多角色权限和 Agent 连续交互等方向，并列出参考设计与验证方法。相关能力尚待实现和验收。</p>
   <p><a href="https://github.com/jmd12a/knowledge-graph/blob/HEAD/docs/02-项目设计/面向业务落地的能力演进与探索-2026-11-08.md">阅读《面向业务落地的能力演进与探索》</a></p>
 </aside>
@@ -438,6 +466,6 @@ export KG_ENV_FILE="$PWD/.env"
 .venv/bin/kg serve
 .venv/bin/kg worker</code></pre><p class="small">先按运行指南创建虚拟环境、安装依赖并复制配置模板。凭据放在本机 .env 或进程环境变量，API 和 Worker 使用同一份配置。</p></div><div><ul class="guide-list"><li><a href="https://github.com/jmd12a/knowledge-graph#readme">README</a><span>安装入口与核心能力</span></li><li><a href="https://github.com/jmd12a/knowledge-graph/blob/HEAD/docs/03-使用与验证/运行指南.md">运行指南</a><span>配置、导入与维护</span></li><li><a href="https://github.com/jmd12a/knowledge-graph/tree/HEAD/docs/02-项目设计">架构与实施设计</a><span>模型、存储与恢复</span></li><li><a href="https://github.com/jmd12a/knowledge-graph/blob/HEAD/docs/02-项目设计/迭代优化设计-2026-11-08.md">迭代优化设计</a><span>构建、检索、差量维护与并行准备</span></li><li><a href="https://github.com/jmd12a/knowledge-graph/tree/HEAD/examples">业务模型示例</a><span>服务目录与合同</span></li><li><a href="https://github.com/jmd12a/knowledge-graph/blob/HEAD/configs/app.example.yaml">OpenRouter 配置</a><span>LLM 与向量模型</span></li></ul><p class="small">知识库的向量配置需要与索引保持一致。更换 Embedding 模型时使用 REINDEX，避免混用不同模型的向量。</p></div></div></section>
 </main>
-<footer class="wrap footer"><span>Knowledge Graph / 项目概览 · 2026-11-02<br>单文件 HTML，无外部字体、脚本或图片依赖。</span><span>README 的图解补充 · <a href="https://github.com/jmd12a/knowledge-graph">jmd12a/knowledge-graph ↗</a><br>合同资料来源与 CC BY 4.0 归属信息保留在仓库语料清单中。</span></footer>
+<footer class="wrap footer"><span>Knowledge Graph / 项目概览 · 2026-11-15<br>单文件 HTML，无外部字体、脚本或图片依赖。</span><span>README 的图解补充 · <a href="https://github.com/jmd12a/knowledge-graph">jmd12a/knowledge-graph ↗</a><br>合同资料来源与 CC BY 4.0 归属信息保留在仓库语料清单中。</span></footer>
 </body>
 </html>
