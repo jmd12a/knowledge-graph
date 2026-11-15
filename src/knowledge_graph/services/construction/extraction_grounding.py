@@ -10,7 +10,7 @@ from pydantic import Field, StrictBool, StrictInt, ValidationError
 
 from ...domain import KGError, StrictModel
 from .extraction_batches import ExtractionBatch, request_fits
-from .extraction_windows import open_source_edges
+from .extraction_windows import build_input_scope, open_source_edges
 from .literal import SourceSelection, ground_literal_field, normalize_candidate_literals
 from .source_references import evidence_positions, unit_visible_pieces, verify_evidence
 
@@ -88,7 +88,11 @@ class EvidenceField:
 
 def _entity_fields(entity, definition):
     literal = {key for key, prop in definition.properties.items() if prop.source_mode == "literal"}
-    for field in sorted(entity["properties"].keys() | entity.get("literal_parts", {}).keys()):
+    atomic_literals = literal.intersection(
+        field for group in definition.atomic_groups for field in group.fields
+    )
+    fields = (entity["properties"].keys() - atomic_literals) | entity.get("literal_parts", {}).keys()
+    for field in sorted(fields):
         yield EvidenceField(
             entity,
             f"entity {entity['ref']}.{field}",
@@ -364,12 +368,10 @@ def _preserve_unpatched_evidence(declaration, definition, name, patched, chunks,
             declaration["resolved_references"][i] = {"reference": [], "target": []}
 
 
-async def complete_windows(
-    language, data, scopes, chunks, catalog, model, make_scope, checkpoint, persist, reuse
-):
+async def complete_windows(language, data, scopes, chunks, catalog, model, checkpoint, persist, reuse):
     for window, pending in _completion_groups(data, scopes, chunks, catalog, model).items():
         local = {key: chunks[key] for key in window}
-        scope = make_scope(local, list(catalog.values()))
+        scope = build_input_scope(local, list(catalog.values()))
         views = {view["unit_key"]: view for view in scope["unit_views"]}
         aliases = {key: f"unit/{i}" for i, key in enumerate(scope["input_unit_keys"])}
         tasks = []

@@ -9,6 +9,7 @@ from copy import deepcopy
 from ...domain import valid_id
 from ...domain.errors import KGError
 from ...domain.model import BusinessModel, check_value
+from ..chunk_search import search_chunk_vectors
 from ..contracts import Filters, SearchRequest, coverage, envelope
 from .rerank import compact_rerank
 
@@ -373,49 +374,6 @@ class SearchMixin:
         )
         return order, reranked
 
-    async def _search_chunk_vectors(self, kb_id, vector, limit, filters):
-        r = self.r
-        scoped = bool(filters.document_ids or filters.domain_ids)
-        members = None
-        ids = None
-        if scoped:
-            members = await r.metadata.vector_members(
-                kb_id,
-                document_ids=filters.document_ids or None,
-                domain_ids=filters.domain_ids or None,
-                active_only=True,
-            )
-            ids = sorted({row["vector_id"] for row in members})
-            if not ids:
-                return []
-        hits = await r.vectors.search(kb_id, "chunk_vectors", vector, limit, filters, point_ids=ids)
-        if not hits:
-            return []
-        hit_ids = {hit["id"] for hit in hits}
-        if members is None:
-            members = await r.metadata.vector_members(kb_id, vector_ids=sorted(hit_ids), active_only=True)
-        by_vector = defaultdict(list)
-        for row in members:
-            if row["vector_id"] in hit_ids:
-                by_vector[row["vector_id"]].append(row["chunk_id"])
-        selected = []
-        for hit in hits:
-            group = by_vector[hit["id"]]
-            if not group:
-                continue
-            representative = hit["payload"]["representative_chunk_id"]
-            chunk_id = representative if representative in group else group[0]
-            selected.append((hit, chunk_id, group))
-        chunks = {
-            point["id"]: point["payload"]
-            for point in await r.vectors.read(kb_id, "chunks", [key for _, key, _ in selected])
-        }
-        return [
-            {"id": key, "payload": chunks[key], "score": hit["score"], "member_chunk_ids": group}
-            for hit, key, group in selected
-            if key in chunks
-        ]
-
     async def _search(self, kb, request, scope=None):
         """合并精确、关键词与语义候选，分别报告对象和文档的覆盖范围。"""
         r, kb_id = self.r, kb["kb_id"]
@@ -528,7 +486,7 @@ class SearchMixin:
         source_hits = None
         if vector is not None and "entity" in request.kinds:
             if scope is not None:
-                hits = await self._search_chunk_vectors(kb_id, vector, fetch_limit, request.filters)
+                hits = await search_chunk_vectors(r, kb_id, vector, fetch_limit, request.filters)
             else:
                 hits = await r.vectors.search(kb_id, collection, vector, fetch_limit, request.filters)
             if scope is not None:
@@ -629,7 +587,7 @@ class SearchMixin:
                 hits = (
                     source_hits
                     if source_hits is not None
-                    else await self._search_chunk_vectors(kb_id, vector, fetch_limit, request.filters)
+                    else await search_chunk_vectors(r, kb_id, vector, fetch_limit, request.filters)
                 )
                 for rank, hit in enumerate(hits, 1):
                     chunks[hit["id"]] = hit["payload"]

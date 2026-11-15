@@ -370,16 +370,18 @@ def normalize(value: Any, rules: list[str]):
     return value
 
 
+def normalize_identity_field(node: NodeType, field: str, value: Any) -> Any:
+    rules = node.identity.normalization
+    return normalize(value, rules if isinstance(rules, list) else rules.get(field, []))
+
+
 def identity_value(node: NodeType, values: dict, document_id: str) -> dict:
     """校验并规范化身份字段，仅来源内身份附加 document_id 隔离不同资料。"""
     result = {"namespace": node.identity.namespace, "fields": {}}
     for field in node.identity.fields:
         if field not in values or values[field] is None or values[field] == "":
             raise KGError("MISSING_IDENTITY", f"Missing identity field: {field}")
-        rules = node.identity.normalization
-        result["fields"][field] = normalize(
-            values[field], rules if isinstance(rules, list) else rules.get(field, [])
-        )
+        result["fields"][field] = normalize_identity_field(node, field, values[field])
         if result["fields"][field] == "":
             raise KGError("MISSING_IDENTITY", f"Empty normalized identity: {field}")
     if node.identity.scope == "document":

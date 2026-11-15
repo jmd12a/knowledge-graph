@@ -109,6 +109,7 @@ class Settings(StrictModel):
     chunk_overlap: int = Field(default=150, ge=0)
     extraction_scope_policy: Literal["whole", "structure"] = "whole"
     extraction_structure_window_chars: int = Field(default=DEFAULT_STRUCTURE_WINDOW_CHARS, ge=1)
+    extraction_loop_calls: int = Field(default=0, ge=0, le=64)
     drain_timeout: float = Field(default=30, gt=0)
     poll_interval: float = Field(default=1, gt=0)
     graph_timeout: float = Field(default=3, gt=0)
@@ -129,6 +130,9 @@ class Settings(StrictModel):
     def validate_runtime(self):
         if self.chunk_target > self.chunk_max or self.chunk_overlap >= self.chunk_max:
             raise ValueError("Chunk overlap and target must fit inside the maximum chunk size")
+
+        if self.extraction_loop_calls and self.extraction_scope_policy != "structure":
+            raise ValueError("Construction review requires the structure extraction strategy")
 
         root = Path(self.data_root)
         if not root.is_absolute() or str(root).startswith("/mnt/"):

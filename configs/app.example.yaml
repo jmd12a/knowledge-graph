@@ -35,6 +35,8 @@ graph_timeout: 3
 extraction_scope_policy: whole
 # structure 首轮按去重后的可见原文计数。
 extraction_structure_window_chars: 10000
+# structure 下每份资料允许的额外构建复查 HTTP 请求数。0 关闭。
+extraction_loop_calls: 0
 retrieval_timeout: 180
 candidate_scan_limit: 5000
 maintenance_scan_limit: 100000

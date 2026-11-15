@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "business_model": "../quality-labeled/model.yaml",
+  "scope": "Sequential imports into a single knowledge base. Score Service identity and CALLS direction, endpoints, and contribution source. The generic title PGW does not resolve an endpoint.",
+  "imports": [
+    {
+      "source": "registry.md",
+      "service_app_ids": ["pay-east", "pay-west", "clearing-prod", "clearing-test"],
+      "calls": []
+    },
+    {
+      "source": "operations.md",
+      "service_app_ids": ["pay-east", "pay-west", "clearing-prod", "clearing-test"],
+      "calls": [
+        {
+          "source_app_id": "pay-east",
+          "target_app_id": "clearing-prod",
+          "contribution_sources": ["operations.md"],
+          "phrase": "PGW-East (app_id pay-east) calls the production Clearing Service (app_id clearing-prod) to settle captured transactions."
+        }
+      ],
+      "forbidden_calls": [
+        ["pay-west", "clearing-prod"],
+        ["clearing-prod", "pay-east"],
+        ["pay-east", "clearing-test"],
+        ["pay-west", "clearing-test"]
+      ]
+    }
+  ],
+  "identity_cases": [
+    {
+      "kind": "distinct_same_name",
+      "name": "Payment Gateway",
+      "app_ids": ["pay-east", "pay-west"]
+    },
+    {
+      "kind": "stable_identity_reuse",
+      "aliases_by_app_id": {"pay-east": "PGW-East", "pay-west": "PGW-West"}
+    },
+    {
+      "kind": "ambiguous_alias",
+      "alias": "PGW",
+      "app_ids": ["pay-east", "pay-west"],
+      "target_app_id": "clearing-test"
+    }
+  ],
+  "repeat": {
+    "source": "operations.md",
+    "expected": "Same Service and CALLS graph IDs and contribution sources after retry."
+  },
+  "withdraw": {
+    "source": "operations.md",
+    "expected": "Only the registry contribution remains. All four Service IDs are preserved and the production CALLS relation is removed."
+  }
+}

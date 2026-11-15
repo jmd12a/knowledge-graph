@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import math
 import re
 from collections import defaultdict
@@ -11,17 +10,30 @@ from typing import Any
 from pydantic import Field, StrictBool, StrictInt, ValidationError
 
 from ...domain import KGError, StrictModel, canonical
-from ...domain.model import NodeType, identity_value
+from ...domain.model import NodeType, identity_value, normalize_identity_field
 from ...domain.source import DEFAULT_STRUCTURE_WINDOW_CHARS
-from ...prompts.extraction import EXTRACTION_SYSTEM, RULE_ASSEMBLY_SYSTEM, STRUCTURE_EXTRACTION_SYSTEM
+from ...prompts.extraction import (
+    EXTRACTION_SYSTEM,
+    RULE_ASSEMBLY_SYSTEM,
+    STRUCTURE_EXTRACTION_SYSTEM,
+    STRUCTURE_IDENTITY_REVIEW_SYSTEM,
+)
 from .alignment import _atomic_statement
-from .extraction_batches import ExtractionBatch, chapter_groups, request_fits
+from .extraction_batches import ExtractionBatch, request_fits
 from .extraction_grounding import complete_windows, repair_window
-from .extraction_windows import plan_source_windows, source_block_ranges
+from .extraction_identity_review import (
+    PublishedMentionSearch,
+    PublishedVectorSearch,
+    review_entity_identities,
+)
+from .extraction_review import ReviewBudget, resolve_document_references, review_window
+from .extraction_windows import build_input_scope, check_input_scope
+from .extraction_windows import plan_extraction_scopes as _plan_scopes
 from .literal import SourceSelection, normalize_candidate_literals
 from .source_references import evidence_positions as evidence_positions
-from .source_references import origin_key, unit_visible_parts, units_by_chunk
+from .source_references import units_by_chunk
 from .source_references import verify_evidence as verify_evidence
+from .source_units import build_rule_context as build_rule_context
 
 
 class EvidenceRef(StrictModel):
@@ -346,264 +358,18 @@ def mapped_extraction(parsed, model):
     return {"entities": entities, "relations": relations}, problems
 
 
-_CONTINUATION = re.compile(
-    r"^(?:but\b|however\b|except\b|provided\b|unless\b|notwithstanding\b|subject\s+to\b|"
-    r"for\s+the\s+avoidance\b|and\b|or\b|但|但是|然而|除外|除非|例外|前款|上述|并且|其中)",
-    re.I,
-)
-
-
-def build_rule_context(parsed, *, structured=False):
-    """把完整来源段落及其续段提供给抽取流程。"""
-    if parsed.get("mapping_id"):
-        return []
-    sources = {}
-    chunks = parsed["chunks"]
-    for chunk in chunks:
-        for span in chunk["source_spans"]:
-            if span.get("role") != "source":
-                continue
-            origin = span["origin"]
-            key = "value_range" if "value_range" in origin else "char_range"
-            a, b = span["chunk_range"]
-            start, end = origin[key]
-            text = chunk["text"][a:b]
-            if len(text) != end - start:
-                raise KGError("PARSE_FAILED", "Source span has a non-reversible coordinate mapping")
-            anchor = origin_key(origin)
-            entry = sources.setdefault(
-                anchor,
-                {
-                    "coordinate": key,
-                    "pieces": [],
-                    "boundaries": set(),
-                },
-            )
-            entry["pieces"].append((start, end, text))
-            native_section = origin["format"] == "md" or (
-                origin["format"] == "docx" and "paragraph" in origin and chunk.get("section_path")
-            )
-            if structured and native_section and a == 0 and chunk.get("block_range", [None])[0] == 0:
-                entry["boundaries"].add(start)
-    units = []
-    for anchor, source in sources.items():
-        text, base, cursor = "", None, None
-        for start, end, piece in sorted(source["pieces"]):
-            if base is None:
-                base, cursor = start, start
-            if start > cursor:
-                raise KGError("PARSE_FAILED", "Source context has an unmapped gap")
-            overlap = min(cursor - start, len(piece))
-            if overlap and text[start - base : start - base + overlap] != piece[:overlap]:
-                raise KGError("PARSE_FAILED", "Overlapping source windows disagree")
-            if end > cursor:
-                text += piece[overlap:]
-                cursor = end
-        origin = json.loads(anchor) if structured else {}
-        ranges = (
-            source_block_ranges(
-                text,
-                inline_headings=origin["format"] in {"txt", "pdf"} or "paragraph" in origin,
-                parser_boundaries=tuple(position - base for position in source["boundaries"]),
-            )
-            if structured
-            else [match.span() for match in re.finditer(r"[\s\S]+?(?:\r?\n[ \t]*\r?\n+|$)", text)]
-        )
-        for left, right in ranges:
-            body = text[left:right]
-            region = {
-                "origin": anchor,
-                "coordinate": source["coordinate"],
-                "range": [base + left, base + right],
-            }
-            if units and base + left not in source["boundaries"] and _CONTINUATION.match(body.lstrip()):
-                units[-1]["regions"].append(region)
-                units[-1]["text"] += body
-            else:
-                units.append(
-                    {
-                        "unit_key": "rule-unit/" + str(len(units)),
-                        "order": len(units),
-                        "regions": [region],
-                        "text": body,
-                    }
-                )
-    for unit in units:
-        unit["evidence"] = _region_references(unit["regions"], chunks)
-    return units
-
-
-def _region_references(regions, chunks):
-    references = []
-    for region in regions:
-        remaining = [region["range"][:]]
-        for chunk in chunks:
-            for span in chunk["source_spans"]:
-                if span.get("role") != "source" or origin_key(span["origin"]) != region["origin"]:
-                    continue
-                key = region["coordinate"]
-                start, end = span["origin"][key]
-                next_remaining = []
-                for left, right in remaining:
-                    a, b = max(left, start), min(right, end)
-                    if a >= b:
-                        next_remaining.append([left, right])
-                        continue
-                    begin = span["chunk_range"][0] + a - start
-                    finish = begin + b - a
-                    references.append(
-                        {
-                            "chunk_id": chunk["chunk_id"],
-                            "start": begin,
-                            "end": finish,
-                            "quote": chunk["text"][begin:finish],
-                        }
-                    )
-                    if left < a:
-                        next_remaining.append([left, a])
-                    if b < right:
-                        next_remaining.append([b, right])
-                remaining = next_remaining
-        if remaining:
-            raise KGError("PARSE_FAILED", "A complete rule context cannot be mapped to chunks")
-    return references
-
-
-def _unit_prompt(unit, chunks):
-    parts = unit_visible_parts(unit, chunks)
-    return {
-        "unit_key": unit["unit_key"],
-        "order": unit["order"],
-        "visible_parts": parts,
-        "fully_supplied": len(parts) == 1 and parts[0]["unit_range"] == [0, len(unit["text"])],
-    }
-
-
-def _scope(chunks, context, *, key=None):
-    views = [_unit_prompt(unit, chunks) for unit in context]
-    views = [view for view in views if view["visible_parts"]]
-    scope = {
-        "input_chunk_ids": list(chunks),
-        "input_unit_keys": [view["unit_key"] for view in views],
-        "unit_views": views,
-    }
-    if key is not None:
-        scope["key"] = key
-    return scope
-
-
-def _check_scope(scope, chunks, context) -> None:
-    catalog = {unit["unit_key"]: unit for unit in context}
-    if (
-        not isinstance(scope, dict)
-        or not isinstance(scope.get("input_chunk_ids"), list)
-        or not isinstance(scope.get("input_unit_keys"), list)
-        or not isinstance(scope.get("unit_views"), list)
-    ):
-        raise KGError("PREPARATION_SCOPE_UNAVAILABLE", "The saved model input scope is unavailable")
-    if "key" in scope and not isinstance(scope["key"], str):
-        raise KGError("PREPARATION_SCOPE_UNAVAILABLE", "The saved model input batch key is invalid")
-    chunk_ids, unit_keys = scope["input_chunk_ids"], scope["input_unit_keys"]
-    if (
-        any(not isinstance(key, str) or key not in chunks for key in chunk_ids)
-        or len(chunk_ids) != len(set(chunk_ids))
-        or not chunk_ids
-        or any(not isinstance(key, str) or key not in catalog for key in unit_keys)
-        or len(unit_keys) != len(set(unit_keys))
-        or any(not isinstance(view, dict) for view in scope["unit_views"])
-        or [view.get("unit_key") for view in scope["unit_views"]] != unit_keys
-    ):
-        raise KGError(
-            "PREPARATION_SCOPE_UNAVAILABLE", "The saved model input scope does not match its parsed source"
-        )
-    local_chunks = {key: chunks[key] for key in chunk_ids}
-    for view in scope["unit_views"]:
-        expected = _unit_prompt(catalog[view["unit_key"]], local_chunks)
-        if view != expected:
-            raise KGError(
-                "PREPARATION_SCOPE_UNAVAILABLE",
-                "Saved visible source-unit text differs from its authorized chunks",
-            )
-
-
-def _plan_scopes(
-    language,
-    chunks,
-    context,
-    model_data,
-    schema,
-    *,
-    scope_policy="whole",
-    structure_window_chars: int = DEFAULT_STRUCTURE_WINDOW_CHARS,
-):
-    system = STRUCTURE_EXTRACTION_SYSTEM if scope_policy == "structure" else EXTRACTION_SYSTEM
-
-    def fits_budget(batch_chunks, scope):
-        request = ExtractionBatch(scope, batch_chunks, model_data, scope_policy=scope_policy).request
-        return request_fits(language, system, request, schema)
-
-    if scope_policy == "structure":
-        whole_limit = min(structure_window_chars, language.profile.max_input_chars)
-        if sum(len(unit["text"]) for unit in context) <= whole_limit:
-            whole = _scope(chunks, context, key="batch/0")
-            if fits_budget(chunks, whole):
-                return [whole]
-        return plan_source_windows(
-            chunks,
-            context,
-            _scope,
-            lambda scope: fits_budget(chunks, scope),
-            target_source_chars=structure_window_chars,
-        )
-
-    # 单批能容纳全文时保留跨章节上下文；长文档再按章节独立装箱。
-    if scope_policy != "whole":
-        raise KGError("INVALID_ARGUMENT", "Unknown extraction strategy")
-    if sum(len(chunk["text"]) for chunk in chunks.values()) <= language.profile.max_input_chars:
-        whole = _scope(chunks, context, key="batch/0")
-        if fits_budget(chunks, whole):
-            return [whole]
-
-    unit_positions_by_chunk = units_by_chunk(context, chunks)
-
-    def context_for_chunks(batch_chunks):
-        if unit_positions_by_chunk is None:
-            return context
-        selected = set().union(*(unit_positions_by_chunk[chunk_id] for chunk_id in batch_chunks))
-        return [context[position] for position in sorted(selected)]
-
-    chapter_batches = []
-    for chapter in chapter_groups(chunks):
-        batch_chunks = {}
-        for chunk_id, chunk in chapter.items():
-            expanded_batch = batch_chunks | {chunk_id: chunk}
-            if fits_budget(expanded_batch, _scope(expanded_batch, context_for_chunks(expanded_batch))):
-                batch_chunks = expanded_batch
-            else:
-                if not batch_chunks:
-                    raise KGError(
-                        "MODEL_INPUT_TOO_LARGE", "One source chunk and model exceed the extraction budget"
-                    )
-                chapter_batches.append(batch_chunks)
-                batch_chunks = {chunk_id: chunk}
-        if batch_chunks:
-            chapter_batches.append(batch_chunks)
-
-    # 全文超过模型预算时，尽量把相邻的完整规则单元带入同一批。
-    scopes = []
-    for position, batch_chunks in enumerate(chapter_batches):
-        for unit in context_for_chunks(batch_chunks):
-            unit_chunks = {ref["chunk_id"]: chunks[ref["chunk_id"]] for ref in unit["evidence"]}
-            if unit_chunks.keys() <= batch_chunks.keys():
-                continue
-            expanded_batch = batch_chunks | unit_chunks
-            if fits_budget(expanded_batch, _scope(expanded_batch, context_for_chunks(expanded_batch))):
-                batch_chunks = expanded_batch
-        scope = _scope(batch_chunks, context_for_chunks(batch_chunks), key=f"batch/{position}")
-        if not fits_budget(batch_chunks, scope):
-            raise KGError("MODEL_INPUT_TOO_LARGE", "Source context exceeds the extraction budget")
-        scopes.append(scope)
-    return scopes
+def _omit_empty_identity_fields(candidate: dict, model) -> None:
+    definition = model.node_types.get(candidate["type"])
+    if definition is None:
+        return
+    properties = candidate["properties"]
+    for field in definition.identity.fields:
+        if field in properties and normalize_identity_field(definition, field, properties[field]) in (
+            None,
+            "",
+        ):
+            properties.pop(field)
+            candidate["evidence"].pop(field, None)
 
 
 async def extract_text(
@@ -616,6 +382,12 @@ async def extract_text(
     reuse=None,
     scope_policy="whole",
     structure_window_chars: int = DEFAULT_STRUCTURE_WINDOW_CHARS,
+    loop_calls: int = 0,
+    review_document=None,
+    published_graph=None,
+    published_scan_limit: int = 6,
+    published_vector_search: PublishedVectorSearch | None = None,
+    published_mention_search: PublishedMentionSearch | None = None,
 ):
     """按持久化输入范围分批抽取，复用已校验的批次结果并组装完整规则。"""
     structured = scope_policy == "structure"
@@ -637,8 +409,10 @@ async def extract_text(
                     "PREPARATION_SCOPE_UNAVAILABLE",
                     "An older multi-chunk checkpoint lacks its original model input scopes; retry preparation with a fresh baseline",
                 )
-            scopes = [_scope(chunks, context, key="batch/0")]
+            scopes = [build_input_scope(chunks, context, key="batch/0")]
         else:
+            if structured:
+                system = STRUCTURE_IDENTITY_REVIEW_SYSTEM
             scopes = _plan_scopes(
                 language,
                 chunks,
@@ -647,11 +421,14 @@ async def extract_text(
                 schema,
                 scope_policy=scope_policy,
                 structure_window_chars=structure_window_chars,
+                system=system,
             )
         checkpoint["_input_scopes"] = {
             "version": 1 if cached else 2,
             "scope_policy": scope_policy,
+            "review_limit": loop_calls,
             "batches": scopes,
+            **({"identity_mentions": True} if system == STRUCTURE_IDENTITY_REVIEW_SYSTEM else {}),
         }
         await persist()
     else:
@@ -666,18 +443,22 @@ async def extract_text(
         scopes = saved["batches"]
         if saved.get("scope_policy", "whole") != scope_policy:
             raise KGError("PREPARATION_SCOPE_UNAVAILABLE", "Saved extraction strategy changed")
+        if structured and saved.get("identity_mentions"):
+            system = STRUCTURE_IDENTITY_REVIEW_SYSTEM
+    if checkpoint["_input_scopes"].get("review_limit", 0) != loop_calls:
+        raise KGError("PREPARATION_BASELINE_CHANGED", "Construction review budget changed")
     if not scopes:
         raise KGError(
             "PREPARATION_SCOPE_UNAVAILABLE", "The saved extraction input plan has no source batches"
         )
     by_chunk = units_by_chunk(context, chunks) if structured else None
     for scope in scopes:
-        _check_scope(scope, chunks, context)
+        check_input_scope(scope, chunks, context)
         if structured:
             selected = set(scope["input_unit_keys"])
             if by_chunk is None:
                 local = {key: chunks[key] for key in scope["input_chunk_ids"]}
-                expected = set(_scope(local, context)["input_unit_keys"])
+                expected = set(build_input_scope(local, context)["input_unit_keys"])
             else:
                 expected = {context[i]["unit_key"] for key in scope["input_chunk_ids"] for i in by_chunk[key]}
             if selected != expected:
@@ -698,6 +479,11 @@ async def extract_text(
     reuse = {} if reuse is None else reuse
     combined = {"entities": [], "relations": [], "issues": []}
     catalog = {unit["unit_key"]: unit for unit in context}
+    review_budget = (
+        ReviewBudget(checkpoint, loop_calls, persist, combined["issues"])
+        if structured and loop_calls
+        else None
+    )
     index = 0
     while index < len(scopes):
         scope = scopes[index]
@@ -745,7 +531,7 @@ async def extract_text(
                 # 先保存拆分结果，接管时只执行较小的窗口。
                 middle = len(ids) // 2
                 scopes[index : index + 1] = [
-                    _scope({item: chunks[item] for item in half}, context, key=f"{key}.{side}")
+                    build_input_scope({item: chunks[item] for item in half}, context, key=f"{key}.{side}")
                     for side, half in enumerate((ids[:middle], ids[middle:]))
                 ]
                 await persist()
@@ -767,6 +553,8 @@ async def extract_text(
         if batch:
             data, all_known = batch.bind(data)
         if structured:
+            for candidate in data["entities"]:
+                _omit_empty_identity_fields(candidate, model)
             valid_without_repair = await repair_window(
                 language, data, scope, chunks, catalog, model, checkpoint, persist, reuse, combined["issues"]
             )
@@ -779,10 +567,25 @@ async def extract_text(
         if batch and all_known and valid_without_repair:
             saved_batch["reusable"] = True
             reuse[saved_batch["request_key"]] = saved_batch["result"]
+        if review_budget and batch:
+            data = await review_window(
+                language,
+                batch,
+                data,
+                scope,
+                chunks,
+                catalog,
+                model,
+                schema,
+                lambda value, stage: _validate_output(value, stage, output_type),
+                review_budget,
+            )
         authorization = {field: list(scope[field]) for field in ("input_chunk_ids", "input_unit_keys")}
         # 局部引用加批次前缀，避免不同调用中同名 ref 相互连接。
         namespace = key + "/"
         for candidate in data["entities"]:
+            if review_budget:
+                _omit_empty_identity_fields(candidate, model)
             visible = candidate if structured else _mark_partial_source(candidate, scope)
             combined["entities"].append(visible | {"ref": namespace + candidate["ref"], **authorization})
         for candidate in data["relations"]:
@@ -796,9 +599,7 @@ async def extract_text(
             )
         index += 1
     if structured:
-        await complete_windows(
-            language, combined, scopes, chunks, catalog, model, _scope, checkpoint, persist, reuse
-        )
+        await complete_windows(language, combined, scopes, chunks, catalog, model, checkpoint, persist, reuse)
     else:
         await _assemble_rules(language, parsed, model, combined, checkpoint, persist)
     if len(scopes) > 1:
@@ -820,6 +621,25 @@ async def extract_text(
         )
         combined["relations"].extend(linked)
         combined["issues"].extend(issues)
+    if review_budget:
+        if review_document is not None:
+            from .extraction_links import document_identity_hints
+
+            await review_entity_identities(
+                language,
+                combined,
+                chunks,
+                catalog,
+                review_budget,
+                model,
+                review_document,
+                published_graph,
+                published_scan_limit,
+                published_vector_search,
+                published_mention_search,
+                document_identity_hints(parsed, model, scopes, combined),
+            )
+        await resolve_document_references(language, combined, chunks, catalog, review_budget)
     return combined
 
 
@@ -1030,12 +850,14 @@ async def _assemble_rules(language, parsed, model, extracted, checkpoint, persis
                     "An older multi-chunk rule assembly lacks its original model input scope",
                 )
             scope = (
-                _scope({key: chunks[key] for key in selected_chunks}, [units[key] for key in selected])
+                build_input_scope(
+                    {key: chunks[key] for key in selected_chunks}, [units[key] for key in selected]
+                )
                 | anchor
             )
             scopes[cache_key] = scope
             await persist()
-        _check_scope(scope, chunks, list(units.values()))
+        check_input_scope(scope, chunks, list(units.values()))
         if (
             any(scope.get(key) != value for key, value in anchor.items())
             or scope["input_unit_keys"] != selected

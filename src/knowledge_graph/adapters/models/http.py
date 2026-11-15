@@ -15,6 +15,7 @@ import httpx
 from jsonschema import Draft202012Validator
 
 from ...domain import EmbeddingProfile, KGError
+from ...ports.language import before_model_send
 
 log = logging.getLogger(__name__)
 
@@ -178,6 +179,8 @@ class Language:
 
         started = time.monotonic()
         for attempt in range(3):
+            if reserve := before_model_send.get():
+                await reserve()
             try:
                 response = await self.client.post(
                     base_url.rstrip("/") + endpoint,

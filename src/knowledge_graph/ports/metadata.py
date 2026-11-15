@@ -67,6 +67,12 @@ class MetadataPort(Protocol):
     async def target_contributions(
         self, kb_id: str, targets: list[tuple[str, str]], *, active_only: bool = False
     ) -> list[Contribution]: ...
+    async def published_mention_contributions(
+        self, kb_id: str, mention: str, entity_type: str, limit: int
+    ) -> list[Contribution]:
+        """按原有提及找仍有效的来源，每个实体最多返回一条记录。"""
+        ...
+
     async def dependent_contributions(
         self, kb_id: str, entity_ids: list[str], max_rows: int
     ) -> list[Contribution]:

@@ -30,6 +30,9 @@ CREATE INDEX IF NOT EXISTS jobs_document_queue ON jobs(kb_id,document_id,queue_s
 CREATE INDEX IF NOT EXISTS documents_active ON documents(kb_id,active,created_at,document_id);
 CREATE INDEX IF NOT EXISTS contributions_target ON source_contributions(kb_id,target_kind,target_id);
 CREATE INDEX IF NOT EXISTS contributions_document ON source_contributions(kb_id,document_id);
+CREATE INDEX IF NOT EXISTS contributions_mention
+ ON source_contributions(kb_id,lower(value_json::jsonb->>'mention'),target_id)
+ WHERE target_kind='entity' AND field_path='$mention';
 CREATE INDEX IF NOT EXISTS issues_job ON candidate_issues(job_id,issue_id);
 
 CREATE TABLE IF NOT EXISTS chunk_vector_members(

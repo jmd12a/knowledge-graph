@@ -1,8 +1,14 @@
 from __future__ import annotations
 
+from collections.abc import Awaitable, Callable
+from contextvars import ContextVar
 from typing import Protocol
 
 from ..settings import LanguageProfile
+
+before_model_send: ContextVar[Callable[[], Awaitable[None]] | None] = ContextVar(
+    "before_model_send", default=None
+)
 
 
 class LanguagePort(Protocol):

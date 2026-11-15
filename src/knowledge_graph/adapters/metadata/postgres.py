@@ -612,6 +612,27 @@ class Metadata:
         )
         return self._decode_contributions(rows)
 
+    async def published_mention_contributions(
+        self, kb_id: str, mention: str, entity_type: str, limit: int
+    ) -> list[dict]:
+        rows = await self._all(
+            "SELECT DISTINCT ON (c.target_id) c.* FROM source_contributions c "
+            "JOIN documents d ON d.document_id=c.document_id "
+            "WHERE c.kb_id=%s AND c.target_kind='entity' AND c.field_path='$mention' "
+            "AND lower(c.value_json::jsonb->>'mention')=lower(%s) AND d.active AND d.deleted_at IS NULL "
+            "AND EXISTS (SELECT 1 FROM source_contributions a "
+            "JOIN documents ad ON ad.document_id=a.document_id "
+            "WHERE a.kb_id=c.kb_id AND a.target_kind='entity' AND a.target_id=c.target_id "
+            "AND a.field_path='$exists' AND a.value_json::jsonb->>'entity_type'=%s "
+            "AND ad.active AND ad.deleted_at IS NULL "
+            "AND EXISTS (SELECT 1 FROM jsonb_array_elements(c.claim_json::jsonb->'identity_dependencies') dep "
+            "WHERE dep->>'target_id'=a.target_id "
+            "AND (dep->>'identity_key')::jsonb=a.value_json::jsonb->'identity')) "
+            "ORDER BY c.target_id,c.contribution_id LIMIT %s",
+            (kb_id, mention, entity_type, limit),
+        )
+        return self._decode_contributions(rows)
+
     async def dependent_contributions(self, kb_id, entity_ids, max_rows):
         if not entity_ids:
             return []

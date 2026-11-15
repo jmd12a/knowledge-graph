@@ -5,6 +5,7 @@ import logging
 import math
 from collections import Counter
 from copy import deepcopy
+from functools import partial
 
 from ...domain import BusinessModel, EmbeddingProfile, KGError, new_id
 from ...ports.resources import Resources
@@ -15,6 +16,7 @@ from .changes import build_write_set, select_writes
 from .chunk_vectors import ChunkVectorPreparation
 from .extraction import extract_text, mapped_extraction
 from .extraction_batches import reusable_batches
+from .extraction_identity_review import search_published_mentions, search_published_vectors
 from .maintenance import check_vector_capacity, conflict_warnings, deletion_cleanup, task_counts
 from .merge import aggregate, effective_contributions, relation_conflict_groups
 
@@ -580,6 +582,18 @@ class Construction:
                     reuse=reuse,
                     scope_policy=c.settings.extraction_scope_policy,
                     structure_window_chars=c.settings.extraction_structure_window_chars,
+                    loop_calls=c.settings.extraction_loop_calls,
+                    review_document=document if job["operation"] == "IMPORT" else None,
+                    published_graph=c.graph if job["operation"] == "IMPORT" else None,
+                    published_scan_limit=min(6, c.settings.candidate_scan_limit),
+                    published_vector_search=partial(
+                        search_published_vectors, c, profile=draft["embedding_profile"]
+                    )
+                    if job["operation"] == "IMPORT"
+                    else None,
+                    published_mention_search=partial(search_published_mentions, c)
+                    if job["operation"] == "IMPORT"
+                    else None,
                 )
                 entry["mapping_issues"] = entry["extracted"].pop("issues", [])
                 entry.pop("retry_reuse", None)

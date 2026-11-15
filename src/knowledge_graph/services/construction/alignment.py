@@ -4,6 +4,7 @@ import re
 from collections import Counter, defaultdict
 
 from ...domain import KGError, canonical, check_value, identity_value, new_id, validate_identity_key
+from ...domain.model import NodeType, normalize_identity_field
 from .literal import normalize_candidate_literals
 from .source_references import (
     evidence_positions,
@@ -54,7 +55,16 @@ def _input_scope(owner, chunks):
 
 
 def _atomic_statement(
-    candidate, group, definition, document, chunks, catalog, model, *, input_unit_keys=None
+    candidate,
+    group,
+    definition,
+    document,
+    chunks,
+    catalog,
+    model,
+    *,
+    input_unit_keys=None,
+    review_chunks=None,
 ):
     """只校验字段、引用原文及输入授权；保留模型完整性判断，不据此否决文本。"""
     declaration = candidate.get("atomic_groups", {}).get(group.name)
@@ -139,8 +149,11 @@ def _atomic_statement(
                 source = verify_evidence(
                     reference.get("reference", []), chunks, units=catalog, input_unit_keys=input_unit_keys
                 )
+                target_chunks, target_keys = chunks, input_unit_keys
+                if review_chunks is not None and "target_review_scope" in reference:
+                    target_chunks, target_keys = _input_scope(reference["target_review_scope"], review_chunks)
                 target = verify_evidence(
-                    reference.get("target", []), chunks, units=catalog, input_unit_keys=input_unit_keys
+                    reference.get("target", []), target_chunks, units=catalog, input_unit_keys=target_keys
                 )
                 if {item["document_id"] for item in source + target} != {document["document_id"]}:
                     raise KGError("EVIDENCE_INVALID", "A resolved reference crosses source documents")
@@ -202,10 +215,8 @@ _ALIAS_EQUIVALENCE = re.compile(
 )
 
 
-async def _resolve_mention(doc, candidate, definition, graph, chunks, catalog, input_unit_keys):
-    """Use only configured, source-verified independent facts to reuse an existing ID."""
-    if graph is None or not definition.identity_match.model_dump(exclude_defaults=True):
-        raise KGError("MISSING_IDENTITY", "Incomplete identity has no configured alignment path")
+def _verify_current_mention(doc, candidate, chunks, catalog, input_unit_keys):
+    """校验被对齐的提及确实来自本次导入。"""
     mention = candidate.get("mention")
     if not isinstance(mention, str) or not mention.strip():
         raise KGError("MISSING_IDENTITY", "Incomplete identity requires a source mention")
@@ -219,8 +230,65 @@ async def _resolve_mention(doc, candidate, definition, graph, chunks, catalog, i
         raise KGError("EVIDENCE_INVALID", "Entity mention must come from this document")
     if not any(mention in item.get("quote", "") for item in mention_support):
         raise KGError("IDENTITY_EVIDENCE_MISSING", "Mention evidence does not contain the stated name")
-    matches = {}
+    return mention_support
+
+
+def check_identity_conflicts(
+    doc: dict,
+    candidate: dict,
+    definition: NodeType,
+    target: dict,
+    chunks: dict,
+    catalog: dict,
+    input_unit_keys: list[str] | None,
+) -> None:
+    """比较本次明确提供的业务身份值和被选中的旧节点。"""
+    conflicts = []
+    for field in definition.identity.fields:
+        if field not in candidate["properties"]:
+            continue
+        raw = candidate["properties"][field]
+        if raw is None or raw == "":
+            continue
+        value = normalize_identity_field(definition, field, raw)
+        existing = target["identity"]["fields"][field]
+        if value == "" or canonical(value) == canonical(existing):
+            continue
+        support = verify_evidence(
+            candidate["evidence"].get(field, []), chunks, units=catalog, input_unit_keys=input_unit_keys
+        )
+        if {item["document_id"] for item in support} != {doc["document_id"]}:
+            raise KGError("EVIDENCE_INVALID", "Identity evidence belongs to another source")
+        conflicts.append(
+            {"field": field, "current_value": raw, "existing_value": existing, "quote": support[0]["quote"]}
+        )
+    if conflicts:
+        raise KGError(
+            "IDENTITY_CONFLICT",
+            "Source-backed business identity differs from the published entity",
+            candidate_id=target["entity_id"],
+            conflicts=conflicts,
+        )
+
+
+async def _resolve_mention(doc, candidate, definition, graph, chunks, catalog, input_unit_keys):
+    """以复查选择或来源内可验证的身份依据复用已发布实体。"""
+    reviewed_id = candidate.get("reviewed_entity_id")
+    if graph is None or (
+        reviewed_id is None and not definition.identity_match.model_dump(exclude_defaults=True)
+    ):
+        raise KGError("MISSING_IDENTITY", "Incomplete identity has no configured alignment path")
+    mention_support = _verify_current_mention(doc, candidate, chunks, catalog, input_unit_keys)
     document_ids = [doc["document_id"]] if definition.identity.scope == "document" else None
+    if reviewed_id is not None:
+        found = await graph.by_id(doc["kb_id"], "entity", [reviewed_id])
+        if len(found) != 1 or found[0]["entity_type"] != candidate["type"] or document_ids is not None:
+            raise KGError("IDENTITY_AMBIGUITY", "Reviewed entity exceeds its identity type or scope")
+        check_identity_conflicts(doc, candidate, definition, found[0], chunks, catalog, input_unit_keys)
+        return found[0], mention_support
+
+    mention = candidate["mention"]
+    matches = {}
     for field in definition.identity_match.stable_fields:
         if field not in candidate["properties"]:
             continue
@@ -275,6 +343,7 @@ async def _resolve_mention(doc, candidate, definition, graph, chunks, catalog, i
         definition.identity.scope == "document" and doc["document_id"] not in target.get("document_ids", [])
     ):
         raise KGError("IDENTITY_AMBIGUITY", "Candidate exceeds its identity type or document scope")
+    check_identity_conflicts(doc, candidate, definition, target, chunks, catalog, input_unit_keys)
     return target, mention_support
 
 
@@ -536,6 +605,7 @@ async def align(
                     catalog,
                     model,
                     input_unit_keys=group_units,
+                    review_chunks=chunks,
                 )
                 rows.append(
                     contribution(

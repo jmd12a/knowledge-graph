@@ -2,54 +2,13 @@
 
 from __future__ import annotations
 
-import re
 from collections import defaultdict
 
 from ...domain import KGError
-from .source_references import units_by_chunk
-
-_PARAGRAPH_END = re.compile(r"(?>\r\n|\n|\r)[ \t]*(?>\r\n|\n|\r)+")
-# 压平布局后，句界、编号和短标题一起出现才推断行内标题。
-_INLINE_START = r"(?:^[ \t]*|(?<=[.!?。！？])[ \t]+)"
-_NUMBERED_HEADING = re.compile(
-    _INLINE_START + r"(?P<heading>[1-9]\d{0,2}(?:\.\d{1,3})*\.[ \t]+"
-    r"[A-Z][A-Z0-9]*(?:[ \t/&,;–-]+[A-Z][A-Z0-9]*){0,12})"
-    r"(?=[.:](?:\s|$)|[ \t]+(?:[a-z]\.|\([a-z]\))[ \t]|[ \t]*$)",
-    re.M,
-)
-_TITLE_TEXT = r"[A-Z][A-Za-z0-9]+(?:[ \t/&,;–-]+(?:[A-Z][A-Za-z0-9]+|and|or|for|in|on|of|by|to|the)){0,12}"
-_TITLE_ITEM = r"(?P<heading>(?:[a-z]\.|\([a-z]\))[ \t]+" + _TITLE_TEXT + r")(?=[.:](?:\s|$))"
-_TITLED_ITEM = re.compile(_INLINE_START + _TITLE_ITEM, re.M)
-_AFTER_NUMBERED_HEADING = re.compile(r"[ \t]+" + _TITLE_ITEM)
-# 裸小节编号只有后面是独立的一行标题时才分块，避免误认小数开头的正文。
-_STANDALONE_SUBHEADING = re.compile(
-    r"^[ \t]*[1-9]\d{0,2}(?:\.\d{1,3})+[ \t]+" + _TITLE_TEXT + r":?[ \t]*\r?$",
-    re.M,
-)
-_LINE_ITEM = re.compile(r"^[ \t]*(?:(?:\d+\.)+|\([a-z]\)|[a-z]\.)[ \t]+(?=\S)", re.M)
-
-
-def source_block_ranges(
-    text: str, *, inline_headings: bool, parser_boundaries: tuple[int, ...] = ()
-) -> list[tuple[int, int]]:
-    """返回连续且无损的来源块坐标。"""
-    starts = {0, len(text), *parser_boundaries}
-    starts.update(match.end() for match in _PARAGRAPH_END.finditer(text))
-    for pattern in (_LINE_ITEM, _STANDALONE_SUBHEADING):
-        starts.update(match.start() for match in pattern.finditer(text))
-    if inline_headings:
-        for pattern in (_NUMBERED_HEADING, _TITLED_ITEM):
-            for match in pattern.finditer(text):
-                start = match.start()
-                if start and text[start - 1] not in "\r\n":
-                    start = match.start("heading")
-                starts.add(start)
-                if pattern is _NUMBERED_HEADING:
-                    child = _AFTER_NUMBERED_HEADING.match(text, match.end())
-                    if child:
-                        starts.add(child.start("heading"))
-    points = sorted(starts)
-    return list(zip(points, points[1:]))
+from ...domain.source import DEFAULT_STRUCTURE_WINDOW_CHARS
+from ...prompts.extraction import EXTRACTION_SYSTEM, STRUCTURE_EXTRACTION_SYSTEM
+from .extraction_batches import ExtractionBatch, chapter_groups, request_fits
+from .source_references import unit_visible_parts, units_by_chunk
 
 
 def visible_source_chars(scope: dict) -> int:
@@ -57,7 +16,7 @@ def visible_source_chars(scope: dict) -> int:
     return sum(len(part["text"]) for view in scope["unit_views"] for part in view["visible_parts"])
 
 
-def plan_source_windows(chunks, units, make_scope, fits_budget, *, target_source_chars: int) -> list[dict]:
+def plan_source_windows(chunks, units, fits_budget, *, target_source_chars: int) -> list[dict]:
     """按目标大小组窗，仅在硬预算不足时拆开来源块。"""
     positions = {key: index for index, key in enumerate(chunks)}
     unit_chunks = defaultdict(set)
@@ -76,7 +35,7 @@ def plan_source_windows(chunks, units, make_scope, fits_budget, *, target_source
     def as_scope(keys, *, key=None):
         window = {item: chunks[item] for item in sorted(keys, key=positions.__getitem__)}
         indexes = sorted({i for item in window for i in by_chunk[item]}) if by_chunk is not None else None
-        return make_scope(window, units if indexes is None else [units[i] for i in indexes], key=key)
+        return build_input_scope(window, units if indexes is None else [units[i] for i in indexes], key=key)
 
     def flush():
         if current:
@@ -108,6 +67,151 @@ def plan_source_windows(chunks, units, make_scope, fits_budget, *, target_source
         if key not in scheduled:
             add({key})
     flush()
+    return scopes
+
+
+def _unit_prompt(unit, chunks):
+    parts = unit_visible_parts(unit, chunks)
+    return {
+        "unit_key": unit["unit_key"],
+        "order": unit["order"],
+        "visible_parts": parts,
+        "fully_supplied": len(parts) == 1 and parts[0]["unit_range"] == [0, len(unit["text"])],
+    }
+
+
+def build_input_scope(chunks, context, *, key=None):
+    """按已选切片生成模型可见的原文范围。"""
+    views = [_unit_prompt(unit, chunks) for unit in context]
+    views = [view for view in views if view["visible_parts"]]
+    scope = {
+        "input_chunk_ids": list(chunks),
+        "input_unit_keys": [view["unit_key"] for view in views],
+        "unit_views": views,
+    }
+    if key is not None:
+        scope["key"] = key
+    return scope
+
+
+def check_input_scope(scope, chunks, context) -> None:
+    """恢复任务时校验保存的原文范围与解析坐标一致。"""
+    catalog = {unit["unit_key"]: unit for unit in context}
+    if (
+        not isinstance(scope, dict)
+        or not isinstance(scope.get("input_chunk_ids"), list)
+        or not isinstance(scope.get("input_unit_keys"), list)
+        or not isinstance(scope.get("unit_views"), list)
+    ):
+        raise KGError("PREPARATION_SCOPE_UNAVAILABLE", "The saved model input scope is unavailable")
+    if "key" in scope and not isinstance(scope["key"], str):
+        raise KGError("PREPARATION_SCOPE_UNAVAILABLE", "The saved model input batch key is invalid")
+    chunk_ids, unit_keys = scope["input_chunk_ids"], scope["input_unit_keys"]
+    if (
+        any(not isinstance(key, str) or key not in chunks for key in chunk_ids)
+        or len(chunk_ids) != len(set(chunk_ids))
+        or not chunk_ids
+        or any(not isinstance(key, str) or key not in catalog for key in unit_keys)
+        or len(unit_keys) != len(set(unit_keys))
+        or any(not isinstance(view, dict) for view in scope["unit_views"])
+        or [view.get("unit_key") for view in scope["unit_views"]] != unit_keys
+    ):
+        raise KGError(
+            "PREPARATION_SCOPE_UNAVAILABLE", "The saved model input scope does not match its parsed source"
+        )
+    local_chunks = {key: chunks[key] for key in chunk_ids}
+    for view in scope["unit_views"]:
+        expected = _unit_prompt(catalog[view["unit_key"]], local_chunks)
+        if view != expected:
+            raise KGError(
+                "PREPARATION_SCOPE_UNAVAILABLE",
+                "Saved visible source-unit text differs from its authorized chunks",
+            )
+
+
+def plan_extraction_scopes(
+    language,
+    chunks,
+    context,
+    model_data,
+    schema,
+    *,
+    scope_policy="whole",
+    structure_window_chars: int = DEFAULT_STRUCTURE_WINDOW_CHARS,
+    system: str | None = None,
+):
+    """选择全文输入或按来源边界分窗，并检查模型请求预算。"""
+    if system is None:
+        system = STRUCTURE_EXTRACTION_SYSTEM if scope_policy == "structure" else EXTRACTION_SYSTEM
+
+    def fits_budget(batch_chunks, scope):
+        request = ExtractionBatch(scope, batch_chunks, model_data, scope_policy=scope_policy).request
+        return request_fits(language, system, request, schema)
+
+    if scope_policy == "structure":
+        whole_limit = min(structure_window_chars, language.profile.max_input_chars)
+        if sum(len(unit["text"]) for unit in context) <= whole_limit:
+            whole = build_input_scope(chunks, context, key="batch/0")
+            if fits_budget(chunks, whole):
+                return [whole]
+        return plan_source_windows(
+            chunks,
+            context,
+            lambda scope: fits_budget(chunks, scope),
+            target_source_chars=structure_window_chars,
+        )
+
+    # 单批能容纳全文时保留跨章节上下文；长文档再按章节独立装箱。
+    if scope_policy != "whole":
+        raise KGError("INVALID_ARGUMENT", "Unknown extraction strategy")
+    if sum(len(chunk["text"]) for chunk in chunks.values()) <= language.profile.max_input_chars:
+        whole = build_input_scope(chunks, context, key="batch/0")
+        if fits_budget(chunks, whole):
+            return [whole]
+
+    unit_positions_by_chunk = units_by_chunk(context, chunks)
+
+    def context_for_chunks(batch_chunks):
+        if unit_positions_by_chunk is None:
+            return context
+        selected = set().union(*(unit_positions_by_chunk[chunk_id] for chunk_id in batch_chunks))
+        return [context[position] for position in sorted(selected)]
+
+    chapter_batches = []
+    for chapter in chapter_groups(chunks):
+        batch_chunks = {}
+        for chunk_id, chunk in chapter.items():
+            expanded_batch = batch_chunks | {chunk_id: chunk}
+            if fits_budget(
+                expanded_batch, build_input_scope(expanded_batch, context_for_chunks(expanded_batch))
+            ):
+                batch_chunks = expanded_batch
+            else:
+                if not batch_chunks:
+                    raise KGError(
+                        "MODEL_INPUT_TOO_LARGE", "One source chunk and model exceed the extraction budget"
+                    )
+                chapter_batches.append(batch_chunks)
+                batch_chunks = {chunk_id: chunk}
+        if batch_chunks:
+            chapter_batches.append(batch_chunks)
+
+    # 全文超过模型预算时，尽量把相邻的完整规则单元带入同一批。
+    scopes = []
+    for position, batch_chunks in enumerate(chapter_batches):
+        for unit in context_for_chunks(batch_chunks):
+            unit_chunks = {ref["chunk_id"]: chunks[ref["chunk_id"]] for ref in unit["evidence"]}
+            if unit_chunks.keys() <= batch_chunks.keys():
+                continue
+            expanded_batch = batch_chunks | unit_chunks
+            if fits_budget(
+                expanded_batch, build_input_scope(expanded_batch, context_for_chunks(expanded_batch))
+            ):
+                batch_chunks = expanded_batch
+        scope = build_input_scope(batch_chunks, context_for_chunks(batch_chunks), key=f"batch/{position}")
+        if not fits_budget(batch_chunks, scope):
+            raise KGError("MODEL_INPUT_TOO_LARGE", "Source context exceeds the extraction budget")
+        scopes.append(scope)
     return scopes
 
 
